@@ -75,9 +75,8 @@ export function Header() {
                 </span>
               </div>
               <Button
-                variant="outline"
                 asChild
-                className="rounded-xl border-gray-200 hover:border-[#00C896] hover:text-[#00C896] transition-all duration-300"
+                className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
               >
                 <Link href="/dashboard">Dashboard</Link>
               </Button>
@@ -94,11 +93,10 @@ export function Header() {
           ) : (
             <>
               <Button
-                variant="outline"
                 asChild
-                className="rounded-xl border-gray-200 hover:border-[#00C896] hover:text-[#00C896] transition-all duration-300"
+                className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
               >
-                <Link href="/auth/kycu">Kyçu</Link>
+                <Link href="/auth/kycu">Kycu</Link>
               </Button>
               <Button
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
@@ -162,7 +160,7 @@ export function Header() {
                   <div className="text-sm text-gray-700 py-3 px-4 glass-card rounded-xl">
                     Mirë se erdhe, {userProfile?.emri_i_plotë || user.email?.split("@")[0]}
                   </div>
-                  <Button variant="outline" asChild className="w-full rounded-xl">
+                  <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
                     <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
                       Dashboard
                     </Link>
@@ -170,16 +168,16 @@ export function Header() {
                   <Button
                     variant="outline"
                     onClick={handleSignOut}
-                    className="w-full rounded-xl text-red-600 border-red-200 hover:bg-red-50"
+                    className="w-full rounded-xl text-red-600 border-red-200 hover:bg-red-50 bg-transparent"
                   >
                     Dilni
                   </Button>
                 </>
               ) : (
                 <>
-                  <Button variant="outline" asChild className="w-full rounded-xl">
+                  <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
                     <Link href="/auth/kycu" onClick={() => setIsMenuOpen(false)}>
-                      Kyçu
+                      Kycu
                     </Link>
                   </Button>
                   <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>

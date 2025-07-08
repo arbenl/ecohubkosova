@@ -148,7 +148,7 @@ export function Sidebar({ userRole }: SidebarProps) {
         <div className="p-3 border-t border-gray-200">
           <Button
             variant="outline"
-            className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-lg py-3 text-sm"
+            className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-lg py-3 text-sm bg-transparent"
             onClick={() => {
               signOut()
               setIsMobileMenuOpen(false)
@@ -162,18 +162,6 @@ export function Sidebar({ userRole }: SidebarProps) {
 
       {/* Desktop Sidebar */}
       <div className="hidden md:flex md:flex-col md:w-72 md:bg-white md:border-r md:border-gray-200 md:h-screen md:sticky md:top-0">
-        {/* Desktop Header */}
-        <div className="p-6 border-b border-gray-200">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl eco-gradient flex items-center justify-center">
-              <span className="text-white font-bold text-lg">E</span>
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-[#00C896] to-[#00A07E] bg-clip-text text-transparent">
-              ECO HUB KOSOVA
-            </span>
-          </Link>
-        </div>
-
         {/* Desktop Navigation */}
         <div className="flex-1 overflow-auto py-6 px-4">
           <nav className="flex flex-col gap-2">
@@ -199,7 +187,7 @@ export function Sidebar({ userRole }: SidebarProps) {
         <div className="p-4 border-t border-gray-200">
           <Button
             variant="outline"
-            className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-xl"
+            className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-xl bg-transparent"
             onClick={signOut}
           >
             <LogOut className="h-4 w-4 mr-2" />

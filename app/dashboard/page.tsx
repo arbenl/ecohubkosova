@@ -87,7 +87,11 @@ export default function DashboardPage() {
           <p className="text-gray-600 mt-1">Ky është paneli juaj i kontrollit në ECO HUB KOSOVA</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
-          <Button variant="outline" size="sm" asChild className="rounded-xl">
+          <Button
+            className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
+            size="sm"
+            asChild
+          >
             <Link href="/profili">
               <User className="h-4 w-4 mr-2" />
               Profili im
@@ -180,7 +184,7 @@ export default function DashboardPage() {
                   </div>
                 ))}
                 <div className="pt-2">
-                  <Button variant="outline" size="sm" className="w-full rounded-xl" asChild>
+                  <Button variant="outline" size="sm" className="w-full rounded-xl bg-transparent" asChild>
                     <Link href="/qendra-e-dijes">Shiko të gjithë artikujt</Link>
                   </Button>
                 </div>
@@ -216,7 +220,7 @@ export default function DashboardPage() {
                   </div>
                 ))}
                 <div className="pt-2">
-                  <Button variant="outline" size="sm" className="w-full rounded-xl" asChild>
+                  <Button variant="outline" size="sm" className="w-full rounded-xl bg-transparent" asChild>
                     <Link href="/drejtoria">Shiko të gjithë partnerët</Link>
                   </Button>
                 </div>
@@ -238,7 +242,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               variant="outline"
-              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift"
+              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
               asChild
             >
               <Link href="/tregu/shto">
@@ -248,7 +252,7 @@ export default function DashboardPage() {
             </Button>
             <Button
               variant="outline"
-              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift"
+              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
               asChild
             >
               <Link href="/drejtoria">
@@ -258,7 +262,7 @@ export default function DashboardPage() {
             </Button>
             <Button
               variant="outline"
-              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift"
+              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
               asChild
             >
               <Link href="/qendra-e-dijes">
@@ -268,7 +272,7 @@ export default function DashboardPage() {
             </Button>
             <Button
               variant="outline"
-              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift"
+              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
               asChild
             >
               <Link href="/profili">

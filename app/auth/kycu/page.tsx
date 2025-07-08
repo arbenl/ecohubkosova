@@ -137,7 +137,7 @@ function LoginForm() {
 
             <Button
               type="submit"
-              className="w-full eco-gradient hover:shadow-lg hover:shadow-[#00C896]/25 text-white rounded-xl py-3 font-semibold transition-all duration-300 hover:scale-[1.02]"
+              className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl py-3 font-semibold transition-all duration-300 hover:scale-[1.02]"
               disabled={isSubmitting}
             >
               {isSubmitting ? (

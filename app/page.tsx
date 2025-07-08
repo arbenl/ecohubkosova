@@ -44,9 +44,8 @@ export default function Home() {
                 </Button>
                 <Button
                   size="lg"
-                  variant="outline"
+                  className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
                   asChild
-                  className="rounded-2xl px-8 py-4 text-lg font-semibold border-2 border-gray-200 hover:border-[#00C896] hover:text-[#00C896] transition-all duration-300 hover:scale-105"
                 >
                   <Link href="/eksploro">
                     <Search className="mr-2 h-5 w-5" />
@@ -70,8 +69,8 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="group animate-slide-in-left">
-                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full">
-                  <div className="w-20 h-20 mx-auto rounded-2xl eco-gradient flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100">
+                  <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <UserPlus className="h-10 w-10 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Krijo Profilin Tënd</h3>
@@ -83,8 +82,8 @@ export default function Home() {
               </div>
 
               <div className="group animate-slide-up">
-                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full">
-                  <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-[#00A07E] to-[#10D9A8] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100">
+                  <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <Search className="h-10 w-10 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Zbulo Mundësitë</h3>
@@ -95,8 +94,8 @@ export default function Home() {
               </div>
 
               <div className="group animate-slide-in-right">
-                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full">
-                  <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-[#10D9A8] to-[#00C896] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full bg-gradient-to-br from-orange-50 to-red-50 border border-orange-100">
+                  <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <MessageCircle className="h-10 w-10 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Fillo Bisedimet</h3>
@@ -123,9 +122,9 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               <div className="group animate-slide-in-left">
-                <div className="glass-card p-8 rounded-2xl hover-lift space-y-6 h-full">
+                <div className="glass-card p-8 rounded-2xl hover-lift space-y-6 h-full bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100">
                   <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 rounded-2xl eco-gradient flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       <ShoppingCart className="h-8 w-8 text-white" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900">Për Shitje</h3>
@@ -135,8 +134,7 @@ export default function Home() {
                     qarkulluese.
                   </p>
                   <Button
-                    variant="outline"
-                    className="w-full rounded-xl border-2 hover:border-[#00C896] hover:text-[#00C896] transition-all duration-300"
+                    className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
                     <Link href="/tregu?lloji=shes">
@@ -148,9 +146,9 @@ export default function Home() {
               </div>
 
               <div className="group animate-slide-in-right">
-                <div className="glass-card p-8 rounded-2xl hover-lift space-y-6 h-full">
+                <div className="glass-card p-8 rounded-2xl hover-lift space-y-6 h-full bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-100">
                   <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#10D9A8] to-[#00A07E] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       <Users className="h-8 w-8 text-white" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900">Kërkoj të Blej</h3>
@@ -160,8 +158,7 @@ export default function Home() {
                     përbashkëta.
                   </p>
                   <Button
-                    variant="outline"
-                    className="w-full rounded-xl border-2 hover:border-[#00A07E] hover:text-[#00A07E] transition-all duration-300"
+                    className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 hover:shadow-xl hover:shadow-cyan-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
                     <Link href="/tregu?lloji=blej">
