@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    authInterrupts: false,
-  },
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
+  },
+  experimental: {
+    serverComponentsExternalPackages: ['@supabase/supabase-js']
   },
   images: {
     domains: ['placeholder.svg'],
@@ -18,20 +18,6 @@ const nextConfig = {
       },
     ],
     unoptimized: true,
-  },
-  async redirects() {
-    return [
-      {
-        source: '/login',
-        destination: '/auth/kycu',
-        permanent: false,
-      },
-      {
-        source: '/register',
-        destination: '/auth/regjistrohu', 
-        permanent: false,
-      },
-    ]
   },
 }
 

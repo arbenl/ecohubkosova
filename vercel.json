@@ -1,21 +1,11 @@
 {
-<<<<<<< HEAD
-  "framework": "nextjs",
+  "version": 2,
   "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
+  "outputDirectory": ".next",
   "installCommand": "npm install",
-  "regions": ["fra1"],
+  "framework": "nextjs",
   "functions": {
     "app/**/*.tsx": {
-=======
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": "nextjs",
-  "regions": ["fra1"],
-  "functions": {
-    "app/api/**/*.ts": {
->>>>>>> f6957e736bb96248d27be22ddff544a743169573
       "maxDuration": 30
     }
   },
@@ -24,21 +14,14 @@
       "source": "/(.*)",
       "headers": [
         {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
           "key": "X-Frame-Options",
           "value": "DENY"
         },
         {
-<<<<<<< HEAD
-=======
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         },
         {
->>>>>>> f6957e736bb96248d27be22ddff544a743169573
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
         }
@@ -49,38 +32,12 @@
     {
       "source": "/login",
       "destination": "/auth/kycu",
-<<<<<<< HEAD
-      "permanent": false
-=======
       "permanent": true
->>>>>>> f6957e736bb96248d27be22ddff544a743169573
     },
     {
       "source": "/register",
       "destination": "/auth/regjistrohu",
-<<<<<<< HEAD
-      "permanent": false
+      "permanent": true
     }
   ]
-=======
-      "permanent": true
-    },
-    {
-      "source": "/success",
-      "destination": "/auth/sukses",
-      "permanent": true
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/admin/:path*",
-      "destination": "/admin/:path*"
-    }
-  ],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase-url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase-anon-key",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase-service-role-key"
-  }
->>>>>>> f6957e736bb96248d27be22ddff544a743169573
 }
