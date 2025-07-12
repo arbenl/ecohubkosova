@@ -31,9 +31,8 @@ export default function OrganizationDetailPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 
-  useEffect(() => {
-
-     const checkSession = async () => {
+useEffect(() => {
+  const checkSession = async () => {
     const { data: { session } } = await supabase.auth.getSession()
     setIsLoggedIn(!!session)
   }
