@@ -121,7 +121,7 @@ export default function Home() {
                     Kontakto partnerët potencialë dhe fillo bashkëpunimin për projekte të qëndrueshme dhe inovative.
                   </p>
                   <Button
-                    className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 hover:shadow-xl hover:shadow-orange-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
+                    className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
                     <Link href="/tregu">
@@ -185,7 +185,7 @@ export default function Home() {
                     përbashkëta.
                   </p>
                   <Button
-                    className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 hover:shadow-xl hover:shadow-cyan-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
+                    className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
                     <Link href="/tregu?lloji=blej">
