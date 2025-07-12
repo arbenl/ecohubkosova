@@ -328,10 +328,14 @@ export default function ListingDetailPage() {
                       <span className="font-medium text-gray-700">Emri:</span>
                       <p className="text-lg">{listing.users?.emri_i_plotë || "Anonim"}</p>
                     </div>
-                    <div>
-                      <span className="font-medium text-gray-700">Email:</span>
-                      <p className="text-lg text-emerald-600">{listing.users?.email}</p>
-                    </div>
+                   <div>
+  <span className="font-medium text-gray-700">Email:</span>
+  {user ? (
+    <p className="text-lg text-emerald-600">{listing.users?.email}</p>
+  ) : (
+    <p className="italic text-gray-400">Kyçu për ta parë emailin</p>
+  )}
+</div>
                   </div>
                 )}
                 <div className="flex gap-3 mt-6">
