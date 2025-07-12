@@ -230,18 +230,22 @@ export default function OrganizationsPage() {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div>
-                <label htmlFor="lloji" className="block text-gray-700 text-sm font-bold mb-2">
-                  Lloji:
-                </label>
-                <input
-                  type="text"
-                  id="lloji"
-                  name="lloji"
-                  defaultValue={editingOrg.lloji}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
+             <div>
+          <label htmlFor="lloji" className="block text-gray-700 text-sm font-bold mb-2">
+    Lloji:
+  </label>
+  <select
+    id="lloji"
+    name="lloji"
+    defaultValue={editingOrg.lloji}
+    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    required
+  >
+    <option value="OJQ">OJQ</option>
+    <option value="Ndërmarrje Sociale">Ndërmarrje Sociale</option>
+    <option value="Kompani">Kompani</option>
+  </select>
+</div>
               <div>
                 <label htmlFor="eshte_aprovuar" className="block text-gray-700 text-sm font-bold mb-2">
                   Eshte Aprovuar:
