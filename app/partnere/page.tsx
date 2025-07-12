@@ -50,7 +50,7 @@ export default function PartnerePage() {
               },
             ].map(({ icon, title, subtitle }) => (
               <div key={title} className="glass-card text-center p-8 rounded-2xl bg-white/70 hover:shadow-xl transition-shadow">
-                <div className="mb-4">{icon}</div>
+                <div className="mb-4 flex justify-center items-center">{icon}</div>
                 <h3 className="text-3xl font-bold text-purple-700">{title}</h3>
                 <p className="text-gray-600 mt-2">{subtitle}</p>
               </div>
