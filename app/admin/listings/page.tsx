@@ -243,17 +243,20 @@ export default function ListingsPage() {
                 />
               </div>
               <div>
-                <label htmlFor="lloji_listimit" className="block text-gray-700 text-sm font-bold mb-2">
-                  Lloji i Listimit:
-                </label>
-                <input
-                  type="text"
-                  id="lloji_listimit"
-                  name="lloji_listimit"
-                  defaultValue={editingListing.lloji_listimit}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
+  <label htmlFor="lloji_listimit" className="block text-gray-700 text-sm font-bold mb-2">
+    Lloji i Listimit:
+  </label>
+  <select
+    id="lloji_listimit"
+    name="lloji_listimit"
+    defaultValue={editingListing.lloji_listimit}
+    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    required
+  >
+    <option value="shes">Shes</option>
+    <option value="blej">Blej</option>
+  </select>
+</div>
               <div>
                 <label htmlFor="eshte_aprovuar" className="block text-gray-700 text-sm font-bold mb-2">
                   Aprovuar:
