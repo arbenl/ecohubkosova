@@ -139,7 +139,7 @@ export default function TreguPage() {
             </div>
             {user && (
               <Button
-                className="bg-gradient-to-r from-orange-500 to-red-600 hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-6 py-3 font-semibold transition-all duration-300 hover:scale-105"
+                className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-6 py-3 font-semibold transition-all duration-300 hover:scale-105"
                 asChild
               >
                 <Link href="/tregu/shto">
@@ -168,7 +168,7 @@ export default function TreguPage() {
                   <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                   <Input
                     placeholder="Kërko sipas titullit..."
-                    className="pl-12 h-12 rounded-2xl border-gray-200 focus:border-orange-500 focus:ring-[#00C896]"
+                    className="pl-12 h-12 rounded-2xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -244,7 +244,7 @@ export default function TreguPage() {
                               <Euro className="h-4 w-4 text-gray-500" />
                               <div>
                                 <span className="font-medium text-gray-700">Çmimi:</span>
-                                <p className="text-orange-600 font-semibold">
+                                <p className="text-[#00C896] font-semibold">
                                   {listing.çmimi} € / {listing.njesia}
                                 </p>
                               </div>
@@ -300,7 +300,7 @@ export default function TreguPage() {
                       variant="outline"
                       onClick={handleLoadMore}
                       disabled={loading}
-                      className="rounded-2xl px-8 py-3 border-2 hover:border-orange-500 hover:text-orange-600 transition-all duration-300 bg-transparent"
+                      className="rounded-2xl px-8 py-3 border-2 hover:border-[#00C896] hover:text-[#00C896] transition-all duration-300"
                     >
                       {loading ? "Duke ngarkuar..." : "Ngarko më shumë"}
                     </Button>
@@ -364,7 +364,7 @@ export default function TreguPage() {
                               <Euro className="h-4 w-4 text-gray-500" />
                               <div>
                                 <span className="font-medium text-gray-700">Çmimi:</span>
-                                <p className="text-orange-600 font-semibold">
+                                <p className="text-[#00C896] font-semibold">
                                   {listing.çmimi} € / {listing.njesia}
                                 </p>
                               </div>
@@ -420,7 +420,7 @@ export default function TreguPage() {
                       variant="outline"
                       onClick={handleLoadMore}
                       disabled={loading}
-                      className="rounded-2xl px-8 py-3 border-2 hover:border-orange-500 hover:text-orange-600 transition-all duration-300 bg-transparent"
+                      className="rounded-2xl px-8 py-3 border-2 hover:border-[#00C896] hover:text-[#00C896] transition-all duration-300"
                     >
                       {loading ? "Duke ngarkuar..." : "Ngarko më shumë"}
                     </Button>
@@ -484,7 +484,7 @@ export default function TreguPage() {
                               <Euro className="h-4 w-4 text-gray-500" />
                               <div>
                                 <span className="font-medium text-gray-700">Çmimi:</span>
-                                <p className="text-orange-600 font-semibold">
+                                <p className="text-[#00C896] font-semibold">
                                   {listing.çmimi} € / {listing.njesia}
                                 </p>
                               </div>
@@ -540,7 +540,7 @@ export default function TreguPage() {
                       variant="outline"
                       onClick={handleLoadMore}
                       disabled={loading}
-                      className="rounded-2xl px-8 py-3 border-2 hover:border-orange-500 hover:text-orange-600 transition-all duration-300 bg-transparent"
+                      className="rounded-2xl px-8 py-3 border-2 hover:border-[#00C896] hover:text-[#00C896] transition-all duration-300"
                     >
                       {loading ? "Duke ngarkuar..." : "Ngarko më shumë"}
                     </Button>
