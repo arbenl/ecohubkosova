@@ -7,18 +7,18 @@ export default function EksploroPage() {
   return (
     <BaseLayout>
       <div className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 eco-gradient-light"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50"></div>
         <div className="container px-4 md:px-6 relative">
           {/* Hero Section */}
           <div className="text-center mb-20 animate-fade-in">
             <div className="inline-flex items-center rounded-full glass-card px-4 py-2 text-sm font-semibold mb-8 transition-all duration-300 hover:scale-105">
-              <Sparkles className="w-4 h-4 mr-2 text-[#00C896]" />
+              <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
               Zbulo Mundësitë e Pafundme
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-8">
               Eksploro{" "}
-              <span className="bg-gradient-to-r from-[#00C896] to-[#00A07E] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
                 Mundësitë
               </span>
             </h1>
@@ -32,7 +32,7 @@ export default function EksploroPage() {
               <Button
                 asChild
                 size="lg"
-                className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
+                className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
               >
                 <Link href="/auth/regjistrohu">
                   <Users className="mr-2 h-5 w-5" />
@@ -43,7 +43,7 @@ export default function EksploroPage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="rounded-2xl px-8 py-4 text-lg font-semibold border-2 border-gray-200 hover:border-[#00C896] hover:text-[#00C896] transition-all duration-300 hover:scale-105"
+                className="rounded-2xl px-8 py-4 text-lg font-semibold border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all duration-300 hover:scale-105 bg-transparent"
               >
                 <Link href="/auth/kycu">
                   <ArrowRight className="mr-2 h-5 w-5" />
@@ -56,7 +56,7 @@ export default function EksploroPage() {
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-slide-up">
             <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6">
-              <div className="w-20 h-20 mx-auto rounded-2xl eco-gradient flex items-center justify-center">
+              <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
                 <Users className="h-10 w-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900">Rrjetëzimi</h3>
@@ -66,7 +66,7 @@ export default function EksploroPage() {
             </div>
 
             <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6">
-              <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-[#00C896] to-[#00A07E] flex items-center justify-center">
+              <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
                 <Leaf className="h-10 w-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900">Qëndrueshmëria</h3>
@@ -76,7 +76,7 @@ export default function EksploroPage() {
             </div>
 
             <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6">
-              <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-[#00A07E] to-[#008A6B] flex items-center justify-center">
+              <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
                 <Sparkles className="h-10 w-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900">Inovacioni</h3>

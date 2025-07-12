@@ -12,7 +12,7 @@ export default function PartnerePage() {
           {/* Hero Section */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold tracking-tighter mb-4">
-              Partnerët <span className="text-emerald-600">Tanë</span>
+              Partnerët <span className="text-purple-600">Tanë</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Zbulo rrjetin tonë të partnerëve të angazhuar në ekonominë qarkulluese të Kosovës
@@ -21,23 +21,23 @@ export default function PartnerePage() {
 
           {/* Stats Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <Card className="text-center">
+            <Card className="text-center bg-gradient-to-br from-purple-50 to-pink-50">
               <CardHeader>
-                <Building className="h-12 w-12 text-emerald-600 mx-auto mb-2" />
+                <Building className="h-12 w-12 text-purple-600 mx-auto mb-2" />
                 <CardTitle className="text-3xl font-bold">50+</CardTitle>
                 <CardDescription>Organizata Partnere</CardDescription>
               </CardHeader>
             </Card>
-            <Card className="text-center">
+            <Card className="text-center bg-gradient-to-br from-purple-50 to-pink-50">
               <CardHeader>
-                <Users className="h-12 w-12 text-emerald-600 mx-auto mb-2" />
+                <Users className="h-12 w-12 text-purple-600 mx-auto mb-2" />
                 <CardTitle className="text-3xl font-bold">200+</CardTitle>
                 <CardDescription>Anëtarë Aktivë</CardDescription>
               </CardHeader>
             </Card>
-            <Card className="text-center">
+            <Card className="text-center bg-gradient-to-br from-purple-50 to-pink-50">
               <CardHeader>
-                <MapPin className="h-12 w-12 text-emerald-600 mx-auto mb-2" />
+                <MapPin className="h-12 w-12 text-purple-600 mx-auto mb-2" />
                 <CardTitle className="text-3xl font-bold">7</CardTitle>
                 <CardDescription>Qytete të Kosovës</CardDescription>
               </CardHeader>
@@ -48,9 +48,9 @@ export default function PartnerePage() {
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-center mb-8">Llojet e Partnerëve</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="hover:shadow-lg transition-shadow bg-gradient-to-br from-purple-50 to-pink-50">
                 <CardHeader>
-                  <CardTitle className="text-emerald-600">Organizata Joqeveritare</CardTitle>
+                  <CardTitle className="text-purple-600">Organizata Joqeveritare</CardTitle>
                   <CardDescription>
                     OJQ-të që punojnë për promovimin e qëndrueshmërisë dhe ekonomisë qarkulluese
                   </CardDescription>
@@ -65,9 +65,9 @@ export default function PartnerePage() {
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="hover:shadow-lg transition-shadow bg-gradient-to-br from-purple-50 to-pink-50">
                 <CardHeader>
-                  <CardTitle className="text-emerald-600">Ndërmarrje Sociale</CardTitle>
+                  <CardTitle className="text-purple-600">Ndërmarrje Sociale</CardTitle>
                   <CardDescription>Biznese që kombinojnë qëllimet sociale me qëndrueshmërinë ekonomike</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -80,9 +80,9 @@ export default function PartnerePage() {
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="hover:shadow-lg transition-shadow bg-gradient-to-br from-purple-50 to-pink-50">
                 <CardHeader>
-                  <CardTitle className="text-emerald-600">Kompani</CardTitle>
+                  <CardTitle className="text-purple-600">Kompani</CardTitle>
                   <CardDescription>
                     Biznese që kanë integruar parimet e ekonomisë qarkulluese në operacionet e tyre
                   </CardDescription>
@@ -101,7 +101,7 @@ export default function PartnerePage() {
 
           {/* Call to Action */}
           <div className="text-center">
-            <Card className="max-w-2xl mx-auto">
+            <Card className="max-w-2xl mx-auto bg-gradient-to-br from-purple-50 to-pink-50">
               <CardHeader>
                 <CardTitle>Bëhu Partner</CardTitle>
                 <CardDescription>
@@ -110,7 +110,7 @@ export default function PartnerePage() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button asChild>
+                  <Button asChild className="bg-gradient-to-r from-purple-500 to-pink-600 text-white">
                     <Link href="/drejtoria">Shiko të gjithë partnerët</Link>
                   </Button>
                   <Button asChild variant="outline">

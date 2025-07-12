@@ -78,6 +78,15 @@ export default function Home() {
                     Regjistrohu si individ ose organizatë dhe krijo profilin tënd në platformë për të filluar
                     rrjetëzimin.
                   </p>
+                  <Button
+                    className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 hover:shadow-xl hover:shadow-blue-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
+                    asChild
+                  >
+                    <Link href="/eksploro">
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Eksploro Tani
+                    </Link>
+                  </Button>
                 </div>
               </div>
 
@@ -90,6 +99,15 @@ export default function Home() {
                   <p className="text-gray-600 leading-relaxed">
                     Eksploro partnerët potencialë, artikujt e dijes dhe mundësitë e bashkëpunimit në treg.
                   </p>
+                  <Button
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 hover:shadow-xl hover:shadow-purple-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
+                    asChild
+                  >
+                    <Link href="/partnere">
+                      <Search className="mr-2 h-4 w-4" />
+                      Shiko Partnerët
+                    </Link>
+                  </Button>
                 </div>
               </div>
 
@@ -102,6 +120,15 @@ export default function Home() {
                   <p className="text-gray-600 leading-relaxed">
                     Kontakto partnerët potencialë dhe fillo bashkëpunimin për projekte të qëndrueshme dhe inovative.
                   </p>
+                  <Button
+                    className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 hover:shadow-xl hover:shadow-orange-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
+                    asChild
+                  >
+                    <Link href="/tregu">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Shiko Tregun
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>
