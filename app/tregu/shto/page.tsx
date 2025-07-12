@@ -35,17 +35,17 @@ export default function ShtoTregun() {
       const data = await response.json()
 
       if (response.ok) {
-        setMessage("Artikulli u shtua me sukses!")
+        setMessage("Tregu u shtua me sukses!")
         setEmri("")
         setPershkrimi("")
         setVendndodhja("")
         setFotoUrl("")
       } else {
-        setError(data.error || "Ndodhi një gabim gjatë shtimit të artikullit.")
+        setError(data.error || "Ndodhi një gabim gjatë shtimit të tregut.")
       }
     } catch (error) {
-      console.error("Gabim gjatë shtimit të artikullit:", error)
-      setError("Ndodhi një gabim gjatë shtimit të artikullit.")
+      console.error("Gabim gjatë shtimit të tregut:", error)
+      setError("Ndodhi një gabim gjatë shtimit të tregut.")
     } finally {
       setIsLoading(false)
     }
@@ -53,18 +53,18 @@ export default function ShtoTregun() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Shto një Artikull të Ri</h1>
+      <h1 className="text-2xl font-bold mb-4">Shto një Treg të Ri</h1>
       {message && <div className="bg-green-200 text-green-800 p-2 mb-4">{message}</div>}
       {error && <div className="bg-red-200 text-red-800 p-2 mb-4">{error}</div>}
       <form onSubmit={handleSubmit} className="max-w-lg">
         <div className="mb-4">
           <label htmlFor="emri" className="block text-gray-700 text-sm font-bold mb-2">
-            Emri i Artikullit:
+            Emri i Tregut:
           </label>
           <input
             type="text"
             id="emri"
-            placeholder="Emri i artikullit"
+            placeholder="Emri i tregut"
             value={emri}
             onChange={(e) => setEmri(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -76,7 +76,7 @@ export default function ShtoTregun() {
           </label>
           <textarea
             id="pershkrimi"
-            placeholder="Përshkruaj artikullin"
+            placeholder="Përshkruaj tregun"
             value={pershkrimi}
             onChange={(e) => setPershkrimi(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -89,7 +89,7 @@ export default function ShtoTregun() {
           <input
             type="text"
             id="vendndodhja"
-            placeholder="Vendndodhja e artikullit"
+            placeholder="Vendndodhja e tregut"
             value={vendndodhja}
             onChange={(e) => setVendndodhja(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -102,7 +102,7 @@ export default function ShtoTregun() {
           <input
             type="text"
             id="fotoUrl"
-            placeholder="URL e fotos së artikullit"
+            placeholder="URL e fotos së tregut"
             value={fotoUrl}
             onChange={(e) => setFotoUrl(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -113,7 +113,7 @@ export default function ShtoTregun() {
           disabled={isLoading}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          {isLoading ? "Duke u ngarkuar..." : "Shto Artikullin"}
+          {isLoading ? "Duke u ngarkuar..." : "Shto Tregun"}
         </button>
       </form>
     </div>
