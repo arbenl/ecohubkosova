@@ -66,7 +66,7 @@ useEffect(() => {
         setLoading(false)
       }
     }
-
+checkSession()        
     fetchOrganization()
   }, [params.id])
 
