@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, Building, BookOpen, ShoppingCart, AlertCircle, TrendingUp } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { supabase } from "@/lib/supabase"
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState({
@@ -18,7 +18,6 @@ export default function AdminDashboardPage() {
   })
   const [loading, setLoading] = useState(true)
 
-  const supabase = createClientComponentClient()
   const router = useRouter()
 
   useEffect(() => {

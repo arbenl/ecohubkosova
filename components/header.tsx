@@ -43,17 +43,17 @@ export function Header() {
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
-            href="/tregu"
-            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-          >
-            Tregu
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link
             href="/rreth-nesh"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             Rreth Nesh
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
+          </Link>
+          <Link
+            href="/tregu"
+            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
+          >
+            Tregu
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
         </nav>
@@ -135,18 +135,18 @@ export function Header() {
               Partnerët
             </Link>
             <Link
-              href="/tregu"
-              className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Tregu
-            </Link>
-            <Link
               href="/rreth-nesh"
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
               Rreth Nesh
+            </Link>
+            <Link
+              href="/tregu"
+              className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Tregu
             </Link>
 
             <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">

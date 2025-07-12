@@ -1,9 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-
-const supabase = createClientComponentClient()
+import { supabase } from "@/lib/supabase"
 
 interface User {
   id: string
