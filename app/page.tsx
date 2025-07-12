@@ -125,7 +125,7 @@ export default function Home() {
                     asChild
                   >
                     <Link href="/tregu">
-                      <MessageCircle className="mr-2 h-4 w-4" />
+               <MessageCircle className="mr-2 h-4 w-4" />
                       Shiko Tregun
                     </Link>
                   </Button>
