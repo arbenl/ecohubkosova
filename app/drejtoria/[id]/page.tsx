@@ -28,8 +28,16 @@ export default function OrganizationDetailPage() {
   const [organization, setOrganization] = useState<Organization | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
 
   useEffect(() => {
+
+     const checkSession = async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    setIsLoggedIn(!!session)
+  }
+    
     const fetchOrganization = async () => {
       if (!params.id) return
 
@@ -200,17 +208,22 @@ export default function OrganizationDetailPage() {
                       <span>{organization.person_kontakti}</span>
                     </div>
                   </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 mb-1">Email</h4>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Mail className="h-4 w-4" />
-                      <a
-                        href={`mailto:${organization.email_kontakti}`}
-                        className="hover:text-[#00C896] transition-colors"
-                      >
-                        {organization.email_kontakti}
-                      </a>
-                    </div>
+                 <div>
+  <h4 className="font-medium text-gray-900 mb-1">Email</h4>
+  <div className="flex items-center gap-2 text-gray-600">
+    <Mail className="h-4 w-4" />
+    {isLoggedIn ? (
+      <a
+        href={`mailto:${organization.email_kontakti}`}
+        className="hover:text-[#00C896] transition-colors"
+      >
+        {organization.email_kontakti}
+      </a>
+    ) : (
+      <span className="italic text-gray-400">Kyçu për ta parë emailin</span>
+    )}
+  </div>
+</div>
                   </div>
                 </CardContent>
               </Card>
