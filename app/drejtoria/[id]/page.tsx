@@ -231,21 +231,7 @@ export default function OrganizationDetailPage() {
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Veprime</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button className="w-full" size="lg">
-                    <Mail className="h-4 w-4 mr-2" />
-                    Kontakto Organizatën
-                  </Button>
-                  <Button variant="outline" className="w-full bg-transparent" size="lg">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Shpreh Interes për Bashkëpunim
-                  </Button>
-                </CardContent>
-              </Card>
+        
             </div>
           </div>
         </div>
