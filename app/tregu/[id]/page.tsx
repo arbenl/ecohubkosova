@@ -224,7 +224,17 @@ export default function ListingDetailPage() {
                       <Building className="h-5 w-5 text-gray-500 mt-0.5" />
                       <div>
                         <p className="font-medium">{listing.organizations.emri}</p>
-                        <p className="text-sm text-gray-600">{listing.organizations.email_kontakti}</p>
+                        {user ? (
+  <a
+    href={`mailto:${listing.organizations.email_kontakti}`}
+    className="text-sm text-emerald-600 hover:underline"
+  >
+    {listing.organizations.email_kontakti}
+  </a>
+) : (
+  <p className="text-sm italic text-gray-400">Kyçu për ta parë emailin</p>
+)}
+
                       </div>
                     </div>
                   ) : (
@@ -232,7 +242,17 @@ export default function ListingDetailPage() {
                       <User className="h-5 w-5 text-gray-500 mt-0.5" />
                       <div>
                         <p className="font-medium">{listing.users?.emri_i_plotë || "Anonim"}</p>
-                        <p className="text-sm text-gray-600">{listing.users?.email}</p>
+                        {user ? (
+  <a
+    href={`mailto:${listing.users?.email}`}
+    className="text-sm text-emerald-600 hover:underline"
+  >
+    {listing.users?.email}
+  </a>
+) : (
+  <p className="text-sm italic text-gray-400">Kyçu për ta parë emailin</p>
+)}
+
                       </div>
                     </div>
                   )}
@@ -294,7 +314,12 @@ export default function ListingDetailPage() {
                     </div>
                     <div>
                       <span className="font-medium text-gray-700">Email:</span>
-                      <p className="text-lg text-emerald-600">{listing.organizations.email_kontakti}</p>
+                      {user ? (
+  <p className="text-lg text-emerald-600">{listing.organizations.email_kontakti}</p>
+) : (
+  <p className="italic text-gray-400">Kyçu për ta parë emailin</p>
+)}
+
                     </div>
                   </div>
                 ) : (
