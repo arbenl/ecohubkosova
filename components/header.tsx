@@ -42,13 +42,7 @@ export function Header() {
             Partnerët
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
-          <Link
-            href="/rreth-nesh"
-            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-          >
-            Rreth Nesh
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
-          </Link>
+         
           <Link
             href="/tregu"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
@@ -56,6 +50,15 @@ export function Header() {
             Tregu
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
+
+           <Link
+            href="/rreth-nesh"
+            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
+          >
+            Rreth Nesh
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
+          </Link>
+          
         </nav>
 
         <div className="hidden md:flex gap-4 items-center">
