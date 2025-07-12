@@ -30,44 +30,47 @@ export default function OrganizationDetailPage() {
   const [error, setError] = useState<string | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-
-useEffect(() => {
   const checkSession = async () => {
     const { data: { session } } = await supabase.auth.getSession()
     setIsLoggedIn(!!session)
   }
-    
-    const fetchOrganization = async () => {
-      if (!params.id) return
 
-      try {
-        setLoading(true)
-        const { data, error } = await supabase
-          .from("organizations")
-          .select("*")
-          .eq("id", params.id)
-          .eq("eshte_aprovuar", true)
-          .single()
+  const fetchOrganization = async () => {
+    if (!params.id) return
 
-        if (error) {
-          if (error.code === "PGRST116") {
-            setError("Organizata nuk u gjet ose nuk është aprovuar.")
-          } else {
-            setError("Gabim gjatë ngarkimit të organizatës.")
-          }
-          console.error("Error fetching organization:", error)
+    try {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from("organizations")
+        .select("*")
+        .eq("id", params.id)
+        .eq("eshte_aprovuar", true)
+        .single()
+
+      if (error) {
+        if (error.code === "PGRST116") {
+          setError("Organizata nuk u gjet ose nuk është aprovuar.")
         } else {
-          setOrganization(data)
+          setError("Gabim gjatë ngarkimit të organizatës.")
         }
-      } catch (error) {
         console.error("Error fetching organization:", error)
-        setError("Gabim gjatë ngarkimit të organizatës.")
-      } finally {
-        setLoading(false)
+      } else {
+        setOrganization(data)
       }
+    } catch (error) {
+      console.error("Error fetching organization:", error)
+      setError("Gabim gjatë ngarkimit të organizatës.")
+    } finally {
+      setLoading(false)
     }
-checkSession()        
-    fetchOrganization()
+  }
+
+  useEffect(() => {
+    const run = async () => {
+      await checkSession()
+      await fetchOrganization()
+    }
+    run()
   }, [params.id])
 
   if (loading) {
@@ -145,8 +148,8 @@ checkSession()
                             organization.lloji === "OJQ"
                               ? "bg-blue-100 text-blue-800"
                               : organization.lloji === "Ndërmarrje Sociale"
-                                ? "bg-purple-100 text-purple-800"
-                                : "bg-amber-100 text-amber-800"
+                              ? "bg-purple-100 text-purple-800"
+                              : "bg-amber-100 text-amber-800"
                           }
                         >
                           {organization.lloji}
@@ -154,7 +157,9 @@ checkSession()
                       </div>
                     </div>
                   </div>
-                  <CardDescription className="text-base leading-relaxed">{organization.pershkrimi}</CardDescription>
+                  <CardDescription className="text-base leading-relaxed">
+                    {organization.pershkrimi}
+                  </CardDescription>
                 </CardHeader>
               </Card>
 
@@ -207,22 +212,21 @@ checkSession()
                       <span>{organization.person_kontakti}</span>
                     </div>
                   </div>
-                 <div>
-  <h4 className="font-medium text-gray-900 mb-1">Email</h4>
-  <div className="flex items-center gap-2 text-gray-600">
-    <Mail className="h-4 w-4" />
-    {isLoggedIn ? (
-      <a
-        href={`mailto:${organization.email_kontakti}`}
-        className="hover:text-[#00C896] transition-colors"
-      >
-        {organization.email_kontakti}
-      </a>
-    ) : (
-      <span className="italic text-gray-400">Kyçu për ta parë emailin</span>
-    )}
-  </div>
-</div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-1">Email</h4>
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <Mail className="h-4 w-4" />
+                      {isLoggedIn ? (
+                        <a
+                          href={`mailto:${organization.email_kontakti}`}
+                          className="hover:text-[#00C896] transition-colors"
+                        >
+                          {organization.email_kontakti}
+                        </a>
+                      ) : (
+                        <span className="italic text-gray-400">Kyçu për ta parë emailin</span>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
