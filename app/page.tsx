@@ -112,7 +112,7 @@ export default function Home() {
               </div>
 
               <div className="group animate-slide-in-right">
-                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full bg-gradient-to-br from-orange-50 to-red-50 border border-orange-100">
+                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100">
                   <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <MessageCircle className="h-10 w-10 text-white" />
                   </div>
@@ -173,7 +173,7 @@ export default function Home() {
               </div>
 
               <div className="group animate-slide-in-right">
-                <div className="glass-card p-8 rounded-2xl hover-lift space-y-6 h-full bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-100">
+                <div className="glass-card p-8 rounded-2xl hover-lift space-y-6 h-full bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100">
                   <div className="flex items-center space-x-4">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       <Users className="h-8 w-8 text-white" />
