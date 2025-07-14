@@ -23,7 +23,7 @@ import { useSupabase, useAuth } from "@/lib/auth-provider";
 type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani";
 
 interface FormData {
-  emri_i_plotë: string;
+  emri_i_plotë: string; // Keep this for the form input name and display
   email: string;
   password: string;
   confirmPassword: string;
@@ -205,7 +205,7 @@ export default function RegjistrohuPage() {
       // The actual organization type is stored in the 'organizations' table.
       const { error: profileError } = await supabase.from("users").insert({
         id: userId, // Link to Supabase auth.users table via ID
-        emri_i_plotë: formData.emri_i_plotë,
+        emri_plote: formData.emri_i_plotë, // Changed to 'emri_plote' to match the error message
         email: formData.email,
         vendndodhja: formData.vendndodhja,
         roli: "Individ", // Set to "Individ" to match DB schema constraint for all base users
