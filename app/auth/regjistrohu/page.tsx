@@ -68,10 +68,7 @@ export default function RegjistrohuPage() {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
+  if (isLoading) return null;
   if (user) return null;
 
   const handleChange = (
@@ -133,7 +130,8 @@ export default function RegjistrohuPage() {
     e.preventDefault();
 
     if (!formData.terms) {
-      setError("Ju duhet të pranoni kushtet e përdo...");
+      setError("Ju duhet të pranoni kushtet e përdorimit.");
+      return;
     }
 
     setLoading(true);
@@ -153,11 +151,20 @@ export default function RegjistrohuPage() {
 
       if (authError) throw authError;
 
-      const user = authData.user;
-      if (!user) throw new Error("Regjistrimi dështoi. Përpiquni përseri.");
+      // Get session again to make sure user is available
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
 
+      if (sessionError) throw sessionError;
+
+      const userId = session?.user?.id;
+      if (!userId) throw new Error("Nuk u arrit të merret ID e përdoruesit.");
+
+      // Insert into users table
       const { error: profileError } = await supabase.from("users").insert({
-        id: user.id,
+        id: userId,
         emri_i_plotë: formData.emri_i_plotë,
         email: formData.email,
         vendndodhja: formData.vendndodhja,
@@ -167,6 +174,7 @@ export default function RegjistrohuPage() {
 
       if (profileError) throw profileError;
 
+      // If registering as org
       if (formData.roli !== "Individ") {
         const { data: orgData, error: orgError } = await supabase
           .from("organizations")
@@ -174,7 +182,8 @@ export default function RegjistrohuPage() {
             emri: formData.emri_organizates!,
             pershkrimi: formData.pershkrimi_organizates!,
             interesi_primar: formData.interesi_primar!,
-            person_kontakti: formData.person_kontakti || formData.emri_i_plotë,
+            person_kontakti:
+              formData.person_kontakti || formData.emri_i_plotë,
             email_kontakti: formData.email_kontakti || formData.email,
             vendndodhja: formData.vendndodhja,
             lloji: formData.roli,
@@ -189,7 +198,7 @@ export default function RegjistrohuPage() {
             .from("organization_members")
             .insert({
               organization_id: orgData[0].id,
-              user_id: user.id,
+              user_id: userId,
               roli_ne_organizate: "themelues",
               eshte_aprovuar: true,
             });
@@ -200,11 +209,14 @@ export default function RegjistrohuPage() {
 
       router.push("/auth/sukses");
     } catch (error: any) {
-      setError(error.message || "Gabim gjetë regjistrimit.");
+      setError(
+        error.message || "Gabim gjatë regjistrimit. Ju lutemi provoni përsëri."
+      );
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5 py-12">
