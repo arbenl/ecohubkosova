@@ -205,7 +205,7 @@ export default function RegjistrohuPage() {
       // The actual organization type is stored in the 'organizations' table.
       const { error: profileError } = await supabase.from("users").insert({
         id: userId, // Link to Supabase auth.users table via ID
-        emri_plote: formData.emri_i_plotë, // Changed to 'emri_plote' to match the error message
+        emri_i_plotë: formData.emri_i_plotë, // Reverted to 'emri_i_plotë' as requested
         email: formData.email,
         vendndodhja: formData.vendndodhja,
         roli: "Individ", // Set to "Individ" to match DB schema constraint for all base users
