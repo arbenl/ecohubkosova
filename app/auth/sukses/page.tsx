@@ -16,7 +16,7 @@ export default function SuksesPage() {
             </div>
             <h1 className="text-2xl font-bold">Regjistrimi u krye me sukses!</h1>
             <p className="text-gray-600">
-              Faleminderit për regjistrimin në ECO HUB KOSOVA. Ju kemi dërguar një email konfirmimi në adresën tuaj.
+  Faleminderit për regjistrimin në ECO HUB KOSOVA. Tani mund të përdorni platformën tonë.
             </p>
             {/* Additional message for organizations */}
             <div className="bg-blue-50 p-4 rounded-lg text-blue-800 text-sm">
