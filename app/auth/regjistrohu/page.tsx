@@ -109,9 +109,11 @@ export default function RegjistrohuPage() {
 
     if (step === 2 && formData.roli !== "Individ") {
       if (
-        !formData.emri_organizates ||
-        !formData.pershkrimi_organizates ||
-        !formData.interesi_primar
+       !formData.emri_organizates ||
+    !formData.pershkrimi_organizates ||
+    !formData.interesi_primar ||
+    !formData.person_kontakti ||
+    !formData.email_kontakti
       ) {
         setError("Ju lutemi plotësoni të gjitha fushat e organizatës.");
         return;
