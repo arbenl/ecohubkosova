@@ -1,44 +1,50 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Textarea } from "@/components/ui/textarea"
-import { useSupabase } from "@/lib/auth-provider"
-import { useAuth } from "@/lib/auth-provider"
+import type React from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
+import { useSupabase, useAuth } from "@/lib/auth-provider";
 
-type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani"
+type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani";
 
 interface FormData {
-  emri_i_plotë: string
-  email: string
-  password: string
-  confirmPassword: string
-  vendndodhja: string
-  roli: UserRole
-  emri_organizates?: string
-  pershkrimi_organizates?: string
-  interesi_primar?: string
-  person_kontakti?: string
-  email_kontakti?: string
-  terms: boolean
-  newsletter: boolean
+  emri_i_plotë: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  vendndodhja: string;
+  roli: UserRole;
+  emri_organizates?: string;
+  pershkrimi_organizates?: string;
+  interesi_primar?: string;
+  person_kontakti?: string;
+  email_kontakti?: string;
+  terms: boolean;
+  newsletter: boolean;
 }
 
 export default function RegjistrohuPage() {
-  const [step, setStep] = useState(1)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
-  const supabase = useSupabase()
-  const { user, isLoading } = useAuth()
+  const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const supabase = useSupabase();
+  const { user, isLoading } = useAuth();
 
   const [formData, setFormData] = useState<FormData>({
     emri_i_plotë: "",
@@ -54,51 +60,34 @@ export default function RegjistrohuPage() {
     email_kontakti: "",
     terms: false,
     newsletter: false,
-  })
+  });
 
   useEffect(() => {
     if (!isLoading && user) {
-      console.log("User already logged in, redirecting to dashboard")
-      router.push("/dashboard")
+      router.push("/dashboard");
     }
-  }, [user, isLoading, router])
+  }, [user, isLoading, router]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5">
-        <div className="max-w-md mx-auto glass-card rounded-2xl shadow-xl p-8">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-gray-200 rounded-xl"></div>
-            <div className="h-12 bg-gray-200 rounded-xl"></div>
-            <div className="h-12 bg-gray-200 rounded-xl"></div>
-            <div className="h-12 bg-gray-200 rounded-xl"></div>
-          </div>
-          <div className="text-center mt-4 text-gray-600">Duke ngarkuar...</div>
-        </div>
-      </div>
-    )
+    return <div>Loading...</div>;
   }
 
-  // Don't render registration form if user is already logged in
-  if (user) {
-    return null
-  }
+  if (user) return null;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target
-    const checked = (e.target as HTMLInputElement).checked
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
-    })
-  }
+    });
+  };
 
   const handleRoleChange = (value: UserRole) => {
-    setFormData({
-      ...formData,
-      roli: value,
-    })
-  }
+    setFormData({ ...formData, roli: value });
+  };
 
   const handleNextStep = () => {
     if (step === 1) {
@@ -109,50 +98,48 @@ export default function RegjistrohuPage() {
         !formData.confirmPassword ||
         !formData.vendndodhja
       ) {
-        setError("Ju lutemi plotësoni të gjitha fushat e detyrueshme.")
-        return
+        setError("Ju lutemi plotësoni të gjitha fushat e detyrueshme.");
+        return;
       }
-
       if (formData.password !== formData.confirmPassword) {
-        setError("Fjalëkalimet nuk përputhen.")
-        return
+        setError("Fjalëkalimet nuk përputhen.");
+        return;
       }
-
       if (formData.password.length < 6) {
-        setError("Fjalëkalimi duhet të ketë të paktën 6 karaktere.")
-        return
+        setError("Fjalëkalimi duhet të ketë të paktën 6 karaktere.");
+        return;
       }
     }
-
     if (step === 2 && formData.roli !== "Individ") {
-      if (!formData.emri_organizates || !formData.pershkrimi_organizates || !formData.interesi_primar) {
-        setError("Ju lutemi plotësoni të gjitha fushat e detyrueshme për organizatën.")
-        return
+      if (
+        !formData.emri_organizates ||
+        !formData.pershkrimi_organizates ||
+        !formData.interesi_primar
+      ) {
+        setError("Ju lutemi plotësoni të gjitha fushat e organizatës.");
+        return;
       }
     }
-
-    setError(null)
-    setStep(step + 1)
-  }
+    setError(null);
+    setStep(step + 1);
+  };
 
   const handlePrevStep = () => {
-    setStep(step - 1)
-    setError(null)
-  }
+    setStep(step - 1);
+    setError(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!formData.terms) {
-      setError("Ju duhet të pranoni kushtet e përdorimit për të vazhduar.")
-      return
+      setError("Ju duhet të pranoni kushtet e përdo...");
     }
 
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
 
     try {
-      // Register user with Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -162,24 +149,25 @@ export default function RegjistrohuPage() {
             roli: formData.roli,
           },
         },
-      })
+      });
 
-      if (authError) throw authError
+      if (authError) throw authError;
 
-      // Create user profile in database
+      const user = authData.user;
+      if (!user) throw new Error("Regjistrimi dështoi. Përpiquni përseri.");
+
       const { error: profileError } = await supabase.from("users").insert({
-        id: authData.user?.id,
+        id: user.id,
         emri_i_plotë: formData.emri_i_plotë,
         email: formData.email,
         vendndodhja: formData.vendndodhja,
         roli: formData.roli,
-        eshte_aprovuar: formData.roli === "Individ" ? true : false,
-      })
+        eshte_aprovuar: formData.roli === "Individ",
+      });
 
-      if (profileError) throw profileError
+      if (profileError) throw profileError;
 
-      // If organization, create organization profile
-      if (formData.roli !== "Individ" && authData.user) {
+      if (formData.roli !== "Individ") {
         const { data: orgData, error: orgError } = await supabase
           .from("organizations")
           .insert({
@@ -192,31 +180,31 @@ export default function RegjistrohuPage() {
             lloji: formData.roli,
             eshte_aprovuar: false,
           })
-          .select()
+          .select();
 
-        if (orgError) throw orgError
+        if (orgError) throw orgError;
 
-        // Create organization member relationship
         if (orgData && orgData[0]) {
-          const { error: memberError } = await supabase.from("organization_members").insert({
-            organization_id: orgData[0].id,
-            user_id: authData.user.id,
-            roli_ne_organizate: "themelues",
-            eshte_aprovuar: true,
-          })
+          const { error: memberError } = await supabase
+            .from("organization_members")
+            .insert({
+              organization_id: orgData[0].id,
+              user_id: user.id,
+              roli_ne_organizate: "themelues",
+              eshte_aprovuar: true,
+            });
 
-          if (memberError) throw memberError
+          if (memberError) throw memberError;
         }
       }
 
-      // Redirect to success page or dashboard
-      router.push("/auth/sukses")
+      router.push("/auth/sukses");
     } catch (error: any) {
-      setError(error.message || "Gabim gjatë regjistrimit. Ju lutemi provoni përsëri.")
+      setError(error.message || "Gabim gjetë regjistrimit.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5 py-12">
