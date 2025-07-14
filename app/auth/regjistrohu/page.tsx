@@ -68,8 +68,7 @@ export default function RegjistrohuPage() {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading) return null;
-  if (user) return null;
+  if (isLoading || user) return null;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -107,6 +106,7 @@ export default function RegjistrohuPage() {
         return;
       }
     }
+
     if (step === 2 && formData.roli !== "Individ") {
       if (
         !formData.emri_organizates ||
@@ -117,6 +117,7 @@ export default function RegjistrohuPage() {
         return;
       }
     }
+
     setError(null);
     setStep(step + 1);
   };
@@ -138,7 +139,7 @@ export default function RegjistrohuPage() {
     setError(null);
 
     try {
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      const { data: signUpData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
@@ -151,16 +152,13 @@ export default function RegjistrohuPage() {
 
       if (authError) throw authError;
 
-   // Get authenticated user after signup
-const {
-  data: { user },
-  error: userError,
-} = await supabase.auth.getUser();
+      // Ensure user is available
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData?.user?.id) {
+        throw new Error("Nuk u arrit të merret përdoruesi pas regjistrimit.");
+      }
 
-if (userError || !user?.id) {
-  throw new Error("Nuk u arrit të merret përdoruesi pas regjistrimit.");
-}
-const userId = user.id;
+      const userId = userData.user.id;
 
       // Insert into users table
       const { error: profileError } = await supabase.from("users").insert({
@@ -174,7 +172,7 @@ const userId = user.id;
 
       if (profileError) throw profileError;
 
-      // If registering as org
+      // If it's an organization
       if (formData.roli !== "Individ") {
         const { data: orgData, error: orgError } = await supabase
           .from("organizations")
@@ -182,36 +180,32 @@ const userId = user.id;
             emri: formData.emri_organizates!,
             pershkrimi: formData.pershkrimi_organizates!,
             interesi_primar: formData.interesi_primar!,
-            person_kontakti:
-              formData.person_kontakti || formData.emri_i_plotë,
+            person_kontakti: formData.person_kontakti || formData.emri_i_plotë,
             email_kontakti: formData.email_kontakti || formData.email,
             vendndodhja: formData.vendndodhja,
             lloji: formData.roli,
             eshte_aprovuar: false,
           })
-          .select();
+          .select()
+          .single();
 
         if (orgError) throw orgError;
 
-        if (orgData && orgData[0]) {
-          const { error: memberError } = await supabase
-            .from("organization_members")
-            .insert({
-              organization_id: orgData[0].id,
-              user_id: userId,
-              roli_ne_organizate: "themelues",
-              eshte_aprovuar: true,
-            });
+        const { error: memberError } = await supabase
+          .from("organization_members")
+          .insert({
+            organization_id: orgData.id,
+            user_id: userId,
+            roli_ne_organizate: "themelues",
+            eshte_aprovuar: true,
+          });
 
-          if (memberError) throw memberError;
-        }
+        if (memberError) throw memberError;
       }
 
       router.push("/auth/sukses");
     } catch (error: any) {
-      setError(
-        error.message || "Gabim gjatë regjistrimit. Ju lutemi provoni përsëri."
-      );
+      setError(error.message || "Gabim gjatë regjistrimit. Ju lutemi provoni përsëri.");
     } finally {
       setLoading(false);
     }
