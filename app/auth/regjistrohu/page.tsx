@@ -385,33 +385,35 @@ export default function RegjistrohuPage() {
                           required
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="person_kontakti" className="text-gray-700 font-medium">
-                          Person kontakti (opsionale)
-                        </Label>
-                        <Input
-                          id="person_kontakti"
-                          name="person_kontakti"
-                          value={formData.person_kontakti}
-                          onChange={handleChange}
-                          placeholder="Emri i personit të kontaktit"
-                          className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email_kontakti" className="text-gray-700 font-medium">
-                          Email kontakti (opsionale)
-                        </Label>
-                        <Input
-                          id="email_kontakti"
-                          name="email_kontakti"
-                          type="email"
-                          value={formData.email_kontakti}
-                          onChange={handleChange}
-                          placeholder="Email i personit të kontaktit"
-                          className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
-                        />
-                      </div>
+<div className="space-y-2">
+  <Label htmlFor="person_kontakti" className="text-gray-700 font-medium">
+    Person kontakti 
+  </Label>
+  <Input
+    id="person_kontakti"
+    name="person_kontakti"
+    value={formData.person_kontakti}
+    onChange={handleChange}
+    placeholder="Emri i personit të kontaktit"
+    className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+  />
+</div>
+
+<div className="space-y-2">
+  <Label htmlFor="email_kontakti" className="text-gray-700 font-medium">
+    Email kontakti
+  </Label>
+  <Input
+    id="email_kontakti"
+    name="email_kontakti"
+    type="email"
+    value={formData.email_kontakti}
+    onChange={handleChange}
+    placeholder="Email i personit të kontaktit"
+    className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+  />
+</div>
+
                     </>
                   ) : (
                     <div className="text-center py-12">
