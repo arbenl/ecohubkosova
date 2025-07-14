@@ -151,16 +151,16 @@ export default function RegjistrohuPage() {
 
       if (authError) throw authError;
 
-      // Get session again to make sure user is available
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
+   // Get authenticated user after signup
+const {
+  data: { user },
+  error: userError,
+} = await supabase.auth.getUser();
 
-      if (sessionError) throw sessionError;
-
-      const userId = session?.user?.id;
-      if (!userId) throw new Error("Nuk u arrit të merret ID e përdoruesit.");
+if (userError || !user?.id) {
+  throw new Error("Nuk u arrit të merret përdoruesi pas regjistrimit.");
+}
+const userId = user.id;
 
       // Insert into users table
       const { error: profileError } = await supabase.from("users").insert({
