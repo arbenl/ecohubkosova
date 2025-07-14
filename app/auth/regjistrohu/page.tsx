@@ -396,6 +396,7 @@ export default function RegjistrohuPage() {
     onChange={handleChange}
     placeholder="Emri i personit të kontaktit"
     className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+    required
   />
 </div>
 
@@ -411,6 +412,7 @@ export default function RegjistrohuPage() {
     onChange={handleChange}
     placeholder="Email i personit të kontaktit"
     className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+    required
   />
 </div>
 
