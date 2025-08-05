@@ -245,9 +245,9 @@ export default function ProfiliPage() {
                 {organization && <TabsTrigger value="organization">Profili i organizatës</TabsTrigger>}
                 <TabsTrigger value="password">Ndrysho fjalëkalimin</TabsTrigger>
               </TabsList>
-
-              {/* ... leave rest of tabs content unchanged ... */}
-
+              <TabsContent value="personal">/* You can re-use your UI layout here */</TabsContent>
+              <TabsContent value="organization">/* Same for org */</TabsContent>
+              <TabsContent value="password">/* Your password form */</TabsContent>
             </Tabs>
           )}
         </div>
