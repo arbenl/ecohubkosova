@@ -245,9 +245,61 @@ export default function ProfiliPage() {
                 {organization && <TabsTrigger value="organization">Profili i organizatës</TabsTrigger>}
                 <TabsTrigger value="password">Ndrysho fjalëkalimin</TabsTrigger>
               </TabsList>
-              <TabsContent value="personal">/* You can re-use your UI layout here */</TabsContent>
-              <TabsContent value="organization">/* Same for org */</TabsContent>
-              <TabsContent value="password">/* Your password form */</TabsContent>
+              <TabsContent value="personal">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Profili Personal</CardTitle>
+                    <CardDescription>Ndrysho informacionet personale.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleUserSubmit} className="space-y-4">
+                      <Label htmlFor="emri_i_plotë">Emri i Plotë</Label>
+                      <Input name="emri_i_plotë" value={userFormData.emri_i_plotë} onChange={handleUserChange} />
+                      <Label htmlFor="email">Email</Label>
+                      <Input name="email" value={userFormData.email} disabled />
+                      <Label htmlFor="vendndodhja">Vendndodhja</Label>
+                      <Input name="vendndodhja" value={userFormData.vendndodhja} onChange={handleUserChange} />
+                      <Button type="submit" disabled={saving}>{saving ? "Duke ruajtur..." : "Ruaj"}</Button>
+                    </form>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              <TabsContent value="organization">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Profili i organizatës</CardTitle>
+                    <CardDescription>Ndrysho të dhënat e organizatës.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleOrgSubmit} className="space-y-4">
+                      <Label htmlFor="emri">Emri</Label>
+                      <Input name="emri" value={orgFormData.emri} onChange={handleOrgChange} />
+                      <Label htmlFor="pershkrimi">Përshkrimi</Label>
+                      <Textarea name="pershkrimi" value={orgFormData.pershkrimi} onChange={handleOrgChange} />
+                      <Label htmlFor="interesi_primar">Interesi Primar</Label>
+                      <Input name="interesi_primar" value={orgFormData.interesi_primar} onChange={handleOrgChange} />
+                      <Label htmlFor="person_kontakti">Person Kontakti</Label>
+                      <Input name="person_kontakti" value={orgFormData.person_kontakti} onChange={handleOrgChange} />
+                      <Label htmlFor="email_kontakti">Email Kontakti</Label>
+                      <Input name="email_kontakti" value={orgFormData.email_kontakti} onChange={handleOrgChange} />
+                      <Label htmlFor="vendndodhja">Vendndodhja</Label>
+                      <Input name="vendndodhja" value={orgFormData.vendndodhja} onChange={handleOrgChange} />
+                      <Button type="submit" disabled={saving}>{saving ? "Duke ruajtur..." : "Ruaj"}</Button>
+                    </form>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              <TabsContent value="password">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Ndrysho fjalëkalimin</CardTitle>
+                    <CardDescription>Zëvendëso fjalëkalimin ekzistues me një të ri.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p>Forma për ndryshim fjalëkalimi do të shtohet këtu.</p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
             </Tabs>
           )}
         </div>
