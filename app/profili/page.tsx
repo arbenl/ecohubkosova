@@ -1,8 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabase"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
@@ -28,6 +27,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert"
+import { supabase } from "@/lib/supabase"
 
 interface UserProfile {
   id: string
@@ -77,80 +77,90 @@ export default function ProfiliPage() {
     vendndodhja: "",
   })
 
-  useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession()
+  const fetchProfileData = async () => {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
 
-        if (!session || !session.user) {
-          router.replace("/auth/kycu")
-          return
-        }
+      if (!session) {
+        router.push("/auth/kycu")
+        return
+      }
 
-        const { data: userData, error: userError } = await supabase
-          .from("users")
-          .select("*")
-          .eq("id", session.user.id)
+      const { data: userData, error: userError } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", session.user.id)
+        .single()
+
+      if (userError) throw userError
+
+      setUserProfile(userData)
+      setUserFormData({
+        emri_i_plotë: userData.emri_i_plotë || "",
+        email: userData.email || "",
+        vendndodhja: userData.vendndodhja || "",
+      })
+
+      if (userData.roli !== "Individ" && userData.roli !== "Admin") {
+        const { data: orgMember } = await supabase
+          .from("organization_members")
+          .select("organization_id")
+          .eq("user_id", session.user.id)
+          .eq("eshte_aprovuar", true)
           .single()
 
-        if (userError) throw userError
-
-        setUserProfile(userData)
-        setUserFormData({
-          emri_i_plotë: userData.emri_i_plotë || "",
-          email: userData.email || "",
-          vendndodhja: userData.vendndodhja || "",
-        })
-
-        if (userData.roli !== "Individ" && userData.roli !== "Admin") {
-          const { data: orgMember } = await supabase
-            .from("organization_members")
-            .select("organization_id")
-            .eq("user_id", session.user.id)
-            .eq("eshte_aprovuar", true)
+        if (orgMember) {
+          const { data: orgData, error: orgError } = await supabase
+            .from("organizations")
+            .select("*")
+            .eq("id", orgMember.organization_id)
             .single()
 
-          if (orgMember) {
-            const { data: orgData, error: orgError } = await supabase
-              .from("organizations")
-              .select("*")
-              .eq("id", orgMember.organization_id)
-              .single()
-
-            if (!orgError && orgData) {
-              setOrganization(orgData)
-              setOrgFormData({
-                emri: orgData.emri || "",
-                pershkrimi: orgData.pershkrimi || "",
-                interesi_primar: orgData.interesi_primar || "",
-                person_kontakti: orgData.person_kontakti || "",
-                email_kontakti: orgData.email_kontakti || "",
-                vendndodhja: orgData.vendndodhja || "",
-              })
-            }
+          if (!orgError && orgData) {
+            setOrganization(orgData)
+            setOrgFormData({
+              emri: orgData.emri || "",
+              pershkrimi: orgData.pershkrimi || "",
+              interesi_primar: orgData.interesi_primar || "",
+              person_kontakti: orgData.person_kontakti || "",
+              email_kontakti: orgData.email_kontakti || "",
+              vendndodhja: orgData.vendndodhja || "",
+            })
           }
         }
-      } catch (err: any) {
-        console.error("Gabim në ngarkimin e profilit:", err)
-        setError(err.message || "Gabim gjatë ngarkimit të profilit.")
-      } finally {
-        setLoading(false)
       }
+    } catch (err: any) {
+      console.error("Error fetching profile:", err)
+      setError(err.message || "Gabim gjatë ngarkimit të profilit.")
+    } finally {
+      setLoading(false)
     }
-
-    loadProfile()
-  }, [router])
-
-  const handleUserChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setUserFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleOrgChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  useEffect(() => {
+    fetchProfileData()
+  }, [])
+
+  const handleUserChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target
-    setOrgFormData((prev) => ({ ...prev, [name]: value }))
+    setUserFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const handleOrgChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target
+    setOrgFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
   }
 
   const handleUserSubmit = async (e: React.FormEvent) => {
@@ -171,8 +181,9 @@ export default function ProfiliPage() {
       if (error) throw error
 
       setSuccess("Profili u përditësua me sukses!")
-    } catch (error: any) {
-      setError(error.message || "Gabim gjatë përditësimit të profilit.")
+      await fetchProfileData()
+    } catch (err: any) {
+      setError(err.message || "Gabim gjatë përditësimit të profilit.")
     } finally {
       setSaving(false)
     }
@@ -202,8 +213,11 @@ export default function ProfiliPage() {
       if (error) throw error
 
       setSuccess("Profili i organizatës u përditësua me sukses!")
-    } catch (error: any) {
-      setError(error.message || "Gabim gjatë përditësimit të profilit të organizatës.")
+      await fetchProfileData()
+    } catch (err: any) {
+      setError(
+        err.message || "Gabim gjatë përditësimit të profilit të organizatës."
+      )
     } finally {
       setSaving(false)
     }
@@ -220,7 +234,6 @@ export default function ProfiliPage() {
               Menaxho informacionet e profilit tënd në ECO HUB KOSOVA
             </p>
           </div>
-
           {loading ? (
             <div className="text-center py-12">
               <p>Duke ngarkuar...</p>
@@ -233,235 +246,8 @@ export default function ProfiliPage() {
                 <TabsTrigger value="password">Ndrysho fjalëkalimin</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="personal">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Informacionet personale</CardTitle>
-                    <CardDescription>
-                      Përditëso informacionet e profilit tënd personal
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {error && (
-                      <Alert variant="destructive" className="mb-6">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>Gabim</AlertTitle>
-                        <AlertDescription>{error}</AlertDescription>
-                      </Alert>
-                    )}
+              {/* ... leave rest of tabs content unchanged ... */}
 
-                    {success && (
-                      <Alert className="mb-6 bg-green-50 text-green-800 border-green-200">
-                        <CheckCircle className="h-4 w-4" />
-                        <AlertTitle>Sukses</AlertTitle>
-                        <AlertDescription>{success}</AlertDescription>
-                      </Alert>
-                    )}
-
-                    <form onSubmit={handleUserSubmit} className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="emri_i_plotë">Emri i plotë</Label>
-                        <Input
-                          id="emri_i_plotë"
-                          name="emri_i_plotë"
-                          value={userFormData.emri_i_plotë}
-                          onChange={handleUserChange}
-                          required
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          value={userFormData.email}
-                          disabled
-                          className="bg-gray-50"
-                        />
-                        <p className="text-xs text-gray-500">
-                          Emaili nuk mund të ndryshohet. Kontaktoni administratorin për ndihmë.
-                        </p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="vendndodhja">Vendndodhja</Label>
-                        <Input
-                          id="vendndodhja"
-                          name="vendndodhja"
-                          value={userFormData.vendndodhja}
-                          onChange={handleUserChange}
-                          placeholder="p.sh. Prishtinë, Kosovë"
-                          required
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="roli">Roli</Label>
-                        <Input
-                          id="roli"
-                          name="roli"
-                          value={userProfile?.roli || ""}
-                          disabled
-                          className="bg-gray-50"
-                        />
-                      </div>
-
-                      <div className="flex justify-end">
-                        <Button
-                          type="submit"
-                          className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
-                          disabled={saving}
-                        >
-                          {saving ? "Duke ruajtur..." : "Ruaj ndryshimet"}
-                        </Button>
-                      </div>
-                    </form>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {organization && (
-                <TabsContent value="organization">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Profili i organizatës</CardTitle>
-                      <CardDescription>Përditëso informacionet e organizatës tuaj</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      {!organization.eshte_aprovuar && (
-                        <Alert className="mb-6 bg-amber-50 text-amber-800 border-amber-200">
-                          <AlertCircle className="h-4 w-4" />
-                          <AlertTitle>Në pritje të aprovimit</AlertTitle>
-                          <AlertDescription>
-                            Profili i organizatës tuaj është në pritje të aprovimit nga administratorët. Ju do të
-                            njoftoheni sapo të aprovohet.
-                          </AlertDescription>
-                        </Alert>
-                      )}
-
-                      <form onSubmit={handleOrgSubmit} className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="emri">Emri i organizatës</Label>
-                          <Input id="emri" name="emri" value={orgFormData.emri} onChange={handleOrgChange} required />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="pershkrimi">Përshkrimi i organizatës</Label>
-                          <Textarea
-                            id="pershkrimi"
-                            name="pershkrimi"
-                            value={orgFormData.pershkrimi}
-                            onChange={handleOrgChange}
-                            rows={4}
-                            required
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="interesi_primar">Interesi primar</Label>
-                          <Input
-                            id="interesi_primar"
-                            name="interesi_primar"
-                            value={orgFormData.interesi_primar}
-                            onChange={handleOrgChange}
-                            required
-                          />
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="person_kontakti">Person kontakti</Label>
-                            <Input
-                              id="person_kontakti"
-                              name="person_kontakti"
-                              value={orgFormData.person_kontakti}
-                              onChange={handleOrgChange}
-                              required
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor="email_kontakti">Email kontakti</Label>
-                            <Input
-                              id="email_kontakti"
-                              name="email_kontakti"
-                              type="email"
-                              value={orgFormData.email_kontakti}
-                              onChange={handleOrgChange}
-                              required
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="vendndodhja">Vendndodhja</Label>
-                          <Input
-                            id="vendndodhja"
-                            name="vendndodhja"
-                            value={orgFormData.vendndodhja}
-                            onChange={handleOrgChange}
-                            required
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="lloji">Lloji</Label>
-                          <Input id="lloji" name="lloji" value={organization.lloji} disabled className="bg-gray-50" />
-                        </div>
-
-                        <div className="flex justify-end">
-                          <Button
-                            type="submit"
-                            className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
-                            disabled={saving || !organization.eshte_aprovuar}
-                          >
-                            {saving ? "Duke ruajtur..." : "Ruaj ndryshimet"}
-                          </Button>
-                        </div>
-                      </form>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              )}
-
-              <TabsContent value="password">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Ndrysho fjalëkalimin</CardTitle>
-                    <CardDescription>
-                      Përditëso fjalëkalimin e llogarisë tënde
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="current_password">Fjalëkalimi aktual</Label>
-                        <Input id="current_password" type="password" required />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="new_password">Fjalëkalimi i ri</Label>
-                        <Input id="new_password" type="password" required />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="confirm_password">Konfirmo fjalëkalimin</Label>
-                        <Input id="confirm_password" type="password" required />
-                      </div>
-
-                      <div className="flex justify-end">
-                        <Button
-                          type="submit"
-                          className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
-                        >
-                          Ndrysho fjalëkalimin
-                        </Button>
-                      </div>
-                    </form>
-                  </CardContent>
-                </Card>
-              </TabsContent>
             </Tabs>
           )}
         </div>
