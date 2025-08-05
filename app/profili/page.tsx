@@ -1,20 +1,33 @@
 "use client"
 
-import type React from "react"
-
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { supabase } from "@/lib/supabase"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 import { AlertCircle, CheckCircle } from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 
 interface UserProfile {
   id: string
@@ -40,7 +53,6 @@ interface Organization {
 
 export default function ProfiliPage() {
   const router = useRouter()
-  const supabase = createClientComponentClient()
 
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -66,19 +78,17 @@ export default function ProfiliPage() {
   })
 
   useEffect(() => {
-    const fetchProfileData = async () => {
+    const loadProfile = async () => {
       try {
-        // Get current session
         const {
           data: { session },
         } = await supabase.auth.getSession()
 
-        if (!session) {
-          router.push("/auth/kycu")
+        if (!session || !session.user) {
+          router.replace("/auth/kycu")
           return
         }
 
-        // Get user profile
         const { data: userData, error: userError } = await supabase
           .from("users")
           .select("*")
@@ -94,7 +104,6 @@ export default function ProfiliPage() {
           vendndodhja: userData.vendndodhja || "",
         })
 
-        // Check if user is part of an organization
         if (userData.roli !== "Individ" && userData.roli !== "Admin") {
           const { data: orgMember } = await supabase
             .from("organization_members")
@@ -104,7 +113,6 @@ export default function ProfiliPage() {
             .single()
 
           if (orgMember) {
-            // Get organization data
             const { data: orgData, error: orgError } = await supabase
               .from("organizations")
               .select("*")
@@ -124,31 +132,25 @@ export default function ProfiliPage() {
             }
           }
         }
-      } catch (error: any) {
-        console.error("Error fetching profile:", error)
-        setError(error.message || "Gabim gjatë ngarkimit të profilit.")
+      } catch (err: any) {
+        console.error("Gabim në ngarkimin e profilit:", err)
+        setError(err.message || "Gabim gjatë ngarkimit të profilit.")
       } finally {
         setLoading(false)
       }
     }
 
-    fetchProfileData()
-  }, [])
+    loadProfile()
+  }, [router])
 
   const handleUserChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setUserFormData({
-      ...userFormData,
-      [name]: value,
-    })
+    setUserFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleOrgChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setOrgFormData({
-      ...orgFormData,
-      [name]: value,
-    })
+    setOrgFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleUserSubmit = async (e: React.FormEvent) => {
@@ -214,7 +216,9 @@ export default function ProfiliPage() {
         <div className="container px-4 md:px-6 max-w-4xl">
           <div className="mb-8">
             <h1 className="text-3xl font-bold">Profili im</h1>
-            <p className="text-gray-600 mt-1">Menaxho informacionet e profilit tënd në ECO HUB KOSOVA</p>
+            <p className="text-gray-600 mt-1">
+              Menaxho informacionet e profilit tënd në ECO HUB KOSOVA
+            </p>
           </div>
 
           {loading ? (
@@ -233,7 +237,9 @@ export default function ProfiliPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Informacionet personale</CardTitle>
-                    <CardDescription>Përditëso informacionet e profilit tënd personal</CardDescription>
+                    <CardDescription>
+                      Përditëso informacionet e profilit tënd personal
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     {error && (
@@ -266,7 +272,13 @@ export default function ProfiliPage() {
 
                       <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" name="email" value={userFormData.email} disabled className="bg-gray-50" />
+                        <Input
+                          id="email"
+                          name="email"
+                          value={userFormData.email}
+                          disabled
+                          className="bg-gray-50"
+                        />
                         <p className="text-xs text-gray-500">
                           Emaili nuk mund të ndryshohet. Kontaktoni administratorin për ndihmë.
                         </p>
@@ -286,7 +298,13 @@ export default function ProfiliPage() {
 
                       <div className="space-y-2">
                         <Label htmlFor="roli">Roli</Label>
-                        <Input id="roli" name="roli" value={userProfile?.roli || ""} disabled className="bg-gray-50" />
+                        <Input
+                          id="roli"
+                          name="roli"
+                          value={userProfile?.roli || ""}
+                          disabled
+                          className="bg-gray-50"
+                        />
                       </div>
 
                       <div className="flex justify-end">
@@ -311,22 +329,6 @@ export default function ProfiliPage() {
                       <CardDescription>Përditëso informacionet e organizatës tuaj</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      {error && (
-                        <Alert variant="destructive" className="mb-6">
-                          <AlertCircle className="h-4 w-4" />
-                          <AlertTitle>Gabim</AlertTitle>
-                          <AlertDescription>{error}</AlertDescription>
-                        </Alert>
-                      )}
-
-                      {success && (
-                        <Alert className="mb-6 bg-green-50 text-green-800 border-green-200">
-                          <CheckCircle className="h-4 w-4" />
-                          <AlertTitle>Sukses</AlertTitle>
-                          <AlertDescription>{success}</AlertDescription>
-                        </Alert>
-                      )}
-
                       {!organization.eshte_aprovuar && (
                         <Alert className="mb-6 bg-amber-50 text-amber-800 border-amber-200">
                           <AlertCircle className="h-4 w-4" />
@@ -357,7 +359,7 @@ export default function ProfiliPage() {
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor="interesi_primar">Interesi primar në ekonominë qarkulluese</Label>
+                          <Label htmlFor="interesi_primar">Interesi primar</Label>
                           <Input
                             id="interesi_primar"
                             name="interesi_primar"
@@ -404,7 +406,7 @@ export default function ProfiliPage() {
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor="lloji">Lloji i organizatës</Label>
+                          <Label htmlFor="lloji">Lloji</Label>
                           <Input id="lloji" name="lloji" value={organization.lloji} disabled className="bg-gray-50" />
                         </div>
 
@@ -427,7 +429,9 @@ export default function ProfiliPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Ndrysho fjalëkalimin</CardTitle>
-                    <CardDescription>Përditëso fjalëkalimin e llogarisë tënde</CardDescription>
+                    <CardDescription>
+                      Përditëso fjalëkalimin e llogarisë tënde
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <form className="space-y-4">
@@ -442,7 +446,7 @@ export default function ProfiliPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="confirm_password">Konfirmo fjalëkalimin e ri</Label>
+                        <Label htmlFor="confirm_password">Konfirmo fjalëkalimin</Label>
                         <Input id="confirm_password" type="password" required />
                       </div>
 
