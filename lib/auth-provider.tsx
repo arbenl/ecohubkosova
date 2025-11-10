@@ -2,13 +2,13 @@
 
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
-import type { User, Session } from "@supabase/supabase-js"
+import type { User, Session, AuthChangeEvent } from "@supabase/supabase-js"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase"
 
 interface UserProfile {
   id: string
-  emri_plote: string
+  emri_i_plotë: string
   email: string
   roli: string
   eshte_aprovuar: boolean
@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (authUser.user) {
           const newProfile = {
             id: userId,
-            emri_plote: authUser.user.user_metadata?.full_name || authUser.user.email?.split("@")[0] || "User",
+            emri_i_plotë: authUser.user.user_metadata?.full_name || authUser.user.email?.split("@")[0] || "User",
             email: authUser.user.email || "",
             roli: "Individ",
             eshte_aprovuar: false,
@@ -135,7 +135,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, newSession) => {
+    } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, newSession: Session | null) => {
       if (!mounted) return
 
       setSession(newSession)

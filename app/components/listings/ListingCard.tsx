@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Mail } from "lucide-react"
@@ -31,7 +32,16 @@ export function ListingCard({ listing, onContact, className }: ListingCardProps)
   return (
     <Card className={className}>
       {listing.imageUrl ? (
-        <img src={listing.imageUrl || "/placeholder.svg"} alt={listing.title} className="h-40 w-full object-cover" />
+        <div className="relative h-40 w-full overflow-hidden rounded-t-lg">
+          <Image
+            src={listing.imageUrl || "/placeholder.svg"}
+            alt={listing.title}
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+            priority={false}
+          />
+        </div>
       ) : null}
 
       <CardHeader className="space-y-1">

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { supabase } from "@/lib/supabase"
@@ -30,12 +30,12 @@ export default function OrganizationDetailPage() {
   const [error, setError] = useState<string | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  const checkSession = async () => {
+  const checkSession = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession()
     setIsLoggedIn(!!session)
-  }
+  }, [])
 
-  const fetchOrganization = async () => {
+  const fetchOrganization = useCallback(async () => {
     if (!params.id) return
 
     try {
@@ -63,7 +63,7 @@ export default function OrganizationDetailPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [params.id])
 
   useEffect(() => {
     const run = async () => {
@@ -71,7 +71,7 @@ export default function OrganizationDetailPage() {
       await fetchOrganization()
     }
     run()
-  }, [params.id])
+  }, [checkSession, fetchOrganization])
 
   if (loading) {
     return (
