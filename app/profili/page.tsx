@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -77,7 +77,7 @@ export default function ProfiliPage() {
     vendndodhja: "",
   })
 
-  const fetchProfileData = async () => {
+  const fetchProfileData = useCallback(async () => {
     try {
       const {
         data: { session },
@@ -137,11 +137,11 @@ export default function ProfiliPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [router])
 
   useEffect(() => {
     fetchProfileData()
-  }, [])
+  }, [fetchProfileData])
 
   const handleUserChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

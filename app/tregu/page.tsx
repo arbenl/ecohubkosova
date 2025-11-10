@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { useSupabase } from "@/lib/auth-provider"
@@ -40,7 +40,7 @@ export default function TreguPage() {
 
   const [activeTab, setActiveTab] = useState(initialTab)
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("all")
   const [listings, setListings] = useState<Listing[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
@@ -50,66 +50,78 @@ export default function TreguPage() {
   const supabase = useSupabase()
   const { user } = useAuth()
 
-  const fetchListings = async (reset = false) => {
-    if (reset) {
-      setPage(1)
-      setListings([])
-    }
+  const fetchListings = useCallback(
+    async ({ reset = false, pageToLoad = 1 }: { reset?: boolean; pageToLoad?: number } = {}) => {
+      const targetPage = reset ? 1 : pageToLoad
+      const normalizedCategory = selectedCategory === "all" ? "" : selectedCategory
 
-    setLoading(true)
+      if (reset) {
+        setPage(1)
+        setListings([])
+      }
 
-    try {
-      let query = supabase
-        .from("tregu_listime")
-        .select(`
+      setLoading(true)
+
+      try {
+        const from = (targetPage - 1) * itemsPerPage
+        const to = targetPage * itemsPerPage - 1
+
+        let query = supabase
+          .from("tregu_listime")
+          .select(`
           *,
           users (emri_i_plotë),
           organizations (emri)
         `)
-        .eq("eshte_aprovuar", true)
-        .order("created_at", { ascending: false })
-        .range(reset ? 0 : (page - 1) * itemsPerPage, reset ? itemsPerPage - 1 : page * itemsPerPage - 1)
+          .eq("eshte_aprovuar", true)
+          .order("created_at", { ascending: false })
+          .range(from, to)
 
-      if (activeTab !== "te-gjitha") {
-        query = query.eq("lloji_listimit", activeTab)
-      }
-
-      if (searchQuery) {
-        query = query.ilike("titulli", `%${searchQuery}%`)
-      }
-
-      if (selectedCategory) {
-        query = query.eq("kategori", selectedCategory)
-      }
-
-      const { data, error } = await query
-
-      if (error) {
-        throw error
-      }
-
-      if (data) {
-        if (reset) {
-          setListings(data)
-        } else {
-          setListings([...listings, ...data])
+        if (activeTab !== "te-gjitha") {
+          query = query.eq("lloji_listimit", activeTab)
         }
-        setHasMore(data.length === itemsPerPage)
+
+        if (searchQuery) {
+          query = query.ilike("titulli", `%${searchQuery}%`)
+        }
+
+        if (normalizedCategory) {
+          query = query.eq("kategori", normalizedCategory)
+        }
+
+        const { data, error } = await query
+
+        if (error) {
+          throw error
+        }
+
+        if (data) {
+          setListings((prev) => (reset ? data : [...prev, ...data]))
+          setHasMore(data.length === itemsPerPage)
+        }
+      } catch (error) {
+        console.error("Gabim gjatë ngarkimit të listimeve:", error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Gabim gjatë ngarkimit të listimeve:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
+    },
+    [activeTab, itemsPerPage, searchQuery, selectedCategory, supabase]
+  )
 
   useEffect(() => {
-    fetchListings(true)
-  }, [activeTab, searchQuery, selectedCategory])
+    fetchListings({ reset: true })
+  }, [fetchListings])
 
   const handleLoadMore = () => {
-    setPage(page + 1)
-    fetchListings()
+    if (loading || !hasMore) {
+      return
+    }
+
+    setPage((prev) => {
+      const nextPage = prev + 1
+      fetchListings({ pageToLoad: nextPage })
+      return nextPage
+    })
   }
 
   const categories = [

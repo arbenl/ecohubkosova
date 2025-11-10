@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Header } from "@/components/header"
@@ -21,6 +21,7 @@ interface Article {
   users: {
     emri_i_plotë: string
   }
+  [key: string]: unknown
 }
 
 export default function QendraEDijesPage() {
@@ -34,62 +35,79 @@ export default function QendraEDijesPage() {
 
   const supabase = createClientComponentClient()
 
-  const fetchArticles = async (reset = false) => {
-    if (reset) {
-      setPage(1)
-      setArticles([])
-    }
+  const fetchArticles = useCallback(
+    async ({ reset = false, pageToLoad = 1 }: { reset?: boolean; pageToLoad?: number } = {}) => {
+      const targetPage = reset ? 1 : pageToLoad
 
-    setLoading(true)
+      if (reset) {
+        setPage(1)
+        setArticles([])
+      }
 
-    try {
-      let query = supabase
-        .from("artikuj")
-        .select(`
+      setLoading(true)
+
+      try {
+        const from = (targetPage - 1) * itemsPerPage
+        const to = targetPage * itemsPerPage - 1
+
+        let query = supabase
+          .from("artikuj")
+          .select(`
           *,
           users (emri_i_plotë)
         `)
-        .eq("eshte_publikuar", true)
-        .order("created_at", { ascending: false })
-        .range(reset ? 0 : (page - 1) * itemsPerPage, reset ? itemsPerPage - 1 : page * itemsPerPage - 1)
+          .eq("eshte_publikuar", true)
+          .order("created_at", { ascending: false })
+          .range(from, to)
 
-      if (searchQuery) {
-        query = query.or(`titulli.ilike.%${searchQuery}%,përmbajtja.ilike.%${searchQuery}%`)
-      }
-
-      if (selectedCategory !== "all") {
-        // Updated condition to check for "all"
-        query = query.eq("kategori", selectedCategory)
-      }
-
-      const { data, error } = await query
-
-      if (error) {
-        throw error
-      }
-
-      if (data) {
-        if (reset) {
-          setArticles(data)
-        } else {
-          setArticles([...articles, ...data])
+        if (searchQuery) {
+          query = query.or(`titulli.ilike.%${searchQuery}%,përmbajtja.ilike.%${searchQuery}%`)
         }
-        setHasMore(data.length === itemsPerPage)
+
+        if (selectedCategory !== "all") {
+          query = query.eq("kategori", selectedCategory)
+        }
+
+        const { data, error } = await query
+
+        if (error) {
+          throw error
+        }
+
+        const typedData = (data ?? []) as unknown as Article[]
+
+        if (typedData.length) {
+          setArticles((prev) => (reset ? typedData : [...prev, ...typedData]))
+          setHasMore(typedData.length === itemsPerPage)
+        } else {
+          if (reset) {
+            setArticles([])
+          }
+          setHasMore(false)
+        }
+      } catch (error) {
+        console.error("Error fetching articles:", error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Error fetching articles:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
+    },
+    [itemsPerPage, searchQuery, selectedCategory, supabase]
+  )
 
   useEffect(() => {
-    fetchArticles(true)
-  }, [searchQuery, selectedCategory])
+    fetchArticles({ reset: true })
+  }, [fetchArticles])
 
   const handleLoadMore = () => {
-    setPage(page + 1)
-    fetchArticles()
+    if (loading || !hasMore) {
+      return
+    }
+
+    setPage((prev) => {
+      const nextPage = prev + 1
+      fetchArticles({ pageToLoad: nextPage })
+      return nextPage
+    })
   }
 
   const formatDate = (dateString: string) => {

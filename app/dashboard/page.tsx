@@ -7,6 +7,22 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
+type DashboardArticle = {
+  id: string
+  titulli: string
+  users?: {
+    emri_i_plotë?: string | null
+  } | null
+}
+
+type KeyPartner = {
+  id: string
+  emri: string
+  pershkrimi: string
+  vendndodhja: string
+  lloji?: string | null
+}
+
 export default function DashboardPage() {
   const { user, userProfile } = useAuth()
   const supabase = useSupabase()
@@ -16,8 +32,8 @@ export default function DashboardPage() {
     usersCount: 0,
     listingsCount: 0,
   })
-  const [latestArticles, setLatestArticles] = useState([])
-  const [keyPartners, setKeyPartners] = useState([])
+  const [latestArticles, setLatestArticles] = useState<DashboardArticle[]>([])
+  const [keyPartners, setKeyPartners] = useState<KeyPartner[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

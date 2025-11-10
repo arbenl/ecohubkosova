@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Header } from "@/components/header"
@@ -25,70 +25,83 @@ export default function DrejtoriaPage() {
   const [organizations, setOrganizations] = useState<Organization[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedType, setSelectedType] = useState("")
-  const [selectedInterest, setSelectedInterest] = useState("")
+  const [selectedType, setSelectedType] = useState("all")
+  const [selectedInterest, setSelectedInterest] = useState("all")
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const itemsPerPage = 9
 
   const supabase = createClientComponentClient()
 
-  const fetchOrganizations = async (reset = false) => {
-    if (reset) {
-      setPage(1)
-      setOrganizations([])
-    }
+  const fetchOrganizations = useCallback(
+    async ({ reset = false, pageToLoad }: { reset?: boolean; pageToLoad?: number } = {}) => {
+      const targetPage = reset ? 1 : pageToLoad ?? 1
+      const normalizedType = selectedType === "all" ? "" : selectedType
+      const normalizedInterest = selectedInterest === "all" ? "" : selectedInterest
 
-    setLoading(true)
-
-    try {
-      let query = supabase
-        .from("organizations")
-        .select("*")
-        .eq("eshte_aprovuar", true)
-        .order("created_at", { ascending: false })
-        .range(reset ? 0 : (page - 1) * itemsPerPage, reset ? itemsPerPage - 1 : page * itemsPerPage - 1)
-
-      if (searchQuery) {
-        query = query.or(`emri.ilike.%${searchQuery}%,pershkrimi.ilike.%${searchQuery}%`)
+      if (reset) {
+        setPage(1)
+        setOrganizations([])
       }
 
-      if (selectedType) {
-        query = query.eq("lloji", selectedType)
-      }
+      setLoading(true)
 
-      if (selectedInterest) {
-        query = query.ilike("interesi_primar", `%${selectedInterest}%`)
-      }
+      try {
+        const from = (targetPage - 1) * itemsPerPage
+        const to = targetPage * itemsPerPage - 1
 
-      const { data, error } = await query
+        let query = supabase
+          .from("organizations")
+          .select("*")
+          .eq("eshte_aprovuar", true)
+          .order("created_at", { ascending: false })
+          .range(from, to)
 
-      if (error) {
-        throw error
-      }
-
-      if (data) {
-        if (reset) {
-          setOrganizations(data)
-        } else {
-          setOrganizations([...organizations, ...data])
+        if (searchQuery) {
+          query = query.or(`emri.ilike.%${searchQuery}%,pershkrimi.ilike.%${searchQuery}%`)
         }
-        setHasMore(data.length === itemsPerPage)
+
+        if (normalizedType) {
+          query = query.eq("lloji", normalizedType)
+        }
+
+        if (normalizedInterest) {
+          query = query.ilike("interesi_primar", `%${normalizedInterest}%`)
+        }
+
+        const { data, error } = await query
+
+        if (error) {
+          throw error
+        }
+
+        if (data) {
+          setOrganizations((prev) => (reset ? data : [...prev, ...data]))
+          setHasMore(data.length === itemsPerPage)
+        }
+      } catch (error) {
+        console.error("Error fetching organizations:", error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Error fetching organizations:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
+    },
+    [itemsPerPage, searchQuery, selectedInterest, selectedType, supabase]
+  )
 
   useEffect(() => {
-    fetchOrganizations(true)
-  }, [searchQuery, selectedType, selectedInterest])
+    fetchOrganizations({ reset: true })
+  }, [fetchOrganizations])
 
   const handleLoadMore = () => {
-    setPage(page + 1)
-    fetchOrganizations()
+    if (loading || !hasMore) {
+      return
+    }
+
+    setPage((prev) => {
+      const nextPage = prev + 1
+      fetchOrganizations({ pageToLoad: nextPage })
+      return nextPage
+    })
   }
 
   const organizationTypes = ["OJQ", "Ndërmarrje Sociale", "Kompani"]
