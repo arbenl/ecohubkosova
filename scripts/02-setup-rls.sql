@@ -10,7 +10,8 @@ CREATE POLICY "Users can view their own profile" ON users
     FOR SELECT USING (auth.uid() = id);
 
 CREATE POLICY "Users can update their own profile" ON users
-    FOR UPDATE USING (auth.uid() = id);
+    FOR UPDATE USING (auth.uid() = id)
+    WITH CHECK (id = auth.uid() AND roli = OLD.roli AND eshte_aprovuar = OLD.eshte_aprovuar);
 
 CREATE POLICY "Anyone can insert user profile" ON users
     FOR INSERT WITH CHECK (auth.uid() = id);
