@@ -7,6 +7,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "test": "echo \"No automated tests defined yet\"",
+    "test:e2e": "playwright test",
     "start": "next start"
   },
   "dependencies": {
@@ -64,6 +65,7 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@solana/wallet-standard-features": "1.2.0",
     "@types/cookie": "0.6.0",
     "@types/node": "22.0.0",

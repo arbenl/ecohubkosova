@@ -18,12 +18,12 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { useSupabase, useAuth } from "@/lib/auth-provider";
+import { registerUser } from "./actions"; // Import the Server Action
 
 type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani";
 
 interface FormData {
-  emri_i_plotë: string; // Keep this for the form input name and display
+  emri_i_plotë: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -43,8 +43,6 @@ export default function RegjistrohuPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const supabase = useSupabase();
-  const { user, isLoading } = useAuth();
 
   const [formData, setFormData] = useState<FormData>({
     emri_i_plotë: "",
@@ -61,16 +59,6 @@ export default function RegjistrohuPage() {
     terms: false,
     newsletter: false,
   });
-
-  useEffect(() => {
-    // If user is already logged in and not loading, redirect to dashboard
-    if (!isLoading && user) {
-      router.push("/dashboard");
-    }
-  }, [user, isLoading, router]);
-
-  // Render nothing while authentication state is loading or if user is already logged in
-  if (isLoading || user) return null;
 
   /**
    * Handles changes for input and textarea elements.
@@ -153,7 +141,7 @@ export default function RegjistrohuPage() {
 
   /**
    * Handles the final submission of the registration form.
-   * Performs Supabase authentication and database inserts.
+   * Calls the registerUser Server Action.
    * @param {React.FormEvent} e - The form submission event.
    */
   const handleSubmit = async (e: React.FormEvent) => {
@@ -168,95 +156,26 @@ export default function RegjistrohuPage() {
     setLoading(true); // Set loading state
     setError(null); // Clear previous errors
 
-    try {
-      // 1. Sign up the user with Supabase Auth
-      // This creates an entry in Supabase's auth.users table.
-      const { data: signUpData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          data: {
-            // Store full name and chosen role in Supabase user metadata (optional, but good for context)
-            emri_i_plotë: formData.emri_i_plotë,
-            roli: formData.roli,
-          },
-        },
-      });
+    const result = await registerUser({
+      emri_i_plotë: formData.emri_i_plotë,
+      email: formData.email,
+      password: formData.password,
+      vendndodhja: formData.vendndodhja,
+      roli: formData.roli,
+      emri_organizates: formData.emri_organizates,
+      pershkrimi_organizates: formData.pershkrimi_organizates,
+      interesi_primar: formData.interesi_primar,
+      person_kontakti: formData.person_kontakti,
+      email_kontakti: formData.email_kontakti,
+      newsletter: formData.newsletter,
+    });
 
-      if (authError) {
-        // Handle specific auth errors (e.g., duplicate email)
-        if (authError.message.includes("User already registered")) {
-          throw new Error("Ky email është tashmë i regjistruar. Ju lutemi kyçuni.");
-        }
-        throw authError; // Re-throw other authentication errors
-      }
-
-      // Ensure user is available after sign-up. This fetches the user from Supabase auth.
-      const { data: userData, error: userError } = await supabase.auth.getUser();
-      if (userError || !userData?.user?.id) {
-        throw new Error("Nuk u arrit të merret përdoruesi pas regjistrimit.");
-      }
-
-      const userId = userData.user.id; // Get the UUID of the newly created user
-
-      // 2. Insert user profile into the 'public.users' table
-      // IMPORTANT: The 'roli' for the 'public.users' table is set to "Individ"
-      // to comply with the database schema's CHECK constraint ('Individ' or 'Admin').
-      // The actual organization type is stored in the 'organizations' table.
-      const { error: profileError } = await supabase.from("users").insert({
-        id: userId, // Link to Supabase auth.users table via ID
-        emri_i_plotë: formData.emri_i_plotë, // Reverted to 'emri_i_plotë' as requested
-        email: formData.email,
-        vendndodhja: formData.vendndodhja,
-        roli: "Individ", // Set to "Individ" to match DB schema constraint for all base users
-        eshte_aprovuar: formData.roli === "Individ", // Individuals are approved by default, organizations require manual approval
-      });
-
-      if (profileError) throw profileError;
-
-      // 3. If the user registered as an organization, insert into 'public.organizations'
-      // and 'public.organization_members' tables.
-      if (formData.roli !== "Individ") {
-        // Insert organization details into the 'organizations' table
-        const { data: orgData, error: orgError } = await supabase
-          .from("organizations")
-          .insert({
-            emri: formData.emri_organizates!,
-            pershkrimi: formData.pershkrimi_organizates!,
-            interesi_primar: formData.interesi_primar!,
-            // Use provided contact person details. These are required by validation in handleNextStep.
-            person_kontakti: formData.person_kontakti!,
-            email_kontakti: formData.email_kontakti!,
-            vendndodhja: formData.vendndodhja,
-            lloji: formData.roli, // Store the specific organization type (OJQ, Ndërmarrje Sociale, Kompani)
-            eshte_aprovuar: false, // Organizations always require approval
-          })
-          .select() // Select the inserted data to get the organization ID
-          .single(); // Expect a single row back
-
-        if (orgError) throw orgError;
-
-        // Link the newly registered user as a member of the organization
-        const { error: memberError } = await supabase
-          .from("organization_members")
-          .insert({
-            organization_id: orgData.id, // ID of the newly created organization
-            user_id: userId, // ID of the user who just registered
-            roli_ne_organizate: "themelues", // The first user is the founder/creator
-            eshte_aprovuar: true, // The founder is automatically approved as a member
-          });
-
-        if (memberError) throw memberError;
-      }
-
-      // Redirect to success page upon successful registration and data insertion
-      router.push("/auth/sukses");
-    } catch (error: any) {
-      // Catch and display any errors during the process
-      setError(error.message || "Gabim gjatë regjistrimit. Ju lutemi provoni përsëri.");
-    } finally {
-      setLoading(false); // Reset loading state
+    if (result.error) {
+      setError(result.error);
+    } else {
+      router.push("/auth/sukses"); // Redirect to success page upon successful registration
     }
+    setLoading(false); // Reset loading state
   };
 
   return (

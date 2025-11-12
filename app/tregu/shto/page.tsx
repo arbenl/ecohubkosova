@@ -4,7 +4,6 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { useSupabase } from "@/lib/auth-provider"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
@@ -17,11 +16,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useAuth } from "@/lib/auth-provider"
-import { useEffect } from "react"
+import { createListing } from "./actions" // Import the server action
 
 export default function ShtoListimPage() {
   const router = useRouter()
-  const supabase = useSupabase()
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -38,32 +36,9 @@ export default function ShtoListimPage() {
     lloji_listimit: "shes" as "shes" | "blej",
   })
 
-  const { user, isLoading } = useAuth()
+  const { user } = useAuth()
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/auth/kycu?message=Please log in to post a listing.")
-    }
-  }, [user, isLoading, router])
-
-  // Show loading while checking auth
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1 py-12">
-          <div className="container px-4 md:px-6 max-w-3xl">
-            <div className="text-center">
-              <p>Duke ngarkuar...</p>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    )
-  }
-
-  // Don't render form if user is not authenticated
+  // Don't render form if user is not authenticated (middleware should handle this, but as a fallback)
   if (!user) {
     return null
   }
@@ -88,38 +63,12 @@ export default function ShtoListimPage() {
     setLoading(true)
     setError(null)
 
-    try {
-      if (!user) {
-        throw new Error("Ju duhet të jeni të kyçur për të shtuar një listim.")
-      }
+    const result = await createListing(formData)
 
-      // Check if user is part of an organization
-      const { data: orgMember } = await supabase
-        .from("organization_members")
-        .select("organization_id")
-        .eq("user_id", user.id)
-        .eq("eshte_aprovuar", true)
-        .single()
-
-      // Create listing
-      const { error: insertError } = await supabase.from("tregu_listime").insert({
-        created_by_user_id: user.id,
-        organization_id: orgMember?.organization_id || null,
-        titulli: formData.titulli,
-        pershkrimi: formData.pershkrimi,
-        kategori: formData.kategori,
-        çmimi: Number.parseFloat(formData.çmimi),
-        njesia: formData.njesia,
-        vendndodhja: formData.vendndodhja,
-        sasia: formData.sasia,
-        lloji_listimit: formData.lloji_listimit,
-        eshte_aprovuar: false, // Requires approval
-      })
-
-      if (insertError) throw insertError
-
+    if (result.error) {
+      setError(result.error)
+    } else {
       setSuccess(true)
-
       // Reset form
       setFormData({
         titulli: "",
@@ -136,11 +85,8 @@ export default function ShtoListimPage() {
       setTimeout(() => {
         router.push("/tregu")
       }, 3000)
-    } catch (error: any) {
-      setError(error.message || "Gabim gjatë shtimit të listimit. Ju lutemi provoni përsëri.")
-    } finally {
-      setLoading(false)
     }
+    setLoading(false)
   }
 
   const categories = [

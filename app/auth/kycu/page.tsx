@@ -9,18 +9,16 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { useSearchParams } from "next/navigation"
-import { useAuth } from "@/lib/auth-provider"
-import { Suspense } from "react"
+import { signIn } from "./actions" // Import the Server Action
 
 const formSchema = z.object({
   email: z.string().email({ message: "Ju lutemi shkruani një adresë email të vlefshme." }),
   password: z.string().min(6, { message: "Fjalëkalimi duhet të ketë të paktën 6 karaktere." }),
 })
 
-function LoginForm() {
+export default function KycuPage() {
   const searchParams = useSearchParams()
   const message = searchParams.get("message")
-  const { signIn, isLoading } = useAuth()
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -36,39 +34,14 @@ function LoginForm() {
     setIsSubmitting(true)
     setError(null)
 
-    try {
-      console.log("Attempting to sign in...")
-      const { error } = await signIn(values.email, values.password)
+    const result = await signIn(values.email, values.password)
 
-      if (error) {
-        console.error("Sign in error:", error)
-        setError(error.message)
-        setIsSubmitting(false)
-      } else {
-        console.log("Sign in successful, waiting for redirect...")
-        // Don't set isSubmitting to false here - let the auth provider handle the redirect
-      }
-    } catch (err) {
-      console.error("Unexpected error:", err)
-      setError("Ndodhi një gabim i papritur")
+    if (result?.error) {
+      setError(result.error)
       setIsSubmitting(false)
     }
-  }
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5">
-        <div className="max-w-md mx-auto glass-card rounded-2xl shadow-xl p-8">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-gray-200 rounded-xl"></div>
-            <div className="h-12 bg-gray-200 rounded-xl"></div>
-            <div className="h-12 bg-gray-200 rounded-xl"></div>
-            <div className="h-12 bg-gray-200 rounded-xl"></div>
-          </div>
-          <div className="text-center mt-4 text-gray-600">Duke ngarkuar...</div>
-        </div>
-      </div>
-    )
+    // If successful, the server action will handle the redirect,
+    // so no need to set isSubmitting to false here.
   }
 
   return (
@@ -164,27 +137,3 @@ function LoginForm() {
     </div>
   )
 }
-
-const KycuPage = () => {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5">
-          <div className="max-w-md mx-auto glass-card rounded-2xl shadow-xl p-8">
-            <div className="animate-pulse space-y-4">
-              <div className="h-8 bg-gray-200 rounded-xl"></div>
-              <div className="h-12 bg-gray-200 rounded-xl"></div>
-              <div className="h-12 bg-gray-200 rounded-xl"></div>
-              <div className="h-12 bg-gray-200 rounded-xl"></div>
-            </div>
-            <div className="text-center mt-4 text-gray-600">Duke ngarkuar...</div>
-          </div>
-        </div>
-      }
-    >
-      <LoginForm />
-    </Suspense>
-  )
-}
-
-export default KycuPage

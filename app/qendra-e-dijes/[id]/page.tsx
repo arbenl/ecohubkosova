@@ -1,14 +1,10 @@
-"use client"
-
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
-import { useSupabase } from "@/lib/auth-provider"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Calendar, User, Tag } from "lucide-react"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 
 interface Article {
   id: string
@@ -22,45 +18,39 @@ interface Article {
   }
 }
 
-export default function ArticleDetailPage() {
-  const params = useParams()
-  const router = useRouter()
-  const [article, setArticle] = useState<Article | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+interface ArticleDetailPageProps {
+  params: {
+    id: string
+  }
+}
 
-  const supabase = useSupabase()
+export default async function ArticleDetailPage({ params }: ArticleDetailPageProps) {
+  const supabase = createServerSupabaseClient()
+  let article: Article | null = null
+  let error: string | null = null
 
-  useEffect(() => {
-    const fetchArticle = async () => {
-      if (!params.id) return
+  try {
+    const { data, error: fetchError } = await supabase
+      .from("artikuj")
+      .select(
+        `
+        *,
+        users!inner("emri_i_plotë")
+      `
+      )
+      .eq("id", params.id)
+      .eq("eshte_publikuar", true)
+      .single()
 
-      try {
-        const { data, error } = await supabase
-          .from("artikuj")
-          .select(`
-            *,
-            users (emri_i_plotë)
-          `)
-          .eq("id", params.id)
-          .eq("eshte_publikuar", true)
-          .single()
-
-        if (error) {
-          throw error
-        }
-
-        setArticle(data)
-      } catch (error: any) {
-        console.error("Error fetching article:", error)
-        setError("Artikulli nuk u gjet ose nuk është i publikuar.")
-      } finally {
-        setLoading(false)
-      }
+    if (fetchError) {
+      throw fetchError
     }
 
-    fetchArticle()
-  }, [params.id, supabase])
+    article = data
+  } catch (err: any) {
+    console.error("Error fetching article:", err)
+    error = "Artikulli nuk u gjet ose nuk është i publikuar."
+  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -69,25 +59,6 @@ export default function ArticleDetailPage() {
       month: "long",
       day: "numeric",
     })
-  }
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1 py-12">
-          <div className="container px-4 md:px-6">
-            <div className="flex items-center justify-center py-12">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-                <p>Duke ngarkuar artikullin...</p>
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    )
   }
 
   if (error || !article) {

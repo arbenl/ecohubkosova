@@ -1,33 +1,7 @@
-"use client"
-
-import { useState, useEffect, useCallback } from "react"
-import { useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { AlertCircle, CheckCircle } from "lucide-react"
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
-import { supabase } from "@/lib/supabase"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
+import ProfiliClientPage from "./profili-client-page" // Will create this client component later
 
 interface UserProfile {
   id: string
@@ -51,176 +25,70 @@ interface Organization {
   eshte_aprovuar: boolean
 }
 
-export default function ProfiliPage() {
-  const router = useRouter()
+export default async function ProfiliPage() {
+  const supabase = createServerSupabaseClient()
 
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  const user = session?.user || null
 
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [organization, setOrganization] = useState<Organization | null>(null)
+  if (!user) {
+    // This should ideally be caught by middleware, but as a fallback
+    return (
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <main className="flex-1 py-12">
+          <div className="container px-4 md:px-6 max-w-4xl">
+            <div className="text-center py-12">
+              <h1 className="text-2xl font-bold mb-4">Qasje e Ndaluar</h1>
+              <p className="text-gray-600 mb-6">Ju duhet të kyçeni për të parë këtë faqe.</p>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
 
-  const [userFormData, setUserFormData] = useState({
-    emri_i_plotë: "",
-    email: "",
-    vendndodhja: "",
-  })
+  let userProfile: UserProfile | null = null
+  let organization: Organization | null = null
+  let error: string | null = null
 
-  const [orgFormData, setOrgFormData] = useState({
-    emri: "",
-    pershkrimi: "",
-    interesi_primar: "",
-    person_kontakti: "",
-    email_kontakti: "",
-    vendndodhja: "",
-  })
+  try {
+    const { data: userData, error: userError } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", user.id)
+      .single()
 
-  const fetchProfileData = useCallback(async () => {
-    try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
+    if (userError) throw userError
 
-      if (!session) {
-        router.push("/auth/kycu")
-        return
-      }
+    userProfile = userData
 
-      const { data: userData, error: userError } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", session.user.id)
+    if (userData.roli !== "Individ" && userData.roli !== "Admin") {
+      const { data: orgMember } = await supabase
+        .from("organization_members")
+        .select("organization_id")
+        .eq("user_id", user.id)
+        .eq("eshte_aprovuar", true)
         .single()
 
-      if (userError) throw userError
-
-      setUserProfile(userData)
-      setUserFormData({
-        emri_i_plotë: userData.emri_i_plotë || "",
-        email: userData.email || "",
-        vendndodhja: userData.vendndodhja || "",
-      })
-
-      if (userData.roli !== "Individ" && userData.roli !== "Admin") {
-        const { data: orgMember } = await supabase
-          .from("organization_members")
-          .select("organization_id")
-          .eq("user_id", session.user.id)
-          .eq("eshte_aprovuar", true)
+      if (orgMember) {
+        const { data: orgData, error: orgError } = await supabase
+          .from("organizations")
+          .select("*")
+          .eq("id", orgMember.organization_id)
           .single()
 
-        if (orgMember) {
-          const { data: orgData, error: orgError } = await supabase
-            .from("organizations")
-            .select("*")
-            .eq("id", orgMember.organization_id)
-            .single()
-
-          if (!orgError && orgData) {
-            setOrganization(orgData)
-            setOrgFormData({
-              emri: orgData.emri || "",
-              pershkrimi: orgData.pershkrimi || "",
-              interesi_primar: orgData.interesi_primar || "",
-              person_kontakti: orgData.person_kontakti || "",
-              email_kontakti: orgData.email_kontakti || "",
-              vendndodhja: orgData.vendndodhja || "",
-            })
-          }
+        if (!orgError && orgData) {
+          organization = orgData
         }
       }
-    } catch (err: any) {
-      console.error("Error fetching profile:", err)
-      setError(err.message || "Gabim gjatë ngarkimit të profilit.")
-    } finally {
-      setLoading(false)
     }
-  }, [router])
-
-  useEffect(() => {
-    fetchProfileData()
-  }, [fetchProfileData])
-
-  const handleUserChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target
-    setUserFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-  }
-
-  const handleOrgChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target
-    setOrgFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-  }
-
-  const handleUserSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSaving(true)
-    setError(null)
-    setSuccess(null)
-
-    try {
-      const { error } = await supabase
-        .from("users")
-        .update({
-          emri_i_plotë: userFormData.emri_i_plotë,
-          vendndodhja: userFormData.vendndodhja,
-        })
-        .eq("id", userProfile?.id)
-
-      if (error) throw error
-
-      setSuccess("Profili u përditësua me sukses!")
-      await fetchProfileData()
-    } catch (err: any) {
-      setError(err.message || "Gabim gjatë përditësimit të profilit.")
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const handleOrgSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSaving(true)
-    setError(null)
-    setSuccess(null)
-
-    try {
-      if (!organization) return
-
-      const { error } = await supabase
-        .from("organizations")
-        .update({
-          emri: orgFormData.emri,
-          pershkrimi: orgFormData.pershkrimi,
-          interesi_primar: orgFormData.interesi_primar,
-          person_kontakti: orgFormData.person_kontakti,
-          email_kontakti: orgFormData.email_kontakti,
-          vendndodhja: orgFormData.vendndodhja,
-        })
-        .eq("id", organization.id)
-
-      if (error) throw error
-
-      setSuccess("Profili i organizatës u përditësua me sukses!")
-      await fetchProfileData()
-    } catch (err: any) {
-      setError(
-        err.message || "Gabim gjatë përditësimit të profilit të organizatës."
-      )
-    } finally {
-      setSaving(false)
-    }
+  } catch (err: any) {
+    console.error("Error fetching profile:", err)
+    error = err.message || "Gabim gjatë ngarkimit të profilit."
   }
 
   return (
@@ -234,73 +102,13 @@ export default function ProfiliPage() {
               Menaxho informacionet e profilit tënd në ECO HUB KOSOVA
             </p>
           </div>
-          {loading ? (
+          {error ? (
             <div className="text-center py-12">
-              <p>Duke ngarkuar...</p>
+              <h1 className="text-2xl font-bold mb-4">Gabim</h1>
+              <p className="text-red-600 mb-6">{error}</p>
             </div>
           ) : (
-            <Tabs defaultValue="personal" className="space-y-6">
-              <TabsList>
-                <TabsTrigger value="personal">Informacione personale</TabsTrigger>
-                {organization && <TabsTrigger value="organization">Profili i organizatës</TabsTrigger>}
-                <TabsTrigger value="password">Ndrysho fjalëkalimin</TabsTrigger>
-              </TabsList>
-              <TabsContent value="personal">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Profili Personal</CardTitle>
-                    <CardDescription>Ndrysho informacionet personale.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleUserSubmit} className="space-y-4">
-                      <Label htmlFor="emri_i_plotë">Emri i Plotë</Label>
-                      <Input name="emri_i_plotë" value={userFormData.emri_i_plotë} onChange={handleUserChange} />
-                      <Label htmlFor="email">Email</Label>
-                      <Input name="email" value={userFormData.email} disabled />
-                      <Label htmlFor="vendndodhja">Vendndodhja</Label>
-                      <Input name="vendndodhja" value={userFormData.vendndodhja} onChange={handleUserChange} />
-                      <Button type="submit" disabled={saving}>{saving ? "Duke ruajtur..." : "Ruaj"}</Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              <TabsContent value="organization">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Profili i organizatës</CardTitle>
-                    <CardDescription>Ndrysho të dhënat e organizatës.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleOrgSubmit} className="space-y-4">
-                      <Label htmlFor="emri">Emri</Label>
-                      <Input name="emri" value={orgFormData.emri} onChange={handleOrgChange} />
-                      <Label htmlFor="pershkrimi">Përshkrimi</Label>
-                      <Textarea name="pershkrimi" value={orgFormData.pershkrimi} onChange={handleOrgChange} />
-                      <Label htmlFor="interesi_primar">Interesi Primar</Label>
-                      <Input name="interesi_primar" value={orgFormData.interesi_primar} onChange={handleOrgChange} />
-                      <Label htmlFor="person_kontakti">Person Kontakti</Label>
-                      <Input name="person_kontakti" value={orgFormData.person_kontakti} onChange={handleOrgChange} />
-                      <Label htmlFor="email_kontakti">Email Kontakti</Label>
-                      <Input name="email_kontakti" value={orgFormData.email_kontakti} onChange={handleOrgChange} />
-                      <Label htmlFor="vendndodhja">Vendndodhja</Label>
-                      <Input name="vendndodhja" value={orgFormData.vendndodhja} onChange={handleOrgChange} />
-                      <Button type="submit" disabled={saving}>{saving ? "Duke ruajtur..." : "Ruaj"}</Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              <TabsContent value="password">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Ndrysho fjalëkalimin</CardTitle>
-                    <CardDescription>Zëvendëso fjalëkalimin ekzistues me një të ri.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p>Forma për ndryshim fjalëkalimi do të shtohet këtu.</p>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+            <ProfiliClientPage userProfile={userProfile} organization={organization} />
           )}
         </div>
       </main>

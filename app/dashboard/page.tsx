@@ -1,11 +1,8 @@
-"use client"
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { BookOpen, Users, ShoppingCart, ArrowRight, User, TrendingUp, Building } from "lucide-react"
-import { useAuth, useSupabase } from "@/lib/auth-provider"
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 
 type DashboardArticle = {
   id: string
@@ -23,73 +20,76 @@ type KeyPartner = {
   lloji?: string | null
 }
 
-export default function DashboardPage() {
-  const { user, userProfile } = useAuth()
-  const supabase = useSupabase()
-  const [stats, setStats] = useState({
+export default async function DashboardPage() {
+  const supabase = createServerSupabaseClient()
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  const user = session?.user || null
+
+  if (!user) {
+    // This should ideally be caught by middleware, but as a fallback
+    return null
+  }
+
+  // Fetch user profile
+  const { data: userProfile } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", user.id)
+    .single()
+
+  let stats = {
     organizationsCount: 0,
     articlesCount: 0,
     usersCount: 0,
     listingsCount: 0,
-  })
-  const [latestArticles, setLatestArticles] = useState<DashboardArticle[]>([])
-  const [keyPartners, setKeyPartners] = useState<KeyPartner[]>([])
-  const [loading, setLoading] = useState(true)
+  }
+  let latestArticles: DashboardArticle[] = []
+  let keyPartners: KeyPartner[] = []
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return
+  try {
+    // Get stats
+    const [
+      { count: organizationsCount },
+      { count: articlesCount },
+      { count: usersCount },
+      { count: listingsCount },
+    ] = await Promise.all([
+      supabase.from("organizations").select("*", { count: "exact", head: true }).eq("eshte_aprovuar", true),
+      supabase.from("artikuj").select("*", { count: "exact", head: true }).eq("eshte_publikuar", true),
+      supabase.from("users").select("*", { count: "exact", head: true }),
+      supabase.from("tregu_listime").select("*", { count: "exact", head: true }).eq("eshte_aprovuar", true),
+    ])
 
-      try {
-        // Get stats
-        const [
-          { count: organizationsCount },
-          { count: articlesCount },
-          { count: usersCount },
-          { count: listingsCount },
-        ] = await Promise.all([
-          supabase.from("organizations").select("*", { count: "exact", head: true }).eq("eshte_aprovuar", true),
-          supabase.from("artikuj").select("*", { count: "exact", head: true }).eq("eshte_publikuar", true),
-          supabase.from("users").select("*", { count: "exact", head: true }),
-          supabase.from("tregu_listime").select("*", { count: "exact", head: true }).eq("eshte_aprovuar", true),
-        ])
+    // Get latest articles
+    const { data: articles } = await supabase
+      .from("artikuj")
+      .select("*, users!inner(\"emri_i_plotë\")")
+      .eq("eshte_publikuar", true)
+      .order("created_at", { ascending: false })
+      .limit(3)
 
-        // Get latest articles
-        const { data: articles } = await supabase
-          .from("artikuj")
-          .select("*, users(emri_i_plotë)")
-          .eq("eshte_publikuar", true)
-          .order("created_at", { ascending: false })
-          .limit(3)
+    // Get key partners
+    const { data: partners } = await supabase
+      .from("organizations")
+      .select("*")
+      .eq("eshte_aprovuar", true)
+      .order("created_at", { ascending: false })
+      .limit(5)
 
-        // Get key partners
-        const { data: partners } = await supabase
-          .from("organizations")
-          .select("*")
-          .eq("eshte_aprovuar", true)
-          .order("created_at", { ascending: false })
-          .limit(5)
-
-        setStats({
-          organizationsCount: organizationsCount || 0,
-          articlesCount: articlesCount || 0,
-          usersCount: usersCount || 0,
-          listingsCount: listingsCount || 0,
-        })
-        setLatestArticles(articles || [])
-        setKeyPartners(partners || [])
-      } catch (error) {
-        console.error("Error fetching dashboard data:", error)
-      } finally {
-        setLoading(false)
-      }
+    stats = {
+      organizationsCount: organizationsCount || 0,
+      articlesCount: articlesCount || 0,
+      usersCount: usersCount || 0,
+      listingsCount: listingsCount || 0,
     }
-
-    fetchData()
-  }, [user, supabase])
-
-  if (!user) {
-    return null
+    latestArticles = articles || []
+    keyPartners = partners || []
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error)
+    // In a real app, you might want to throw an error or return an error state
   }
 
   return (

@@ -1,5 +1,3 @@
-"use client"
-
 import { BaseLayout } from "@/components/base-layout"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"

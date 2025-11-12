@@ -1,5 +1,3 @@
-"use client"
-
 import { BaseLayout } from "@/components/base-layout"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -78,7 +76,7 @@ export default function PartnerePage() {
                   items: ["Riciklimi dhe ripërdorimi", "Energjia e ripërtëritshme", "Prodhimi i qëndrueshëm", "Zinxhiri i furnizimit të gjelbër"],
                 },
               ].map(({ title, description, items }) => (
-                <div key={title} className="glass-card p-6 rounded-2xl text-left bg-white/80 space-y-4 hover:shadow-lg transition-shadow">
+              <div key={title} className="glass-card p-6 rounded-2xl text-left bg-white/80 space-y-4 hover:shadow-lg transition-shadow">
                   <h3 className="text-xl font-semibold text-purple-600">{title}</h3>
                   <p className="text-sm text-gray-600">{description}</p>
                   <ul className="list-disc pl-4 text-sm text-gray-700 space-y-1">

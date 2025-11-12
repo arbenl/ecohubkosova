@@ -1,39 +1,20 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useEffect, useState } from "react"
-import type { User, Session, AuthChangeEvent } from "@supabase/supabase-js"
-import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabase"
+import { createClientSupabaseClient } from "@/lib/supabase"
 
-interface UserProfile {
-  id: string
-  emri_i_plotë: string
-  email: string
-  roli: string
-  eshte_aprovuar: boolean
-}
-
-type AuthContextType = {
-  user: User | null
-  userProfile: UserProfile | null
-  session: Session | null
-  isLoading: boolean
-  isAdmin: boolean
-  signIn: (email: string, password: string) => Promise<{ error: any }>
-  signOut: () => Promise<void>
-  refreshUserProfile: () => Promise<void>
-}
+// ... (rest of the file)
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+export function AuthProvider({ children, initialSession }: { children: React.ReactNode; initialSession: Session | null }) {
+  const [user, setUser] = useState<User | null>(initialSession?.user ?? null)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
+  const [session, setSession] = useState<Session | null>(initialSession)
   const [isLoading, setIsLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
   const router = useRouter()
+  const supabase = createClientSupabaseClient()
 
   const fetchUserProfile = async (userId: string): Promise<UserProfile | null> => {
     try {
@@ -94,44 +75,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let mounted = true
 
-    const initialize = async () => {
-      try {
-        const {
-          data: { session: initialSession },
-        } = await supabase.auth.getSession()
-
-        if (mounted) {
-          setSession(initialSession)
-          setUser(initialSession?.user ?? null)
-
-          if (initialSession?.user) {
-            // Fetch profile in background - don't block loading
-            fetchUserProfile(initialSession.user.id)
-              .then((profile) => {
-                if (mounted) {
-                  setUserProfile(profile)
-                  setIsAdmin(profile?.roli === "Admin")
-                }
-              })
-              .catch((error) => {
-                console.error("Dështoi marrja e profilit në sfond:", error)
-              })
-          } else {
-            setUserProfile(null)
-            setIsAdmin(false)
+    // Initial state is now set by initialSession prop, so we don't need to fetch it here.
+    // We only need to set isLoading to false after initial profile fetch.
+    if (initialSession?.user) {
+      fetchUserProfile(initialSession.user.id)
+        .then((profile) => {
+          if (mounted) {
+            setUserProfile(profile)
+            setIsAdmin(profile?.roli === "Admin")
           }
-        }
-      } catch (error) {
-        console.error("Gabim në sesion:", error)
-      } finally {
-        // ALWAYS clear loading regardless of success/failure
-        if (mounted) {
-          setIsLoading(false)
-        }
-      }
+        })
+        .catch((error) => {
+          console.error("Dështoi marrja e profilit në sfond:", error)
+        })
+        .finally(() => {
+          if (mounted) {
+            setIsLoading(false)
+          }
+        })
+    } else {
+      setIsLoading(false)
     }
-
-    initialize()
 
     const {
       data: { subscription },
@@ -178,7 +142,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       mounted = false
       subscription.unsubscribe()
     }
-  }, [router])
+  }, [initialSession, router, supabase])
 
   const signIn = async (email: string, password: string) => {
     setIsLoading(true)

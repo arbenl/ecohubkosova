@@ -1,15 +1,11 @@
-"use client"
-
-import { useState, useEffect, useCallback } from "react"
-import { useParams } from "next/navigation"
 import Link from "next/link"
-import { supabase } from "@/lib/supabase"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Building, MapPin, Mail, Phone, Users, ArrowLeft, ExternalLink } from "lucide-react"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 
 interface Organization {
   id: string
@@ -23,73 +19,45 @@ interface Organization {
   created_at: string
 }
 
-export default function OrganizationDetailPage() {
-  const params = useParams()
-  const [organization, setOrganization] = useState<Organization | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+interface OrganizationDetailPageProps {
+  params: {
+    id: string
+  }
+}
 
-  const checkSession = useCallback(async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    setIsLoggedIn(!!session)
-  }, [])
+export default async function OrganizationDetailPage({ params }: OrganizationDetailPageProps) {
+  const supabase = createServerSupabaseClient()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  const isLoggedIn = !!session
 
-  const fetchOrganization = useCallback(async () => {
-    if (!params.id) return
+  let organization: Organization | null = null
+  let error: string | null = null
 
-    try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from("organizations")
-        .select("*")
-        .eq("id", params.id)
-        .eq("eshte_aprovuar", true)
-        .single()
+  try {
+    const { data, error: fetchError } = await supabase
+      .from("organizations")
+      .select("*")
+      .eq("id", params.id)
+      .eq("eshte_aprovuar", true)
+      .single()
 
-      if (error) {
-        if (error.code === "PGRST116") {
-          setError("Organizata nuk u gjet ose nuk është aprovuar.")
-        } else {
-          setError("Gabim gjatë ngarkimit të organizatës.")
-        }
-        console.error("Error fetching organization:", error)
+    if (fetchError) {
+      if (fetchError.code === "PGRST116") {
+        error = "Organizata nuk u gjet ose nuk është aprovuar."
       } else {
-        setOrganization(data)
+        error = "Gabim gjatë ngarkimit të organizatës."
       }
-    } catch (error) {
-      console.error("Error fetching organization:", error)
-      setError("Gabim gjatë ngarkimit të organizatës.")
-    } finally {
-      setLoading(false)
+      throw fetchError
     }
-  }, [params.id])
 
-  useEffect(() => {
-    const run = async () => {
-      await checkSession()
-      await fetchOrganization()
+    organization = data
+  } catch (err: any) {
+    console.error("Error fetching organization:", err)
+    if (!error) { // Only set if not already set by specific error code
+      error = "Gabim gjatë ngarkimit të organizatës."
     }
-    run()
-  }, [checkSession, fetchOrganization])
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1 py-12">
-          <div className="container px-4 md:px-6">
-            <div className="flex items-center justify-center min-h-[400px]">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00C896] mx-auto mb-4"></div>
-                <p className="text-gray-600">Duke ngarkuar organizatën...</p>
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    )
   }
 
   if (error || !organization) {

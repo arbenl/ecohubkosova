@@ -1,15 +1,12 @@
-"use client"
-
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
-import { useSupabase, useAuth } from "@/lib/auth-provider"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Calendar, MapPin, Package, Euro, User, Building } from "lucide-react"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
+import ContactListingButton from "./contact-listing-button" // Will create this client component later
 
 interface Listing {
   id: string
@@ -32,48 +29,39 @@ interface Listing {
   }
 }
 
-export default function ListingDetailPage() {
-  const params = useParams()
-  const router = useRouter()
-  const { user } = useAuth()
-  const [listing, setListing] = useState<Listing | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [showContactModal, setShowContactModal] = useState(false)
+export default async function ListingDetailPage({ params }: { params: { id: string } }) {
+  const supabase = createServerSupabaseClient()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  const user = session?.user || null
 
-  const supabase = useSupabase()
+  let listing: Listing | null = null
+  let error: string | null = null
 
-  useEffect(() => {
-    const fetchListing = async () => {
-      if (!params.id) return
+  try {
+    const { data, error: dbError } = await supabase
+      .from("tregu_listime")
+      .select(
+        `
+        *,
+        users!inner("emri_i_plotë", email),
+        organizations (emri, email_kontakti)
+      `
+      )
+      .eq("id", params.id)
+      .eq("eshte_aprovuar", true)
+      .single()
 
-      try {
-        const { data, error } = await supabase
-          .from("tregu_listime")
-          .select(`
-            *,
-            users (emri_i_plotë, email),
-            organizations (emri, email_kontakti)
-          `)
-          .eq("id", params.id)
-          .eq("eshte_aprovuar", true)
-          .single()
-
-        if (error) {
-          throw error
-        }
-
-        setListing(data)
-      } catch (error: any) {
-        console.error("Error fetching listing:", error)
-        setError("Listimi nuk u gjet ose nuk është i aprovuar.")
-      } finally {
-        setLoading(false)
-      }
+    if (dbError) {
+      throw dbError
     }
 
-    fetchListing()
-  }, [params.id, supabase])
+    listing = data
+  } catch (err: any) {
+    console.error("Error fetching listing:", err)
+    error = "Listimi nuk u gjet ose nuk është i aprovuar."
+  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -82,25 +70,6 @@ export default function ListingDetailPage() {
       month: "long",
       day: "numeric",
     })
-  }
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1 py-12">
-          <div className="container px-4 md:px-6">
-            <div className="flex items-center justify-center py-12">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-                <p>Duke ngarkuar listimin...</p>
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    )
   }
 
   if (error || !listing) {
@@ -225,16 +194,15 @@ export default function ListingDetailPage() {
                       <div>
                         <p className="font-medium">{listing.organizations.emri}</p>
                         {user ? (
-  <a
-    href={`mailto:${listing.organizations.email_kontakti}`}
-    className="text-sm text-emerald-600 hover:underline"
-  >
-    {listing.organizations.email_kontakti}
-  </a>
-) : (
-  <p className="text-sm italic text-gray-400">Kyçu për ta parë emailin</p>
-)}
-
+                          <a
+                            href={`mailto:${listing.organizations.email_kontakti}`}
+                            className="text-sm text-emerald-600 hover:underline"
+                          >
+                            {listing.organizations.email_kontakti}
+                          </a>
+                        ) : (
+                          <p className="text-sm italic text-gray-400">Kyçu për ta parë emailin</p>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -243,32 +211,20 @@ export default function ListingDetailPage() {
                       <div>
                         <p className="font-medium">{listing.users?.emri_i_plotë || "Anonim"}</p>
                         {user ? (
-  <a
-    href={`mailto:${listing.users?.email}`}
-    className="text-sm text-emerald-600 hover:underline"
-  >
-    {listing.users?.email}
-  </a>
-) : (
-  <p className="text-sm italic text-gray-400">Kyçu për ta parë emailin</p>
-)}
-
+                          <a
+                            href={`mailto:${listing.users?.email}`}
+                            className="text-sm text-emerald-600 hover:underline"
+                          >
+                            {listing.users?.email}
+                          </a>
+                        ) : (
+                          <p className="text-sm italic text-gray-400">Kyçu për ta parë emailin</p>
+                        )}
                       </div>
                     </div>
                   )}
 
-                  <Button
-                    className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
-                    onClick={() => {
-                      if (user) {
-                        setShowContactModal(true)
-                      } else {
-                        router.push("/auth/kycu?message=Ju duhet të kyçeni për të kontaktuar shitësin")
-                      }
-                    }}
-                  >
-                    Kontakto
-                  </Button>
+                  <ContactListingButton listing={listing} user={user} />
                 </CardContent>
               </Card>
 
@@ -300,63 +256,6 @@ export default function ListingDetailPage() {
               </Card>
             </div>
           </div>
-
-          {/* Contact Modal */}
-          {showContactModal && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
-                <h3 className="text-xl font-bold mb-4">Informacione Kontakti</h3>
-                {listing.organizations ? (
-                  <div className="space-y-3">
-                    <div>
-                      <span className="font-medium text-gray-700">Organizata:</span>
-                      <p className="text-lg">{listing.organizations.emri}</p>
-                    </div>
-                    <div>
-                      <span className="font-medium text-gray-700">Email:</span>
-                      {user ? (
-  <p className="text-lg text-emerald-600">{listing.organizations.email_kontakti}</p>
-) : (
-  <p className="italic text-gray-400">Kyçu për ta parë emailin</p>
-)}
-
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div>
-                      <span className="font-medium text-gray-700">Emri:</span>
-                      <p className="text-lg">{listing.users?.emri_i_plotë || "Anonim"}</p>
-                    </div>
-                   <div>
-  <span className="font-medium text-gray-700">Email:</span>
-  {user ? (
-    <p className="text-lg text-emerald-600">{listing.users?.email}</p>
-  ) : (
-    <p className="italic text-gray-400">Kyçu për ta parë emailin</p>
-  )}
-</div>
-                  </div>
-                )}
-                <div className="flex gap-3 mt-6">
-                  <Button variant="outline" onClick={() => setShowContactModal(false)} className="flex-1">
-                    Mbyll
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      const email = listing.organizations?.email_kontakti || listing.users?.email
-                      if (email) {
-                        window.location.href = `mailto:${email}?subject=Interesim për: ${listing.titulli}`
-                      }
-                    }}
-                    className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
-                  >
-                    Dërgo Email
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
 
           <div className="mt-8 text-center">
             <Button asChild variant="outline">
