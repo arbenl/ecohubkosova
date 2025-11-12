@@ -1,8 +1,25 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
+import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+
+interface Listing {
+  id: string
+  created_by_user_id: string
+  organization_id: string | null
+  titulli: string
+  pershkrimi: string
+  kategori: string
+  çmimi: number
+  njesia: string
+  vendndodhja: string
+  sasia: string
+  lloji_listimit: string
+  eshte_aprovuar: boolean
+  created_at: string
+  updated_at: string | null
+}
 
 interface ListingUpdateData {
   titulli: string
@@ -15,6 +32,32 @@ interface ListingUpdateData {
   lloji_listimit: string
   eshte_aprovuar: boolean
   updated_at: string
+}
+
+type GetListingsResult = {
+  data: Listing[] | null
+  error: string | null
+}
+
+export async function getListings(): Promise<GetListingsResult> {
+  const supabase = createServerSupabaseClient()
+
+  try {
+    const { data, error } = await supabase.from("tregu_listime").select("*")
+
+    if (error) {
+      console.error("Error fetching listings:", error)
+      return { data: null, error: error.message || "Gabim gjatë marrjes së listimeve." }
+    }
+
+    return { data: data ?? [], error: null }
+  } catch (error) {
+    console.error("Server Action Error (getListings):", error)
+    return {
+      data: null,
+      error: error instanceof Error ? error.message : "Gabim i panjohur gjatë marrjes së listimeve.",
+    }
+  }
 }
 
 export async function deleteListing(listingId: string) {

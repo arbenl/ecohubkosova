@@ -3,6 +3,7 @@ import { BookOpen, Users, ShoppingCart, ArrowRight, User, TrendingUp, Building }
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { unstable_noStore as noStore } from "next/cache"
 
 type DashboardArticle = {
   id: string
@@ -21,12 +22,12 @@ type KeyPartner = {
 }
 
 export default async function DashboardPage() {
+  noStore()
   const supabase = createServerSupabaseClient()
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
-  const user = session?.user || null
+    data: { user },
+  } = await supabase.auth.getUser()
 
   if (!user) {
     // This should ideally be caught by middleware, but as a fallback

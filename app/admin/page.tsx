@@ -1,13 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Users, Building, BookOpen, ShoppingCart, AlertCircle, TrendingUp } from "lucide-react"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { Users, Building, BookOpen, ShoppingCart, TrendingUp } from "lucide-react"
+import { getAdminStats, AdminStats } from "./actions"
 import AdminStatCard from "./admin-stat-card" // Will create this client component later
 import AdminQuickActionCard from "./admin-quick-action-card" // Will create this client component later
 
 export default async function AdminDashboardPage() {
-  const supabase = createServerSupabaseClient()
-
-  let stats = {
+  const defaultStats: AdminStats = {
     users: 0,
     organizations: 0,
     pendingOrganizations: 0,
@@ -17,53 +15,11 @@ export default async function AdminDashboardPage() {
     pendingListings: 0,
   }
 
-  try {
-    // Get users count
-    const { count: usersCount } = await supabase.from("users").select("*", { count: "exact", head: true })
+  const { data, error } = await getAdminStats()
+  const stats = data ?? defaultStats
 
-    // Get organizations count
-    const { count: organizationsCount } = await supabase
-      .from("organizations")
-      .select("*", { count: "exact", head: true })
-
-    // Get pending organizations count
-    const { count: pendingOrganizationsCount } = await supabase
-      .from("organizations")
-      .select("*", { count: "exact", head: true })
-      .eq("eshte_aprovuar", false)
-
-    // Get articles count
-    const { count: articlesCount } = await supabase.from("artikuj").select("*", { count: "exact", head: true })
-
-    // Get pending articles count
-    const { count: pendingArticlesCount } = await supabase
-      .from("artikuj")
-      .select("*", { count: "exact", head: true })
-      .eq("eshte_publikuar", false)
-
-    // Get listings count
-    const { count: listingsCount } = await supabase
-      .from("tregu_listime")
-      .select("*", { count: "exact", head: true })
-
-    // Get pending listings count
-    const { count: pendingListingsCount } = await supabase
-      .from("tregu_listime")
-      .select("*", { count: "exact", head: true })
-      .eq("eshte_aprovuar", false)
-
-    stats = {
-      users: usersCount || 0,
-      organizations: organizationsCount || 0,
-      pendingOrganizations: pendingOrganizationsCount || 0,
-      articles: articlesCount || 0,
-      pendingArticles: pendingArticlesCount || 0,
-      listings: listingsCount || 0,
-      pendingListings: pendingListingsCount || 0,
-    }
-  } catch (error) {
+  if (error) {
     console.error("Error fetching admin stats:", error)
-    // In a real app, you might want to throw an error or return an error state
   }
 
   return (

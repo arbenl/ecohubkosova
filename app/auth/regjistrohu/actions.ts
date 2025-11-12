@@ -1,6 +1,6 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
+import { createServerActionSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -21,7 +21,7 @@ interface RegistrationFormData {
 }
 
 export async function registerUser(formData: RegistrationFormData) {
-  const supabase = createRouteHandlerSupabaseClient()
+  const supabase = createServerActionSupabaseClient()
 
   try {
     // 1. Sign up the user with Supabase Auth
@@ -61,7 +61,7 @@ export async function registerUser(formData: RegistrationFormData) {
       eshte_aprovuar: formData.roli === "Individ", // Individuals approved by default
     })
 
-    if (profileError) throw profileError
+    if (profileError && profileError.code !== "23505") throw profileError
 
     // 3. If the user registered as an organization, insert into 'public.organizations'
     if (formData.roli !== "Individ") {

@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { getArticles } from "./actions"
 import ArticlesClientPage from "./articles-client-page" // Will create this client component later
 
 interface Article {
@@ -15,23 +15,11 @@ interface Article {
 }
 
 const AdminArticlesPage = async () => {
-  const supabase = createServerSupabaseClient()
-
-  let initialArticles: Article[] = []
-  let error: string | null = null
-
-  try {
-    const { data, error: fetchError } = await supabase.from("artikuj").select("*")
-    if (fetchError) {
-      throw fetchError
-    }
-    initialArticles = data || []
-  } catch (err: any) {
-    console.error("Error fetching articles:", err)
-    error = "Gabim gjatë marrjes së artikujve."
-  }
+  const { data, error } = await getArticles()
+  const initialArticles: Article[] = data ?? []
 
   if (error) {
+    console.error("Error fetching articles:", error)
     return (
       <div className="container mx-auto py-10">
         <div className="text-center text-red-500">{error}</div>

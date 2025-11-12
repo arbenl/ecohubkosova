@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ListingCard } from "@/components/listings/ListingCard"
 import { Search, SlidersHorizontal } from "lucide-react"
 import { Listing } from "@/types"
-import type { User as SupabaseAuthUser } from "@supabase/supabase-js"
+import { useRouter } from "next/navigation"
 
 interface TreguClientPageProps {
   initialListings: Listing[]
@@ -16,7 +16,6 @@ interface TreguClientPageProps {
   initialSearchQuery: string
   initialSelectedCategory: string
   categories: string[]
-  user: SupabaseAuthUser | null
 }
 
 export default function TreguClientPage({
@@ -26,7 +25,6 @@ export default function TreguClientPage({
   initialSearchQuery,
   initialSelectedCategory,
   categories,
-  user,
 }: TreguClientPageProps) {
   const [listings, setListings] = useState<Listing[]>(initialListings)
   const [filters, setFilters] = useState({
@@ -42,36 +40,32 @@ export default function TreguClientPage({
     setListings(initialListings)
   }, [initialListings])
 
-  const applyFiltersAndSort = () => {
-    let filteredListings = initialListings.filter((listing) => {
-      const matchesCategory = filters.category ? listing.kategori === filters.category : true
-      const matchesCondition = filters.condition ? listing.gjendja === filters.condition : true
-      const matchesLocation = filters.location
-        ? listing.vendndodhja.toLowerCase().includes(filters.location.toLowerCase())
-        : true
-      const matchesSearch = searchQuery
-        ? listing.titulli.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          listing.pershkrimi.toLowerCase().includes(searchQuery.toLowerCase())
-        : true
-      return matchesCategory && matchesCondition && matchesLocation && matchesSearch
-    })
-
-    filteredListings.sort((a, b) => {
-      if (sortOrder === "newest") {
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      } else if (sortOrder === "oldest") {
-        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-      }
-      // Add more sorting options if needed
-      return 0
-    })
+  useEffect(() => {
+    const filteredListings = initialListings
+      .filter((listing) => {
+        const matchesCategory = filters.category ? listing.kategori === filters.category : true
+        const matchesCondition = filters.condition ? listing.gjendja === filters.condition : true
+        const matchesLocation = filters.location
+          ? listing.vendndodhja.toLowerCase().includes(filters.location.toLowerCase())
+          : true
+        const matchesSearch = searchQuery
+          ? listing.titulli.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            listing.pershkrimi.toLowerCase().includes(searchQuery.toLowerCase())
+          : true
+        return matchesCategory && matchesCondition && matchesLocation && matchesSearch
+      })
+      .sort((a, b) => {
+        if (sortOrder === "newest") {
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        }
+        if (sortOrder === "oldest") {
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        }
+        return 0
+      })
 
     setListings(filteredListings)
-  }
-
-  useEffect(() => {
-    applyFiltersAndSort()
-  }, [filters, sortOrder, searchQuery, initialListings]) // Re-run when filters, sortOrder, searchQuery, or initialListings change
+  }, [filters, sortOrder, searchQuery, initialListings])
 
   const handleFilterChange = (filterName: string, value: string) => {
     setFilters((prev) => ({ ...prev, [filterName]: value }))
@@ -86,6 +80,11 @@ export default function TreguClientPage({
   }
 
   const uniqueConditions = Array.from(new Set(initialListings.map((listing) => listing.gjendja)))
+  const router = useRouter()
+
+  const handleContactClick = (listing: Listing) => {
+    router.push(`/tregu/${listing.id}`)
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -110,13 +109,16 @@ export default function TreguClientPage({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <Select onValueChange={(value) => handleFilterChange("category", value)} value={filters.category}>
+          <Select
+            onValueChange={(value) => handleFilterChange("category", value === "all" ? "" : value)}
+            value={filters.category}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Kategoria" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Të gjitha kategoritë</SelectItem>
-              {categories.map((category) => (
+              <SelectItem value="all">Të gjitha kategoritë</SelectItem>
+              {categories.filter(Boolean).map((category) => (
                 <SelectItem key={category} value={category}>
                   {category}
                 </SelectItem>
@@ -124,13 +126,16 @@ export default function TreguClientPage({
             </SelectContent>
           </Select>
 
-          <Select onValueChange={(value) => handleFilterChange("condition", value)} value={filters.condition}>
+          <Select
+            onValueChange={(value) => handleFilterChange("condition", value === "all" ? "" : value)}
+            value={filters.condition}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Gjendja" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Të gjitha gjendjet</SelectItem>
-              {uniqueConditions.map((condition) => (
+              <SelectItem value="all">Të gjitha gjendjet</SelectItem>
+              {uniqueConditions.filter(Boolean).map((condition) => (
                 <SelectItem key={condition} value={condition}>
                   {condition}
                 </SelectItem>
@@ -166,7 +171,7 @@ export default function TreguClientPage({
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {listings.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} user={user} />
+            <ListingCard key={listing.id} listing={listing} onContact={handleContactClick} />
           ))}
         </div>
       )}

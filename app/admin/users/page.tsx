@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { getUsers } from "./actions"
 import UsersClientPage from "./users-client-page" // Will create this client component later
 
 interface User {
@@ -13,23 +13,11 @@ interface User {
 }
 
 export default async function UsersPage() {
-  const supabase = createServerSupabaseClient()
-
-  let initialUsers: User[] = []
-  let error: string | null = null
-
-  try {
-    const { data, error: fetchError } = await supabase.from("users").select("*")
-    if (fetchError) {
-      throw fetchError
-    }
-    initialUsers = data || []
-  } catch (err: any) {
-    console.error("Error fetching users:", err)
-    error = "Gabim gjatë marrjes së përdoruesve."
-  }
+  const { data, error } = await getUsers()
+  const initialUsers: User[] = data ?? []
 
   if (error) {
+    console.error("Error fetching users:", error)
     return (
       <div className="container mx-auto py-10">
         <div className="text-center text-red-500">{error}</div>

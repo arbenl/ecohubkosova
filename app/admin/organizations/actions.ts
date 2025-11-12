@@ -1,8 +1,22 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
+import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+
+interface Organization {
+  id: string
+  emri: string
+  pershkrimi: string
+  interesi_primar: string
+  person_kontakti: string
+  email_kontakti: string
+  vendndodhja: string
+  lloji: string
+  eshte_aprovuar: boolean
+  created_at: string
+  updated_at: string | null
+}
 
 interface OrganizationUpdateData {
   emri: string
@@ -14,6 +28,32 @@ interface OrganizationUpdateData {
   lloji: string
   eshte_aprovuar: boolean
   updated_at: string
+}
+
+type GetOrganizationsResult = {
+  data: Organization[] | null
+  error: string | null
+}
+
+export async function getOrganizations(): Promise<GetOrganizationsResult> {
+  const supabase = createServerSupabaseClient()
+
+  try {
+    const { data, error } = await supabase.from("organizations").select("*")
+
+    if (error) {
+      console.error("Error fetching organizations:", error)
+      return { data: null, error: error.message || "Gabim gjatë marrjes së organizatave." }
+    }
+
+    return { data: data ?? [], error: null }
+  } catch (error) {
+    console.error("Server Action Error (getOrganizations):", error)
+    return {
+      data: null,
+      error: error instanceof Error ? error.message : "Gabim i panjohur gjatë marrjes së organizatave.",
+    }
+  }
 }
 
 export async function deleteOrganization(organizationId: string) {

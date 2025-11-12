@@ -1,68 +1,97 @@
 "use client"
 
 import type React from "react"
+import { useState, useEffect, useCallback, useContext, createContext, useMemo, useRef } from "react"
+import { useRouter } from "next/navigation"
+import type { Session, User, AuthChangeEvent, AuthError } from "@supabase/supabase-js"
 import { createClientSupabaseClient } from "@/lib/supabase"
+import type { UserProfile } from "@/types"
 
-// ... (rest of the file)
+interface AuthContextType {
+  user: User | null
+  userProfile: UserProfile | null
+  session: Session | null
+  isLoading: boolean
+  isAdmin: boolean
+  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
+  signOut: () => Promise<void>
+  refreshUserProfile: () => Promise<void>
+}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const SupabaseContext = createContext<ReturnType<typeof createClientSupabaseClient> | null>(null)
 
-export function AuthProvider({ children, initialSession }: { children: React.ReactNode; initialSession: Session | null }) {
-  const [user, setUser] = useState<User | null>(initialSession?.user ?? null)
+export function AuthProvider({
+  children,
+  initialSession,
+  initialUser,
+}: {
+  children: React.ReactNode
+  initialSession: Session | null
+  initialUser: User | null
+}) {
+  const [user, setUser] = useState<User | null>(initialUser ?? null)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [session, setSession] = useState<Session | null>(initialSession)
   const [isLoading, setIsLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
   const router = useRouter()
-  const supabase = createClientSupabaseClient()
+  const supabase = useMemo(() => createClientSupabaseClient(), [])
+  const listenerInitializedRef = useRef(false)
+  const signOutInFlightRef = useRef(false)
 
-  const fetchUserProfile = async (userId: string): Promise<UserProfile | null> => {
-    try {
-      // Add 5 second timeout to prevent hanging
-      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Database timeout")), 5000))
-
-      const queryPromise = supabase.from("users").select("*").eq("id", userId).limit(1).maybeSingle()
-
-      const { data, error } = (await Promise.race([queryPromise, timeoutPromise])) as any
-
-      if (error) {
-        console.error("Gabim në bazën e të dhënave:", error)
-        return null
-      }
-
-      if (!data) {
-        const { data: authUser } = await supabase.auth.getUser()
-        if (authUser.user) {
-          const newProfile = {
-            id: userId,
-            emri_i_plotë: authUser.user.user_metadata?.full_name || authUser.user.email?.split("@")[0] || "User",
-            email: authUser.user.email || "",
-            roli: "Individ",
-            eshte_aprovuar: false,
-          }
-
-          const { data: createdProfile, error: createError } = await supabase
-            .from("users")
-            .insert(newProfile)
-            .select()
-            .single()
-
-          if (createError) {
-            console.error("Gabim në krijimin e profilit:", createError)
-            return null
-          }
-
-          return createdProfile
-        }
-        return null
-      }
-
-      return data
-    } catch (error) {
-      console.error("Dështoi marrja e profilit:", error)
-      return null
-    }
+  const resetAuthState = () => {
+    setUser(null)
+    setSession(null)
+    setUserProfile(null)
+    setIsAdmin(false)
   }
+
+  const fetchUserProfile = useCallback(
+    async (userId: string): Promise<UserProfile | null> => {
+      try {
+        const { data, error } = await supabase.from("users").select("*").eq("id", userId).limit(1).maybeSingle()
+
+        if (error) {
+          console.error("Gabim në bazën e të dhënave:", error)
+          return null
+        }
+
+        if (!data) {
+          const { data: authUser } = await supabase.auth.getUser()
+          if (authUser.user) {
+            const newProfile = {
+              id: userId,
+              emri_i_plotë: authUser.user.user_metadata?.full_name || authUser.user.email?.split("@")[0] || "User",
+              email: authUser.user.email || "",
+              roli: "Individ",
+              eshte_aprovuar: false,
+            }
+
+            const { data: createdProfile, error: createError } = await supabase
+              .from("users")
+              .insert(newProfile)
+              .select()
+              .single()
+
+            if (createError) {
+              console.error("Gabim në krijimin e profilit:", createError)
+              return null
+            }
+
+            return createdProfile
+          }
+          return null
+        }
+
+        return data
+      } catch (error) {
+        console.error("Dështoi marrja e profilit:", error)
+        return null
+      }
+    },
+    [supabase]
+  )
 
   const refreshUserProfile = async () => {
     if (user) {
@@ -75,27 +104,32 @@ export function AuthProvider({ children, initialSession }: { children: React.Rea
   useEffect(() => {
     let mounted = true
 
-    // Initial state is now set by initialSession prop, so we don't need to fetch it here.
-    // We only need to set isLoading to false after initial profile fetch.
-    if (initialSession?.user) {
-      fetchUserProfile(initialSession.user.id)
-        .then((profile) => {
-          if (mounted) {
-            setUserProfile(profile)
-            setIsAdmin(profile?.roli === "Admin")
-          }
-        })
-        .catch((error) => {
-          console.error("Dështoi marrja e profilit në sfond:", error)
-        })
-        .finally(() => {
-          if (mounted) {
-            setIsLoading(false)
-          }
-        })
-    } else {
+    const syncUserState = async (nextUser: User | null) => {
+      if (!mounted) return
+
+      if (!nextUser) {
+        resetAuthState()
+        setIsLoading(false)
+        return
+      }
+
+      setUser(nextUser)
       setIsLoading(false)
+      const profile = await fetchUserProfile(nextUser.id)
+      if (!mounted) return
+      setUserProfile(profile)
+      setIsAdmin(profile?.roli === "Admin")
     }
+
+    void syncUserState(initialUser)
+
+    if (listenerInitializedRef.current) {
+      return () => {
+        mounted = false
+      }
+    }
+
+    listenerInitializedRef.current = true
 
     const {
       data: { subscription },
@@ -103,46 +137,20 @@ export function AuthProvider({ children, initialSession }: { children: React.Rea
       if (!mounted) return
 
       setSession(newSession)
-      setUser(newSession?.user ?? null)
+      const {
+        data: { user: authenticatedUser },
+      } = await supabase.auth.getUser()
 
-      if (newSession?.user) {
-        // Fetch profile in background
-        fetchUserProfile(newSession.user.id)
-          .then((profile) => {
-            if (mounted) {
-              setUserProfile(profile)
-              setIsAdmin(profile?.roli === "Admin")
-            }
-          })
-          .catch((error) => {
-            console.error("Dështoi marrja e profilit gjatë autentifikimit:", error)
-          })
+      await syncUserState(authenticatedUser ?? null)
 
-        if (event === "SIGNED_IN") {
-          router.push("/dashboard")
-        }
-      } else {
-        if (mounted) {
-          setUserProfile(null)
-          setIsAdmin(false)
-        }
-
-        if (event === "SIGNED_OUT") {
-          router.push("/auth/kycu")
-        }
-      }
-
-      // Always clear loading after auth state change
-      if (mounted) {
-        setIsLoading(false)
-      }
     })
 
     return () => {
       mounted = false
       subscription.unsubscribe()
+      listenerInitializedRef.current = false
     }
-  }, [initialSession, router, supabase])
+  }, [fetchUserProfile, initialUser, supabase])
 
   const signIn = async (email: string, password: string) => {
     setIsLoading(true)
@@ -163,16 +171,40 @@ export function AuthProvider({ children, initialSession }: { children: React.Rea
     } catch (error) {
       // Always clear loading on any error
       setIsLoading(false)
-      return { error }
+      return { error: error as AuthError }
     }
   }
 
   const signOut = async () => {
+    if (signOutInFlightRef.current) return
+    signOutInFlightRef.current = true
     setIsLoading(true)
+
     try {
-      await supabase.auth.signOut()
+      const response = await fetch("/api/auth/signout", {
+        method: "POST",
+        cache: "no-store",
+        credentials: "include",
+      })
+
+      if (!response.ok) {
+        const { error: serverError } = await response.json().catch(() => ({ error: "Gabim gjatë daljes" }))
+        throw new Error(serverError || "Gabim gjatë daljes nga serveri")
+      }
+
+      try {
+        await supabase.auth.signOut()
+      } catch (error) {
+        console.error("Gabim gjatë daljes nga klienti:", error)
+      }
+
+      resetAuthState()
+      router.replace("/auth/kycu")
+      router.refresh()
     } catch (error) {
       console.error("Gabim gjatë daljes:", error)
+    } finally {
+      signOutInFlightRef.current = false
       setIsLoading(false)
     }
   }
@@ -188,7 +220,11 @@ export function AuthProvider({ children, initialSession }: { children: React.Rea
     refreshUserProfile,
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <SupabaseContext.Provider value={supabase}>
+      <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+    </SupabaseContext.Provider>
+  )
 }
 
 export function useAuth() {
@@ -200,5 +236,9 @@ export function useAuth() {
 }
 
 export function useSupabase() {
-  return supabase
+  const context = useContext(SupabaseContext)
+  if (!context) {
+    throw new Error("useSupabase must be used within an AuthProvider")
+  }
+  return context
 }

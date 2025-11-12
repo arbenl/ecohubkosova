@@ -184,7 +184,7 @@ export default function QendraEDijesClientPage({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Të gjitha kategoritë</SelectItem>
-            {categories.map((category) => (
+            {categories.filter(Boolean).map((category) => (
               <SelectItem key={category} value={category}>
                 {category}
               </SelectItem>

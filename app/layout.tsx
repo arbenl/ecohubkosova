@@ -5,7 +5,9 @@ import { AuthProvider } from "@/lib/auth-provider"
 import ErrorBoundary from "@/components/error-boundary" // Import the ErrorBoundary component
 import "./globals.css"
 import type { Metadata } from "next"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server"
+
+export const dynamic = "force-dynamic"
 
 const inter = Inter({ subsets: ["latin", "latin-ext"] })
 
@@ -32,15 +34,22 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const supabase = createServerSupabaseClient();
-  const { data: { session: initialSession } } = await supabase.auth.getSession();
+  const supabase = createServerSupabaseClient()
+  const [
+    {
+      data: { session: initialSession },
+    },
+    { user: initialUser },
+  ] = await Promise.all([supabase.auth.getSession(), getServerUser()])
 
   return (
-    <html lang="sq">
+    <html lang="sq" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <ErrorBoundary> {/* Wrap AuthProvider with ErrorBoundary */}
-            <AuthProvider initialSession={initialSession}>{children}</AuthProvider>
+          <ErrorBoundary>
+            <AuthProvider initialSession={initialSession} initialUser={initialUser}>
+              {children}
+            </AuthProvider>
           </ErrorBoundary>
         </ThemeProvider>
       </body>

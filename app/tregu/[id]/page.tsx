@@ -32,9 +32,8 @@ interface Listing {
 export default async function ListingDetailPage({ params }: { params: { id: string } }) {
   const supabase = createServerSupabaseClient()
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
-  const user = session?.user || null
+    data: { user },
+  } = await supabase.auth.getUser()
 
   let listing: Listing | null = null
   let error: string | null = null

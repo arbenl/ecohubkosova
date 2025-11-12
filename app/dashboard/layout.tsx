@@ -12,15 +12,14 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const { user, userProfile, isLoading } = useAuth()
   const router = useRouter()
+  const { user, userProfile, isLoading } = useAuth()
 
   useEffect(() => {
     if (!isLoading && !user) {
-      console.log("No user found, redirecting to login")
-      router.push("/auth/kycu")
+      router.replace("/auth/kycu")
     }
-  }, [user, isLoading, router])
+  }, [isLoading, user, router])
 
   if (isLoading) {
     return (
@@ -37,7 +36,7 @@ export default function DashboardLayout({
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <p>Duke ju ridrejtuar...</p>
+          <p>Duke verifikuar llogarinë...</p>
         </div>
       </div>
     )

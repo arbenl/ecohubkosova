@@ -1,8 +1,21 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
+import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+
+interface Article {
+  id: string
+  titulli: string
+  përmbajtja: string
+  autori_id: string
+  eshte_publikuar: boolean
+  kategori: string
+  tags: string[] | null
+  foto_kryesore: string | null
+  created_at: string
+  updated_at: string | null
+}
 
 interface ArticleCreateData {
   titulli: string
@@ -21,6 +34,32 @@ interface ArticleUpdateData {
   tags: string[] | null
   foto_kryesore: string | null
   updated_at: string
+}
+
+type GetArticlesResult = {
+  data: Article[] | null
+  error: string | null
+}
+
+export async function getArticles(): Promise<GetArticlesResult> {
+  const supabase = createServerSupabaseClient()
+
+  try {
+    const { data, error } = await supabase.from("artikuj").select("*")
+
+    if (error) {
+      console.error("Error fetching articles:", error)
+      return { data: null, error: error.message || "Gabim gjatë marrjes së artikujve." }
+    }
+
+    return { data: data ?? [], error: null }
+  } catch (error) {
+    console.error("Server Action Error (getArticles):", error)
+    return {
+      data: null,
+      error: error instanceof Error ? error.message : "Gabim i panjohur gjatë marrjes së artikujve.",
+    }
+  }
 }
 
 export async function createArticle(formData: ArticleCreateData) {

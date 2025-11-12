@@ -3,10 +3,9 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { ShoppingCart, Plus } from "lucide-react"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
 import TreguClientPage from "./tregu-client-page" // Will create this client component later
-
-import { Listing } from "@/types"
+import { getListingsData } from "./actions" // Import the new server action
+import { createServerSupabaseClient } from "@/lib/supabase/server" // Keep for user check
 
 interface TreguPageProps {
   searchParams: {
@@ -18,62 +17,18 @@ interface TreguPageProps {
 }
 
 export default async function TreguPage({ searchParams }: TreguPageProps) {
+  // Fetch user securely for gating UI
   const supabase = createServerSupabaseClient()
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
-  const user = session?.user || null
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const { initialListings, hasMoreInitial, error } = await getListingsData(searchParams)
 
   const initialTab =
     searchParams.lloji === "blej" ? "blej" : searchParams.lloji === "shes" ? "shes" : "te-gjitha"
   const initialSearchQuery = searchParams.search || ""
   const initialSelectedCategory = searchParams.category || "all"
-  const initialPage = parseInt(searchParams.page || "1")
-  const itemsPerPage = 9
-
-  let initialListings: Listing[] = []
-  let hasMoreInitial = false
-
-  try {
-    const from = (initialPage - 1) * itemsPerPage
-    const to = initialPage * itemsPerPage - 1
-
-    let query = supabase
-      .from("tregu_listime")
-      .select(
-        `
-        *,
-        users!inner("emri_i_plotë"),
-        organizations!inner(emri)
-      `
-      )
-      .eq("eshte_aprovuar", true)
-      .order("created_at", { ascending: false })
-      .range(from, to)
-
-    if (initialTab !== "te-gjitha") {
-      query = query.eq("lloji_listimit", initialTab)
-    }
-
-    if (initialSearchQuery) {
-      query = query.ilike("titulli", `%${initialSearchQuery}%`)
-    }
-
-    if (initialSelectedCategory && initialSelectedCategory !== "all") {
-      query = query.eq("kategori", initialSelectedCategory)
-    }
-
-    const { data, error } = await query
-
-    if (error) {
-      throw error
-    }
-
-    initialListings = data || []
-    hasMoreInitial = data?.length === itemsPerPage
-  } catch (error) {
-    console.error("Gabim gjatë ngarkimit të listimeve fillestare:", error)
-  }
 
   const categories = [
     "Materiale të riciklueshme",
@@ -119,7 +74,6 @@ export default async function TreguPage({ searchParams }: TreguPageProps) {
             initialSearchQuery={initialSearchQuery}
             initialSelectedCategory={initialSelectedCategory}
             categories={categories}
-            user={user}
           />
         </div>
       </main>

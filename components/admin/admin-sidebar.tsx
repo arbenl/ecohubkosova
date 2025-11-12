@@ -12,6 +12,10 @@ export function AdminSidebar() {
   const pathname = usePathname()
   const { signOut } = useAuth()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const handleSignOut = async () => {
+    await signOut()
+    setIsMobileMenuOpen(false)
+  }
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -145,10 +149,7 @@ export function AdminSidebar() {
           <Button
             variant="outline"
             className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-lg py-3 text-sm"
-            onClick={() => {
-              signOut()
-              setIsMobileMenuOpen(false)
-            }}
+            onClick={handleSignOut}
           >
             <LogOut className="h-4 w-4 mr-2" />
             Dilni
@@ -196,7 +197,7 @@ export function AdminSidebar() {
           <Button
             variant="outline"
             className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-xl"
-            onClick={signOut}
+            onClick={handleSignOut}
           >
             <LogOut className="h-4 w-4 mr-2" />
             Dilni

@@ -1,20 +1,28 @@
-import { createServerComponentClient, createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
-import { cache } from 'react';
+import { cookies } from "next/headers"
+import {
+  createRouteHandlerClient,
+  createServerActionClient,
+  type CookiesOptions,
+} from "@supabase/auth-helpers-nextjs"
 
-// This function creates a Supabase client specifically for Server Components.
-// It's cached to ensure that a single instance is used across multiple calls within the same request.
-export const createServerSupabaseClient = cache(() => {
-  const cookieStore = cookies();
-  return createServerComponentClient({ cookies: () => cookieStore });
-});
+export { createServerSupabaseClient, getServerUser } from "@/src/lib/supabase-server"
 
 // This function creates a Supabase client for Route Handlers (API routes) and Server Actions.
-// It also uses cookies to manage the session.
-export const createRouteHandlerSupabaseClient = cache(() => {
-  const cookieStore = cookies();
-  return createRouteHandlerClient({ cookies: () => cookieStore });
-});
+// It also uses cookies to manage the session. We avoid caching so auth cookies
+// can be set per-request (important for sign-in/out flows).
+export const createRouteHandlerSupabaseClient = (cookieOptions?: CookiesOptions) => {
+  const cookieStore = cookies()
+  return createRouteHandlerClient({
+    cookies: () => cookieStore,
+    cookieOptions,
+  })
+}
+
+// Server Actions need their own client helper so that auth cookies can be set
+// inside action requests (e.g., during sign-in/out flows).
+export const createServerActionSupabaseClient = () => {
+  return createServerActionClient({ cookies })
+}
 
 // Note: createMiddlewareClient is typically used directly within middleware.ts
 // and doesn't usually need to be exported from a central utility file like this.

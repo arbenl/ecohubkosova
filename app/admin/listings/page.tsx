@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { getListings } from "./actions"
 import ListingsClientPage from "./listings-client-page" // Will create this client component later
 
 interface Listing {
@@ -19,23 +19,11 @@ interface Listing {
 }
 
 export default async function ListingsPage() {
-  const supabase = createServerSupabaseClient()
-
-  let initialListings: Listing[] = []
-  let error: string | null = null
-
-  try {
-    const { data, error: fetchError } = await supabase.from("tregu_listime").select("*")
-    if (fetchError) {
-      throw fetchError
-    }
-    initialListings = data || []
-  } catch (err: any) {
-    console.error("Error fetching listings:", err)
-    error = "Gabim gjatë marrjes së listimeve."
-  }
+  const { data, error } = await getListings()
+  const initialListings: Listing[] = data ?? []
 
   if (error) {
+    console.error("Error fetching listings:", error)
     return (
       <div className="container mx-auto py-10">
         <div className="text-center text-red-500">{error}</div>

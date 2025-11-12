@@ -3,10 +3,15 @@
 import { useAuth, useSupabase } from "@/lib/auth-provider"
 import { useEffect, useState } from "react"
 
+type ExampleItem = {
+  id: string | number
+  name?: string | null
+}
+
 export function ExampleComponent() {
   const { user, userProfile, isAdmin, isLoading, signOut } = useAuth()
   const supabase = useSupabase()
-  const [data, setData] = useState([])
+  const [data, setData] = useState<ExampleItem[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +40,7 @@ export function ExampleComponent() {
       <button onClick={signOut}>Sign Out</button>
       {/* Use data from Supabase */}
       <ul>
-        {data.map((item: any) => (
+        {data.map((item) => (
           <li key={item.id}>{item.name}</li>
         ))}
       </ul>

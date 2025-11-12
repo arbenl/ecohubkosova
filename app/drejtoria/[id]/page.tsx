@@ -28,9 +28,9 @@ interface OrganizationDetailPageProps {
 export default async function OrganizationDetailPage({ params }: OrganizationDetailPageProps) {
   const supabase = createServerSupabaseClient()
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
-  const isLoggedIn = !!session
+    data: { user },
+  } = await supabase.auth.getUser()
+  const isLoggedIn = !!user
 
   let organization: Organization | null = null
   let error: string | null = null

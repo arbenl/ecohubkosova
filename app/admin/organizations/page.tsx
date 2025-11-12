@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { getOrganizations } from "./actions"
 import OrganizationsClientPage from "./organizations-client-page" // Will create this client component later
 
 interface Organization {
@@ -16,23 +16,11 @@ interface Organization {
 }
 
 export default async function OrganizationsPage() {
-  const supabase = createServerSupabaseClient()
-
-  let initialOrganizations: Organization[] = []
-  let error: string | null = null
-
-  try {
-    const { data, error: fetchError } = await supabase.from("organizations").select("*")
-    if (fetchError) {
-      throw fetchError
-    }
-    initialOrganizations = data || []
-  } catch (err: any) {
-    console.error("Error fetching organizations:", err)
-    error = "Gabim gjatë marrjes së organizatave."
-  }
+  const { data, error } = await getOrganizations()
+  const initialOrganizations: Organization[] = data ?? []
 
   if (error) {
+    console.error("Error fetching organizations:", error)
     return (
       <div className="container mx-auto py-10">
         <div className="text-center text-red-500">{error}</div>

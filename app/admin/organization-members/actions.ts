@@ -1,12 +1,66 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
+import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+
+interface OrganizationMember {
+  id: string
+  organization_id: string
+  user_id: string
+  roli_ne_organizate: string
+  eshte_aprovuar: boolean
+  created_at: string
+}
+
+interface OrganizationMemberWithDetails extends OrganizationMember {
+  organization_name?: string
+  user_name?: string
+  user_email?: string
+}
 
 interface OrganizationMemberUpdateData {
   roli_ne_organizate: string
   eshte_aprovuar: boolean
+}
+
+type GetOrganizationMembersResult = {
+  data: OrganizationMemberWithDetails[] | null
+  error: string | null
+}
+
+export async function getOrganizationMembers(): Promise<GetOrganizationMembersResult> {
+  const supabase = createServerSupabaseClient()
+
+  try {
+    const { data, error } = await supabase.from("organization_members").select(`
+          *,
+          organizations!inner(emri),
+          users!inner(emri_i_plotë, email)
+        `)
+
+    if (error) {
+      console.error("Error fetching organization members:", error)
+      return { data: null, error: error.message || "Gabim gjatë marrjes së anëtarëve të organizatave." }
+    }
+
+    const formattedData =
+      data?.map((member: any) => ({
+        ...member,
+        organization_name: member.organizations?.emri,
+        user_name: member.users?.emri_i_plotë,
+        user_email: member.users?.email,
+      })) || []
+
+    return { data: formattedData, error: null }
+  } catch (error) {
+    console.error("Server Action Error (getOrganizationMembers):", error)
+    return {
+      data: null,
+      error:
+        error instanceof Error ? error.message : "Gabim i panjohur gjatë marrjes së anëtarëve të organizatave.",
+    }
+  }
 }
 
 export async function deleteOrganizationMember(memberId: string) {

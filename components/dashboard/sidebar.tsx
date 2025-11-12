@@ -16,6 +16,10 @@ export function Sidebar({ userRole }: SidebarProps) {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { signOut } = useAuth()
+  const handleSignOut = async () => {
+    await signOut()
+    setIsMobileMenuOpen(false)
+  }
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -149,10 +153,7 @@ export function Sidebar({ userRole }: SidebarProps) {
           <Button
             variant="outline"
             className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-lg py-3 text-sm bg-transparent"
-            onClick={() => {
-              signOut()
-              setIsMobileMenuOpen(false)
-            }}
+            onClick={handleSignOut}
           >
             <LogOut className="h-4 w-4 mr-2" />
             Dilni
@@ -188,7 +189,7 @@ export function Sidebar({ userRole }: SidebarProps) {
           <Button
             variant="outline"
             className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-xl bg-transparent"
-            onClick={signOut}
+            onClick={handleSignOut}
           >
             <LogOut className="h-4 w-4 mr-2" />
             Dilni
