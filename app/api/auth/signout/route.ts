@@ -6,11 +6,7 @@ export const dynamic = "force-dynamic"
 
 export async function POST() {
   const cookieStore = cookies()
-  const supabase = createRouteHandlerSupabaseClient({
-    cookieOptions: {
-      name: "sb-auth-token",
-    },
-  })
+  const supabase = createRouteHandlerSupabaseClient()
   const { error } = await supabase.auth.signOut()
 
   // Always clear the __session cookie ourselves to avoid stale sessions.
