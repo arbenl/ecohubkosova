@@ -1,46 +1,22 @@
-"use client"
-
 import type React from "react"
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { redirect } from "next/navigation"
 import { Sidebar } from "@/components/dashboard/sidebar"
 import { Header } from "@/components/header"
-import { useAuth } from "@/lib/auth-provider"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const router = useRouter()
-  const { user, userProfile, isLoading } = useAuth()
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const supabase = createServerSupabaseClient()
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace("/auth/kycu")
-    }
-  }, [isLoading, user, router])
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-          <p>Duke ngarkuar dashboard...</p>
-        </div>
-      </div>
-    )
+  if (!user || userError) {
+    redirect("/auth/kycu?message=Ju duhet të kyçeni për të aksesuar dashboardin.")
   }
 
-  if (!user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <p>Duke verifikuar llogarinë...</p>
-        </div>
-      </div>
-    )
-  }
+  const { data: userProfile } = await supabase.from("users").select("roli").eq("id", user.id).single()
 
   return (
     <div className="min-h-screen bg-gray-50">

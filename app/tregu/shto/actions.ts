@@ -3,19 +3,20 @@
 import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+import { listingCreateSchema } from "@/src/validation/listings"
 
-interface FormData {
+interface FormPayload {
   titulli: string
   pershkrimi: string
   kategori: string
-  çmimi: string
+  cmimi: string
   njesia: string
   vendndodhja: string
   sasia: string
   lloji_listimit: "shes" | "blej"
 }
 
-export async function createListing(formData: FormData) {
+export async function createListing(formData: FormPayload) {
   const supabase = createRouteHandlerSupabaseClient()
 
   const {
@@ -28,6 +29,11 @@ export async function createListing(formData: FormData) {
   }
 
   try {
+    const parsed = listingCreateSchema.safeParse(formData)
+    if (!parsed.success) {
+      return { error: parsed.error.errors[0]?.message || "Formulari ka të dhëna të pavlefshme." }
+    }
+
     // Check if user is part of an organization
     const { data: orgMember, error: orgError } = await supabase
       .from("organization_members")
@@ -45,14 +51,14 @@ export async function createListing(formData: FormData) {
     const { error: insertError } = await supabase.from("tregu_listime").insert({
       created_by_user_id: user.id,
       organization_id: orgMember?.organization_id || null,
-      titulli: formData.titulli,
-      pershkrimi: formData.pershkrimi,
-      kategori: formData.kategori,
-      çmimi: Number.parseFloat(formData.çmimi),
-      njesia: formData.njesia,
-      vendndodhja: formData.vendndodhja,
-      sasia: formData.sasia,
-      lloji_listimit: formData.lloji_listimit,
+      titulli: parsed.data.titulli,
+      pershkrimi: parsed.data.pershkrimi,
+      kategori: parsed.data.kategori,
+      cmimi: parsed.data.cmimi ?? null,
+      njesia: parsed.data.njesia,
+      vendndodhja: parsed.data.vendndodhja,
+      sasia: parsed.data.sasia,
+      lloji_listimit: parsed.data.lloji_listimit,
       eshte_aprovuar: false, // Requires approval
     })
 

@@ -23,7 +23,7 @@ import { registerUser } from "./actions"; // Import the Server Action
 type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani";
 
 interface FormData {
-  emri_i_plotë: string;
+  emri_i_plote: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -45,7 +45,7 @@ export default function RegjistrohuPage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState<FormData>({
-    emri_i_plotë: "",
+    emri_i_plote: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -94,7 +94,7 @@ export default function RegjistrohuPage() {
     if (step === 1) {
       // Step 1 validation: Basic user information
       if (
-        !formData.emri_i_plotë ||
+        !formData.emri_i_plote ||
         !formData.email ||
         !formData.password ||
         !formData.confirmPassword ||
@@ -157,7 +157,7 @@ export default function RegjistrohuPage() {
     setError(null); // Clear previous errors
 
     const result = await registerUser({
-      emri_i_plotë: formData.emri_i_plotë,
+      emri_i_plote: formData.emri_i_plote,
       email: formData.email,
       password: formData.password,
       vendndodhja: formData.vendndodhja,
@@ -194,18 +194,17 @@ export default function RegjistrohuPage() {
               {step === 1 && (
                 <>
                   <div className="space-y-2">
-                    <Label htmlFor="emri_i_plotë" className="text-gray-700 font-medium">
-                      Emri i plotë
-                    </Label>
-                    <Input
-                      id="emri_i_plotë"
-                      name="emri_i_plotë"
-                      value={formData.emri_i_plotë}
-                      onChange={handleChange}
-                      placeholder="Emri dhe mbiemri"
-                      className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
-                      required
-                    />
+<Label htmlFor="emri_i_plote" className="text-gray-700 font-medium">
+              Emri i Plotë
+            </Label>
+            <Input
+              id="emri_i_plote"
+              name="emri_i_plote"
+              value={formData.emri_i_plote}
+              onChange={handleChange}
+              className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+              required
+            />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-gray-700 font-medium">

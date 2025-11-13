@@ -2,7 +2,7 @@
 
 import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
+import { requireAdminRole } from "@/lib/auth/roles"
 
 interface Organization {
   id: string
@@ -58,14 +58,7 @@ export async function getOrganizations(): Promise<GetOrganizationsResult> {
 
 export async function deleteOrganization(organizationId: string) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të fshini organizata.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase.from("organizations").delete().eq("id", organizationId)
@@ -85,14 +78,7 @@ export async function deleteOrganization(organizationId: string) {
 
 export async function updateOrganization(organizationId: string, formData: OrganizationUpdateData) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të përditësoni organizata.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase

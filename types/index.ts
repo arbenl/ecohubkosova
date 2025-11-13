@@ -5,7 +5,7 @@ import type { User as SupabaseAuthUser } from "@supabase/supabase-js"
 // User Profile Interface
 export interface UserProfile {
   id: string
-  emri_i_plotë: string
+  emri_i_plote: string
   email: string
   vendndodhja: string
   roli: string // e.g., "Individ", "Admin", "Organizational"
@@ -34,7 +34,7 @@ export interface Listing {
   titulli: string
   pershkrimi: string
   foto_url: string | null
-  çmimi: number | null // Use 'ç' to match database column name and 'number | null' for consistency
+  cmimi: number | null // Use 'c' to match database column name and 'number | null' for consistency
   monedha: string | null
   kategori: string
   gjendja: string
@@ -45,7 +45,7 @@ export interface Listing {
   eshte_publikuar: boolean
   // Joined relations
   users?: {
-    emri_i_plotë: string
+    emri_i_plote: string
     email?: string // Include email for contact if necessary
   }
   organizations?: {
@@ -63,7 +63,7 @@ export interface DashboardArticle {
   id: string
   titulli: string
   users?: {
-    emri_i_plotë?: string | null
+    emri_i_plote?: string | null
   } | null
 }
 

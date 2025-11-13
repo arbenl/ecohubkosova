@@ -7,20 +7,21 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Calendar, MapPin, Package, Euro, User, Building } from "lucide-react"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import ContactListingButton from "./contact-listing-button" // Will create this client component later
+import { fetchListingById } from "@/src/services/listings"
 
 interface Listing {
   id: string
   titulli: string
   pershkrimi: string
   kategori: string
-  çmimi: number
+  cmimi: number
   njesia: string
   vendndodhja: string
   sasia: string
   lloji_listimit: "shes" | "blej"
   created_at: string
   users?: {
-    emri_i_plotë: string
+    emri_i_plote: string
     email: string
   }
   organizations?: {
@@ -35,32 +36,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
     data: { user },
   } = await supabase.auth.getUser()
 
-  let listing: Listing | null = null
-  let error: string | null = null
-
-  try {
-    const { data, error: dbError } = await supabase
-      .from("tregu_listime")
-      .select(
-        `
-        *,
-        users!inner("emri_i_plotë", email),
-        organizations (emri, email_kontakti)
-      `
-      )
-      .eq("id", params.id)
-      .eq("eshte_aprovuar", true)
-      .single()
-
-    if (dbError) {
-      throw dbError
-    }
-
-    listing = data
-  } catch (err: any) {
-    console.error("Error fetching listing:", err)
-    error = "Listimi nuk u gjet ose nuk është i aprovuar."
-  }
+  const { data: listing, error } = await fetchListingById(params.id)
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -146,7 +122,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                       <div>
                         <span className="font-medium">Çmimi:</span>
                         <p className="text-lg font-bold text-emerald-600">
-                          {listing.çmimi} € / {listing.njesia}
+                          {listing.cmimi} € / {listing.njesia}
                         </p>
                       </div>
                     </div>
@@ -208,7 +184,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                     <div className="flex items-start gap-3">
                       <User className="h-5 w-5 text-gray-500 mt-0.5" />
                       <div>
-                        <p className="font-medium">{listing.users?.emri_i_plotë || "Anonim"}</p>
+                        <p className="font-medium">{listing.users?.emri_i_plote || "Anonim"}</p>
                         {user ? (
                           <a
                             href={`mailto:${listing.users?.email}`}

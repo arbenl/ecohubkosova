@@ -3,6 +3,7 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { UserPlus, Search, MessageCircle, ShoppingCart, Sparkles, Leaf, Users } from "lucide-react"
+import { LandingAuthPanel } from "@/components/landing/landing-auth-panel"
 
 export default function Home() {
   return (
@@ -47,11 +48,15 @@ export default function Home() {
                   className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
                   asChild
                 >
-                  <Link href="/eksploro">
+                  <Link href="/tregu">
                     <Search className="mr-2 h-5 w-5" />
-                    Eksploro Rrjetin
+                    Eksploro Tregun
                   </Link>
                 </Button>
+              </div>
+
+              <div className="w-full max-w-2xl mx-auto">
+                <LandingAuthPanel />
               </div>
             </div>
           </div>

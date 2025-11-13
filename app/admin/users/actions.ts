@@ -2,11 +2,11 @@
 
 import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
+import { requireAdminRole } from "@/lib/auth/roles"
 
 interface User {
   id: string
-  emri_i_plotë: string
+  emri_i_plote: string
   email: string
   vendndodhja: string
   roli: string
@@ -16,7 +16,7 @@ interface User {
 }
 
 interface UserUpdateData {
-  emri_i_plotë: string
+  emri_i_plote: string
   email: string
   vendndodhja: string
   roli: string
@@ -52,14 +52,7 @@ export async function getUsers(): Promise<GetUsersResult> {
 
 export async function deleteUser(userId: string) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të fshini përdorues.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase.from("users").delete().eq("id", userId)
@@ -79,20 +72,13 @@ export async function deleteUser(userId: string) {
 
 export async function updateUser(userId: string, formData: UserUpdateData) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të përditësoni përdorues.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase
       .from("users")
       .update({
-        emri_i_plotë: formData.emri_i_plotë,
+        emri_i_plote: formData.emri_i_plote,
         email: formData.email,
         vendndodhja: formData.vendndodhja,
         roli: formData.roli,

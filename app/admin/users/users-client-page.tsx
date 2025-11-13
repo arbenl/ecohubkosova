@@ -5,7 +5,7 @@ import { deleteUser, updateUser } from "./actions" // Import Server Actions
 
 interface User {
   id: string
-  emri_i_plotë: string
+  emri_i_plote: string
   email: string
   vendndodhja: string
   roli: string
@@ -52,7 +52,7 @@ export default function UsersClientPage({ initialUsers }: UsersClientPageProps) 
           <tbody>
             {users.map((user) => (
               <tr key={user.id}>
-                <td className="py-2 px-4 border-b">{user.emri_i_plotë}</td>
+                <td className="py-2 px-4 border-b">{user.emri_i_plote}</td>
                 <td className="py-2 px-4 border-b">{user.email}</td>
                 <td className="py-2 px-4 border-b">{user.vendndodhja}</td>
                 <td className="py-2 px-4 border-b">{user.roli}</td>
@@ -88,7 +88,7 @@ export default function UsersClientPage({ initialUsers }: UsersClientPageProps) 
 
                 const formData = new FormData(e.currentTarget)
                 const updatedData = {
-                  emri_i_plotë: formData.get("emri_i_plotë") as string,
+                  emri_i_plote: formData.get("emri_i_plote") as string,
                   email: formData.get("email") as string,
                   vendndodhja: formData.get("vendndodhja") as string,
                   roli: formData.get("roli") as string,
@@ -109,14 +109,14 @@ export default function UsersClientPage({ initialUsers }: UsersClientPageProps) 
               className="space-y-4"
             >
               <div>
-                <label htmlFor="emri_i_plotë" className="block text-gray-700 text-sm font-bold mb-2">
-                  Emri i Plotë:
+                <label htmlFor="emri_i_plote" className="block text-gray-700 text-sm font-bold mb-2">
+                  Emri i Plotë
                 </label>
                 <input
                   type="text"
-                  id="emri_i_plotë"
-                  name="emri_i_plotë"
-                  defaultValue={editingUser.emri_i_plotë}
+                  id="emri_i_plote"
+                  name="emri_i_plote"
+                  defaultValue={editingUser.emri_i_plote}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>

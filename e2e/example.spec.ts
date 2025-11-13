@@ -14,5 +14,5 @@ test('get started link', async ({ page }) => {
   await page.getByRole('link', { name: 'Eksploro Tregun' }).click();
 
   // Expects page to have a heading with the name of the route.
-  await expect(page.getByRole('heading', { name: 'Tregu' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Tregu i Ekonomisë Qarkulluese' })).toBeVisible();
 });

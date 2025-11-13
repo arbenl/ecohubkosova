@@ -3,10 +3,10 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, BookOpen, Users, ShoppingCart, User, Settings, Menu, X, LogOut } from "lucide-react"
+import { LayoutDashboard, BookOpen, Users, ShoppingCart, User, Settings, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
-import { useAuth } from "@/lib/auth-provider"
+import { SignOutButton } from "@/components/sign-out-button"
 
 interface SidebarProps {
   userRole: string
@@ -15,11 +15,7 @@ interface SidebarProps {
 export function Sidebar({ userRole }: SidebarProps) {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { signOut } = useAuth()
-  const handleSignOut = async () => {
-    await signOut()
-    setIsMobileMenuOpen(false)
-  }
+  const handleBeforeSignOut = () => setIsMobileMenuOpen(false)
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -150,14 +146,11 @@ export function Sidebar({ userRole }: SidebarProps) {
 
         {/* Mobile Sidebar Footer */}
         <div className="p-3 border-t border-gray-200">
-          <Button
+          <SignOutButton
             variant="outline"
             className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-lg py-3 text-sm bg-transparent"
-            onClick={handleSignOut}
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Dilni
-          </Button>
+            onBeforeSignOut={handleBeforeSignOut}
+          />
         </div>
       </div>
 
@@ -186,14 +179,10 @@ export function Sidebar({ userRole }: SidebarProps) {
 
         {/* Desktop Footer */}
         <div className="p-4 border-t border-gray-200">
-          <Button
+          <SignOutButton
             variant="outline"
             className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-xl bg-transparent"
-            onClick={handleSignOut}
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Dilni
-          </Button>
+          />
         </div>
       </div>
     </>

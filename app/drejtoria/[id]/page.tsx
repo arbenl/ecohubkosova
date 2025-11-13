@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Building, MapPin, Mail, Phone, Users, ArrowLeft, ExternalLink } from "lucide-react"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { fetchOrganizationById } from "@/src/services/organizations"
 
 interface Organization {
   id: string
@@ -32,33 +33,7 @@ export default async function OrganizationDetailPage({ params }: OrganizationDet
   } = await supabase.auth.getUser()
   const isLoggedIn = !!user
 
-  let organization: Organization | null = null
-  let error: string | null = null
-
-  try {
-    const { data, error: fetchError } = await supabase
-      .from("organizations")
-      .select("*")
-      .eq("id", params.id)
-      .eq("eshte_aprovuar", true)
-      .single()
-
-    if (fetchError) {
-      if (fetchError.code === "PGRST116") {
-        error = "Organizata nuk u gjet ose nuk është aprovuar."
-      } else {
-        error = "Gabim gjatë ngarkimit të organizatës."
-      }
-      throw fetchError
-    }
-
-    organization = data
-  } catch (err: any) {
-    console.error("Error fetching organization:", err)
-    if (!error) { // Only set if not already set by specific error code
-      error = "Gabim gjatë ngarkimit të organizatës."
-    }
-  }
+  const { data: organization, error } = await fetchOrganizationById(params.id)
 
   if (error || !organization) {
     return (

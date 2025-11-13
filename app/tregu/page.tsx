@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { ShoppingCart, Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import TreguClientPage from "./tregu-client-page" // Will create this client component later
 import { getListingsData } from "./actions" // Import the new server action
 import { createServerSupabaseClient } from "@/lib/supabase/server" // Keep for user check
@@ -29,6 +29,7 @@ export default async function TreguPage({ searchParams }: TreguPageProps) {
     searchParams.lloji === "blej" ? "blej" : searchParams.lloji === "shes" ? "shes" : "te-gjitha"
   const initialSearchQuery = searchParams.search || ""
   const initialSelectedCategory = searchParams.category || "all"
+  const initialPage = Number.parseInt(searchParams.page || "1")
 
   const categories = [
     "Materiale të riciklueshme",
@@ -73,6 +74,7 @@ export default async function TreguPage({ searchParams }: TreguPageProps) {
             initialTab={initialTab}
             initialSearchQuery={initialSearchQuery}
             initialSelectedCategory={initialSelectedCategory}
+            initialPage={Number.isNaN(initialPage) ? 1 : initialPage}
             categories={categories}
           />
         </div>

@@ -39,7 +39,7 @@ export function ListingCard({ listing, onContact, className }: ListingCardProps)
       <CardHeader className="space-y-1">
         <h3 className="text-lg font-semibold leading-none">{listing.titulli}</h3>
 
-        {listing.çmimi !== undefined ? <p className="text-sm text-muted-foreground">{listing.çmimi} €</p> : null}
+        {listing.cmimi !== undefined ? <p className="text-sm text-muted-foreground">{listing.cmimi} €</p> : null}
 
         {listing.vendndodhja ? <p className="text-sm text-muted-foreground">{listing.vendndodhja}</p> : null}
       </CardHeader>

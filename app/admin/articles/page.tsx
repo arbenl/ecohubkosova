@@ -4,7 +4,7 @@ import ArticlesClientPage from "./articles-client-page" // Will create this clie
 interface Article {
   id: string
   titulli: string
-  përmbajtja: string
+  permbajtja: string
   autori_id: string
   eshte_publikuar: boolean
   kategori: string

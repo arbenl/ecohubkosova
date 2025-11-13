@@ -3,17 +3,13 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X, LogOut, User } from "lucide-react"
+import { Menu, X, User } from "lucide-react"
 import { useAuth } from "@/lib/auth-provider"
+import { SignOutButton } from "@/components/sign-out-button"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { user, userProfile, signOut, isLoading } = useAuth()
-
-  const handleSignOut = async () => {
-    setIsMenuOpen(false)
-    await signOut()
-  }
+  const { user, userProfile, isLoading } = useAuth()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm">
@@ -74,7 +70,7 @@ export function Header() {
                   <User className="h-4 w-4 text-white" />
                 </div>
                 <span className="font-medium">
-                  Mirë se erdhe, {userProfile?.emri_i_plotë || user.email?.split("@")[0]}
+                  Mirë se erdhe, {userProfile?.emri_i_plote || user.email?.split("@")[0]}
                 </span>
               </div>
               <Button
@@ -83,15 +79,11 @@ export function Header() {
               >
                 <Link href="/dashboard">Dashboard</Link>
               </Button>
-              <Button
+              <SignOutButton
                 variant="ghost"
                 size="icon"
-                onClick={handleSignOut}
-                title="Dilni"
                 className="rounded-xl hover:bg-red-50 hover:text-red-600 transition-all duration-300"
-              >
-                <LogOut className="h-4 w-4" />
-              </Button>
+              />
             </div>
           ) : (
             <>
@@ -161,20 +153,18 @@ export function Header() {
               ) : user ? (
                 <>
                   <div className="text-sm text-gray-700 py-3 px-4 glass-card rounded-xl">
-                    Mirë se erdhe, {userProfile?.emri_i_plotë || user.email?.split("@")[0]}
+                    Mirë se erdhe, {userProfile?.emri_i_plote || user.email?.split("@")[0]}
                   </div>
                   <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
                     <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
                       Dashboard
                     </Link>
                   </Button>
-                  <Button
+                  <SignOutButton
                     variant="outline"
-                    onClick={handleSignOut}
                     className="w-full rounded-xl text-red-600 border-red-200 hover:bg-red-50 bg-transparent"
-                  >
-                    Dilni
-                  </Button>
+                    onBeforeSignOut={() => setIsMenuOpen(false)}
+                  />
                 </>
               ) : (
                 <>

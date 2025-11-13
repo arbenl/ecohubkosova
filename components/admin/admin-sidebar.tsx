@@ -3,19 +3,15 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Users, Building, BookOpen, ShoppingCart, LayoutDashboard, LogOut, Menu, X } from "lucide-react"
+import { Users, Building, BookOpen, ShoppingCart, LayoutDashboard, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useAuth } from "@/lib/auth-provider"
 import { useState, useEffect } from "react"
+import { SignOutButton } from "@/components/sign-out-button"
 
 export function AdminSidebar() {
   const pathname = usePathname()
-  const { signOut } = useAuth()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const handleSignOut = async () => {
-    await signOut()
-    setIsMobileMenuOpen(false)
-  }
+  const handleBeforeSignOut = () => setIsMobileMenuOpen(false)
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -146,14 +142,11 @@ export function AdminSidebar() {
 
         {/* Mobile Sidebar Footer */}
         <div className="p-3 border-t border-gray-200">
-          <Button
+          <SignOutButton
             variant="outline"
             className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-lg py-3 text-sm"
-            onClick={handleSignOut}
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Dilni
-          </Button>
+            onBeforeSignOut={handleBeforeSignOut}
+          />
         </div>
       </div>
 
@@ -194,14 +187,10 @@ export function AdminSidebar() {
 
         {/* Desktop Footer */}
         <div className="p-4 border-t border-gray-200">
-          <Button
+          <SignOutButton
             variant="outline"
             className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-xl"
-            onClick={handleSignOut}
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Dilni
-          </Button>
+          />
         </div>
       </div>
     </>

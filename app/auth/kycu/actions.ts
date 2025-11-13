@@ -1,38 +1,54 @@
 "use server"
 
+import { redirect } from "next/navigation"
 import { createServerActionSupabaseClient } from "@/lib/supabase/server"
-type SignInResult = {
-  error: string | null
-  session?: {
-    access_token: string
-    refresh_token: string
-  } | null
-}
+import { headers } from "next/headers"
+import { loginSchema } from "@/src/validation/auth"
 
-export async function signIn(email: string, password: string): Promise<SignInResult> {
+export async function signIn(prevState: any, formData: FormData) {
   const supabase = createServerActionSupabaseClient()
 
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+  const parsed = loginSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  })
 
-    if (error) {
-      console.error("Sign in error:", error)
-      return { error: error.message }
-    }
-
-    const session = data?.session
-      ? {
-          access_token: data.session.access_token,
-          refresh_token: data.session.refresh_token,
-        }
-      : null
-
-    return { error: null, session }
-  } catch (error: any) {
-    console.error("Server Action Error (signIn):", error)
-    return { error: error.message || "Gabim i panjohur gjatë kyçjes." }
+  if (!parsed.success) {
+    return { message: parsed.error.errors[0]?.message ?? "Të dhëna të pavlefshme." }
   }
+
+  const { email, password } = parsed.data
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+
+  if (error) {
+    console.error("Sign in error:", error)
+    return {
+      message: error.message,
+    }
+  }
+
+  return redirect("/dashboard")
+}
+
+export async function signInWithGoogle() {
+  const supabase = createServerActionSupabaseClient()
+  const origin = headers().get("origin")
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+    },
+  })
+
+  if (error) {
+    console.error("Sign in with Google error:", error)
+    return redirect(`/auth/kycu?message=${error.message}`)
+  }
+
+  return redirect(data.url)
 }

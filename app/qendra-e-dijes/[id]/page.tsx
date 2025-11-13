@@ -4,19 +4,7 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Calendar, User, Tag } from "lucide-react"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
-
-interface Article {
-  id: string
-  titulli: string
-  përmbajtja: string
-  kategori: string
-  tags: string[]
-  created_at: string
-  users: {
-    emri_i_plotë: string
-  }
-}
+import { fetchArticleById } from "@/src/services/articles"
 
 interface ArticleDetailPageProps {
   params: {
@@ -25,32 +13,7 @@ interface ArticleDetailPageProps {
 }
 
 export default async function ArticleDetailPage({ params }: ArticleDetailPageProps) {
-  const supabase = createServerSupabaseClient()
-  let article: Article | null = null
-  let error: string | null = null
-
-  try {
-    const { data, error: fetchError } = await supabase
-      .from("artikuj")
-      .select(
-        `
-        *,
-        users!inner("emri_i_plotë")
-      `
-      )
-      .eq("id", params.id)
-      .eq("eshte_publikuar", true)
-      .single()
-
-    if (fetchError) {
-      throw fetchError
-    }
-
-    article = data
-  } catch (err: any) {
-    console.error("Error fetching article:", err)
-    error = "Artikulli nuk u gjet ose nuk është i publikuar."
-  }
+  const { data: article, error } = await fetchArticleById(params.id)
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -115,7 +78,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
                 </div>
                 <div className="flex items-center gap-1">
                   <User className="h-4 w-4" />
-                  <span>{article.users?.emri_i_plotë || "Anonim"}</span>
+                  <span>{article.users?.emri_i_plote || "Anonim"}</span>
                 </div>
               </div>
 
@@ -132,7 +95,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
             </CardHeader>
 
             <CardContent className="prose prose-lg max-w-none">
-              <div className="whitespace-pre-wrap text-gray-800 leading-relaxed">{article.përmbajtja}</div>
+              <div className="whitespace-pre-wrap text-gray-800 leading-relaxed">{article.permbajtja}</div>
             </CardContent>
           </Card>
 

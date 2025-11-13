@@ -3,7 +3,7 @@ import UsersClientPage from "./users-client-page" // Will create this client com
 
 interface User {
   id: string
-  emri_i_plotë: string
+  emri_i_plote: string
   email: string
   vendndodhja: string
   roli: string

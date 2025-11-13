@@ -10,7 +10,7 @@ import { getProfileData } from "./actions"
 // For now, we'll trust the types from the action.
 interface UserProfile {
   id: string
-  emri_i_plotë: string
+  emri_i_plote: string
   email: string
   vendndodhja: string
   roli: string

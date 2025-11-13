@@ -1,11 +1,5 @@
-import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BookOpen, Search, Calendar, User } from "lucide-react"
 import QendraEDijesClientPage from "./qendra-e-dijes-client-page" // Will create this client component later
 import { getArticlesData } from "./actions"
 
@@ -22,6 +16,7 @@ export default async function QendraEDijesPage({ searchParams }: QendraEDijesPag
 
   const initialSearchQuery = searchParams.search || ""
   const initialSelectedCategory = searchParams.category || "all"
+  const initialPage = Number.parseInt(searchParams.page || "1")
 
   // TODO: Handle the error state in the UI
   if (error) {
@@ -56,6 +51,7 @@ export default async function QendraEDijesPage({ searchParams }: QendraEDijesPag
             hasMoreInitial={hasMoreInitial}
             initialSearchQuery={initialSearchQuery}
             initialSelectedCategory={initialSelectedCategory}
+            initialPage={Number.isNaN(initialPage) ? 1 : initialPage}
             categories={categories}
           />
         </div>

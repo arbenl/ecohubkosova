@@ -1,80 +1,28 @@
 "use server"
 
-import { createServerSupabaseClient } from "@/lib/supabase/server"
-
-interface Organization {
-  id: string
-  emri: string
-  pershkrimi: string
-  interesi_primar: string
-  vendndodhja: string
-  lloji: string
-  created_at: string
-}
-
-interface GetOrganizationsDataParams {
-  search?: string
-  type?: string
-  interest?: string
-  page?: string
-}
+import type { OrganizationListOptions } from "@/src/services/organizations"
+import { fetchOrganizationsList } from "@/src/services/organizations"
 
 interface GetOrganizationsDataResult {
-  initialOrganizations: Organization[]
+  initialOrganizations: Awaited<ReturnType<typeof fetchOrganizationsList>>["data"]
   hasMoreInitial: boolean
   error: string | null
 }
 
 export async function getOrganizationsData(
-  searchParams: GetOrganizationsDataParams
+  searchParams: Record<string, string | undefined>
 ): Promise<GetOrganizationsDataResult> {
-  const supabase = createServerSupabaseClient()
+  const options: OrganizationListOptions = {
+    search: searchParams.search,
+    type: searchParams.type,
+    interest: searchParams.interest,
+    page: searchParams.page ? Number.parseInt(searchParams.page, 10) : undefined,
+  }
 
-  const initialSearchQuery = searchParams.search || ""
-  const initialSelectedType = searchParams.type || "all"
-  const initialSelectedInterest = searchParams.interest || "all"
-  const initialPage = parseInt(searchParams.page || "1")
-  const itemsPerPage = 9
-
-  try {
-    const from = (initialPage - 1) * itemsPerPage
-    const to = initialPage * itemsPerPage - 1
-
-    let query = supabase
-      .from("organizations")
-      .select("*")
-      .eq("eshte_aprovuar", true)
-      .order("created_at", { ascending: false })
-      .range(from, to)
-
-    if (initialSearchQuery) {
-      query = query.or(`emri.ilike.%${initialSearchQuery}%,pershkrimi.ilike.%${initialSearchQuery}%`)
-    }
-
-    if (initialSelectedType && initialSelectedType !== "all") {
-      query = query.eq("lloji", initialSelectedType)
-    }
-
-    if (initialSelectedInterest && initialSelectedInterest !== "all") {
-      query = query.ilike("interesi_primar", `%${initialSelectedInterest}%`)
-    }
-
-    const { data, error } = await query
-
-    if (error) {
-      throw error
-    }
-
-    const initialOrganizations = data || []
-    const hasMoreInitial = initialOrganizations.length === itemsPerPage
-
-    return { initialOrganizations, hasMoreInitial, error: null }
-  } catch (error: any) {
-    console.error("Error fetching initial organizations:", error)
-    return {
-      initialOrganizations: [],
-      hasMoreInitial: false,
-      error: error.message || "Gabim gjatë ngarkimit të organizatave.",
-    }
+  const result = await fetchOrganizationsList(options)
+  return {
+    initialOrganizations: result.data,
+    hasMoreInitial: result.hasMore,
+    error: result.error,
   }
 }

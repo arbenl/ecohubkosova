@@ -28,12 +28,13 @@ export default function ShtoListimPage() {
   const [formData, setFormData] = useState({
     titulli: "",
     pershkrimi: "",
-    kategori: "",
-    çmimi: "",
+    kategori: "Materiale",
+    cmimi: "",
     njesia: "copë",
     vendndodhja: "",
     sasia: "",
-    lloji_listimit: "shes" as "shes" | "blej",
+    lloji_listimit: "shes",
+    foto_url: "",
   })
 
   const { user } = useAuth()
@@ -63,7 +64,11 @@ export default function ShtoListimPage() {
     setLoading(true)
     setError(null)
 
-    const result = await createListing(formData)
+    const { foto_url, ...listingPayload } = formData
+    const result = await createListing({
+      ...listingPayload,
+      lloji_listimit: listingPayload.lloji_listimit as "shes" | "blej",
+    })
 
     if (result.error) {
       setError(result.error)
@@ -74,11 +79,12 @@ export default function ShtoListimPage() {
         titulli: "",
         pershkrimi: "",
         kategori: "",
-        çmimi: "",
+        cmimi: "",
         njesia: "copë",
         vendndodhja: "",
         sasia: "",
         lloji_listimit: "shes",
+        foto_url: "",
       })
 
       // Redirect after 3 seconds
@@ -227,18 +233,16 @@ export default function ShtoListimPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="çmimi">Çmimi (€) *</Label>
-                        <Input
-                          id="çmimi"
-                          name="çmimi"
-                          type="number"
-                          min="0"
-                          step="0.01"
-                          value={formData.çmimi}
-                          onChange={handleChange}
-                          placeholder="p.sh. 10.50"
-                          required
-                        />
+<Label htmlFor="cmimi">Çmimi (€) *</Label>
+            <Input
+              id="cmimi"
+              name="cmimi"
+              type="number"
+              step="0.01"
+              value={formData.cmimi}
+              onChange={handleChange}
+              required
+            />
                       </div>
 
                       <div>

@@ -1,14 +1,13 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useEffect, useState, useTransition, type FormEvent } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { createClientSupabaseClient } from "@/lib/supabase" // Use client-side supabase client
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Building, Search, MapPin, Users } from "lucide-react"
+import { Building, MapPin, Search, Users } from "lucide-react"
 
 interface Organization {
   id: string
@@ -26,6 +25,7 @@ interface DrejtoriaClientPageProps {
   initialSearchQuery: string
   initialSelectedType: string
   initialSelectedInterest: string
+  initialPage: number
   organizationTypes: string[]
   interests: string[]
 }
@@ -36,125 +36,85 @@ export default function DrejtoriaClientPage({
   initialSearchQuery,
   initialSelectedType,
   initialSelectedInterest,
+  initialPage,
   organizationTypes,
   interests,
 }: DrejtoriaClientPageProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
-  const [organizations, setOrganizations] = useState<Organization[]>(initialOrganizations)
-  const [loading, setLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
   const [selectedType, setSelectedType] = useState(initialSelectedType)
   const [selectedInterest, setSelectedInterest] = useState(initialSelectedInterest)
-  const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(hasMoreInitial)
-  const itemsPerPage = 9
-
-  const supabase = createClientSupabaseClient()
-
-  const fetchOrganizations = useCallback(
-    async ({ reset = false, pageToLoad }: { reset?: boolean; pageToLoad?: number } = {}) => {
-      const targetPage = reset ? 1 : pageToLoad ?? 1
-      const normalizedType = selectedType === "all" ? "" : selectedType
-      const normalizedInterest = selectedInterest === "all" ? "" : selectedInterest
-
-      if (reset) {
-        setPage(1)
-        setOrganizations([])
-      }
-
-      setLoading(true)
-
-      try {
-        const from = (targetPage - 1) * itemsPerPage
-        const to = targetPage * itemsPerPage - 1
-
-        let query = supabase
-          .from("organizations")
-          .select("*")
-          .eq("eshte_aprovuar", true)
-          .order("created_at", { ascending: false })
-          .range(from, to)
-
-        if (searchQuery) {
-          query = query.or(`emri.ilike.%${searchQuery}%,pershkrimi.ilike.%${searchQuery}%`)
-        }
-
-        if (normalizedType) {
-          query = query.eq("lloji", normalizedType)
-        }
-
-        if (normalizedInterest) {
-          query = query.ilike("interesi_primar", `%${normalizedInterest}%`)
-        }
-
-        const { data, error } = await query
-
-        if (error) {
-          throw error
-        }
-
-        if (data) {
-          setOrganizations((prev) => (reset ? data : [...prev, ...data]))
-          setHasMore(data.length === itemsPerPage)
-        }
-      } catch (error) {
-        console.error("Error fetching organizations:", error)
-      } finally {
-        setLoading(false)
-      }
-    },
-    [itemsPerPage, searchQuery, selectedInterest, selectedType, supabase]
-  )
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    // Only fetch if not initial load or if filters have changed from initial
-    if (
-      searchQuery !== initialSearchQuery ||
-      selectedType !== initialSelectedType ||
-      selectedInterest !== initialSelectedInterest
-    ) {
-      fetchOrganizations({ reset: true })
-    }
-  }, [searchQuery, selectedType, selectedInterest, fetchOrganizations, initialSearchQuery, initialSelectedType, initialSelectedInterest])
+    setSearchQuery(initialSearchQuery)
+  }, [initialSearchQuery])
 
-  const handleLoadMore = () => {
-    if (loading || !hasMore) {
-      return
+  useEffect(() => {
+    setSelectedType(initialSelectedType)
+  }, [initialSelectedType])
+
+  useEffect(() => {
+    setSelectedInterest(initialSelectedInterest)
+  }, [initialSelectedInterest])
+
+  const buildQuery = ({
+    search,
+    type,
+    interest,
+    page,
+  }: {
+    search: string
+    type: string
+    interest: string
+    page: number
+  }) => {
+    const params = new URLSearchParams()
+
+    if (search.trim()) {
+      params.set("search", search.trim())
     }
 
-    setPage((prev) => {
-      const nextPage = prev + 1
-      fetchOrganizations({ pageToLoad: nextPage })
-      return nextPage
+    if (type !== "all") {
+      params.set("type", type)
+    }
+
+    if (interest !== "all") {
+      params.set("interest", interest)
+    }
+
+    if (page > 1) {
+      params.set("page", String(page))
+    }
+
+    return params.toString()
+  }
+
+  const applyFilters = (overrides?: { page?: number; type?: string; interest?: string; search?: string }) => {
+    const query = buildQuery({
+      search: overrides?.search ?? searchQuery,
+      type: overrides?.type ?? selectedType,
+      interest: overrides?.interest ?? selectedInterest,
+      page: overrides?.page ?? 1,
+    })
+    startTransition(() => {
+      router.push(query ? `?${query}` : "?")
     })
   }
 
-  // Update URL search params for persistence
-  useEffect(() => {
-    const current = new URLSearchParams(Array.from(searchParams.entries()));
-    if (searchQuery) {
-      current.set("search", searchQuery);
-    } else {
-      current.delete("search");
-    }
-    if (selectedType !== "all") {
-      current.set("type", selectedType);
-    } else {
-      current.delete("type");
-    }
-    if (selectedInterest !== "all") {
-      current.set("interest", selectedInterest);
-    } else {
-      current.delete("interest");
-    }
-    router.push(`?${current.toString()}`);
-  }, [searchQuery, selectedType, selectedInterest, router, searchParams]);
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    applyFilters({ page: 1, search: searchQuery })
+  }
+
+  const handleLoadPage = (page: number) => {
+    applyFilters({ page })
+  }
 
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      <form className="flex flex-col md:flex-row gap-4 mb-8" onSubmit={handleSubmit}>
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
           <Input
@@ -164,7 +124,13 @@ export default function DrejtoriaClientPage({
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Select value={selectedType} onValueChange={setSelectedType}>
+        <Select
+          value={selectedType}
+          onValueChange={(value) => {
+            setSelectedType(value)
+            applyFilters({ page: 1, type: value })
+          }}
+        >
           <SelectTrigger className="w-full md:w-[200px]">
             <SelectValue placeholder="Lloji i organizatës" />
           </SelectTrigger>
@@ -177,7 +143,13 @@ export default function DrejtoriaClientPage({
             ))}
           </SelectContent>
         </Select>
-        <Select value={selectedInterest} onValueChange={setSelectedInterest}>
+        <Select
+          value={selectedInterest}
+          onValueChange={(value) => {
+            setSelectedInterest(value)
+            applyFilters({ page: 1, interest: value })
+          }}
+        >
           <SelectTrigger className="w-full md:w-[200px]">
             <SelectValue placeholder="Interesi" />
           </SelectTrigger>
@@ -190,11 +162,14 @@ export default function DrejtoriaClientPage({
             ))}
           </SelectContent>
         </Select>
-      </div>
+        <Button type="submit" disabled={isPending} className="md:w-[150px]">
+          {isPending ? "Duke filtruar..." : "Kërko"}
+        </Button>
+      </form>
 
-      {organizations.length > 0 ? (
+      {initialOrganizations.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {organizations.map((org) => (
+          {initialOrganizations.map((org) => (
             <Card key={org.id} className="overflow-hidden hover:shadow-lg transition-shadow">
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2 mb-2">
@@ -238,25 +213,30 @@ export default function DrejtoriaClientPage({
         </div>
       ) : (
         <div className="text-center py-12">
-          {loading ? (
-            <p>Duke ngarkuar...</p>
-          ) : (
-            <div className="flex flex-col items-center">
-              <Users className="h-12 w-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium">Nuk u gjetën organizata</h3>
-              <p className="text-gray-500 mt-1">Provoni të ndryshoni filtrat ose të kontrolloni më vonë</p>
-            </div>
-          )}
+          <Users className="h-12 w-12 text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium">Nuk u gjetën organizata</h3>
+          <p className="text-gray-500 mt-1">Provoni të ndryshoni filtrat ose të kontrolloni më vonë.</p>
         </div>
       )}
 
-      {hasMore && organizations.length > 0 && (
-        <div className="flex justify-center mt-8">
-          <Button variant="outline" onClick={handleLoadMore} disabled={loading}>
-            {loading ? "Duke ngarkuar..." : "Ngarko më shumë"}
-          </Button>
+      <div className="flex justify-between items-center mt-10">
+        <Button
+          variant="outline"
+          disabled={initialPage <= 1 || isPending}
+          onClick={() => handleLoadPage(Math.max(1, initialPage - 1))}
+        >
+          Më parë
+        </Button>
+
+        <div className="text-sm text-gray-500">
+          Faqja {initialPage}
+          {isPending && <span className="ml-2 italic">Duke u ngarkuar...</span>}
         </div>
-      )}
+
+        <Button variant="outline" disabled={!hasMoreInitial || isPending} onClick={() => handleLoadPage(initialPage + 1)}>
+          Më pas
+        </Button>
+      </div>
     </>
   )
 }

@@ -1,11 +1,5 @@
-import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Building, Search, MapPin, Users } from "lucide-react"
 import DrejtoriaClientPage from "./drejtoria-client-page" // Will create this client component later
 import { getOrganizationsData } from "./actions"
 
@@ -24,6 +18,7 @@ export default async function DrejtoriaPage({ searchParams }: DrejtoriaPageProps
   const initialSearchQuery = searchParams.search || ""
   const initialSelectedType = searchParams.type || "all"
   const initialSelectedInterest = searchParams.interest || "all"
+  const initialPage = Number.parseInt(searchParams.page || "1")
 
   // TODO: Handle the error state in the UI
   if (error) {
@@ -63,6 +58,7 @@ export default async function DrejtoriaPage({ searchParams }: DrejtoriaPageProps
             initialSearchQuery={initialSearchQuery}
             initialSelectedType={initialSelectedType}
             initialSelectedInterest={initialSelectedInterest}
+            initialPage={Number.isNaN(initialPage) ? 1 : initialPage}
             organizationTypes={organizationTypes}
             interests={interests}
           />

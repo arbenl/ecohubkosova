@@ -1,33 +1,21 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useEffect, useMemo, useState, useTransition, type FormEvent } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { createClientSupabaseClient } from "@/lib/supabase" // Use client-side supabase client
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BookOpen, Search, Calendar, User } from "lucide-react"
-
-interface Article {
-  id: string
-  titulli: string
-  përmbajtja: string
-  kategori: string
-  tags: string[]
-  created_at: string
-  users: {
-    emri_i_plotë: string
-  }
-  [key: string]: unknown
-}
+import { BookOpen, Calendar, Search, User } from "lucide-react"
+import type { ArticleRecord } from "@/src/services/articles"
 
 interface QendraEDijesClientPageProps {
-  initialArticles: Article[]
+  initialArticles: ArticleRecord[]
   hasMoreInitial: boolean
   initialSearchQuery: string
   initialSelectedCategory: string
+  initialPage: number
   categories: string[]
 }
 
@@ -36,103 +24,59 @@ export default function QendraEDijesClientPage({
   hasMoreInitial,
   initialSearchQuery,
   initialSelectedCategory,
+  initialPage,
   categories,
 }: QendraEDijesClientPageProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
-
-  const [articles, setArticles] = useState<Article[]>(initialArticles)
-  const [loading, setLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
   const [selectedCategory, setSelectedCategory] = useState(initialSelectedCategory)
-  const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(hasMoreInitial)
-  const itemsPerPage = 9
-
-  const supabase = createClientSupabaseClient()
-
-  const fetchArticles = useCallback(
-    async ({ reset = false, pageToLoad = 1 }: { reset?: boolean; pageToLoad?: number } = {}) => {
-      const targetPage = reset ? 1 : pageToLoad
-      const normalizedCategory = selectedCategory === "all" ? "" : selectedCategory
-
-      if (reset) {
-        setPage(1)
-        setArticles([])
-      }
-
-      setLoading(true)
-
-      try {
-        const from = (targetPage - 1) * itemsPerPage
-        const to = targetPage * itemsPerPage - 1
-
-        let query = supabase
-          .from("artikuj")
-          .select(
-            `
-            *,
-            users (emri_i_plotë)
-          `
-          )
-          .eq("eshte_publikuar", true)
-          .order("created_at", { ascending: false })
-          .range(from, to)
-
-        if (searchQuery) {
-          query = query.or(`titulli.ilike.%${searchQuery}%,përmbajtja.ilike.%${searchQuery}%`)
-        }
-
-        if (normalizedCategory) {
-          query = query.eq("kategori", normalizedCategory)
-        }
-
-        const { data, error } = await query
-
-        if (error) {
-          throw error
-        }
-
-        const typedData = (data ?? []) as unknown as Article[]
-
-        if (typedData.length) {
-          setArticles((prev) => (reset ? typedData : [...prev, ...typedData]))
-          setHasMore(typedData.length === itemsPerPage)
-        } else {
-          if (reset) {
-            setArticles([])
-          }
-          setHasMore(false)
-        }
-      } catch (error) {
-        console.error("Error fetching articles:", error)
-      } finally {
-        setLoading(false)
-      }
-    },
-    [itemsPerPage, searchQuery, selectedCategory, supabase]
-  )
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    // Only fetch if not initial load or if filters have changed from initial
-    if (
-      searchQuery !== initialSearchQuery ||
-      selectedCategory !== initialSelectedCategory
-    ) {
-      fetchArticles({ reset: true })
-    }
-  }, [searchQuery, selectedCategory, fetchArticles, initialSearchQuery, initialSelectedCategory])
+    setSearchQuery(initialSearchQuery)
+  }, [initialSearchQuery])
 
-  const handleLoadMore = () => {
-    if (loading || !hasMore) {
-      return
+  useEffect(() => {
+    setSelectedCategory(initialSelectedCategory)
+  }, [initialSelectedCategory])
+
+  const buildQuery = (search: string, category: string, page: number) => {
+    const params = new URLSearchParams()
+
+    if (search.trim()) {
+      params.set("search", search.trim())
     }
 
-    setPage((prev) => {
-      const nextPage = prev + 1
-      fetchArticles({ pageToLoad: nextPage })
-      return nextPage
+    if (category !== "all") {
+      params.set("category", category)
+    }
+
+    if (page > 1) {
+      params.set("page", String(page))
+    }
+
+    return params.toString()
+  }
+
+  const pushQuery = (overrides?: { search?: string; category?: string; page?: number }) => {
+    const query = buildQuery(
+      overrides?.search ?? searchQuery,
+      overrides?.category ?? selectedCategory,
+      overrides?.page ?? 1,
+    )
+
+    startTransition(() => {
+      router.push(query ? `?${query}` : "?")
     })
+  }
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    pushQuery({ page: 1, search: searchQuery })
+  }
+
+  const handlePageChange = (page: number) => {
+    pushQuery({ page })
   }
 
   const formatDate = (dateString: string) => {
@@ -146,29 +90,14 @@ export default function QendraEDijesClientPage({
 
   const truncateText = (text: string, maxLength: number) => {
     if (text.length <= maxLength) return text
-    return text.slice(0, maxLength) + "..."
+    return `${text.slice(0, maxLength)}...`
   }
 
-  // Update URL search params for persistence
-  useEffect(() => {
-    const current = new URLSearchParams(Array.from(searchParams.entries()));
-    if (searchQuery) {
-      current.set("search", searchQuery);
-    } else {
-      current.delete("search");
-    }
-    if (selectedCategory !== "all") {
-      current.set("category", selectedCategory);
-    } else {
-      current.delete("category");
-    }
-    router.push(`?${current.toString()}`);
-  }, [searchQuery, selectedCategory, router, searchParams]);
-
+  const visibleArticles = useMemo(() => initialArticles, [initialArticles])
 
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      <form className="flex flex-col md:flex-row gap-4 mb-8" onSubmit={handleSubmit}>
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
           <Input
@@ -178,8 +107,14 @@ export default function QendraEDijesClientPage({
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-          <SelectTrigger className="w-full md:w-[200px]">
+        <Select
+          value={selectedCategory}
+          onValueChange={(value) => {
+            setSelectedCategory(value)
+            pushQuery({ page: 1, category: value })
+          }}
+        >
+          <SelectTrigger className="w-full md:w-[220px]">
             <SelectValue placeholder="Kategoria" />
           </SelectTrigger>
           <SelectContent>
@@ -191,11 +126,14 @@ export default function QendraEDijesClientPage({
             ))}
           </SelectContent>
         </Select>
-      </div>
+        <Button type="submit" disabled={isPending} className="md:w-[140px]">
+          {isPending ? "Duke filtruar..." : "Kërko"}
+        </Button>
+      </form>
 
-      {articles.length > 0 ? (
+      {visibleArticles.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((article) => (
+          {visibleArticles.map((article) => (
             <Card key={article.id} className="overflow-hidden hover:shadow-lg transition-shadow">
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2 mb-2">
@@ -206,18 +144,18 @@ export default function QendraEDijesClientPage({
                 <CardTitle className="text-lg">{article.titulli}</CardTitle>
               </CardHeader>
               <CardContent className="pb-2">
-                <CardDescription className="line-clamp-3">{truncateText(article.përmbajtja, 150)}</CardDescription>
+                <CardDescription className="line-clamp-3">{truncateText(article.permbajtja, 180)}</CardDescription>
               </CardContent>
-              <CardFooter className="pt-2 flex justify-between items-center border-t">
-                <div className="flex items-center gap-4 text-xs text-gray-500">
-                  <div className="flex items-center gap-1">
+              <CardFooter className="pt-2 flex justify-between items-center border-t text-xs text-gray-500">
+                <div className="flex items-center gap-4">
+                  <span className="flex items-center gap-1">
                     <Calendar size={14} />
-                    <span>{formatDate(article.created_at)}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
+                    {formatDate(article.created_at)}
+                  </span>
+                  <span className="flex items-center gap-1">
                     <User size={14} />
-                    <span>{article.users?.emri_i_plotë || "Anonim"}</span>
-                  </div>
+                    {article.users?.emri_i_plote || "Anonim"}
+                  </span>
                 </div>
                 <Button size="sm" asChild>
                   <Link href={`/qendra-e-dijes/${article.id}`}>Lexo më shumë</Link>
@@ -228,25 +166,28 @@ export default function QendraEDijesClientPage({
         </div>
       ) : (
         <div className="text-center py-12">
-          {loading ? (
-            <p>Duke ngarkuar...</p>
-          ) : (
-            <div className="flex flex-col items-center">
-              <BookOpen className="h-12 w-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium">Nuk u gjetën artikuj</h3>
-              <p className="text-gray-500 mt-1">Provoni të ndryshoni filtrat ose të kontrolloni më vonë</p>
-            </div>
-          )}
+          <BookOpen className="h-12 w-12 text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium">Nuk u gjetën artikuj</h3>
+          <p className="text-gray-500 mt-1">Provoni të ndryshoni filtrat ose të kontrolloni më vonë.</p>
         </div>
       )}
 
-      {hasMore && articles.length > 0 && (
-        <div className="flex justify-center mt-8">
-          <Button variant="outline" onClick={handleLoadMore} disabled={loading}>
-            {loading ? "Duke ngarkuar..." : "Ngarko më shumë"}
-          </Button>
+      <div className="flex justify-between items-center mt-10">
+        <Button
+          variant="outline"
+          disabled={initialPage <= 1 || isPending}
+          onClick={() => handlePageChange(Math.max(1, initialPage - 1))}
+        >
+          Më parë
+        </Button>
+        <div className="text-sm text-gray-500">
+          Faqja {initialPage}
+          {isPending && <span className="ml-2 italic">Duke u ngarkuar...</span>}
         </div>
-      )}
+        <Button variant="outline" disabled={!hasMoreInitial || isPending} onClick={() => handlePageChange(initialPage + 1)}>
+          Më pas
+        </Button>
+      </div>
     </>
   )
 }

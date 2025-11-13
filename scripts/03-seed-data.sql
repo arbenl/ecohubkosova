@@ -7,7 +7,7 @@ INSERT INTO organizations (emri, pershkrimi, interesi_primar, person_kontakti, e
 ('Bujqësia e Qëndrueshme', 'OJQ për promovimin e bujqësisë organike', 'Bujqësi e qëndrueshme', 'Mentor Kelmendi', 'contact@bujqesia.org', 'Ferizaj, Kosovë', 'OJQ', true);
 
 -- Insert sample articles (published)
-INSERT INTO artikuj (titulli, përmbajtja, autori_id, eshte_publikuar, kategori, tags) VALUES
+INSERT INTO artikuj (titulli, permbajtja, autori_id, eshte_publikuar, kategori, tags) VALUES
 ('Hyrje në Ekonominë Qarkulluese', 'Ekonomia qarkulluese është një model ekonomik që synon eliminimin e mbetjeve dhe përdorimin e vazhdueshëm të burimeve. Ky artikull shpjegon parimet bazë të ekonomisë qarkulluese dhe përfitimet e saj për mjedisin dhe ekonominë.', (SELECT id FROM users WHERE roli = 'Admin' LIMIT 1), true, 'Ekonomi qarkulluese', ARRAY['ekonomi', 'qëndrueshmëri', 'mjedis']),
 ('Riciklimi në Kosovë: Sfidat dhe Mundësitë', 'Analiza e gjendjes aktuale të riciklimit në Kosovë, sfidat kryesore dhe mundësitë për përmirësim. Artikulli përfshin rekomandime për politikëbërësit dhe qytetarët.', (SELECT id FROM users WHERE roli = 'Admin' LIMIT 1), true, 'Riciklim', ARRAY['riciklim', 'Kosovë', 'politika']),
 ('Energjia e Ripërtëritshme: E Ardhmja e Kosovës', 'Potenciali i Kosovës për energji të ripërtëritshme, duke përfshirë energjinë diellore, erën dhe hidro. Diskutohen investimet e nevojshme dhe përfitimet ekonomike.', (SELECT id FROM users WHERE roli = 'Admin' LIMIT 1), true, 'Energji e ripërtëritshme', ARRAY['energji', 'diell', 'erë']);

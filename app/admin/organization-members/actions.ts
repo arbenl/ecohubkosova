@@ -2,7 +2,7 @@
 
 import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
+import { requireAdminRole } from "@/lib/auth/roles"
 
 interface OrganizationMember {
   id: string
@@ -36,7 +36,7 @@ export async function getOrganizationMembers(): Promise<GetOrganizationMembersRe
     const { data, error } = await supabase.from("organization_members").select(`
           *,
           organizations!inner(emri),
-          users!inner(emri_i_plotë, email)
+          users!inner(emri_i_plote, email)
         `)
 
     if (error) {
@@ -48,7 +48,7 @@ export async function getOrganizationMembers(): Promise<GetOrganizationMembersRe
       data?.map((member: any) => ({
         ...member,
         organization_name: member.organizations?.emri,
-        user_name: member.users?.emri_i_plotë,
+        user_name: member.users?.emri_i_plote,
         user_email: member.users?.email,
       })) || []
 
@@ -65,14 +65,7 @@ export async function getOrganizationMembers(): Promise<GetOrganizationMembersRe
 
 export async function deleteOrganizationMember(memberId: string) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të fshini anëtarë organizate.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase.from("organization_members").delete().eq("id", memberId)
@@ -92,14 +85,7 @@ export async function deleteOrganizationMember(memberId: string) {
 
 export async function updateOrganizationMember(memberId: string, formData: OrganizationMemberUpdateData) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të përditësoni anëtarë organizate.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase
@@ -125,14 +111,7 @@ export async function updateOrganizationMember(memberId: string, formData: Organ
 
 export async function toggleOrganizationMemberApproval(memberId: string, currentStatus: boolean) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të ndryshoni statusin e aprovimit.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase

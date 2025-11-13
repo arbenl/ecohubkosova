@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useEffect, useCallback, useContext, createContext, useMemo, useRef } from "react"
 import { useRouter } from "next/navigation"
-import type { Session, User, AuthChangeEvent, AuthError } from "@supabase/supabase-js"
+import type { Session, User, AuthChangeEvent, AuthResponse, SignInWithPasswordCredentials } from "@supabase/supabase-js"
 import { createClientSupabaseClient } from "@/lib/supabase"
 import type { UserProfile } from "@/types"
 
@@ -12,9 +12,10 @@ interface AuthContextType {
   userProfile: UserProfile | null
   session: Session | null
   isLoading: boolean
+  signOutPending: boolean
   isAdmin: boolean
-  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<void>
+  signInWithPassword: (credentials: SignInWithPasswordCredentials) => Promise<AuthResponse>
   refreshUserProfile: () => Promise<void>
 }
 
@@ -34,10 +35,10 @@ export function AuthProvider({
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [session, setSession] = useState<Session | null>(initialSession)
   const [isLoading, setIsLoading] = useState(true)
+  const [signOutPending, setSignOutPending] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const router = useRouter()
   const supabase = useMemo(() => createClientSupabaseClient(), [])
-  const listenerInitializedRef = useRef(false)
   const signOutInFlightRef = useRef(false)
 
   const resetAuthState = () => {
@@ -45,12 +46,18 @@ export function AuthProvider({
     setSession(null)
     setUserProfile(null)
     setIsAdmin(false)
+    setIsLoading(false)
   }
 
   const fetchUserProfile = useCallback(
     async (userId: string): Promise<UserProfile | null> => {
       try {
-        const { data, error } = await supabase.from("users").select("*").eq("id", userId).limit(1).maybeSingle()
+        const { data, error } = await supabase
+          .from("users")
+          .select("id, emri_i_plote, email, vendndodhja, roli, eshte_aprovuar, created_at")
+          .eq("id", userId)
+          .limit(1)
+          .maybeSingle()
 
         if (error) {
           console.error("Gabim në bazën e të dhënave:", error)
@@ -60,9 +67,9 @@ export function AuthProvider({
         if (!data) {
           const { data: authUser } = await supabase.auth.getUser()
           if (authUser.user) {
-            const newProfile = {
+            const newProfile: Omit<UserProfile, "created_at" | "vendndodhja"> & { vendndodhja?: string } = {
               id: userId,
-              emri_i_plotë: authUser.user.user_metadata?.full_name || authUser.user.email?.split("@")[0] || "User",
+              emri_i_plote: authUser.user.user_metadata?.full_name || authUser.user.email?.split("@")[0] || "User",
               email: authUser.user.email || "",
               roli: "Individ",
               eshte_aprovuar: false,
@@ -71,7 +78,7 @@ export function AuthProvider({
             const { data: createdProfile, error: createError } = await supabase
               .from("users")
               .insert(newProfile)
-              .select()
+              .select("id, emri_i_plote, email, vendndodhja, roli, eshte_aprovuar, created_at")
               .single()
 
             if (createError) {
@@ -101,111 +108,160 @@ export function AuthProvider({
     }
   }
 
-  useEffect(() => {
-    let mounted = true
-
-    const syncUserState = async (nextUser: User | null) => {
-      if (!mounted) return
-
+  const hydrateUser = useCallback(
+    async (nextUser: User | null) => {
       if (!nextUser) {
         resetAuthState()
-        setIsLoading(false)
         return
       }
 
       setUser(nextUser)
-      setIsLoading(false)
-      const profile = await fetchUserProfile(nextUser.id)
-      if (!mounted) return
-      setUserProfile(profile)
-      setIsAdmin(profile?.roli === "Admin")
-    }
 
-    void syncUserState(initialUser)
+      try {
+        const profile = await fetchUserProfile(nextUser.id)
+        setUserProfile(profile)
+        setIsAdmin(profile?.roli === "Admin")
+      } catch (error) {
+        console.error("Dështoi rifreskimi i profilit:", error)
+        setUserProfile(null)
+        setIsAdmin(false)
+      }
+    },
+    [fetchUserProfile]
+  )
 
-    if (listenerInitializedRef.current) {
-      return () => {
-        mounted = false
+  useEffect(() => {
+    let active = true
+
+    const primeSession = async () => {
+      setIsLoading(true)
+      try {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession()
+
+        if (!active) return
+
+        if (sessionError) {
+          throw sessionError
+        }
+
+        setSession(session ?? null)
+
+        if (!session) {
+          await hydrateUser(null)
+          return
+        }
+
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser()
+
+        if (userError) {
+          throw userError
+        }
+
+        await hydrateUser(user ?? null)
+      } catch (error) {
+        if (!active) return
+        console.error("Dështoi verifikimi i sesionit:", error)
+        await hydrateUser(null)
+      } finally {
+        if (active) {
+          setIsLoading(false)
+        }
       }
     }
 
-    listenerInitializedRef.current = true
+    primeSession()
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, newSession: Session | null) => {
-      if (!mounted) return
+    } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, newSession: Session | null) => {
+      if (!active) return
 
       setSession(newSession)
-      const {
-        data: { user: authenticatedUser },
-      } = await supabase.auth.getUser()
 
-      await syncUserState(authenticatedUser ?? null)
-
-    })
-
-    return () => {
-      mounted = false
-      subscription.unsubscribe()
-      listenerInitializedRef.current = false
-    }
-  }, [fetchUserProfile, initialUser, supabase])
-
-  const signIn = async (email: string, password: string) => {
-    setIsLoading(true)
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      // If there's an error, clear loading immediately
-      if (error) {
-        setIsLoading(false)
-        return { error }
-      }
-
-      return { error: null }
-    } catch (error) {
-      // Always clear loading on any error
-      setIsLoading(false)
-      return { error: error as AuthError }
-    }
-  }
-
-  const signOut = async () => {
-    if (signOutInFlightRef.current) return
-    signOutInFlightRef.current = true
-    setIsLoading(true)
-
-    try {
-      const response = await fetch("/api/auth/signout", {
-        method: "POST",
-        cache: "no-store",
-        credentials: "include",
-      })
-
-      if (!response.ok) {
-        const { error: serverError } = await response.json().catch(() => ({ error: "Gabim gjatë daljes" }))
-        throw new Error(serverError || "Gabim gjatë daljes nga serveri")
+      if (!newSession) {
+        await hydrateUser(null)
+        return
       }
 
       try {
-        await supabase.auth.signOut()
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser()
+
+        if (userError) {
+          throw userError
+        }
+
+        await hydrateUser(user ?? null)
       } catch (error) {
-        console.error("Gabim gjatë daljes nga klienti:", error)
+        console.error("Dështoi sinkronizimi i sesionit pas ndryshimit:", error)
+        await hydrateUser(null)
+      }
+    })
+
+    return () => {
+      active = false
+      subscription.unsubscribe()
+    }
+  }, [hydrateUser, supabase])
+
+  const signOut = async () => {
+    if (signOutInFlightRef.current) {
+      return
+    }
+    signOutInFlightRef.current = true
+    setSignOutPending(true)
+
+    try {
+      // Sign out from the client
+      const { error: clientError } = await supabase.auth.signOut({ scope: "global" })
+      if (clientError) {
+        // Even if client-side signout fails, we should try to clear the server session.
+        console.error("Client sign-out error:", clientError)
       }
 
+      // Immediately reset auth state and redirect
       resetAuthState()
       router.replace("/auth/kycu")
       router.refresh()
+
+      // Fire and forget the server-side sign-out
+      fetch("/api/auth/signout", {
+        method: "POST",
+        cache: "no-store",
+        credentials: "include",
+      }).catch((error) => {
+        // Log any errors from the server-side sign-out without blocking the user.
+        console.error("Server sign-out error:", error)
+      })
     } catch (error) {
       console.error("Gabim gjatë daljes:", error)
+      // It's important to reset the pending state even if there's an error.
     } finally {
       signOutInFlightRef.current = false
-      setIsLoading(false)
+      setSignOutPending(false)
+    }
+  }
+
+  const signInWithPassword = async (credentials: SignInWithPasswordCredentials) => {
+    try {
+      const response = await supabase.auth.signInWithPassword(credentials)
+      if (response.error) {
+        throw response.error
+      }
+      // The onAuthStateChange listener will handle the user and session update.
+      return response
+    } catch (error) {
+      console.error("Sign in error:", error)
+      // Re-throw the error to be handled by the caller
+      throw error
     }
   }
 
@@ -214,9 +270,10 @@ export function AuthProvider({
     userProfile,
     session,
     isLoading,
+    signOutPending,
     isAdmin,
-    signIn,
     signOut,
+    signInWithPassword,
     refreshUserProfile,
   }
 

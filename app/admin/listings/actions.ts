@@ -2,7 +2,7 @@
 
 import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
+import { requireAdminRole } from "@/lib/auth/roles"
 
 interface Listing {
   id: string
@@ -11,7 +11,7 @@ interface Listing {
   titulli: string
   pershkrimi: string
   kategori: string
-  çmimi: number
+  cmimi: number
   njesia: string
   vendndodhja: string
   sasia: string
@@ -25,7 +25,7 @@ interface ListingUpdateData {
   titulli: string
   pershkrimi: string
   kategori: string
-  çmimi: number
+  cmimi: number
   njesia: string
   vendndodhja: string
   sasia: string
@@ -62,14 +62,7 @@ export async function getListings(): Promise<GetListingsResult> {
 
 export async function deleteListing(listingId: string) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të fshini listime.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase.from("tregu_listime").delete().eq("id", listingId)
@@ -89,14 +82,7 @@ export async function deleteListing(listingId: string) {
 
 export async function updateListing(listingId: string, formData: ListingUpdateData) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të përditësoni listime.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase
@@ -105,7 +91,7 @@ export async function updateListing(listingId: string, formData: ListingUpdateDa
         titulli: formData.titulli,
         pershkrimi: formData.pershkrimi,
         kategori: formData.kategori,
-        çmimi: formData.çmimi,
+        cmimi: formData.cmimi,
         njesia: formData.njesia,
         vendndodhja: formData.vendndodhja,
         sasia: formData.sasia,

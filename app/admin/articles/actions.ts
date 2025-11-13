@@ -2,12 +2,12 @@
 
 import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
+import { requireAdminRole } from "@/lib/auth/roles"
 
 interface Article {
   id: string
   titulli: string
-  përmbajtja: string
+  permbajtja: string
   autori_id: string
   eshte_publikuar: boolean
   kategori: string
@@ -19,7 +19,7 @@ interface Article {
 
 interface ArticleCreateData {
   titulli: string
-  përmbajtja: string
+  permbajtja: string
   kategori: string
   eshte_publikuar: boolean
   tags: string[] | null
@@ -28,7 +28,7 @@ interface ArticleCreateData {
 
 interface ArticleUpdateData {
   titulli: string
-  përmbajtja: string
+  permbajtja: string
   kategori: string
   eshte_publikuar: boolean
   tags: string[] | null
@@ -64,20 +64,13 @@ export async function getArticles(): Promise<GetArticlesResult> {
 
 export async function createArticle(formData: ArticleCreateData) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të krijoni artikuj.")
-  }
+  const { user } = await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase.from("artikuj").insert([
       {
         titulli: formData.titulli,
-        përmbajtja: formData.përmbajtja,
+        permbajtja: formData.permbajtja,
         kategori: formData.kategori,
         eshte_publikuar: formData.eshte_publikuar,
         tags: formData.tags,
@@ -103,14 +96,7 @@ export async function createArticle(formData: ArticleCreateData) {
 
 export async function deleteArticle(articleId: string) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të fshini artikuj.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase.from("artikuj").delete().eq("id", articleId)
@@ -130,21 +116,14 @@ export async function deleteArticle(articleId: string) {
 
 export async function updateArticle(articleId: string, formData: ArticleUpdateData) {
   const supabase = createRouteHandlerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user || user.user_metadata.role !== "Admin") {
-    redirect("/auth/kycu?message=Nuk jeni i autorizuar të përditësoni artikuj.")
-  }
+  await requireAdminRole(supabase)
 
   try {
     const { error } = await supabase
       .from("artikuj")
       .update({
         titulli: formData.titulli,
-        përmbajtja: formData.përmbajtja,
+        permbajtja: formData.permbajtja,
         kategori: formData.kategori,
         eshte_publikuar: formData.eshte_publikuar,
         tags: formData.tags,

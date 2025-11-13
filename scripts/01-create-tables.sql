@@ -1,7 +1,7 @@
 -- Create users table
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    emri_i_plotë TEXT NOT NULL,
+    emri_i_plote TEXT NOT NULL,
     email TEXT NOT NULL,
     vendndodhja TEXT NOT NULL,
     roli TEXT NOT NULL CHECK (roli IN ('Individ', 'Admin')),
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS organization_members (
 CREATE TABLE IF NOT EXISTS artikuj (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     titulli TEXT NOT NULL,
-    përmbajtja TEXT NOT NULL,
+    permbajtja TEXT NOT NULL,
     autori_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     eshte_publikuar BOOLEAN DEFAULT FALSE,
     kategori TEXT NOT NULL,

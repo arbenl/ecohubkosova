@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useMemo, useState, useTransition, type FormEvent } from "react"
+import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ListingCard } from "@/components/listings/ListingCard"
-import { Search, SlidersHorizontal } from "lucide-react"
 import { Listing } from "@/types"
-import { useRouter } from "next/navigation"
+import { Search, SlidersHorizontal } from "lucide-react"
 
 interface TreguClientPageProps {
   initialListings: Listing[]
@@ -15,8 +15,15 @@ interface TreguClientPageProps {
   initialTab: string
   initialSearchQuery: string
   initialSelectedCategory: string
+  initialPage: number
   categories: string[]
 }
+
+const TAB_OPTIONS = [
+  { value: "te-gjitha", label: "Të gjitha" },
+  { value: "shes", label: "Për Shitje" },
+  { value: "blej", label: "Kërkoj të Blej" },
+]
 
 export default function TreguClientPage({
   initialListings,
@@ -24,63 +31,118 @@ export default function TreguClientPage({
   initialTab,
   initialSearchQuery,
   initialSelectedCategory,
+  initialPage,
   categories,
 }: TreguClientPageProps) {
-  const [listings, setListings] = useState<Listing[]>(initialListings)
-  const [filters, setFilters] = useState({
-    category: initialSelectedCategory === "all" ? "" : initialSelectedCategory,
-    condition: "",
-    location: "",
-  })
-  const [sortOrder, setSortOrder] = useState(initialTab === "te-gjitha" ? "newest" : initialTab)
+  const router = useRouter()
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
+  const [selectedCategory, setSelectedCategory] = useState(initialSelectedCategory)
+  const [activeTab, setActiveTab] = useState(initialTab)
+  const [sortOrder, setSortOrder] = useState("newest")
+  const [filters, setFilters] = useState({ condition: "", location: "" })
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    // When initialListings change (e.g., after a server revalidation), update the state
-    setListings(initialListings)
-  }, [initialListings])
+    setSearchQuery(initialSearchQuery)
+  }, [initialSearchQuery])
 
   useEffect(() => {
-    const filteredListings = initialListings
+    setSelectedCategory(initialSelectedCategory)
+  }, [initialSelectedCategory])
+
+  useEffect(() => {
+    setActiveTab(initialTab)
+  }, [initialTab])
+
+  const buildQuery = ({
+    tab,
+    category,
+    search,
+    page,
+  }: {
+    tab: string
+    category: string
+    search: string
+    page: number
+  }) => {
+    const params = new URLSearchParams()
+
+    if (tab !== "te-gjitha") {
+      params.set("lloji", tab)
+    }
+
+    if (category !== "all") {
+      params.set("category", category)
+    }
+
+    if (search.trim()) {
+      params.set("search", search.trim())
+    }
+
+    if (page > 1) {
+      params.set("page", String(page))
+    }
+
+    return params.toString()
+  }
+
+  const pushQuery = (overrides?: { tab?: string; category?: string; search?: string; page?: number }) => {
+    const query = buildQuery({
+      tab: overrides?.tab ?? activeTab,
+      category: overrides?.category ?? selectedCategory,
+      search: overrides?.search ?? searchQuery,
+      page: overrides?.page ?? 1,
+    })
+
+    startTransition(() => {
+      router.push(query ? `?${query}` : "?")
+    })
+  }
+
+  const handleSearchSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    pushQuery({ page: 1, search: searchQuery })
+  }
+
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value)
+    pushQuery({ page: 1, category: value })
+  }
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab)
+    pushQuery({ page: 1, tab })
+  }
+
+  const handlePageChange = (page: number) => {
+    pushQuery({ page })
+  }
+
+  const handleFilterChange = (key: "condition" | "location", value: string) => {
+    setFilters((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const filteredListings = useMemo(() => {
+    return initialListings
       .filter((listing) => {
-        const matchesCategory = filters.category ? listing.kategori === filters.category : true
         const matchesCondition = filters.condition ? listing.gjendja === filters.condition : true
         const matchesLocation = filters.location
           ? listing.vendndodhja.toLowerCase().includes(filters.location.toLowerCase())
           : true
-        const matchesSearch = searchQuery
-          ? listing.titulli.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            listing.pershkrimi.toLowerCase().includes(searchQuery.toLowerCase())
-          : true
-        return matchesCategory && matchesCondition && matchesLocation && matchesSearch
+        return matchesCondition && matchesLocation
       })
       .sort((a, b) => {
-        if (sortOrder === "newest") {
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        }
         if (sortOrder === "oldest") {
           return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
         }
-        return 0
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       })
+  }, [initialListings, filters, sortOrder])
 
-    setListings(filteredListings)
-  }, [filters, sortOrder, searchQuery, initialListings])
-
-  const handleFilterChange = (filterName: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [filterName]: value }))
-  }
-
-  const handleSortChange = (value: string) => {
-    setSortOrder(value)
-  }
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-  }
-
-  const uniqueConditions = Array.from(new Set(initialListings.map((listing) => listing.gjendja)))
-  const router = useRouter()
+  const uniqueConditions = useMemo(
+    () => Array.from(new Set(initialListings.map((listing) => listing.gjendja))).filter(Boolean),
+    [initialListings],
+  )
 
   const handleContactClick = (listing: Listing) => {
     router.push(`/tregu/${listing.id}`)
@@ -90,29 +152,44 @@ export default function TreguClientPage({
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">Tregu i Qarkullueshëm</h1>
 
-      {/* Search and Filter Section */}
+      <div className="flex flex-wrap gap-3 justify-center mb-8">
+        {TAB_OPTIONS.map((tab) => (
+          <Button
+            key={tab.value}
+            variant={activeTab === tab.value ? "default" : "outline"}
+            className="rounded-full px-6"
+            onClick={() => handleTabChange(tab.value)}
+            disabled={isPending}
+          >
+            {tab.label}
+          </Button>
+        ))}
+      </div>
+
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <div className="flex flex-col md:flex-row gap-4 mb-4">
+        <form className="flex flex-col md:flex-row gap-4 mb-4" onSubmit={handleSearchSubmit}>
           <div className="relative flex-grow">
             <Input
               type="text"
               placeholder="Kërko sipas titullit ose përshkrimit..."
               className="pl-10 pr-4 py-2 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
               value={searchQuery}
-              onChange={handleSearchChange}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
           </div>
-          <Button className="md:hidden flex items-center justify-center gap-2 bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200">
-            <SlidersHorizontal className="w-5 h-5" /> Filtro
+          <Button
+            type="submit"
+            className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
+            disabled={isPending}
+          >
+            <SlidersHorizontal className="w-5 h-5" />
+            {isPending ? "Duke filtruar..." : "Filtro"}
           </Button>
-        </div>
+        </form>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <Select
-            onValueChange={(value) => handleFilterChange("category", value === "all" ? "" : value)}
-            value={filters.category}
-          >
+          <Select value={selectedCategory} onValueChange={handleCategoryChange}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Kategoria" />
             </SelectTrigger>
@@ -128,14 +205,14 @@ export default function TreguClientPage({
 
           <Select
             onValueChange={(value) => handleFilterChange("condition", value === "all" ? "" : value)}
-            value={filters.condition}
+            value={filters.condition || "all"}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Gjendja" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Të gjitha gjendjet</SelectItem>
-              {uniqueConditions.filter(Boolean).map((condition) => (
+              {uniqueConditions.map((condition) => (
                 <SelectItem key={condition} value={condition}>
                   {condition}
                 </SelectItem>
@@ -153,7 +230,7 @@ export default function TreguClientPage({
         </div>
 
         <div className="flex justify-end">
-          <Select onValueChange={handleSortChange} value={sortOrder}>
+          <Select onValueChange={setSortOrder} value={sortOrder}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Rendit sipas" />
             </SelectTrigger>
@@ -165,16 +242,32 @@ export default function TreguClientPage({
         </div>
       </div>
 
-      {/* Listings Grid */}
-      {listings.length === 0 ? (
+      {filteredListings.length === 0 ? (
         <p className="text-center text-gray-600 text-lg">Nuk u gjetën shpallje që përputhen me kriteret.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {listings.map((listing) => (
+          {filteredListings.map((listing) => (
             <ListingCard key={listing.id} listing={listing} onContact={handleContactClick} />
           ))}
         </div>
       )}
+
+      <div className="flex justify-between items-center mt-10">
+        <Button
+          variant="outline"
+          disabled={initialPage <= 1 || isPending}
+          onClick={() => handlePageChange(Math.max(1, initialPage - 1))}
+        >
+          Më parë
+        </Button>
+        <div className="text-sm text-gray-500">
+          Faqja {initialPage}
+          {isPending && <span className="ml-2 italic">Duke u ngarkuar...</span>}
+        </div>
+        <Button variant="outline" disabled={!hasMoreInitial || isPending} onClick={() => handlePageChange(initialPage + 1)}>
+          Më pas
+        </Button>
+      </div>
     </div>
   )
 }

@@ -1,16 +1,22 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
 import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 
 export const dynamic = "force-dynamic"
 
 export async function POST() {
-  const cookieStore = cookies()
+  const response = NextResponse.json(
+    { success: true },
+    {
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    }
+  )
   const supabase = createRouteHandlerSupabaseClient()
-  const { error } = await supabase.auth.signOut()
+  const { error } = await supabase.auth.signOut({ scope: "global" })
 
-  // Always clear the __session cookie ourselves to avoid stale sessions.
-  cookieStore.set("__session", "", {
+  // Ensure the httpOnly cookie is wiped even if Supabase succeeds silently.
+  response.cookies.set("__session", "", {
     path: "/",
     httpOnly: true,
     sameSite: "lax",
@@ -19,8 +25,16 @@ export async function POST() {
   })
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 })
+    response.cookies.set("logout_error", error.message, { path: "/", maxAge: 5 })
+    response.headers.set("x-supabase-logout-error", error.message)
+    return NextResponse.json(
+      { success: false, error: error.message },
+      {
+        status: 500,
+        headers: response.headers,
+      }
+    )
   }
 
-  return NextResponse.json({ success: true })
+  return response
 }

@@ -10,7 +10,7 @@ interface Listing {
   titulli: string
   pershkrimi: string
   kategori: string
-  çmimi: number
+  cmimi: number
   njesia: string
   vendndodhja: string
   sasia: string
@@ -48,7 +48,7 @@ export default function ListingsClientPage({ initialListings }: ListingsClientPa
             <tr className="bg-gray-100">
               <th className="py-2 px-4 border-b">Titulli</th>
               <th className="py-2 px-4 border-b">Kategoria</th>
-              <th className="py-2 px-4 border-b">Çmimi</th>
+              <th className="py-2 px-4 border-b">Cmimi</th>
               <th className="py-2 px-4 border-b">Njesia</th>
               <th className="py-2 px-4 border-b">Vendndodhja</th>
               <th className="py-2 px-4 border-b">Aprovuar</th>
@@ -61,7 +61,7 @@ export default function ListingsClientPage({ initialListings }: ListingsClientPa
                 <td className="py-2 px-4 border-b">{listing.titulli}</td>
                 <td className="py-2 px-4 border-b">{listing.kategori}</td>
                 <td className="py-2 px-4 border-b">
-                  {listing.çmimi} {listing.njesia}
+                  {listing.cmimi} {listing.njesia}
                 </td>
                 <td className="py-2 px-4 border-b">{listing.njesia}</td>
                 <td className="py-2 px-4 border-b">{listing.vendndodhja}</td>
@@ -100,7 +100,7 @@ export default function ListingsClientPage({ initialListings }: ListingsClientPa
                   titulli: formData.get("titulli") as string,
                   pershkrimi: formData.get("pershkrimi") as string,
                   kategori: formData.get("kategori") as string,
-                  çmimi: Number.parseFloat(formData.get("çmimi") as string),
+                  cmimi: Number.parseFloat(formData.get("cmimi") as string),
                   njesia: formData.get("njesia") as string,
                   vendndodhja: formData.get("vendndodhja") as string,
                   sasia: formData.get("sasia") as string,
@@ -157,15 +157,15 @@ export default function ListingsClientPage({ initialListings }: ListingsClientPa
                 />
               </div>
               <div>
-                <label htmlFor="çmimi" className="block text-gray-700 text-sm font-bold mb-2">
-                  Çmimi:
+                <label htmlFor="cmimi" className="block text-gray-700 text-sm font-bold mb-2">
+                  Cmimi:
                 </label>
                 <input
                   type="number"
                   step="0.01"
-                  id="çmimi"
-                  name="çmimi"
-                  defaultValue={editingListing.çmimi}
+                  id="cmimi"
+                  name="cmimi"
+                  defaultValue={editingListing.cmimi}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>

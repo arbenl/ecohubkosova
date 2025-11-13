@@ -9,12 +9,12 @@ interface Listing {
   id: string
   titulli: string
   users?: {
-    emri_i_plotë: string
-    email: string
+    emri_i_plote: string
+    email?: string
   }
   organizations?: {
     emri: string
-    email_kontakti: string
+    email_kontakti?: string
   }
 }
 
@@ -65,7 +65,7 @@ export default function ContactListingButton({ listing, user }: ContactListingBu
               <div className="space-y-3">
                 <div>
                   <span className="font-medium text-gray-700">Emri:</span>
-                  <p className="text-lg">{listing.users?.emri_i_plotë || "Anonim"}</p>
+                  <p className="text-lg">{listing.users?.emri_i_plote || "Anonim"}</p>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700">Email:</span>

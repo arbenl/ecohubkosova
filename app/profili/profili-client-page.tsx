@@ -29,7 +29,7 @@ import type { User } from "@supabase/supabase-js"
 
 interface UserProfile {
   id: string
-  emri_i_plotë: string
+  emri_i_plote: string
   email: string
   vendndodhja: string
   roli: string
@@ -60,7 +60,7 @@ export default function ProfiliClientPage({ userProfile, organization }: Profili
   const [success, setSuccess] = useState<string | null>(null)
 
   const [userFormData, setUserFormData] = useState({
-    emri_i_plotë: userProfile?.emri_i_plotë || "",
+    emri_i_plote: userProfile?.emri_i_plote || "",
     email: userProfile?.email || "",
     vendndodhja: userProfile?.vendndodhja || "",
   })
@@ -77,7 +77,7 @@ export default function ProfiliClientPage({ userProfile, organization }: Profili
   // Update form data if userProfile or organization props change (e.g., after revalidation)
   useEffect(() => {
     setUserFormData({
-      emri_i_plotë: userProfile?.emri_i_plotë || "",
+      emri_i_plote: userProfile?.emri_i_plote || "",
       email: userProfile?.email || "",
       vendndodhja: userProfile?.vendndodhja || "",
     });
@@ -119,7 +119,7 @@ export default function ProfiliClientPage({ userProfile, organization }: Profili
     setSuccess(null)
 
     const result = await updateUserProfile({
-      emri_i_plotë: userFormData.emri_i_plotë,
+      emri_i_plote: userFormData.emri_i_plote,
       vendndodhja: userFormData.vendndodhja,
     })
 
@@ -189,8 +189,8 @@ export default function ProfiliClientPage({ userProfile, organization }: Profili
               </Alert>
             )}
             <form onSubmit={handleUserSubmit} className="space-y-4">
-              <Label htmlFor="emri_i_plotë">Emri i Plotë</Label>
-              <Input name="emri_i_plotë" value={userFormData.emri_i_plotë} onChange={handleUserChange} />
+              <Label htmlFor="emri_i_plote">Emri i Plotë</Label>
+              <Input name="emri_i_plote" value={userFormData.emri_i_plote} onChange={handleUserChange} />
               <Label htmlFor="email">Email</Label>
               <Input name="email" value={userFormData.email} disabled />
               <Label htmlFor="vendndodhja">Vendndodhja</Label>

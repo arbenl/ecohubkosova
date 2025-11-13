@@ -8,7 +8,7 @@ interface Listing {
   titulli: string
   pershkrimi: string
   kategori: string
-  çmimi: number
+  cmimi: number
   njesia: string
   vendndodhja: string
   sasia: string

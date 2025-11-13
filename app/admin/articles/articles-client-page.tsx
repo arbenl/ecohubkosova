@@ -6,7 +6,7 @@ import { createArticle, deleteArticle, updateArticle } from "./actions" // Impor
 interface Article {
   id: string
   titulli: string
-  përmbajtja: string
+  permbajtja: string
   autori_id: string
   eshte_publikuar: boolean
   kategori: string
@@ -25,7 +25,7 @@ const ArticlesClientPage = ({ initialArticles }: ArticlesClientPageProps) => {
   const [editingArticle, setEditingArticle] = useState<Article | null>(null)
   const [newArticle, setNewArticle] = useState({
     titulli: "",
-    përmbajtja: "",
+    permbajtja: "",
     kategori: "",
     eshte_publikuar: false,
     tags: "",
@@ -74,7 +74,7 @@ const ArticlesClientPage = ({ initialArticles }: ArticlesClientPageProps) => {
 
     const result = await createArticle({
       titulli: newArticle.titulli,
-      përmbajtja: newArticle.përmbajtja,
+      permbajtja: newArticle.permbajtja,
       kategori: newArticle.kategori,
       eshte_publikuar: newArticle.eshte_publikuar,
       tags: tagsArray,
@@ -89,7 +89,7 @@ const ArticlesClientPage = ({ initialArticles }: ArticlesClientPageProps) => {
       alert("Artikulli u krijua me sukses!")
       setNewArticle({
         titulli: "",
-        përmbajtja: "",
+        permbajtja: "",
         kategori: "",
         eshte_publikuar: false,
         tags: "",
@@ -164,7 +164,7 @@ const ArticlesClientPage = ({ initialArticles }: ArticlesClientPageProps) => {
 
                 const updatedData = {
                   titulli: formData.get("titulli") as string,
-                  përmbajtja: formData.get("përmbajtja") as string,
+                  permbajtja: formData.get("permbajtja") as string,
                   kategori: formData.get("kategori") as string,
                   eshte_publikuar: formData.get("eshte_publikuar") === "on",
                   tags: tagsArray,
@@ -197,16 +197,16 @@ const ArticlesClientPage = ({ initialArticles }: ArticlesClientPageProps) => {
                 />
               </div>
               <div>
-                <label htmlFor="përmbajtja" className="block text-sm font-medium text-gray-700">
+<label htmlFor="permbajtja" className="block text-sm font-medium text-gray-700">
                   Përmbajtja:
                 </label>
                 <textarea
-                  id="përmbajtja"
-                  name="përmbajtja"
-                  rows={4}
-                  defaultValue={editingArticle.përmbajtja}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                />
+                  id="permbajtja"
+                  name="permbajtja"
+                  rows={10}
+                  defaultValue={editingArticle.permbajtja}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                ></textarea>
               </div>
               <div>
                 <label htmlFor="kategori" className="block text-sm font-medium text-gray-700">
@@ -296,14 +296,14 @@ const ArticlesClientPage = ({ initialArticles }: ArticlesClientPageProps) => {
             />
           </div>
           <div>
-            <label htmlFor="përmbajtja" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="permbajtja" className="block text-sm font-medium text-gray-700">
               Përmbajtja:
             </label>
             <textarea
-              id="përmbajtja"
-              name="përmbajtja"
+              id="permbajtja"
+              name="permbajtja"
               rows={4}
-              value={newArticle.përmbajtja}
+              value={newArticle.permbajtja}
               onChange={handleInputChange}
               className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
               required
