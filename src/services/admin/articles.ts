@@ -1,7 +1,10 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server"
-import type { SupabaseClient } from "@supabase/supabase-js"
+import { eq } from "drizzle-orm"
+import { db } from "@/lib/drizzle"
+import { articles } from "@/db/schema"
 import type { AdminArticleCreateInput, AdminArticleUpdateInput } from "@/validation/admin"
 export type { AdminArticleCreateInput, AdminArticleUpdateInput } from "@/validation/admin"
+
+export type AdminArticleRow = typeof articles.$inferSelect
 
 export interface AdminArticle {
   id: string
@@ -16,43 +19,64 @@ export interface AdminArticle {
   updated_at: string | null
 }
 
-type AnySupabaseClient = SupabaseClient<any, any, any>
-
 export async function fetchAdminArticles() {
-  const supabase = createServerSupabaseClient()
-  const { data, error } = await supabase.from("artikuj").select("*")
-  return { data: data ?? [], error }
+  try {
+    const rows = await db.get().select().from(articles)
+    const serialized: AdminArticle[] = rows.map((article) => ({
+      ...article,
+      tags: article.tags ?? null,
+      created_at: article.created_at.toISOString(),
+      updated_at: article.updated_at ? article.updated_at.toISOString() : null,
+    }))
+
+    return { data: serialized, error: null }
+  } catch (error) {
+    return { data: null, error: error as Error }
+  }
 }
 
-export function insertArticleRecord(
-  supabase: AnySupabaseClient,
-  authorId: string,
-  data: AdminArticleCreateInput
-) {
-  return supabase.from("artikuj").insert([
-    {
-      ...data,
-      autori_id: authorId,
-      created_at: new Date().toISOString(),
-      updated_at: null,
-    },
-  ])
+export async function insertArticleRecord(authorId: string, data: AdminArticleCreateInput) {
+  try {
+    await db
+      .get()
+      .insert(articles)
+      .values({
+        ...data,
+        tags: data.tags ?? [],
+        autori_id: authorId,
+        created_at: new Date(),
+        updated_at: new Date(),
+      })
+
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }
 
-export function deleteArticleRecord(supabase: AnySupabaseClient, articleId: string) {
-  return supabase.from("artikuj").delete().eq("id", articleId)
+export async function deleteArticleRecord(articleId: string) {
+  try {
+    await db.get().delete(articles).where(eq(articles.id, articleId))
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }
 
-export function updateArticleRecord(
-  supabase: AnySupabaseClient,
-  articleId: string,
-  data: AdminArticleUpdateInput
-) {
-  return supabase
-    .from("artikuj")
-    .update({
-      ...data,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", articleId)
+export async function updateArticleRecord(articleId: string, data: AdminArticleUpdateInput) {
+  try {
+    await db
+      .get()
+      .update(articles)
+      .set({
+        ...data,
+        tags: data.tags ?? [],
+        updated_at: new Date(),
+      })
+      .where(eq(articles.id, articleId))
+
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }

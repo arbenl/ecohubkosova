@@ -66,7 +66,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
         </nav>
 
         <div className="hidden md:flex gap-4 items-center">
-          {isLoading ? (
+          {isLoading && !isAuthenticated ? (
             <div className="animate-pulse flex items-center gap-2">
               <div className="h-4 w-20 bg-gray-200 rounded-lg"></div>
               <div className="text-center mt-4 text-gray-600">Duke ngarkuar...</div>
@@ -89,9 +89,10 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
               </Button>
               <SignOutButton
                 variant="ghost"
-                size="icon"
-                className="rounded-xl hover:bg-red-50 hover:text-red-600 transition-all duration-300"
-              />
+                className="rounded-xl px-4 hover:bg-red-50 hover:text-red-600 transition-all duration-300"
+              >
+                Dil
+              </SignOutButton>
             </div>
           ) : (
             <>
@@ -153,7 +154,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
             </Link>
 
             <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
-              {isLoading ? (
+              {isLoading && !isAuthenticated ? (
                 <div className="animate-pulse space-y-3">
                   <div className="h-12 bg-gray-200 rounded-xl"></div>
                   <div className="h-12 bg-gray-200 rounded-xl"></div>

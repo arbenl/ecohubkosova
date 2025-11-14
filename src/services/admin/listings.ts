@@ -1,7 +1,10 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server"
-import type { SupabaseClient } from "@supabase/supabase-js"
+import { eq } from "drizzle-orm"
+import { db } from "@/lib/drizzle"
+import { marketplaceListings } from "@/db/schema"
 import type { AdminListingUpdateInput } from "@/validation/admin"
 export type { AdminListingUpdateInput } from "@/validation/admin"
+
+export type AdminListingRow = typeof marketplaceListings.$inferSelect
 
 export interface AdminListing {
   id: string
@@ -20,28 +23,45 @@ export interface AdminListing {
   updated_at: string | null
 }
 
-type AnySupabaseClient = SupabaseClient<any, any, any>
-
 export async function fetchAdminListings() {
-  const supabase = createServerSupabaseClient()
-  const { data, error } = await supabase.from("tregu_listime").select("*")
-  return { data: data ?? [], error }
+  try {
+    const rows = await db.get().select().from(marketplaceListings)
+    const serialized: AdminListing[] = rows.map((listing) => ({
+      ...listing,
+      cmimi: Number(listing.cmimi),
+      created_at: listing.created_at.toISOString(),
+      updated_at: listing.updated_at ? listing.updated_at.toISOString() : null,
+    }))
+
+    return { data: serialized, error: null }
+  } catch (error) {
+    return { data: null, error: error as Error }
+  }
 }
 
-export function deleteListingRecord(supabase: AnySupabaseClient, listingId: string) {
-  return supabase.from("tregu_listime").delete().eq("id", listingId)
+export async function deleteListingRecord(listingId: string) {
+  try {
+    await db.get().delete(marketplaceListings).where(eq(marketplaceListings.id, listingId))
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }
 
-export function updateListingRecord(
-  supabase: AnySupabaseClient,
-  listingId: string,
-  data: AdminListingUpdateInput
-) {
-  return supabase
-    .from("tregu_listime")
-    .update({
-      ...data,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", listingId)
+export async function updateListingRecord(listingId: string, data: AdminListingUpdateInput) {
+  try {
+    await db
+      .get()
+      .update(marketplaceListings)
+      .set({
+        ...data,
+        cmimi: data.cmimi.toString(),
+        updated_at: new Date(),
+      })
+      .where(eq(marketplaceListings.id, listingId))
+
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }

@@ -1,7 +1,10 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server"
-import type { SupabaseClient } from "@supabase/supabase-js"
+import { eq } from "drizzle-orm"
+import { db } from "@/lib/drizzle"
+import { organizationMembers, organizations, users } from "@/db/schema"
 import type { AdminOrganizationMemberUpdateInput } from "@/validation/admin"
 export type { AdminOrganizationMemberUpdateInput } from "@/validation/admin"
+
+export type AdminOrganizationMemberRow = typeof organizationMembers.$inferSelect
 
 export interface AdminOrganizationMember {
   id: string
@@ -18,50 +21,73 @@ export interface AdminOrganizationMemberWithDetails extends AdminOrganizationMem
   user_email?: string
 }
 
-type AnySupabaseClient = SupabaseClient<any, any, any>
-
 export async function fetchAdminOrganizationMembers() {
-  const supabase = createServerSupabaseClient()
+  try {
+    const rows = await db
+      .get()
+      .select({
+        member: organizationMembers,
+        organization_name: organizations.emri,
+        user_name: users.emri_i_plote,
+        user_email: users.email,
+      })
+      .from(organizationMembers)
+      .innerJoin(organizations, eq(organizationMembers.organization_id, organizations.id))
+      .innerJoin(users, eq(organizationMembers.user_id, users.id))
 
-  const { data, error } = await supabase.from("organization_members").select(`
-      *,
-      organizations!inner(emri),
-      users!inner(emri_i_plote, email)
-    `)
-
-  const formatted =
-    data?.map((member: any) => ({
+    const formatted: AdminOrganizationMemberWithDetails[] = rows.map(({ member, organization_name, user_name, user_email }) => ({
       ...member,
-      organization_name: member.organizations?.emri,
-      user_name: member.users?.emri_i_plote,
-      user_email: member.users?.email,
-    })) ?? []
+      created_at: member.created_at.toISOString(),
+      organization_name,
+      user_name,
+      user_email,
+    }))
 
-  return { data: formatted, error }
+    return { data: formatted, error: null }
+  } catch (error) {
+    return { data: null, error: error as Error }
+  }
 }
 
-export function deleteOrganizationMemberRecord(supabase: AnySupabaseClient, memberId: string) {
-  return supabase.from("organization_members").delete().eq("id", memberId)
+export async function deleteOrganizationMemberRecord(memberId: string) {
+  try {
+    await db.get().delete(organizationMembers).where(eq(organizationMembers.id, memberId))
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }
 
-export function updateOrganizationMemberRecord(
-  supabase: AnySupabaseClient,
+export async function updateOrganizationMemberRecord(
   memberId: string,
   data: AdminOrganizationMemberUpdateInput
 ) {
-  return supabase
-    .from("organization_members")
-    .update({
-      roli_ne_organizate: data.roli_ne_organizate,
-      eshte_aprovuar: data.eshte_aprovuar,
-    })
-    .eq("id", memberId)
+  try {
+    await db
+      .get()
+      .update(organizationMembers)
+      .set({
+        roli_ne_organizate: data.roli_ne_organizate,
+        eshte_aprovuar: data.eshte_aprovuar,
+      })
+      .where(eq(organizationMembers.id, memberId))
+
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }
 
-export function toggleOrganizationMemberApprovalRecord(
-  supabase: AnySupabaseClient,
-  memberId: string,
-  currentStatus: boolean
-) {
-  return supabase.from("organization_members").update({ eshte_aprovuar: !currentStatus }).eq("id", memberId)
+export async function toggleOrganizationMemberApprovalRecord(memberId: string, currentStatus: boolean) {
+  try {
+    await db
+      .get()
+      .update(organizationMembers)
+      .set({ eshte_aprovuar: !currentStatus })
+      .where(eq(organizationMembers.id, memberId))
+
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }

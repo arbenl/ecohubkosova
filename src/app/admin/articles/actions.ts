@@ -53,11 +53,11 @@ export async function createArticle(formData: ArticleCreateData) {
   }
 
   try {
-    const { error } = await insertArticleRecord(supabase, user.id, parsed.data)
+    const { error } = await insertArticleRecord(user.id, parsed.data)
 
     if (error) {
       console.error("Error creating article:", error)
-      return { error: error.message || "Gabim gjatë krijimit të artikullit." }
+      return { error: error.message ?? "Gabim gjatë krijimit të artikullit." }
     }
 
     revalidatePath("/admin/articles")
@@ -73,11 +73,11 @@ export async function deleteArticle(articleId: string) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await deleteArticleRecord(supabase, articleId)
+    const { error } = await deleteArticleRecord(articleId)
 
     if (error) {
       console.error("Error deleting article:", error)
-      return { error: error.message || "Gabim gjatë fshirjes së artikullit." }
+      return { error: error.message ?? "Gabim gjatë fshirjes së artikullit." }
     }
 
     revalidatePath("/admin/articles")
@@ -100,11 +100,11 @@ export async function updateArticle(articleId: string, formData: ArticleUpdateDa
   }
 
   try {
-    const { error } = await updateArticleRecord(supabase, articleId, parsed.data)
+    const { error } = await updateArticleRecord(articleId, parsed.data)
 
     if (error) {
       console.error("Error updating article:", error)
-      return { error: error.message || "Gabim gjatë përditësimit të artikullit." }
+      return { error: error.message ?? "Gabim gjatë përditësimit të artikullit." }
     }
 
     revalidatePath("/admin/articles")

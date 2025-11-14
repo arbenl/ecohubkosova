@@ -43,11 +43,11 @@ export async function deleteListing(listingId: string) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await deleteListingRecord(supabase, listingId)
+    const { error } = await deleteListingRecord(listingId)
 
     if (error) {
       console.error("Error deleting listing:", error)
-      return { error: error.message || "Gabim gjatë fshirjes së listimit." }
+      return { error: error.message ?? "Gabim gjatë fshirjes së listimit." }
     }
 
     revalidatePath("/admin/listings")
@@ -69,11 +69,11 @@ export async function updateListing(listingId: string, formData: ListingUpdateDa
   }
 
   try {
-    const { error } = await updateListingRecord(supabase, listingId, parsed.data)
+    const { error } = await updateListingRecord(listingId, parsed.data)
 
     if (error) {
       console.error("Error updating listing:", error)
-      return { error: error.message || "Gabim gjatë përditësimit të listimit." }
+      return { error: error.message ?? "Gabim gjatë përditësimit të listimit." }
     }
 
     revalidatePath("/admin/listings")
