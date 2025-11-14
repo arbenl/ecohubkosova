@@ -5,11 +5,16 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint": "next lint",
-    "test": "echo \"No automated tests defined yet\"",
+    "check:src-structure": "node scripts/check-src-structure.mjs",
+    "lint": "pnpm check:src-structure && next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:e2e": "playwright test",
     "start": "next start",
-    "drizzle:generate": "drizzle-kit generate"
+    "drizzle:generate": "drizzle-kit generate",
+    "db:sync": "SUPABASE_DB_URL=${SUPABASE_DB_URL} pnpm dlx supabase db diff --file auto-update --db-url \"$SUPABASE_DB_URL\" && SUPABASE_DB_URL=${SUPABASE_DB_URL} pnpm dlx supabase db push --db-url \"$SUPABASE_DB_URL\" && pnpm drizzle:generate",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@hookform/resolvers": "5.1.1",
@@ -71,15 +76,21 @@
   "devDependencies": {
     "@playwright/test": "^1.56.1",
     "@solana/wallet-standard-features": "1.2.0",
+    "@testing-library/jest-dom": "6.4.2",
+    "@testing-library/react": "16.0.1",
+    "@testing-library/user-event": "14.5.2",
     "@types/cookie": "0.6.0",
     "@types/node": "22.0.0",
     "@types/react": "18.2.45",
     "@types/react-dom": "18.2.18",
     "eslint": "8.57.1",
     "eslint-config-next": "14.2.13",
+    "jsdom": "24.0.0",
     "postcss": "8.5.0",
+    "prettier": "^3.6.2",
     "tailwindcss": "3.4.17",
-    "typescript": "5.0.2"
+    "typescript": "5.0.2",
+    "vitest": "1.6.0"
   },
   "packageManager": "pnpm@10.16.1+sha512.0e155aa2629db8672b49e8475da6226aa4bdea85fdcdfdc15350874946d4f3c91faaf64cbdc4a5d1ab8002f473d5c3fcedcd197989cf0390f9badd3c04678706"
 }

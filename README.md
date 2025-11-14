@@ -47,6 +47,14 @@ The app runs on [http://localhost:3000](http://localhost:3000).
 - `docs/roadmap.md` – High-level roadmap of upcoming initiatives.
 - `docs/next-session-specs.md` – The short-term TODO list for the next coding session.
 
+### Source Layout Guardrail
+
+All feature code lives under `src/**`. The shadcn UI generator (`components.json`) is configured with `@/components` / `@/lib` aliases so new components automatically land in `src/…`. To keep the tree clean, `pnpm lint` now runs `pnpm check:src-structure`, which fails the build if any `.ts/.tsx/.js/.jsx` file shows up outside the approved directories. Run the check manually at any time with:
+
+```bash
+pnpm check:src-structure
+```
+
 ## Database & Supabase CLI
 
 Database schema changes now live under `supabase/migrations/**` and seed data is in `supabase/seed.sql`. Use the Supabase CLI (via `pnpm dlx supabase` or a global install) for all DB work:
@@ -66,6 +74,20 @@ When you change the schema, generate refreshed Drizzle types with:
 pnpm drizzle:generate
 ```
 
+> **`pnpm db:sync`:** After adjusting the schema locally, run `pnpm db:sync` to (1) diff the Supabase database via CLI, (2) push the migrations, and (3) regenerate Drizzle types. This command requires `SUPABASE_DB_URL` (see `.env.example`).
+
+## Public API (React Native readiness)
+
+To give future React Native or partner clients a stable integration surface, the core read-model is now available under `/api/v1`:
+
+| Endpoint | Description |
+| --- | --- |
+| `GET /api/v1/listings?category=&type=&search=` | Returns approved marketplace listings. Optional filters for category, listing type (`shes` / `blej`), or title search. |
+| `GET /api/v1/organizations?lloji=&search=` | Returns approved organizations. Filter by organization type or search by name. |
+| `GET /api/v1/articles?category=&search=` | Returns published knowledge-base articles with optional category or title search filters. |
+
+All responses are JSON in the shape `{ data: [...] }` or `{ error: string }`, and they reuse the same Drizzle services that power the web UI so mobile clients and the web stay in sync automatically.
+
 ## Contributing Workflow
 
 1. Create a feature branch from `main`.
@@ -73,6 +95,23 @@ pnpm drizzle:generate
 3. Run `pnpm lint`, `pnpm test`, and `pnpm build`.
 4. Commit using conventional-ish messages (e.g., `feat: ...`, `fix: ...`, `chore: ...`).
 5. Open a PR against `main`.
+
+## Testing
+
+- `pnpm test` – runs the Vitest + React Testing Library suite (unit/component).
+- `pnpm test:watch` – watch mode for Vitest during local development.
+- `pnpm test:e2e` – re-enables the Playwright end-to-end tests; the config auto-starts `pnpm dev` on port 3000 if needed.
+
+Playwright artifacts (HTML report, traces) are written to the default `playwright-report/` folder, and Vitest coverage is available under `coverage/` when needed.
+
+## Formatting
+
+Prettier enforces a consistent style across contributors:
+
+- `pnpm format` – formats the entire repository (honoring `.prettierignore`).
+- `pnpm format:check` – CI-friendly check.
+
+Consider wiring `pnpm format` into a pre-commit hook (e.g., via Husky) if you prefer automatic formatting before pushes.
 
 ## Roadmap / Next Steps
 

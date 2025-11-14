@@ -41,8 +41,16 @@ This document tracks the restructuring blueprint we agreed to while preparing Ec
 
 ## Next Priorities
 
-1. Document and enforce the new `src/**`-only layout across generators (shadcn config, new modules, docs) so future code never drifts back to the root.
-2. Re-enable Playwright and introduce Vitest + React Testing Library so unit/component suites run locally and in CI.
-3. Publish the service layer via typed route handlers / SDK endpoints for React Native and other consumers once the above refactors land.
+1. ✅ Document and enforce the new `src/**`-only layout across generators (shadcn config, new modules, docs) so future code never drifts back to the root.
+2. ✅ Re-enable Playwright and introduce Vitest + React Testing Library so unit/component suites run locally and in CI (`pnpm test`, `pnpm test:e2e`).
+3. ✅ Publish the service layer via typed route handlers / SDK endpoints for React Native and other consumers once the above refactors land (see `/api/v1/*`).
 4. Investigate and harden the lingering cross-session sign-out issue once the above foundational work is complete.
 5. Wire Supabase migrations into CI (db reset/lint) so schema drift is caught automatically.
+
+## Upcoming Enhancements (from latest architecture audit)
+
+1. Add a `pnpm db:sync` script that chains `supabase db diff/push` with `pnpm drizzle:generate` so schema changes always refresh Drizzle types, and integrate it into CI.
+2. ✅ Introduce Prettier (script + optional pre-commit hook) to keep formatting consistent across contributors (`pnpm format`, `pnpm format:check`).
+3. Expand Vitest coverage (ListingCard, tregu client flows, server actions) and keep Playwright scenarios up to date.
+4. Evaluate TanStack Query + Zustand for complex client/server state on pages like `tregu-client`, reducing ad-hoc state wiring.
+5. Add monitoring/observability (e.g., Sentry) before production launch.
