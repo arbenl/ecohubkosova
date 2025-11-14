@@ -48,13 +48,13 @@ async function fetchAdminListingsViaSupabase() {
     return { data: null, error: toError(error) }
   }
 
-  const serialized: AdminListing[] =
-    (data ?? []).map((listing: Record<string, any>) => ({
+  const serialized =
+    ((data ?? []).map((listing: Record<string, any>) => ({
       ...listing,
       cmimi: Number(listing.cmimi),
       created_at: formatTimestamp(listing.created_at) ?? "",
       updated_at: formatTimestamp(listing.updated_at),
-    })) ?? []
+    })) ?? []) as AdminListing[]
 
   return { data: serialized, error: null }
 }

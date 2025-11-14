@@ -45,12 +45,12 @@ async function fetchAdminOrganizationsViaSupabase() {
     return { data: null, error: toError(error) }
   }
 
-  const serialized: AdminOrganization[] =
-    (data ?? []).map((org: Record<string, any>) => ({
+  const serialized =
+    ((data ?? []).map((org: Record<string, any>) => ({
       ...org,
       created_at: formatTimestamp(org.created_at) ?? "",
       updated_at: formatTimestamp(org.updated_at),
-    })) ?? []
+    })) ?? []) as AdminOrganization[]
 
   return { data: serialized, error: null }
 }

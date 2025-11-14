@@ -44,13 +44,13 @@ async function fetchAdminArticlesViaSupabase() {
     return { data: null, error: toError(error) }
   }
 
-  const serialized: AdminArticle[] =
-    (data ?? []).map((article: Record<string, any>) => ({
+  const serialized =
+    ((data ?? []).map((article: Record<string, any>) => ({
       ...article,
       tags: article.tags ?? null,
       created_at: formatTimestamp(article.created_at) ?? "",
       updated_at: formatTimestamp(article.updated_at),
-    })) ?? []
+    })) ?? []) as AdminArticle[]
 
   return { data: serialized, error: null }
 }

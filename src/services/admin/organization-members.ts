@@ -59,8 +59,8 @@ async function fetchMembersViaSupabase() {
     return { data: null, error: toError(error) }
   }
 
-  const formatted: AdminOrganizationMemberWithDetails[] =
-    (data ?? []).map((record: any) => ({
+  const formatted =
+    ((data ?? []).map((record: any) => ({
       id: record.id,
       organization_id: record.organization_id,
       user_id: record.user_id,
@@ -70,7 +70,7 @@ async function fetchMembersViaSupabase() {
       organization_name: record.organizations?.emri,
       user_name: record.users?.emri_i_plote,
       user_email: record.users?.email,
-    })) ?? []
+    })) ?? []) as AdminOrganizationMemberWithDetails[]
 
   return { data: formatted, error: null }
 }

@@ -42,12 +42,12 @@ async function fetchAdminUsersViaSupabase() {
     return { data: null, error: toError(error) }
   }
 
-  const serialized: AdminUser[] =
-    (data ?? []).map((user: Record<string, any>) => ({
+  const serialized =
+    ((data ?? []).map((user: Record<string, any>) => ({
       ...user,
       created_at: formatTimestamp(user.created_at) ?? "",
       updated_at: formatTimestamp(user.updated_at),
-    })) ?? []
+    })) ?? []) as AdminUser[]
 
   return { data: serialized, error: null }
 }
