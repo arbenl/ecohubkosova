@@ -14,10 +14,13 @@ interface HeaderClientProps {
 
 export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: HeaderClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { user, session, userProfile, isLoading } = useAuth()
-  const authUser = user ?? session?.user ?? null
-  const derivedName = userProfile?.emri_i_plote || authUser?.email?.split("@")[0] || fallbackUserName || fallbackUserEmail?.split("@")[0]
-  const isAuthenticated = Boolean(authUser || fallbackUserEmail)
+  const { user, userProfile, isLoading } = useAuth()
+  const derivedName =
+    userProfile?.emri_i_plote ||
+    user?.email?.split("@")[0] ||
+    fallbackUserName ||
+    fallbackUserEmail?.split("@")[0]
+  const isAuthenticated = Boolean(user || fallbackUserEmail)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm">
