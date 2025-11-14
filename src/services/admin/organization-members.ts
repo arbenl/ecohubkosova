@@ -1,5 +1,7 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import type { SupabaseClient } from "@supabase/supabase-js"
+import type { AdminOrganizationMemberUpdateInput } from "@/validation/admin"
+export type { AdminOrganizationMemberUpdateInput } from "@/validation/admin"
 
 export interface AdminOrganizationMember {
   id: string
@@ -14,11 +16,6 @@ export interface AdminOrganizationMemberWithDetails extends AdminOrganizationMem
   organization_name?: string
   user_name?: string
   user_email?: string
-}
-
-export interface AdminOrganizationMemberUpdateInput {
-  roli_ne_organizate: string
-  eshte_aprovuar: boolean
 }
 
 type AnySupabaseClient = SupabaseClient<any, any, any>

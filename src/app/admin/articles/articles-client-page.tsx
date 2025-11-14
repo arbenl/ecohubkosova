@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { createArticle, deleteArticle, updateArticle } from "./actions" // Import Server Actions
+import { adminArticleCreateSchema, adminArticleUpdateSchema } from "@/validation/admin"
 
 interface Article {
   id: string
@@ -72,14 +73,22 @@ const ArticlesClientPage = ({ initialArticles }: ArticlesClientPageProps) => {
 
     const tagsArray = newArticle.tags ? newArticle.tags.split(",").map((tag) => tag.trim()) : null
 
-    const result = await createArticle({
+    const payload = {
       titulli: newArticle.titulli,
       permbajtja: newArticle.permbajtja,
       kategori: newArticle.kategori,
       eshte_publikuar: newArticle.eshte_publikuar,
       tags: tagsArray,
       foto_kryesore: newArticle.foto_kryesore || null,
-    })
+    }
+
+    const parsed = adminArticleCreateSchema.safeParse(payload)
+    if (!parsed.success) {
+      alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
+      return
+    }
+
+    const result = await createArticle(parsed.data)
 
     if (result.error) {
       alert(result.error)
@@ -169,15 +178,22 @@ const ArticlesClientPage = ({ initialArticles }: ArticlesClientPageProps) => {
                   eshte_publikuar: formData.get("eshte_publikuar") === "on",
                   tags: tagsArray,
                   foto_kryesore: (formData.get("foto_kryesore") as string) || null,
-                  updated_at: new Date().toISOString(),
                 }
 
-                const result = await updateArticle(editingArticle.id, updatedData)
+                const parsed = adminArticleUpdateSchema.safeParse(updatedData)
+                if (!parsed.success) {
+                  alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
+                  return
+                }
+
+                const result = await updateArticle(editingArticle.id, parsed.data)
 
                 if (result.error) {
                   alert(result.error)
                 } else {
-                  setArticles(articles.map(a => a.id === editingArticle.id ? { ...a, ...updatedData } : a));
+                  setArticles(
+                    articles.map((a) => (a.id === editingArticle.id ? { ...a, ...parsed.data } : a))
+                  )
                   setEditingArticle(null)
                   alert("Artikulli u përditësua me sukses!")
                 }

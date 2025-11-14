@@ -1,5 +1,7 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import type { SupabaseClient } from "@supabase/supabase-js"
+import type { AdminArticleCreateInput, AdminArticleUpdateInput } from "@/validation/admin"
+export type { AdminArticleCreateInput, AdminArticleUpdateInput } from "@/validation/admin"
 
 export interface AdminArticle {
   id: string
@@ -13,17 +15,6 @@ export interface AdminArticle {
   created_at: string
   updated_at: string | null
 }
-
-export interface AdminArticleCreateInput {
-  titulli: string
-  permbajtja: string
-  kategori: string
-  eshte_publikuar: boolean
-  tags: string[] | null
-  foto_kryesore: string | null
-}
-
-export interface AdminArticleUpdateInput extends AdminArticleCreateInput {}
 
 type AnySupabaseClient = SupabaseClient<any, any, any>
 

@@ -10,6 +10,7 @@ import {
   type AdminListing,
   type AdminListingUpdateInput,
 } from "@/services/admin/listings"
+import { adminListingUpdateSchema } from "@/validation/admin"
 
 type ListingUpdateData = AdminListingUpdateInput
 
@@ -61,8 +62,14 @@ export async function updateListing(listingId: string, formData: ListingUpdateDa
   const supabase = createRouteHandlerSupabaseClient()
   await requireAdminRole(supabase)
 
+  const parsed = adminListingUpdateSchema.safeParse(formData)
+  if (!parsed.success) {
+    const message = parsed.error.issues[0]?.message || "Të dhënat e listimit nuk janë të vlefshme."
+    return { error: message }
+  }
+
   try {
-    const { error } = await updateListingRecord(supabase, listingId, formData)
+    const { error } = await updateListingRecord(supabase, listingId, parsed.data)
 
     if (error) {
       console.error("Error updating listing:", error)

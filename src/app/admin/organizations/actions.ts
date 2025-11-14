@@ -10,6 +10,7 @@ import {
   type AdminOrganization,
   type AdminOrganizationUpdateInput,
 } from "@/services/admin/organizations"
+import { adminOrganizationUpdateSchema } from "@/validation/admin"
 
 type OrganizationUpdateData = AdminOrganizationUpdateInput
 
@@ -61,8 +62,15 @@ export async function updateOrganization(organizationId: string, formData: Organ
   const supabase = createRouteHandlerSupabaseClient()
   await requireAdminRole(supabase)
 
+  const parsed = adminOrganizationUpdateSchema.safeParse(formData)
+  if (!parsed.success) {
+    const message =
+      parsed.error.issues[0]?.message || "Të dhënat e organizatës nuk janë të vlefshme."
+    return { error: message }
+  }
+
   try {
-    const { error } = await updateOrganizationRecord(supabase, organizationId, formData)
+    const { error } = await updateOrganizationRecord(supabase, organizationId, parsed.data)
 
     if (error) {
       console.error("Error updating organization:", error)

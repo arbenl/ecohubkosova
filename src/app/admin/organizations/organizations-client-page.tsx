@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { deleteOrganization, updateOrganization } from "./actions" // Import Server Actions
+import { adminOrganizationUpdateSchema } from "@/validation/admin"
 
 interface Organization {
   id: string
@@ -105,15 +106,22 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                   vendndodhja: formData.get("vendndodhja") as string,
                   lloji: formData.get("lloji") as string,
                   eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
-                  updated_at: new Date().toISOString(),
                 }
 
-                const result = await updateOrganization(editingOrg.id, updatedData)
+                const parsed = adminOrganizationUpdateSchema.safeParse(updatedData)
+                if (!parsed.success) {
+                  alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
+                  return
+                }
+
+                const result = await updateOrganization(editingOrg.id, parsed.data)
 
                 if (result.error) {
                   alert(result.error)
                 } else {
-                  setOrganizations(organizations.map(o => o.id === editingOrg.id ? { ...o, ...updatedData } : o));
+                  setOrganizations(
+                    organizations.map((o) => (o.id === editingOrg.id ? { ...o, ...parsed.data } : o))
+                  )
                   setEditingOrg(null)
                   alert("Organizata u përditësua me sukses!")
                 }

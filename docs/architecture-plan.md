@@ -17,8 +17,7 @@ This document tracks the restructuring blueprint we agreed to while preparing Ec
 
 ## 3. Shared Validation
 
-- ✅ Zod schemas now back all auth, listing creation, and profile/organization updates (`src/validation/auth.ts`, `src/validation/listings.ts`, `src/validation/profile.ts`), and the corresponding server actions consume the sanitized payloads.
-- 🔜 Extend the pattern to the remaining admin CRUD flows and their UI so every mutation shares the same schema across web and RN.
+- ✅ Zod schemas now back all auth, listing creation, profile/organization updates, and every admin CRUD screen (`src/validation/{auth,listings,profile,admin}.ts`); server actions and client forms both reuse the sanitized payloads.
 
 ## 4. Testing & CI
 
@@ -41,8 +40,8 @@ This document tracks the restructuring blueprint we agreed to while preparing Ec
 
 ## Next Priorities
 
-1. Extend the new Zod schema coverage to the remaining admin operations and plug them into both server actions and client forms.
-2. Adopt a proper migration tool (e.g., Supabase CLI/Drizzle) to replace the manual SQL scripts and keep schema history reviewable.
-3. Document and enforce the new `src/**`-only layout across generators (shadcn config, new modules, docs) so future code never drifts back to the root.
-4. Re-enable Playwright and introduce Vitest + React Testing Library so unit/component suites run locally and in CI.
-5. Publish the service layer via typed route handlers / SDK endpoints for React Native and other consumers once the above refactors land.
+1. Adopt a proper migration tool (e.g., Supabase CLI/Drizzle) to replace the manual SQL scripts and keep schema history reviewable.
+2. Document and enforce the new `src/**`-only layout across generators (shadcn config, new modules, docs) so future code never drifts back to the root.
+3. Re-enable Playwright and introduce Vitest + React Testing Library so unit/component suites run locally and in CI.
+4. Publish the service layer via typed route handlers / SDK endpoints for React Native and other consumers once the above refactors land.
+5. Investigate and harden the lingering cross-session sign-out issue once the above foundational work is complete.

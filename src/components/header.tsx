@@ -1,7 +1,7 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import HeaderClient from "@/components/header-client"
 
-export async function Header() {
+async function HeaderServer() {
   const supabase = createServerSupabaseClient()
   const {
     data: { user },
@@ -20,6 +20,11 @@ export async function Header() {
   }
 
   return <HeaderClient fallbackUserName={fallbackName} fallbackUserEmail={user?.email ?? null} />
+}
+
+export function Header() {
+  // @ts-expect-error Async Server Component
+  return <HeaderServer />
 }
 
 export default Header

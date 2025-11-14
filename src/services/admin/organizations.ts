@@ -1,5 +1,7 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import type { SupabaseClient } from "@supabase/supabase-js"
+import type { AdminOrganizationUpdateInput } from "@/validation/admin"
+export type { AdminOrganizationUpdateInput } from "@/validation/admin"
 
 export interface AdminOrganization {
   id: string
@@ -13,17 +15,6 @@ export interface AdminOrganization {
   eshte_aprovuar: boolean
   created_at: string
   updated_at: string | null
-}
-
-export interface AdminOrganizationUpdateInput {
-  emri: string
-  pershkrimi: string
-  interesi_primar: string
-  person_kontakti: string
-  email_kontakti: string
-  vendndodhja: string
-  lloji: string
-  eshte_aprovuar: boolean
 }
 
 type AnySupabaseClient = SupabaseClient<any, any, any>

@@ -12,6 +12,7 @@ import {
   type AdminArticleCreateInput,
   type AdminArticleUpdateInput,
 } from "@/services/admin/articles"
+import { adminArticleCreateSchema, adminArticleUpdateSchema } from "@/validation/admin"
 
 type ArticleCreateData = AdminArticleCreateInput
 type ArticleUpdateData = AdminArticleUpdateInput
@@ -44,8 +45,15 @@ export async function createArticle(formData: ArticleCreateData) {
   const supabase = createRouteHandlerSupabaseClient()
   const { user } = await requireAdminRole(supabase)
 
+  const parsed = adminArticleCreateSchema.safeParse(formData)
+  if (!parsed.success) {
+    const message =
+      parsed.error.issues[0]?.message || "Të dhënat e artikullit nuk janë të vlefshme."
+    return { error: message }
+  }
+
   try {
-    const { error } = await insertArticleRecord(supabase, user.id, formData)
+    const { error } = await insertArticleRecord(supabase, user.id, parsed.data)
 
     if (error) {
       console.error("Error creating article:", error)
@@ -84,8 +92,15 @@ export async function updateArticle(articleId: string, formData: ArticleUpdateDa
   const supabase = createRouteHandlerSupabaseClient()
   await requireAdminRole(supabase)
 
+  const parsed = adminArticleUpdateSchema.safeParse(formData)
+  if (!parsed.success) {
+    const message =
+      parsed.error.issues[0]?.message || "Të dhënat e artikullit nuk janë të vlefshme."
+    return { error: message }
+  }
+
   try {
-    const { error } = await updateArticleRecord(supabase, articleId, formData)
+    const { error } = await updateArticleRecord(supabase, articleId, parsed.data)
 
     if (error) {
       console.error("Error updating article:", error)

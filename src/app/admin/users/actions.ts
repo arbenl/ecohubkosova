@@ -10,6 +10,7 @@ import {
   type AdminUser,
   type AdminUserUpdateInput,
 } from "@/services/admin/users"
+import { adminUserUpdateSchema } from "@/validation/admin"
 
 type UserUpdateData = AdminUserUpdateInput
 
@@ -61,8 +62,14 @@ export async function updateUser(userId: string, formData: UserUpdateData) {
   const supabase = createRouteHandlerSupabaseClient()
   await requireAdminRole(supabase)
 
+  const parsed = adminUserUpdateSchema.safeParse(formData)
+  if (!parsed.success) {
+    const message = parsed.error.issues[0]?.message || "Të dhënat e përdoruesit nuk janë të vlefshme."
+    return { error: message }
+  }
+
   try {
-    const { error } = await updateUserRecord(supabase, userId, formData)
+    const { error } = await updateUserRecord(supabase, userId, parsed.data)
 
     if (error) {
       console.error("Error updating user:", error)

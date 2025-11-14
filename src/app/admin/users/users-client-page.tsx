@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { deleteUser, updateUser } from "./actions" // Import Server Actions
+import { adminUserUpdateSchema } from "@/validation/admin"
 
 interface User {
   id: string
@@ -93,15 +94,20 @@ export default function UsersClientPage({ initialUsers }: UsersClientPageProps) 
                   vendndodhja: formData.get("vendndodhja") as string,
                   roli: formData.get("roli") as string,
                   eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
-                  updated_at: new Date().toISOString(),
                 }
 
-                const result = await updateUser(editingUser.id, updatedData)
+                const parsed = adminUserUpdateSchema.safeParse(updatedData)
+                if (!parsed.success) {
+                  alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
+                  return
+                }
+
+                const result = await updateUser(editingUser.id, parsed.data)
 
                 if (result.error) {
                   alert(result.error)
                 } else {
-                  setUsers(users.map(u => u.id === editingUser.id ? { ...u, ...updatedData } : u));
+                  setUsers(users.map((u) => (u.id === editingUser.id ? { ...u, ...parsed.data } : u)))
                   setEditingUser(null)
                   alert("Përdoruesi u përditësua me sukses!")
                 }

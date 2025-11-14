@@ -5,7 +5,7 @@ import Link from "next/link"
 import { UserPlus, Search, MessageCircle, ShoppingCart, Sparkles, Leaf, Users } from "lucide-react"
 import { LandingAuthPanel } from "@/components/landing/landing-auth-panel"
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-gray-50 to-white">
       <Header />
