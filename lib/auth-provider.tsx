@@ -219,32 +219,31 @@ export function AuthProvider({
     signOutInFlightRef.current = true
     setSignOutPending(true)
 
+    // Reset local auth state immediately so the UI reflects the sign-out intent.
+    resetAuthState()
+
     try {
-      // Sign out from the client
-      const { error: clientError } = await supabase.auth.signOut({ scope: "global" })
-      if (clientError) {
-        // Even if client-side signout fails, we should try to clear the server session.
-        console.error("Client sign-out error:", clientError)
-      }
-
-      // Immediately reset auth state and redirect
-      resetAuthState()
-      router.replace("/auth/kycu")
-      router.refresh()
-
-      // Fire and forget the server-side sign-out
-      fetch("/api/auth/signout", {
+      const response = await fetch("/api/auth/signout", {
         method: "POST",
         cache: "no-store",
         credentials: "include",
-      }).catch((error) => {
-        // Log any errors from the server-side sign-out without blocking the user.
-        console.error("Server sign-out error:", error)
       })
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null)
+        throw new Error(payload?.error ?? response.statusText)
+      }
     } catch (error) {
-      console.error("Gabim gjatë daljes:", error)
-      // It's important to reset the pending state even if there's an error.
+      console.error("Server sign-out error:", error)
     } finally {
+      try {
+        // Clear any cached session data inside the client without issuing another network call.
+        await supabase.auth.signOut({ scope: "local" })
+      } catch (clientError) {
+        console.error("Client sign-out cleanup error:", clientError)
+      }
+
+      router.replace("/auth/kycu")
       signOutInFlightRef.current = false
       setSignOutPending(false)
     }

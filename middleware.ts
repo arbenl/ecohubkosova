@@ -4,7 +4,15 @@ import type { NextRequest } from "next/server"
 
 const PROTECTED_PREFIXES = ["/admin", "/dashboard", "/profili", "/tregu/shto"]
 const AUTH_PREFIXES = ["/auth/kycu", "/auth/regjistrohu"]
-const IGNORED_PREFIXES = ["/_next", "/favicon.ico", "/robots.txt", "/sitemap.xml", "/auth/callback", "/api/public"]
+const IGNORED_PREFIXES = [
+  "/_next",
+  "/favicon.ico",
+  "/robots.txt",
+  "/sitemap.xml",
+  "/auth/callback",
+  "/api/public",
+  "/api/auth",
+]
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
