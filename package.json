@@ -11,7 +11,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "start": "next start",
-    "drizzle:generate": "drizzle-kit generate"
+    "drizzle:generate": "drizzle-kit generate",
+    "db:sync": "SUPABASE_DB_URL=${SUPABASE_DB_URL} pnpm dlx supabase db diff --file auto-update --db-url \"$SUPABASE_DB_URL\" && SUPABASE_DB_URL=${SUPABASE_DB_URL} pnpm dlx supabase db push --db-url \"$SUPABASE_DB_URL\" && pnpm drizzle:generate"
   },
   "dependencies": {
     "@hookform/resolvers": "5.1.1",

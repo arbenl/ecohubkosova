@@ -74,6 +74,8 @@ When you change the schema, generate refreshed Drizzle types with:
 pnpm drizzle:generate
 ```
 
+> **`pnpm db:sync`:** After adjusting the schema locally, run `pnpm db:sync` to (1) diff the Supabase database via CLI, (2) push the migrations, and (3) regenerate Drizzle types. This command requires `SUPABASE_DB_URL` (see `.env.example`).
+
 ## Public API (React Native readiness)
 
 To give future React Native or partner clients a stable integration surface, the core read-model is now available under `/api/v1`:

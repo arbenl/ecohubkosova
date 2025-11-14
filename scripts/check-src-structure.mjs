@@ -24,6 +24,7 @@ const ALLOWED_FILES = new Set([
   "GEMINI.md",
   "components.json",
   "drizzle.config.ts",
+  "vitest.config.ts",
   "middleware.ts",
   "next-env.d.ts",
   "next.config.mjs",
