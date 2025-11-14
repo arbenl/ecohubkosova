@@ -45,6 +45,29 @@ vi.mock("@/lib/drizzle", () => ({
   },
 }))
 
+const supabaseState = vi.hoisted(() => ({
+  selectData: [] as any[],
+  selectError: null as any,
+}))
+
+const createSupabaseBuilder = () => ({
+  select: vi.fn(() => Promise.resolve({ data: supabaseState.selectData, error: supabaseState.selectError })),
+  delete: vi.fn(() => ({
+    eq: vi.fn(() => Promise.resolve({ error: null })),
+  })),
+  update: vi.fn(() => ({
+    eq: vi.fn(() => Promise.resolve({ error: null })),
+  })),
+})
+
+const supabase = vi.hoisted(() => ({
+  from: vi.fn(() => createSupabaseBuilder()),
+}))
+
+vi.mock("@/lib/supabase/server", () => ({
+  createServerSupabaseClient: () => supabase,
+}))
+
 const eqMock = vi.hoisted(() => vi.fn((_column: unknown, value: unknown) => ({ value })))
 vi.mock("drizzle-orm", async (importOriginal) => {
   const actual = await importOriginal<any>()
@@ -61,6 +84,9 @@ import {
 describe("services/admin/organization-members", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    supabase.from.mockClear()
+    supabaseState.selectData = []
+    supabaseState.selectError = null
   })
 
   it("formats joined data", async () => {
@@ -92,5 +118,28 @@ describe("services/admin/organization-members", () => {
     const result = await toggleOrganizationMemberApprovalRecord("member-1", true)
     expect(result.error).toBeNull()
     expect(updateWhere.payload.eshte_aprovuar).toBe(false)
+  })
+
+  it("falls back to Supabase when Drizzle fetch fails", async () => {
+    chain.select.mockImplementationOnce(() => {
+      throw new Error("offline")
+    })
+    supabaseState.selectData = [
+      {
+        id: "member-fallback",
+        organization_id: "org-2",
+        user_id: "user-2",
+        roli_ne_organizate: "Roli",
+        eshte_aprovuar: true,
+        created_at: "2024-01-01T00:00:00.000Z",
+        organizations: { emri: "Org Fallback" },
+        users: { emri_i_plote: "User", email: "user@example.com" },
+      },
+    ]
+
+    const result = await fetchAdminOrganizationMembers()
+
+    expect(supabase.from).toHaveBeenCalledWith("organization_members")
+    expect(result.data?.[0].id).toBe("member-fallback")
   })
 })

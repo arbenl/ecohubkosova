@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
 import { users } from "@/db/schema"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import type { AdminUserUpdateInput } from "@/validation/admin"
 export type { AdminUserUpdateInput } from "@/validation/admin"
 
@@ -17,6 +18,59 @@ export interface AdminUser {
   updated_at: string | null
 }
 
+const USERS_TABLE = "users"
+
+const formatTimestamp = (value: Date | string | null | undefined) => {
+  if (!value) {
+    return null
+  }
+  return value instanceof Date ? value.toISOString() : new Date(value).toISOString()
+}
+
+const toError = (error: unknown) => {
+  if (!error) {
+    return null
+  }
+  return error instanceof Error ? error : new Error(typeof error === "object" && error && "message" in error ? String((error as any).message) : "Supabase error")
+}
+
+async function fetchAdminUsersViaSupabase() {
+  const supabase = createServerSupabaseClient()
+  const { data, error } = await supabase.from(USERS_TABLE).select("*")
+
+  if (error) {
+    return { data: null, error: toError(error) }
+  }
+
+  const serialized: AdminUser[] =
+    (data ?? []).map((user: Record<string, any>) => ({
+      ...user,
+      created_at: formatTimestamp(user.created_at) ?? "",
+      updated_at: formatTimestamp(user.updated_at),
+    })) ?? []
+
+  return { data: serialized, error: null }
+}
+
+async function deleteUserViaSupabase(userId: string) {
+  const supabase = createServerSupabaseClient()
+  const { error } = await supabase.from(USERS_TABLE).delete().eq("id", userId)
+  return { error: toError(error) }
+}
+
+async function updateUserViaSupabase(userId: string, data: AdminUserUpdateInput) {
+  const supabase = createServerSupabaseClient()
+  const { error } = await supabase
+    .from(USERS_TABLE)
+    .update({
+      ...data,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", userId)
+
+  return { error: toError(error) }
+}
+
 export async function fetchAdminUsers() {
   try {
     const rows = await db.get().select().from(users)
@@ -28,7 +82,8 @@ export async function fetchAdminUsers() {
 
     return { data: serialized, error: null }
   } catch (error) {
-    return { data: null, error: error as Error }
+    console.warn("[services/admin/users] Drizzle fetch failed; falling back to Supabase REST.", error)
+    return fetchAdminUsersViaSupabase()
   }
 }
 
@@ -37,7 +92,8 @@ export async function deleteUserRecord(userId: string) {
     await db.get().delete(users).where(eq(users.id, userId))
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.warn("[services/admin/users] Drizzle delete failed; falling back to Supabase REST.", error)
+    return deleteUserViaSupabase(userId)
   }
 }
 
@@ -54,6 +110,7 @@ export async function updateUserRecord(userId: string, data: AdminUserUpdateInpu
 
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.warn("[services/admin/users] Drizzle update failed; falling back to Supabase REST.", error)
+    return updateUserViaSupabase(userId, data)
   }
 }

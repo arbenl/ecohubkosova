@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
 import { marketplaceListings } from "@/db/schema"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import type { AdminListingUpdateInput } from "@/validation/admin"
 export type { AdminListingUpdateInput } from "@/validation/admin"
 
@@ -23,6 +24,61 @@ export interface AdminListing {
   updated_at: string | null
 }
 
+const LISTINGS_TABLE = "tregu_listime"
+
+const formatTimestamp = (value: Date | string | null | undefined) => {
+  if (!value) {
+    return null
+  }
+  return value instanceof Date ? value.toISOString() : new Date(value).toISOString()
+}
+
+const toError = (error: unknown) => {
+  if (!error) {
+    return null
+  }
+  return error instanceof Error ? error : new Error(typeof error === "object" && error && "message" in error ? String((error as any).message) : "Supabase error")
+}
+
+async function fetchAdminListingsViaSupabase() {
+  const supabase = createServerSupabaseClient()
+  const { data, error } = await supabase.from(LISTINGS_TABLE).select("*")
+
+  if (error) {
+    return { data: null, error: toError(error) }
+  }
+
+  const serialized: AdminListing[] =
+    (data ?? []).map((listing: Record<string, any>) => ({
+      ...listing,
+      cmimi: Number(listing.cmimi),
+      created_at: formatTimestamp(listing.created_at) ?? "",
+      updated_at: formatTimestamp(listing.updated_at),
+    })) ?? []
+
+  return { data: serialized, error: null }
+}
+
+async function deleteListingViaSupabase(listingId: string) {
+  const supabase = createServerSupabaseClient()
+  const { error } = await supabase.from(LISTINGS_TABLE).delete().eq("id", listingId)
+  return { error: toError(error) }
+}
+
+async function updateListingViaSupabase(listingId: string, data: AdminListingUpdateInput) {
+  const supabase = createServerSupabaseClient()
+  const { error } = await supabase
+    .from(LISTINGS_TABLE)
+    .update({
+      ...data,
+      cmimi: data.cmimi.toString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", listingId)
+
+  return { error: toError(error) }
+}
+
 export async function fetchAdminListings() {
   try {
     const rows = await db.get().select().from(marketplaceListings)
@@ -35,7 +91,8 @@ export async function fetchAdminListings() {
 
     return { data: serialized, error: null }
   } catch (error) {
-    return { data: null, error: error as Error }
+    console.warn("[services/admin/listings] Drizzle fetch failed; falling back to Supabase REST.", error)
+    return fetchAdminListingsViaSupabase()
   }
 }
 
@@ -44,7 +101,8 @@ export async function deleteListingRecord(listingId: string) {
     await db.get().delete(marketplaceListings).where(eq(marketplaceListings.id, listingId))
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.warn("[services/admin/listings] Drizzle delete failed; falling back to Supabase REST.", error)
+    return deleteListingViaSupabase(listingId)
   }
 }
 
@@ -62,6 +120,7 @@ export async function updateListingRecord(listingId: string, data: AdminListingU
 
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.warn("[services/admin/listings] Drizzle update failed; falling back to Supabase REST.", error)
+    return updateListingViaSupabase(listingId, data)
   }
 }
