@@ -1,6 +1,5 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { requireAdminRole } from "@/lib/auth/roles"
 import {
@@ -39,8 +38,7 @@ export async function getListings(): Promise<GetListingsResult> {
 }
 
 export async function deleteListing(listingId: string) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   try {
     const { error } = await deleteListingRecord(listingId)
@@ -59,8 +57,7 @@ export async function deleteListing(listingId: string) {
 }
 
 export async function updateListing(listingId: string, formData: ListingUpdateData) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   const parsed = adminListingUpdateSchema.safeParse(formData)
   if (!parsed.success) {

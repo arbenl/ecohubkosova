@@ -12,11 +12,17 @@ interface GetListingsDataResult {
 export async function getListingsData(
   searchParams: Record<string, string | undefined>
 ): Promise<GetListingsDataResult> {
+  const pageValue = searchParams.page ? Number.parseInt(searchParams.page, 10) : undefined
+  const sortParam = searchParams.sort === "oldest" ? "oldest" : "newest"
+
   const result = await fetchListings({
     type: searchParams.lloji,
     search: searchParams.search,
     category: searchParams.category,
-    page: searchParams.page ? Number.parseInt(searchParams.page, 10) : undefined,
+    page: pageValue,
+    condition: searchParams.condition,
+    location: searchParams.location,
+    sort: sortParam,
   })
 
   return {

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Building, MapPin, Mail, Phone, Users, ArrowLeft, ExternalLink } from "lucide-react"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { getServerUser } from "@/lib/supabase/server"
 import { fetchOrganizationById } from "@/services/organizations"
 
 interface Organization {
@@ -27,10 +27,7 @@ interface OrganizationDetailPageProps {
 }
 
 export default async function OrganizationDetailPage({ params }: OrganizationDetailPageProps) {
-  const supabase = createServerSupabaseClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { user } = await getServerUser()
   const isLoggedIn = !!user
 
   const { data: organization, error } = await fetchOrganizationById(params.id)

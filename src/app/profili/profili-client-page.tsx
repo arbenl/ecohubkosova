@@ -1,31 +1,10 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { AlertCircle, CheckCircle } from "lucide-react"
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
-import { updateUserProfile, updateOrganizationProfile } from "./actions" // Import Server Actions
-import { organizationProfileUpdateSchema, userProfileUpdateSchema } from "@/validation/profile"
+import React from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { UserProfileForm } from "./components/user-profile-form"
+import { OrganizationProfileForm } from "./components/org-profile-form"
 
 interface UserProfile {
   id: string
@@ -69,157 +48,6 @@ interface ProfiliClientPageProps {
 }
 
 export default function ProfiliClientPage({ userProfile, organization }: ProfiliClientPageProps) {
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
-  const [userFieldErrors, setUserFieldErrors] = useState<UserFieldErrors>({})
-  const [orgFieldErrors, setOrgFieldErrors] = useState<OrgFieldErrors>({})
-
-  const [userFormData, setUserFormData] = useState({
-    emri_i_plote: userProfile?.emri_i_plote || "",
-    email: userProfile?.email || "",
-    vendndodhja: userProfile?.vendndodhja || "",
-  })
-
-  const [orgFormData, setOrgFormData] = useState({
-    emri: organization?.emri || "",
-    pershkrimi: organization?.pershkrimi || "",
-    interesi_primar: organization?.interesi_primar || "",
-    person_kontakti: organization?.person_kontakti || "",
-    email_kontakti: organization?.email_kontakti || "",
-    vendndodhja: organization?.vendndodhja || "",
-  })
-
-  // Update form data if userProfile or organization props change (e.g., after revalidation)
-  useEffect(() => {
-    setUserFormData({
-      emri_i_plote: userProfile?.emri_i_plote || "",
-      email: userProfile?.email || "",
-      vendndodhja: userProfile?.vendndodhja || "",
-    });
-    setOrgFormData({
-      emri: organization?.emri || "",
-      pershkrimi: organization?.pershkrimi || "",
-      interesi_primar: organization?.interesi_primar || "",
-      person_kontakti: organization?.person_kontakti || "",
-      email_kontakti: organization?.email_kontakti || "",
-      vendndodhja: organization?.vendndodhja || "",
-    });
-    setUserFieldErrors({})
-    setOrgFieldErrors({})
-  }, [userProfile, organization]);
-
-
-  const handleUserChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target
-    setUserFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-    setUserFieldErrors((prev) => ({
-      ...prev,
-      [name]: undefined,
-    }))
-  }
-
-  const handleOrgChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target
-    setOrgFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-    setOrgFieldErrors((prev) => ({
-      ...prev,
-      [name]: undefined,
-    }))
-  }
-
-  const handleUserSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSaving(true)
-    setError(null)
-    setSuccess(null)
-
-    const parsed = userProfileUpdateSchema.safeParse({
-      emri_i_plote: userFormData.emri_i_plote,
-      vendndodhja: userFormData.vendndodhja,
-    })
-
-    if (!parsed.success) {
-      const { fieldErrors } = parsed.error.flatten()
-      setUserFieldErrors({
-        emri_i_plote: fieldErrors.emri_i_plote?.[0],
-        vendndodhja: fieldErrors.vendndodhja?.[0],
-      })
-      setError("Kontrolloni fushat e shënuara dhe provoni përsëri.")
-      setSaving(false)
-      return
-    }
-
-    setUserFieldErrors({})
-
-    const result = await updateUserProfile(parsed.data)
-
-    if (result.error) {
-      setError(result.error)
-    } else {
-      setSuccess("Profili u përditësua me sukses!")
-    }
-    setSaving(false)
-  }
-
-  const handleOrgSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSaving(true)
-    setError(null)
-    setSuccess(null)
-
-    if (!organization) {
-      setError("Nuk ka organizatë për të përditësuar.")
-      setSaving(false)
-      return
-    }
-
-    const parsed = organizationProfileUpdateSchema.safeParse({
-      emri: orgFormData.emri,
-      pershkrimi: orgFormData.pershkrimi,
-      interesi_primar: orgFormData.interesi_primar,
-      person_kontakti: orgFormData.person_kontakti,
-      email_kontakti: orgFormData.email_kontakti,
-      vendndodhja: orgFormData.vendndodhja,
-    })
-
-    if (!parsed.success) {
-      const { fieldErrors } = parsed.error.flatten()
-      setOrgFieldErrors({
-        emri: fieldErrors.emri?.[0],
-        pershkrimi: fieldErrors.pershkrimi?.[0],
-        interesi_primar: fieldErrors.interesi_primar?.[0],
-        person_kontakti: fieldErrors.person_kontakti?.[0],
-        email_kontakti: fieldErrors.email_kontakti?.[0],
-        vendndodhja: fieldErrors.vendndodhja?.[0],
-      })
-      setError("Kontrolloni fushat e shënuara dhe provoni përsëri.")
-      setSaving(false)
-      return
-    }
-
-    setOrgFieldErrors({})
-
-    const result = await updateOrganizationProfile(organization.id, parsed.data)
-
-    if (result.error) {
-      setError(result.error)
-    } else {
-      setSuccess("Profili i organizatës u përditësua me sukses!")
-    }
-    setSaving(false)
-  }
-
   return (
     <Tabs defaultValue="personal" className="space-y-6">
       <TabsList>
@@ -234,35 +62,11 @@ export default function ProfiliClientPage({ userProfile, organization }: Profili
             <CardDescription>Ndrysho informacionet personale.</CardDescription>
           </CardHeader>
           <CardContent>
-            {error && (
-              <Alert variant="destructive" className="mb-4">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Gabim</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-            {success && (
-              <Alert className="mb-4 bg-green-50 text-green-700 border-green-200">
-                <CheckCircle className="h-4 w-4" />
-                <AlertTitle>Sukses</AlertTitle>
-                <AlertDescription>{success}</AlertDescription>
-              </Alert>
-            )}
-            <form onSubmit={handleUserSubmit} className="space-y-4">
-              <Label htmlFor="emri_i_plote">Emri i Plotë</Label>
-              <Input name="emri_i_plote" value={userFormData.emri_i_plote} onChange={handleUserChange} />
-              {userFieldErrors.emri_i_plote && (
-                <p className="text-sm text-red-600">{userFieldErrors.emri_i_plote}</p>
-              )}
-              <Label htmlFor="email">Email</Label>
-              <Input name="email" value={userFormData.email} disabled />
-              <Label htmlFor="vendndodhja">Vendndodhja</Label>
-              <Input name="vendndodhja" value={userFormData.vendndodhja} onChange={handleUserChange} />
-              {userFieldErrors.vendndodhja && (
-                <p className="text-sm text-red-600">{userFieldErrors.vendndodhja}</p>
-              )}
-              <Button type="submit" disabled={saving}>{saving ? "Duke ruajtur..." : "Ruaj"}</Button>
-            </form>
+            <UserProfileForm
+              initialFullName={userProfile?.emri_i_plote || ""}
+              initialEmail={userProfile?.email || ""}
+              initialLocation={userProfile?.vendndodhja || ""}
+            />
           </CardContent>
         </Card>
       </TabsContent>
@@ -273,51 +77,21 @@ export default function ProfiliClientPage({ userProfile, organization }: Profili
             <CardDescription>Ndrysho të dhënat e organizatës.</CardDescription>
           </CardHeader>
           <CardContent>
-            {error && (
-              <Alert variant="destructive" className="mb-4">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Gabim</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
+            {organization ? (
+              <OrganizationProfileForm
+                organizationId={organization.id}
+                initialData={{
+                  emri: organization.emri || "",
+                  pershkrimi: organization.pershkrimi || "",
+                  interesi_primar: organization.interesi_primar || "",
+                  person_kontakti: organization.person_kontakti || "",
+                  email_kontakti: organization.email_kontakti || "",
+                  vendndodhja: organization.vendndodhja || "",
+                }}
+              />
+            ) : (
+              <p className="text-sm text-gray-500">Nuk ka organizatë për të përditësuar.</p>
             )}
-            {success && (
-              <Alert className="mb-4 bg-green-50 text-green-700 border-green-200">
-                <CheckCircle className="h-4 w-4" />
-                <AlertTitle>Sukses</AlertTitle>
-                <AlertDescription>{success}</AlertDescription>
-              </Alert>
-            )}
-            <form onSubmit={handleOrgSubmit} className="space-y-4">
-              <Label htmlFor="emri">Emri</Label>
-              <Input name="emri" value={orgFormData.emri} onChange={handleOrgChange} />
-              {orgFieldErrors.emri && <p className="text-sm text-red-600">{orgFieldErrors.emri}</p>}
-              <Label htmlFor="pershkrimi">Përshkrimi</Label>
-              <Textarea name="pershkrimi" value={orgFormData.pershkrimi} onChange={handleOrgChange} />
-              {orgFieldErrors.pershkrimi && (
-                <p className="text-sm text-red-600">{orgFieldErrors.pershkrimi}</p>
-              )}
-              <Label htmlFor="interesi_primar">Interesi Primar</Label>
-              <Input name="interesi_primar" value={orgFormData.interesi_primar} onChange={handleOrgChange} />
-              {orgFieldErrors.interesi_primar && (
-                <p className="text-sm text-red-600">{orgFieldErrors.interesi_primar}</p>
-              )}
-              <Label htmlFor="person_kontakti">Person Kontakti</Label>
-              <Input name="person_kontakti" value={orgFormData.person_kontakti} onChange={handleOrgChange} />
-              {orgFieldErrors.person_kontakti && (
-                <p className="text-sm text-red-600">{orgFieldErrors.person_kontakti}</p>
-              )}
-              <Label htmlFor="email_kontakti">Email Kontakti</Label>
-              <Input name="email_kontakti" value={orgFormData.email_kontakti} onChange={handleOrgChange} />
-              {orgFieldErrors.email_kontakti && (
-                <p className="text-sm text-red-600">{orgFieldErrors.email_kontakti}</p>
-              )}
-              <Label htmlFor="vendndodhja">Vendndodhja</Label>
-              <Input name="vendndodhja" value={orgFormData.vendndodhja} onChange={handleOrgChange} />
-              {orgFieldErrors.vendndodhja && (
-                <p className="text-sm text-red-600">{orgFieldErrors.vendndodhja}</p>
-              )}
-              <Button type="submit" disabled={saving}>{saving ? "Duke ruajtur..." : "Ruaj"}</Button>
-            </form>
           </CardContent>
         </Card>
       </TabsContent>

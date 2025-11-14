@@ -3,8 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { BookOpen, Users, ShoppingCart, User } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
-import { unstable_noStore as noStore } from "next/cache"
+import { getServerUser } from "@/lib/supabase/server"
 import { StatsCards } from "./stats-cards"
 import { LatestArticles } from "./latest-articles"
 import { KeyPartners } from "./key-partners"
@@ -14,22 +13,21 @@ import { LatestArticlesSkeleton } from "@/components/dashboard/latest-articles-s
 import { KeyPartnersSkeleton } from "@/components/dashboard/key-partners-skeleton"
 import { ChartSkeleton } from "@/components/dashboard/chart-skeleton"
 import { getStats, getLatestArticles, getKeyPartners } from "./actions"
+import { fetchUserProfileById } from "@/services/profile"
 
 export default async function DashboardPage() {
-  noStore()
-  const supabase = createServerSupabaseClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { user } = await getServerUser()
 
   if (!user) {
     // This should ideally be caught by middleware, but as a fallback
     return null
   }
 
-  // Fetch user profile
-  const { data: userProfile } = await supabase.from("users").select("emri_i_plote").eq("id", user.id).single()
+  const { userProfile, error: profileError } = await fetchUserProfileById(user.id)
+
+  if (profileError) {
+    console.error("DashboardPage profile load error:", profileError)
+  }
 
   const stats = await getStats()
   const chartData = [

@@ -1,6 +1,5 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { requireAdminRole } from "@/lib/auth/roles"
 import {
@@ -39,8 +38,7 @@ export async function getUsers(): Promise<GetUsersResult> {
 }
 
 export async function deleteUser(userId: string) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   try {
     const { error } = await deleteUserRecord(userId)
@@ -59,8 +57,7 @@ export async function deleteUser(userId: string) {
 }
 
 export async function updateUser(userId: string, formData: UserUpdateData) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   const parsed = adminUserUpdateSchema.safeParse(formData)
   if (!parsed.success) {

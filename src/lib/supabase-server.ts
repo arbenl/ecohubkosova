@@ -21,6 +21,13 @@ export const getServerUser = cache(async (): Promise<{
 }> => {
   const supabase = createServerSupabaseClient()
 
+  const isSessionMissing = (err: unknown) =>
+    typeof err === "object" &&
+    err !== null &&
+    "message" in err &&
+    typeof (err as any).message === "string" &&
+    (err as any).message.includes("Auth session missing")
+
   try {
     const {
       data: { user },
@@ -28,13 +35,17 @@ export const getServerUser = cache(async (): Promise<{
     } = await supabase.auth.getUser()
 
     if (error) {
-      console.error("Failed to fetch server user:", error)
+      if (!isSessionMissing(error)) {
+        console.error("Failed to fetch server user:", error)
+      }
       return { user: null, error }
     }
 
     return { user, error: null }
   } catch (error) {
-    console.error("Unexpected error fetching server user:", error)
+    if (!isSessionMissing(error)) {
+      console.error("Unexpected error fetching server user:", error)
+    }
     return { user: null, error: error as Error }
   }
 })
