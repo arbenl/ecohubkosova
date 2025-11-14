@@ -1,5 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { and, desc, eq, ilike, or } from "drizzle-orm"
+import { db } from "@/lib/drizzle"
+import { organizations } from "@/db/schema"
 import type { Organization } from "@/types"
 
 const ITEMS_PER_PAGE = 9
@@ -24,41 +26,42 @@ export async function fetchOrganizationsList({
   page = 1,
 }: OrganizationListOptions): Promise<PaginatedResult<Organization>> {
   noStore()
-  const supabase = createServerSupabaseClient()
 
   try {
-    const from = (page - 1) * ITEMS_PER_PAGE
-    const to = page * ITEMS_PER_PAGE - 1
+    const offset = (page - 1) * ITEMS_PER_PAGE
+    const filters = [eq(organizations.eshte_aprovuar, true)]
 
-    let query = supabase
-      .from("organizations")
-      .select("*")
-      .eq("eshte_aprovuar", true)
-      .order("created_at", { ascending: false })
-      .range(from, to)
-
-    if (search) {
-      query = query.or(`emri.ilike.%${search}%,pershkrimi.ilike.%${search}%`)
+    if (search.trim()) {
+      const term = `%${search.trim()}%`
+      const nameOrDescription = or(ilike(organizations.emri, term), ilike(organizations.pershkrimi, term))
+      if (nameOrDescription) {
+        filters.push(nameOrDescription)
+      }
     }
 
     if (type !== "all") {
-      query = query.eq("lloji", type)
+      filters.push(eq(organizations.lloji, type))
     }
 
     if (interest !== "all") {
-      query = query.ilike("interesi_primar", `%${interest}%`)
+      filters.push(ilike(organizations.interesi_primar, `%${interest}%`))
     }
 
-    const { data, error } = await query
+    const whereClause = filters.length === 1 ? filters[0] : and(...filters)
+    const rows = await db
+      .get()
+      .select()
+      .from(organizations)
+      .where(whereClause)
+      .orderBy(desc(organizations.created_at))
+      .limit(ITEMS_PER_PAGE + 1)
+      .offset(offset)
 
-    if (error) {
-      throw error
-    }
-
-    const list = data ?? []
+    const hasMore = rows.length > ITEMS_PER_PAGE
+    const list = rows.slice(0, ITEMS_PER_PAGE).map(toOrganization)
     return {
       data: list,
-      hasMore: list.length === ITEMS_PER_PAGE,
+      hasMore,
       error: null,
     }
   } catch (error) {
@@ -73,26 +76,33 @@ export async function fetchOrganizationsList({
 
 export async function fetchOrganizationById(id: string) {
   noStore()
-  const supabase = createServerSupabaseClient()
 
   try {
-    const { data, error } = await supabase
-      .from("organizations")
-      .select("*")
-      .eq("id", id)
-      .eq("eshte_aprovuar", true)
-      .single()
+    const [row] = await db
+      .get()
+      .select()
+      .from(organizations)
+      .where(and(eq(organizations.id, id), eq(organizations.eshte_aprovuar, true)))
+      .limit(1)
 
-    if (error) {
-      throw error
+    if (!row) {
+      throw new Error("Organizata nuk u gjet ose nuk është e aprovuar.")
     }
 
-    return { data, error: null as string | null }
+    return { data: toOrganization(row), error: null as string | null }
   } catch (error) {
     console.error("fetchOrganizationById error:", error)
     return {
       data: null,
       error: error instanceof Error ? error.message : "Gabim gjatë ngarkimit të organizatës.",
     }
+  }
+}
+
+function toOrganization(record: typeof organizations.$inferSelect): Organization {
+  return {
+    ...record,
+    created_at: record.created_at.toISOString(),
+    updated_at: record.updated_at ? record.updated_at.toISOString() : null,
   }
 }

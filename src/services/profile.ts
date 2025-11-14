@@ -1,6 +1,8 @@
 import { unstable_noStore as noStore } from "next/cache"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
-import type { PostgrestSingleResponse, SupabaseClient } from "@supabase/supabase-js"
+import { and, eq } from "drizzle-orm"
+import { db } from "@/lib/drizzle"
+import { organizationMembers, organizations, users } from "@/db/schema"
 import type { OrganizationProfileUpdateInput, UserProfileUpdateInput } from "@/validation/profile"
 
 export type ProfileUser = {
@@ -25,13 +27,34 @@ export type ProfileOrganization = {
   eshte_aprovuar: boolean
 }
 
-type AnySupabaseClient = SupabaseClient<any, any, any>
+type UserRow = typeof users.$inferSelect
+type OrganizationRow = typeof organizations.$inferSelect
 
-async function selectUserProfileById(
-  supabase: AnySupabaseClient,
-  userId: string
-): Promise<PostgrestSingleResponse<ProfileUser>> {
-  return supabase.from("users").select("*").eq("id", userId).single<ProfileUser>()
+const toProfileUser = (record: UserRow): ProfileUser => ({
+  id: record.id,
+  emri_i_plote: record.emri_i_plote,
+  email: record.email,
+  vendndodhja: record.vendndodhja,
+  roli: record.roli,
+  eshte_aprovuar: record.eshte_aprovuar,
+  created_at: record.created_at.toISOString(),
+})
+
+const toProfileOrganization = (record: OrganizationRow): ProfileOrganization => ({
+  id: record.id,
+  emri: record.emri,
+  pershkrimi: record.pershkrimi,
+  interesi_primar: record.interesi_primar,
+  person_kontakti: record.person_kontakti,
+  email_kontakti: record.email_kontakti,
+  vendndodhja: record.vendndodhja,
+  lloji: record.lloji,
+  eshte_aprovuar: record.eshte_aprovuar,
+})
+
+async function findUserProfile(userId: string) {
+  const [record] = await db.get().select().from(users).where(eq(users.id, userId)).limit(1)
+  return record ? toProfileUser(record) : null
 }
 
 export async function fetchCurrentUserProfile() {
@@ -48,33 +71,32 @@ export async function fetchCurrentUserProfile() {
   }
 
   try {
-    const { data: userProfile, error: userError } = await selectUserProfileById(supabase, user.id)
-
-    if (userError || !userProfile) {
-      throw userError ?? new Error("Profili i përdoruesit nuk u gjet.")
+    const userProfile = await findUserProfile(user.id)
+    if (!userProfile) {
+      throw new Error("Profili i përdoruesit nuk u gjet.")
     }
 
     let organization: ProfileOrganization | null = null
 
     if (userProfile.roli !== "Individ" && userProfile.roli !== "Admin") {
-      const { data: orgMember } = await supabase
-        .from("organization_members")
-        .select("organization_id")
-        .eq("user_id", user.id)
-        .eq("eshte_aprovuar", true)
-        .single()
+      const [membership] = await db
+        .get()
+        .select({ organization_id: organizationMembers.organization_id })
+        .from(organizationMembers)
+        .where(and(eq(organizationMembers.user_id, user.id), eq(organizationMembers.eshte_aprovuar, true)))
+        .limit(1)
 
-      if (orgMember) {
-        const { data: orgData, error: orgError } = await supabase
-          .from("organizations")
-          .select("*")
-          .eq("id", orgMember.organization_id)
-          .single()
+      if (membership?.organization_id) {
+        const [orgRecord] = await db
+          .get()
+          .select()
+          .from(organizations)
+          .where(eq(organizations.id, membership.organization_id))
+          .limit(1)
 
-        if (orgError) {
-          throw orgError
+        if (orgRecord) {
+          organization = toProfileOrganization(orgRecord)
         }
-        organization = orgData
       }
     }
 
@@ -91,16 +113,15 @@ export async function fetchCurrentUserProfile() {
 
 export async function fetchUserProfileById(userId: string) {
   noStore()
-  const supabase = createServerSupabaseClient()
 
   try {
-    const { data, error } = await selectUserProfileById(supabase, userId)
+    const profile = await findUserProfile(userId)
 
-    if (error || !data) {
-      throw error ?? new Error("Profili i përdoruesit nuk ekziston.")
+    if (!profile) {
+      throw new Error("Profili i përdoruesit nuk ekziston.")
     }
 
-    return { userProfile: data, error: null as string | null }
+    return { userProfile: profile, error: null as string | null }
   } catch (error) {
     console.error("fetchUserProfileById error:", error)
     return {
@@ -110,57 +131,63 @@ export async function fetchUserProfileById(userId: string) {
   }
 }
 
-export async function updateUserProfileRecord(
-  supabase: AnySupabaseClient,
-  userId: string,
-  data: UserProfileUpdateInput
-) {
-  return supabase
-    .from("users")
-    .update({
-      emri_i_plote: data.emri_i_plote,
-      vendndodhja: data.vendndodhja,
-    })
-    .eq("id", userId)
+export async function updateUserProfileRecord(userId: string, data: UserProfileUpdateInput) {
+  try {
+    await db
+      .get()
+      .update(users)
+      .set({
+        emri_i_plote: data.emri_i_plote,
+        vendndodhja: data.vendndodhja,
+        updated_at: new Date(),
+      })
+      .where(eq(users.id, userId))
+
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }
 
 export async function updateOrganizationRecord(
-  supabase: AnySupabaseClient,
   organizationId: string,
   data: OrganizationProfileUpdateInput
 ) {
-  return supabase
-    .from("organizations")
-    .update({
-      emri: data.emri,
-      pershkrimi: data.pershkrimi,
-      interesi_primar: data.interesi_primar,
-      person_kontakti: data.person_kontakti,
-      email_kontakti: data.email_kontakti,
-      vendndodhja: data.vendndodhja,
-    })
-    .eq("id", organizationId)
+  try {
+    await db
+      .get()
+      .update(organizations)
+      .set({
+        emri: data.emri,
+        pershkrimi: data.pershkrimi,
+        interesi_primar: data.interesi_primar,
+        person_kontakti: data.person_kontakti,
+        email_kontakti: data.email_kontakti,
+        vendndodhja: data.vendndodhja,
+        updated_at: new Date(),
+      })
+      .where(eq(organizations.id, organizationId))
+
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }
 
 export async function ensureUserOrganizationMembership(
-  supabase: AnySupabaseClient,
   organizationId: string,
   userId: string
 ) {
-  const { data, error } = await supabase
-    .from("organization_members")
-    .select("id")
-    .eq("organization_id", organizationId)
-    .eq("user_id", userId)
-    .single()
+  try {
+    const [record] = await db
+      .get()
+      .select({ id: organizationMembers.id })
+      .from(organizationMembers)
+      .where(and(eq(organizationMembers.organization_id, organizationId), eq(organizationMembers.user_id, userId)))
+      .limit(1)
 
-  if (error) {
-    const code = (error as { code?: string } | null)?.code
-    if (code === "PGRST116") {
-      return { isMember: false, error: null }
-    }
-    return { isMember: false, error }
+    return { isMember: Boolean(record), error: null }
+  } catch (error) {
+    return { isMember: false, error: error as Error }
   }
-
-  return { isMember: Boolean(data), error: null }
 }

@@ -52,7 +52,7 @@ export async function updateUserProfile(formData: UserProfileUpdateInput) {
   const payload = parsed.data
 
   try {
-    const { error } = await updateUserProfileRecord(supabase, user.id, payload)
+    const { error } = await updateUserProfileRecord(user.id, payload)
 
     if (error) {
       console.error("Error updating user profile:", error)
@@ -89,7 +89,7 @@ export async function updateOrganizationProfile(
   const payload = parsed.data
 
   try {
-    const membership = await ensureUserOrganizationMembership(supabase, organizationId, user.id)
+    const membership = await ensureUserOrganizationMembership(organizationId, user.id)
 
     if (membership.error) {
       console.error("Error verifying organization membership:", membership.error)
@@ -100,7 +100,7 @@ export async function updateOrganizationProfile(
       return { error: "Nuk jeni i autorizuar të përditësoni këtë organizatë." }
     }
 
-    const { error } = await updateOrganizationRecord(supabase, organizationId, payload)
+    const { error } = await updateOrganizationRecord(organizationId, payload)
 
     if (error) {
       console.error("Error updating organization profile:", error)
