@@ -7,7 +7,7 @@ interface BaseLayoutProps {
   className?: string
 }
 
-export async function BaseLayout({ children, className = "" }: BaseLayoutProps) {
+export function BaseLayout({ children, className = "" }: BaseLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-gray-50 to-white">
       <Header />
