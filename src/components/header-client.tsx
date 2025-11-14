@@ -89,9 +89,10 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
               </Button>
               <SignOutButton
                 variant="ghost"
-                size="icon"
-                className="rounded-xl hover:bg-red-50 hover:text-red-600 transition-all duration-300"
-              />
+                className="rounded-xl px-4 hover:bg-red-50 hover:text-red-600 transition-all duration-300"
+              >
+                Dil
+              </SignOutButton>
             </div>
           ) : (
             <>
