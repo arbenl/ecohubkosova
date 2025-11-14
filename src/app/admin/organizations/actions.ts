@@ -43,11 +43,11 @@ export async function deleteOrganization(organizationId: string) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await deleteOrganizationRecord(supabase, organizationId)
+    const { error } = await deleteOrganizationRecord(organizationId)
 
     if (error) {
       console.error("Error deleting organization:", error)
-      return { error: error.message || "Gabim gjatë fshirjes së organizatës." }
+      return { error: error.message ?? "Gabim gjatë fshirjes së organizatës." }
     }
 
     revalidatePath("/admin/organizations")
@@ -70,11 +70,11 @@ export async function updateOrganization(organizationId: string, formData: Organ
   }
 
   try {
-    const { error } = await updateOrganizationRecord(supabase, organizationId, parsed.data)
+    const { error } = await updateOrganizationRecord(organizationId, parsed.data)
 
     if (error) {
       console.error("Error updating organization:", error)
-      return { error: error.message || "Gabim gjatë përditësimit të organizatës." }
+      return { error: error.message ?? "Gabim gjatë përditësimit të organizatës." }
     }
 
     revalidatePath("/admin/organizations")

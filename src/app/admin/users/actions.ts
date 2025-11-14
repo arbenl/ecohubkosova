@@ -43,11 +43,11 @@ export async function deleteUser(userId: string) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await deleteUserRecord(supabase, userId)
+    const { error } = await deleteUserRecord(userId)
 
     if (error) {
       console.error("Error deleting user:", error)
-      return { error: error.message || "Gabim gjatë fshirjes së përdoruesit." }
+      return { error: error.message ?? "Gabim gjatë fshirjes së përdoruesit." }
     }
 
     revalidatePath("/admin/users")
@@ -69,11 +69,11 @@ export async function updateUser(userId: string, formData: UserUpdateData) {
   }
 
   try {
-    const { error } = await updateUserRecord(supabase, userId, parsed.data)
+    const { error } = await updateUserRecord(userId, parsed.data)
 
     if (error) {
       console.error("Error updating user:", error)
-      return { error: error.message || "Gabim gjatë përditësimit të përdoruesit." }
+      return { error: error.message ?? "Gabim gjatë përditësimit të përdoruesit." }
     }
 
     revalidatePath("/admin/users")

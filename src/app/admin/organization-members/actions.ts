@@ -29,15 +29,7 @@ export async function getOrganizationMembers(): Promise<GetOrganizationMembersRe
       return { data: null, error: error.message || "Gabim gjatë marrjes së anëtarëve të organizatave." }
     }
 
-    const formattedData =
-      data?.map((member: any) => ({
-        ...member,
-        organization_name: member.organizations?.emri,
-        user_name: member.users?.emri_i_plote,
-        user_email: member.users?.email,
-      })) || []
-
-    return { data: formattedData, error: null }
+    return { data: data ?? [], error: null }
   } catch (error) {
     console.error("Server Action Error (getOrganizationMembers):", error)
     return {
@@ -53,11 +45,11 @@ export async function deleteOrganizationMember(memberId: string) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await deleteOrganizationMemberRecord(supabase, memberId)
+    const { error } = await deleteOrganizationMemberRecord(memberId)
 
     if (error) {
       console.error("Error deleting organization member:", error)
-      return { error: error.message || "Gabim gjatë fshirjes së anëtarit të organizatës." }
+      return { error: error.message ?? "Gabim gjatë fshirjes së anëtarit të organizatës." }
     }
 
     revalidatePath("/admin/organization-members")
@@ -80,11 +72,11 @@ export async function updateOrganizationMember(memberId: string, formData: Organ
   }
 
   try {
-    const { error } = await updateOrganizationMemberRecord(supabase, memberId, parsed.data)
+    const { error } = await updateOrganizationMemberRecord(memberId, parsed.data)
 
     if (error) {
       console.error("Error updating organization member:", error)
-      return { error: error.message || "Gabim gjatë përditësimit të anëtarit të organizatës." }
+      return { error: error.message ?? "Gabim gjatë përditësimit të anëtarit të organizatës." }
     }
 
     revalidatePath("/admin/organization-members")
@@ -100,11 +92,11 @@ export async function toggleOrganizationMemberApproval(memberId: string, current
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await toggleOrganizationMemberApprovalRecord(supabase, memberId, currentStatus)
+    const { error } = await toggleOrganizationMemberApprovalRecord(memberId, currentStatus)
 
     if (error) {
       console.error("Error toggling approval status:", error)
-      return { error: error.message || "Gabim gjatë ndryshimit të statusit të aprovimit." }
+      return { error: error.message ?? "Gabim gjatë ndryshimit të statusit të aprovimit." }
     }
 
     revalidatePath("/admin/organization-members")

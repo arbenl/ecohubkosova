@@ -1,7 +1,10 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server"
-import type { SupabaseClient } from "@supabase/supabase-js"
+import { eq } from "drizzle-orm"
+import { db } from "@/lib/drizzle"
+import { organizations } from "@/db/schema"
 import type { AdminOrganizationUpdateInput } from "@/validation/admin"
 export type { AdminOrganizationUpdateInput } from "@/validation/admin"
+
+export type AdminOrganizationRow = typeof organizations.$inferSelect
 
 export interface AdminOrganization {
   id: string
@@ -17,29 +20,45 @@ export interface AdminOrganization {
   updated_at: string | null
 }
 
-type AnySupabaseClient = SupabaseClient<any, any, any>
-
 export async function fetchAdminOrganizations() {
-  const supabase = createServerSupabaseClient()
-
-  const { data, error } = await supabase.from("organizations").select("*")
-  return { data: data ?? [], error }
+  try {
+    const rows = await db.get().select().from(organizations)
+    const serialized: AdminOrganization[] = rows.map((org) => ({
+      ...org,
+      created_at: org.created_at.toISOString(),
+      updated_at: org.updated_at ? org.updated_at.toISOString() : null,
+    }))
+    return { data: serialized, error: null }
+  } catch (error) {
+    return { data: null, error: error as Error }
+  }
 }
 
-export function deleteOrganizationRecord(supabase: AnySupabaseClient, organizationId: string) {
-  return supabase.from("organizations").delete().eq("id", organizationId)
+export async function deleteOrganizationRecord(organizationId: string) {
+  try {
+    await db.get().delete(organizations).where(eq(organizations.id, organizationId))
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }
 
-export function updateOrganizationRecord(
-  supabase: AnySupabaseClient,
+export async function updateOrganizationRecord(
   organizationId: string,
   data: AdminOrganizationUpdateInput
 ) {
-  return supabase
-    .from("organizations")
-    .update({
-      ...data,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", organizationId)
+  try {
+    await db
+      .get()
+      .update(organizations)
+      .set({
+        ...data,
+        updated_at: new Date(),
+      })
+      .where(eq(organizations.id, organizationId))
+
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }

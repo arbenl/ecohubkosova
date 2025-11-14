@@ -31,7 +31,8 @@ This document tracks the restructuring blueprint we agreed to while preparing Ec
 
 ## 6. Tooling & Code Organization
 
-- 🟡 Database migrations currently live as hand-authored SQL in `/scripts`. Adopt a versioned migration tool (Supabase CLI, Drizzle Kit, etc.) so schema changes can be diffed, reverted, and applied consistently across environments.
+- ✅ Database migrations now live under `supabase/migrations/**` (managed with the Supabase CLI) and seeds in `supabase/seed.sql`, replacing the legacy `/scripts` SQL.
+- ✅ Drizzle ORM powers the admin service layer via the Supabase Postgres connection string, giving us typed queries without sacrificing the Supabase auth checks executed in server actions.
 - ✅ All application code now lives under `src/**` (`src/app`, `src/components`, `src/hooks`, `src/lib`, `src/services`, `src/validation`), giving RN and future SDKs a single import root.
 
 ## Current Work Branch
@@ -40,8 +41,8 @@ This document tracks the restructuring blueprint we agreed to while preparing Ec
 
 ## Next Priorities
 
-1. Adopt a proper migration tool (e.g., Supabase CLI/Drizzle) to replace the manual SQL scripts and keep schema history reviewable.
-2. Document and enforce the new `src/**`-only layout across generators (shadcn config, new modules, docs) so future code never drifts back to the root.
-3. Re-enable Playwright and introduce Vitest + React Testing Library so unit/component suites run locally and in CI.
-4. Publish the service layer via typed route handlers / SDK endpoints for React Native and other consumers once the above refactors land.
-5. Investigate and harden the lingering cross-session sign-out issue once the above foundational work is complete.
+1. Document and enforce the new `src/**`-only layout across generators (shadcn config, new modules, docs) so future code never drifts back to the root.
+2. Re-enable Playwright and introduce Vitest + React Testing Library so unit/component suites run locally and in CI.
+3. Publish the service layer via typed route handlers / SDK endpoints for React Native and other consumers once the above refactors land.
+4. Investigate and harden the lingering cross-session sign-out issue once the above foundational work is complete.
+5. Wire Supabase migrations into CI (db reset/lint) so schema drift is caught automatically.

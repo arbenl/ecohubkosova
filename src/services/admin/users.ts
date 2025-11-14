@@ -1,7 +1,10 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server"
-import type { SupabaseClient } from "@supabase/supabase-js"
+import { eq } from "drizzle-orm"
+import { db } from "@/lib/drizzle"
+import { users } from "@/db/schema"
 import type { AdminUserUpdateInput } from "@/validation/admin"
 export type { AdminUserUpdateInput } from "@/validation/admin"
+
+export type AdminUserRow = typeof users.$inferSelect
 
 export interface AdminUser {
   id: string
@@ -14,24 +17,43 @@ export interface AdminUser {
   updated_at: string | null
 }
 
-type AnySupabaseClient = SupabaseClient<any, any, any>
-
 export async function fetchAdminUsers() {
-  const supabase = createServerSupabaseClient()
-  const { data, error } = await supabase.from("users").select("*")
-  return { data: data ?? [], error }
+  try {
+    const rows = await db.get().select().from(users)
+    const serialized: AdminUser[] = rows.map((user) => ({
+      ...user,
+      created_at: user.created_at.toISOString(),
+      updated_at: user.updated_at ? user.updated_at.toISOString() : null,
+    }))
+
+    return { data: serialized, error: null }
+  } catch (error) {
+    return { data: null, error: error as Error }
+  }
 }
 
-export function deleteUserRecord(supabase: AnySupabaseClient, userId: string) {
-  return supabase.from("users").delete().eq("id", userId)
+export async function deleteUserRecord(userId: string) {
+  try {
+    await db.get().delete(users).where(eq(users.id, userId))
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }
 
-export function updateUserRecord(supabase: AnySupabaseClient, userId: string, data: AdminUserUpdateInput) {
-  return supabase
-    .from("users")
-    .update({
-      ...data,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", userId)
+export async function updateUserRecord(userId: string, data: AdminUserUpdateInput) {
+  try {
+    await db
+      .get()
+      .update(users)
+      .set({
+        ...data,
+        updated_at: new Date(),
+      })
+      .where(eq(users.id, userId))
+
+    return { error: null }
+  } catch (error) {
+    return { error: error as Error }
+  }
 }

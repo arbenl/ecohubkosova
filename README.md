@@ -18,7 +18,7 @@ EcoHub Kosova is a Next.js App Router project that powers a circular-economy por
 pnpm install
 ```
 
-3. Copy `.env.example` to `.env.local` (or create it) and fill in the Supabase keys and any other secrets the app expects.
+3. Copy `.env.example` to `.env.local` (or create it) and fill in the Supabase keys and any other secrets the app expects (`NEXT_PUBLIC_SUPABASE_*`, `SUPABASE_SERVICE_ROLE_KEY`, and `SUPABASE_DB_URL` for Drizzle).
 4. Start the dev server:
 
 ```bash
@@ -47,6 +47,25 @@ The app runs on [http://localhost:3000](http://localhost:3000).
 - `docs/roadmap.md` – High-level roadmap of upcoming initiatives.
 - `docs/next-session-specs.md` – The short-term TODO list for the next coding session.
 
+## Database & Supabase CLI
+
+Database schema changes now live under `supabase/migrations/**` and seed data is in `supabase/seed.sql`. Use the Supabase CLI (via `pnpm dlx supabase` or a global install) for all DB work:
+
+1. `pnpm dlx supabase login` – paste a Supabase access token from your dashboard.
+2. `pnpm dlx supabase link --project-ref xjyseqtfuxcuviiankhy --password <database_password>` – associates the CLI with this project.
+3. `pnpm dlx supabase db diff -f <migration_name>` – generates a new migration after you change the schema.
+4. `pnpm dlx supabase db push` (remote) or `pnpm dlx supabase db reset` (local) – apply migrations & seed data.
+
+See `docs/database-migrations.md` for the full workflow, including environment variables to set and troubleshooting tips. The legacy SQL files under `scripts/` remain for historical context but should no longer be edited.
+
+> **Drizzle ORM:** Admin services now run through Drizzle + the Supabase Postgres connection string. Set `SUPABASE_DB_URL` (available from your Supabase dashboard → Project Settings → Database) so server actions can establish the connection securely.
+
+When you change the schema, generate refreshed Drizzle types with:
+
+```bash
+pnpm drizzle:generate
+```
+
 ## Contributing Workflow
 
 1. Create a feature branch from `main`.
@@ -66,4 +85,3 @@ See `docs/roadmap.md` and `docs/next-session-specs.md` for the current plan. Hig
 ## License
 
 This repository currently doesn’t declare a license. If you plan to open source it, add one under the root (e.g., `LICENSE`).
-
