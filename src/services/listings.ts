@@ -1,6 +1,10 @@
 import { unstable_noStore as noStore } from "next/cache"
+import { and, eq } from "drizzle-orm"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { db } from "@/lib/drizzle"
+import { marketplaceListings, organizationMembers } from "@/db/schema"
 import type { Listing } from "@/types"
+import type { ListingCreateInput } from "@/validation/listings"
 
 const ITEMS_PER_PAGE = 9
 
@@ -114,5 +118,120 @@ export async function fetchListingById(id: string) {
       data: null,
       error: error instanceof Error ? error.message : "Listimi nuk u gjet ose nuk është i aprovuar.",
     }
+  }
+}
+
+type ListingMutationResult = { success: true } | { error: string }
+
+const formatPrice = (value: ListingCreateInput["cmimi"]) => {
+  if (typeof value === "number" && !Number.isNaN(value)) {
+    return value.toFixed(2)
+  }
+  return null
+}
+
+async function findApprovedOrganizationId(userId: string) {
+  const [membership] = await db
+    .get()
+    .select({ organization_id: organizationMembers.organization_id })
+    .from(organizationMembers)
+    .where(and(eq(organizationMembers.user_id, userId), eq(organizationMembers.eshte_aprovuar, true)))
+    .limit(1)
+
+  return membership?.organization_id ?? null
+}
+
+export async function createUserListing(userId: string, payload: ListingCreateInput): Promise<ListingMutationResult> {
+  const price = formatPrice(payload.cmimi)
+  if (price === null) {
+    return { error: "Çmimi është i detyrueshëm dhe duhet të jetë numër pozitiv." }
+  }
+
+  try {
+    const organizationId = await findApprovedOrganizationId(userId)
+    const now = new Date()
+
+    await db
+      .get()
+      .insert(marketplaceListings)
+      .values({
+        created_by_user_id: userId,
+        organization_id: organizationId,
+        titulli: payload.titulli,
+        pershkrimi: payload.pershkrimi,
+        kategori: payload.kategori,
+        cmimi: price,
+        njesia: payload.njesia,
+        vendndodhja: payload.vendndodhja,
+        sasia: payload.sasia,
+        lloji_listimit: payload.lloji_listimit,
+        eshte_aprovuar: false,
+        created_at: now,
+        updated_at: now,
+      })
+
+    return { success: true }
+  } catch (error) {
+    console.error("[services/listings] Failed to create listing:", error)
+    return { error: "Gabim gjatë shtimit të listimit. Ju lutemi provoni përsëri." }
+  }
+}
+
+export async function updateUserListing(
+  listingId: string,
+  userId: string,
+  payload: ListingCreateInput
+): Promise<ListingMutationResult> {
+  const price = formatPrice(payload.cmimi)
+  if (price === null) {
+    return { error: "Çmimi është i detyrueshëm dhe duhet të jetë numër pozitiv." }
+  }
+
+  try {
+    const [updated] = await db
+      .get()
+      .update(marketplaceListings)
+      .set({
+        titulli: payload.titulli,
+        pershkrimi: payload.pershkrimi,
+        kategori: payload.kategori,
+        cmimi: price,
+        njesia: payload.njesia,
+        vendndodhja: payload.vendndodhja,
+        sasia: payload.sasia,
+        lloji_listimit: payload.lloji_listimit,
+        eshte_aprovuar: false,
+        updated_at: new Date(),
+      })
+      .where(and(eq(marketplaceListings.id, listingId), eq(marketplaceListings.created_by_user_id, userId)))
+      .returning({ id: marketplaceListings.id })
+
+    if (!updated) {
+      return { error: "Listimi nuk u gjet ose nuk keni të drejta ta ndryshoni." }
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("[services/listings] Failed to update listing:", error)
+    return { error: "Gabim gjatë përditësimit të listimit. Ju lutemi provoni përsëri." }
+  }
+}
+
+export async function deleteUserListing(listingId: string, userId: string): Promise<ListingMutationResult> {
+  try {
+    const [deleted] = await db
+      .get()
+      .delete(marketplaceListings)
+      .where(and(eq(marketplaceListings.id, listingId), eq(marketplaceListings.created_by_user_id, userId)))
+      .returning({ id: marketplaceListings.id })
+
+    if (!deleted) {
+      return { error: "Listimi nuk u gjet ose nuk keni të drejta ta fshini." }
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("[services/listings] Failed to delete listing:", error)
+    return { error: "Gabim gjatë fshirjes së listimit. Ju lutemi provoni përsëri." }
   }
 }

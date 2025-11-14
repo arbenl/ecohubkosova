@@ -1,5 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { and, desc, eq, ilike, or } from "drizzle-orm"
+import { db } from "@/lib/drizzle"
+import { articles, users } from "@/db/schema"
 
 const ITEMS_PER_PAGE = 9
 
@@ -21,51 +23,55 @@ export interface ArticleRecord {
   } | null
 }
 
-export async function fetchArticlesList({
-  search = "",
-  category = "all",
-  page = 1,
-}: ArticleListOptions) {
+export async function fetchArticlesList({ search = "", category = "all", page = 1 }: ArticleListOptions) {
   noStore()
-  const supabase = createServerSupabaseClient()
 
   try {
-    const from = (page - 1) * ITEMS_PER_PAGE
-    const to = page * ITEMS_PER_PAGE - 1
-
-    let query = supabase
-      .from("artikuj")
-      .select(
-        `
-        *,
-        users (emri_i_plote)
-      `
-      )
-      .eq("eshte_publikuar", true)
-      .order("created_at", { ascending: false })
-      .range(from, to)
-
-    if (search) {
-      query = query.or(`titulli.ilike.%${search}%,permbajtja.ilike.%${search}%`)
-    }
+    const offset = (page - 1) * ITEMS_PER_PAGE
+    const filters: any[] = [eq(articles.eshte_publikuar, true)]
 
     if (category !== "all") {
-      query = query.eq("kategori", category)
+      filters.push(eq(articles.kategori, category))
     }
 
-    const { data, error } = await query
-
-    if (error) {
-      throw error
+    if (search) {
+      filters.push(or(ilike(articles.titulli, `%${search}%`), ilike(articles.permbajtja, `%${search}%`)))
     }
 
-    const list = (data ?? []) as ArticleRecord[]
+    const whereClause = filters.length === 1 ? filters[0] : filters.length > 1 ? and(...filters) : undefined
+
+    const rows = await db
+      .get()
+      .select({
+        article: articles,
+        author_name: users.emri_i_plote,
+      })
+      .from(articles)
+      .leftJoin(users, eq(articles.autori_id, users.id))
+      .where(whereClause)
+      .orderBy(desc(articles.created_at))
+      .limit(ITEMS_PER_PAGE + 1)
+      .offset(offset)
+
+    const hasMore = rows.length > ITEMS_PER_PAGE
+    const list = rows.slice(0, ITEMS_PER_PAGE).map(({ article, author_name }) => ({
+      id: article.id,
+      titulli: article.titulli,
+      permbajtja: article.permbajtja,
+      kategori: article.kategori,
+      tags: article.tags?.length ? article.tags : null,
+      created_at: article.created_at.toISOString(),
+      users: {
+        emri_i_plote: author_name ?? null,
+      },
+    }))
+
     return {
       data: list,
-      hasMore: list.length === ITEMS_PER_PAGE,
+      hasMore,
       error: null as string | null,
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("fetchArticlesList error:", error)
     return {
       data: [] as ArticleRecord[],
@@ -77,27 +83,37 @@ export async function fetchArticlesList({
 
 export async function fetchArticleById(id: string) {
   noStore()
-  const supabase = createServerSupabaseClient()
 
   try {
-    const { data, error } = await supabase
-      .from("artikuj")
-      .select(
-        `
-        *,
-        users!inner(emri_i_plote)
-      `
-      )
-      .eq("id", id)
-      .eq("eshte_publikuar", true)
-      .single()
+    const [record] = await db
+      .get()
+      .select({
+        article: articles,
+        author_name: users.emri_i_plote,
+      })
+      .from(articles)
+      .leftJoin(users, eq(articles.autori_id, users.id))
+      .where(and(eq(articles.id, id), eq(articles.eshte_publikuar, true)))
+      .limit(1)
 
-    if (error) {
-      throw error
+    if (!record) {
+      throw new Error("Artikulli nuk u gjet ose nuk është i publikuar.")
     }
 
-    return { data: data as ArticleRecord, error: null as string | null }
-  } catch (error) {
+    const articleRecord: ArticleRecord = {
+      id: record.article.id,
+      titulli: record.article.titulli,
+      permbajtja: record.article.permbajtja,
+      kategori: record.article.kategori,
+      tags: record.article.tags?.length ? record.article.tags : null,
+      created_at: record.article.created_at.toISOString(),
+      users: {
+        emri_i_plote: record.author_name ?? null,
+      },
+    }
+
+    return { data: articleRecord, error: null as string | null }
+  } catch (error: unknown) {
     console.error("fetchArticleById error:", error)
     return {
       data: null,

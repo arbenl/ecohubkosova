@@ -31,12 +31,15 @@ create policy "Users: read own or admin" on public.users
 
 create policy "Users: insert self" on public.users
   for insert
-  with check (auth.uid() = id or public.is_admin(auth.uid()));
+  with check (
+    (auth.uid() = id and roli = 'Individ')
+    or public.is_admin(auth.uid())
+  );
 
 create policy "Users: update self" on public.users
   for update
   using (auth.uid() = id)
-  with check (auth.uid() = id);
+  with check (auth.uid() = id and roli = 'Individ');
 
 create policy "Users: admins manage" on public.users
   for all
@@ -66,7 +69,7 @@ create policy "Organizations: members view" on public.organizations
 
 create policy "Organizations: insert by authenticated" on public.organizations
   for insert
-  with check (auth.uid() is not null);
+  with check (auth.uid() is not null and coalesce(eshte_aprovuar, false) = false);
 
 create policy "Organizations: admin manage" on public.organizations
   for all
@@ -81,9 +84,12 @@ create policy "Org members: select" on public.organization_members
   for select
   using (user_id = auth.uid() or public.is_admin(auth.uid()));
 
-create policy "Org members: insert self" on public.organization_members
+create policy "Org members: insert by member or admin" on public.organization_members
   for insert
-  with check (user_id = auth.uid() or public.is_admin(auth.uid()));
+  with check (
+    (user_id = auth.uid() and coalesce(eshte_aprovuar, false) = false)
+    or public.is_admin(auth.uid())
+  );
 
 create policy "Org members: admin manage" on public.organization_members
   for all
@@ -120,7 +126,7 @@ create policy "Listings: view approved or owner" on public.tregu_listime
 
 create policy "Listings: insert by owner" on public.tregu_listime
   for insert
-  with check (created_by_user_id = auth.uid());
+  with check (created_by_user_id = auth.uid() and coalesce(eshte_aprovuar, false) = false);
 
 create policy "Listings: admin manage" on public.tregu_listime
   for all

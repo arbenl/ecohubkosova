@@ -18,7 +18,7 @@ EcoHub Kosova is a Next.js App Router project that powers a circular-economy por
 pnpm install
 ```
 
-3. Copy `.env.example` to `.env.local` (or create it) and fill in the Supabase keys and any other secrets the app expects (`NEXT_PUBLIC_SUPABASE_*`, `SUPABASE_SERVICE_ROLE_KEY`, and `SUPABASE_DB_URL` for Drizzle).
+3. Copy `.env.example` to `.env.local` (or create it) and fill in the Supabase keys and any other secrets the app expects (`NEXT_PUBLIC_SUPABASE_*`, `SUPABASE_SERVICE_ROLE_KEY`, and `SUPABASE_DB_URL` for Drizzle). If you load remote images (e.g., Supabase Storage, partner CDNs), list their hostnames in `NEXT_PUBLIC_ALLOWED_IMAGE_HOSTS` (comma separated) so Next.js only serves optimized assets from approved origins.
 4. Start the dev server:
 
 ```bash

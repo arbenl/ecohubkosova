@@ -2,8 +2,9 @@
 
 import { createServerActionSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 import { registrationSchema } from "@/validation/auth"
+import { db } from "@/lib/drizzle"
+import { organizationMembers, organizations, users } from "@/db/schema"
 
 type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani"
 
@@ -58,47 +59,46 @@ emri_i_plote: payload.emri_i_plote,
 
     const userId = userData.user.id
 
-    // 2. Insert user profile into the 'public.users' table
-    const { error: profileError } = await supabase.from("users").insert({
-      id: userId,
-      emri_i_plote: payload.emri_i_plote,
-      email: payload.email,
-      vendndodhja: payload.vendndodhja,
-      roli: "Individ", // All base users are "Individ" in public.users
-      eshte_aprovuar: payload.roli === "Individ", // Individuals approved by default
-    })
-
-    if (profileError && profileError.code !== "23505") throw profileError
-
-    // 3. If the user registered as an organization, insert into 'public.organizations'
-    if (payload.roli !== "Individ") {
-      const { data: orgData, error: orgError } = await supabase
-        .from("organizations")
-        .insert({
-          emri: payload.emri_organizates!,
-          pershkrimi: payload.pershkrimi_organizates!,
-          interesi_primar: payload.interesi_primar!,
-          person_kontakti: payload.person_kontakti!,
-          email_kontakti: payload.email_kontakti!,
+    await db.get().transaction(async (tx) => {
+      await tx
+        .insert(users)
+        .values({
+          id: userId,
+          emri_i_plote: payload.emri_i_plote,
+          email: payload.email,
           vendndodhja: payload.vendndodhja,
-          lloji: payload.roli,
-          eshte_aprovuar: false, // Organizations always require approval
+          roli: "Individ",
+          eshte_aprovuar: payload.roli === "Individ",
         })
-        .select()
-        .single()
+        .onConflictDoNothing({ target: users.id })
 
-      if (orgError) throw orgError
+      if (payload.roli !== "Individ") {
+        const [organization] = await tx
+          .insert(organizations)
+          .values({
+            emri: payload.emri_organizates!,
+            pershkrimi: payload.pershkrimi_organizates!,
+            interesi_primar: payload.interesi_primar!,
+            person_kontakti: payload.person_kontakti!,
+            email_kontakti: payload.email_kontakti!,
+            vendndodhja: payload.vendndodhja,
+            lloji: payload.roli,
+            eshte_aprovuar: false,
+          })
+          .returning({ id: organizations.id })
 
-      // Link the newly registered user as a member of the organization
-      const { error: memberError } = await supabase.from("organization_members").insert({
-        organization_id: orgData.id,
-        user_id: userId,
-        roli_ne_organizate: "themelues",
-        eshte_aprovuar: true, // Founder is automatically approved as a member
-      })
+        if (!organization?.id) {
+          throw new Error("Nuk u arrit të krijohet organizata.")
+        }
 
-      if (memberError) throw memberError
-    }
+        await tx.insert(organizationMembers).values({
+          organization_id: organization.id,
+          user_id: userId,
+          roli_ne_organizate: "themelues",
+          eshte_aprovuar: true,
+        })
+      }
+    })
 
     // Revalidate paths that might display user/organization data
     revalidatePath("/dashboard")
