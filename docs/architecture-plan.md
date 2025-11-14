@@ -41,7 +41,7 @@ This document tracks the restructuring blueprint we agreed to while preparing Ec
 
 ## Next Priorities
 
-1. Document and enforce the new `src/**`-only layout across generators (shadcn config, new modules, docs) so future code never drifts back to the root.
+1. ✅ Document and enforce the new `src/**`-only layout across generators (shadcn config, new modules, docs) so future code never drifts back to the root.
 2. Re-enable Playwright and introduce Vitest + React Testing Library so unit/component suites run locally and in CI.
 3. Publish the service layer via typed route handlers / SDK endpoints for React Native and other consumers once the above refactors land.
 4. Investigate and harden the lingering cross-session sign-out issue once the above foundational work is complete.
