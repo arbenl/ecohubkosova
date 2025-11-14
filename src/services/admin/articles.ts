@@ -44,13 +44,18 @@ async function fetchAdminArticlesViaSupabase() {
     return { data: null, error: toError(error) }
   }
 
-  const serialized =
-    ((data ?? []).map((article: Record<string, any>) => ({
-      ...article,
-      tags: article.tags ?? null,
-      created_at: formatTimestamp(article.created_at) ?? "",
-      updated_at: formatTimestamp(article.updated_at),
-    })) ?? []) as AdminArticle[]
+  const serialized: AdminArticle[] = (data ?? []).map((article: Record<string, any>) => ({
+    id: article.id,
+    titulli: article.titulli,
+    permbajtja: article.permbajtja,
+    autori_id: article.autori_id,
+    eshte_publikuar: article.eshte_publikuar,
+    kategori: article.kategori,
+    tags: Array.isArray(article.tags) ? article.tags : null,
+    foto_kryesore: article.foto_kryesore ?? null,
+    created_at: formatTimestamp(article.created_at) ?? new Date().toISOString(),
+    updated_at: formatTimestamp(article.updated_at),
+  }))
 
   return { data: serialized, error: null }
 }
