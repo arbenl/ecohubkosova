@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { deleteOrganizationMember, updateOrganizationMember, toggleOrganizationMemberApproval } from "./actions" // Import Server Actions
+import { adminOrganizationMemberUpdateSchema } from "@/validation/admin"
 
 interface OrganizationMember {
   id: string
@@ -124,14 +125,20 @@ export default function OrganizationMembersClientPage({ initialMembers }: Organi
                   eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
                 }
 
-                const result = await updateOrganizationMember(editingMember.id, updatedData)
+                const parsed = adminOrganizationMemberUpdateSchema.safeParse(updatedData)
+                if (!parsed.success) {
+                  alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
+                  return
+                }
+
+                const result = await updateOrganizationMember(editingMember.id, parsed.data)
 
                 if (result.error) {
                   alert(result.error)
                 } else {
                   setMembers(
                     members.map((m) =>
-                      m.id === editingMember.id ? { ...m, ...updatedData } : m
+                      m.id === editingMember.id ? { ...m, ...parsed.data } : m
                     )
                   )
                   setEditingMember(null)

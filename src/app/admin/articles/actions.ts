@@ -1,51 +1,30 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
+import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { requireAdminRole } from "@/lib/auth/roles"
+import {
+  deleteArticleRecord,
+  fetchAdminArticles,
+  insertArticleRecord,
+  updateArticleRecord,
+  type AdminArticle,
+  type AdminArticleCreateInput,
+  type AdminArticleUpdateInput,
+} from "@/services/admin/articles"
+import { adminArticleCreateSchema, adminArticleUpdateSchema } from "@/validation/admin"
 
-interface Article {
-  id: string
-  titulli: string
-  permbajtja: string
-  autori_id: string
-  eshte_publikuar: boolean
-  kategori: string
-  tags: string[] | null
-  foto_kryesore: string | null
-  created_at: string
-  updated_at: string | null
-}
-
-interface ArticleCreateData {
-  titulli: string
-  permbajtja: string
-  kategori: string
-  eshte_publikuar: boolean
-  tags: string[] | null
-  foto_kryesore: string | null
-}
-
-interface ArticleUpdateData {
-  titulli: string
-  permbajtja: string
-  kategori: string
-  eshte_publikuar: boolean
-  tags: string[] | null
-  foto_kryesore: string | null
-  updated_at: string
-}
+type ArticleCreateData = AdminArticleCreateInput
+type ArticleUpdateData = AdminArticleUpdateInput
 
 type GetArticlesResult = {
-  data: Article[] | null
+  data: AdminArticle[] | null
   error: string | null
 }
 
 export async function getArticles(): Promise<GetArticlesResult> {
-  const supabase = createServerSupabaseClient()
-
   try {
-    const { data, error } = await supabase.from("artikuj").select("*")
+    const { data, error } = await fetchAdminArticles()
 
     if (error) {
       console.error("Error fetching articles:", error)
@@ -66,20 +45,15 @@ export async function createArticle(formData: ArticleCreateData) {
   const supabase = createRouteHandlerSupabaseClient()
   const { user } = await requireAdminRole(supabase)
 
+  const parsed = adminArticleCreateSchema.safeParse(formData)
+  if (!parsed.success) {
+    const message =
+      parsed.error.issues[0]?.message || "Të dhënat e artikullit nuk janë të vlefshme."
+    return { error: message }
+  }
+
   try {
-    const { error } = await supabase.from("artikuj").insert([
-      {
-        titulli: formData.titulli,
-        permbajtja: formData.permbajtja,
-        kategori: formData.kategori,
-        eshte_publikuar: formData.eshte_publikuar,
-        tags: formData.tags,
-        foto_kryesore: formData.foto_kryesore,
-        autori_id: user.id,
-        created_at: new Date().toISOString(),
-        updated_at: null,
-      },
-    ])
+    const { error } = await insertArticleRecord(supabase, user.id, parsed.data)
 
     if (error) {
       console.error("Error creating article:", error)
@@ -99,7 +73,7 @@ export async function deleteArticle(articleId: string) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await supabase.from("artikuj").delete().eq("id", articleId)
+    const { error } = await deleteArticleRecord(supabase, articleId)
 
     if (error) {
       console.error("Error deleting article:", error)
@@ -118,19 +92,15 @@ export async function updateArticle(articleId: string, formData: ArticleUpdateDa
   const supabase = createRouteHandlerSupabaseClient()
   await requireAdminRole(supabase)
 
+  const parsed = adminArticleUpdateSchema.safeParse(formData)
+  if (!parsed.success) {
+    const message =
+      parsed.error.issues[0]?.message || "Të dhënat e artikullit nuk janë të vlefshme."
+    return { error: message }
+  }
+
   try {
-    const { error } = await supabase
-      .from("artikuj")
-      .update({
-        titulli: formData.titulli,
-        permbajtja: formData.permbajtja,
-        kategori: formData.kategori,
-        eshte_publikuar: formData.eshte_publikuar,
-        tags: formData.tags,
-        foto_kryesore: formData.foto_kryesore,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", articleId)
+    const { error } = await updateArticleRecord(supabase, articleId, parsed.data)
 
     if (error) {
       console.error("Error updating article:", error)

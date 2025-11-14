@@ -1,45 +1,27 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
+import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { requireAdminRole } from "@/lib/auth/roles"
+import {
+  deleteOrganizationRecord,
+  fetchAdminOrganizations,
+  updateOrganizationRecord,
+  type AdminOrganization,
+  type AdminOrganizationUpdateInput,
+} from "@/services/admin/organizations"
+import { adminOrganizationUpdateSchema } from "@/validation/admin"
 
-interface Organization {
-  id: string
-  emri: string
-  pershkrimi: string
-  interesi_primar: string
-  person_kontakti: string
-  email_kontakti: string
-  vendndodhja: string
-  lloji: string
-  eshte_aprovuar: boolean
-  created_at: string
-  updated_at: string | null
-}
-
-interface OrganizationUpdateData {
-  emri: string
-  pershkrimi: string
-  interesi_primar: string
-  person_kontakti: string
-  email_kontakti: string
-  vendndodhja: string
-  lloji: string
-  eshte_aprovuar: boolean
-  updated_at: string
-}
+type OrganizationUpdateData = AdminOrganizationUpdateInput
 
 type GetOrganizationsResult = {
-  data: Organization[] | null
+  data: AdminOrganization[] | null
   error: string | null
 }
 
 export async function getOrganizations(): Promise<GetOrganizationsResult> {
-  const supabase = createServerSupabaseClient()
-
   try {
-    const { data, error } = await supabase.from("organizations").select("*")
+    const { data, error } = await fetchAdminOrganizations()
 
     if (error) {
       console.error("Error fetching organizations:", error)
@@ -61,7 +43,7 @@ export async function deleteOrganization(organizationId: string) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await supabase.from("organizations").delete().eq("id", organizationId)
+    const { error } = await deleteOrganizationRecord(supabase, organizationId)
 
     if (error) {
       console.error("Error deleting organization:", error)
@@ -80,21 +62,15 @@ export async function updateOrganization(organizationId: string, formData: Organ
   const supabase = createRouteHandlerSupabaseClient()
   await requireAdminRole(supabase)
 
+  const parsed = adminOrganizationUpdateSchema.safeParse(formData)
+  if (!parsed.success) {
+    const message =
+      parsed.error.issues[0]?.message || "Të dhënat e organizatës nuk janë të vlefshme."
+    return { error: message }
+  }
+
   try {
-    const { error } = await supabase
-      .from("organizations")
-      .update({
-        emri: formData.emri,
-        pershkrimi: formData.pershkrimi,
-        interesi_primar: formData.interesi_primar,
-        person_kontakti: formData.person_kontakti,
-        email_kontakti: formData.email_kontakti,
-        vendndodhja: formData.vendndodhja,
-        lloji: formData.lloji,
-        eshte_aprovuar: formData.eshte_aprovuar,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", organizationId)
+    const { error } = await updateOrganizationRecord(supabase, organizationId, parsed.data)
 
     if (error) {
       console.error("Error updating organization:", error)

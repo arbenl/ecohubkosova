@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { deleteListing, updateListing } from "./actions" // Import Server Actions
+import { adminListingUpdateSchema } from "@/validation/admin"
 
 interface Listing {
   id: string
@@ -96,25 +97,37 @@ export default function ListingsClientPage({ initialListings }: ListingsClientPa
                 if (!editingListing) return
 
                 const formData = new FormData(e.currentTarget)
+                const cmimiField = formData.get("cmimi")
+                const cmimiValue =
+                  typeof cmimiField === "string" && cmimiField.trim().length
+                    ? Number.parseFloat(cmimiField)
+                    : Number.NaN
                 const updatedData = {
                   titulli: formData.get("titulli") as string,
                   pershkrimi: formData.get("pershkrimi") as string,
                   kategori: formData.get("kategori") as string,
-                  cmimi: Number.parseFloat(formData.get("cmimi") as string),
+                  cmimi: cmimiValue,
                   njesia: formData.get("njesia") as string,
                   vendndodhja: formData.get("vendndodhja") as string,
                   sasia: formData.get("sasia") as string,
                   lloji_listimit: formData.get("lloji_listimit") as string,
                   eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
-                  updated_at: new Date().toISOString(),
                 }
 
-                const result = await updateListing(editingListing.id, updatedData)
+                const parsed = adminListingUpdateSchema.safeParse(updatedData)
+                if (!parsed.success) {
+                  alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
+                  return
+                }
+
+                const result = await updateListing(editingListing.id, parsed.data)
 
                 if (result.error) {
                   alert(result.error)
                 } else {
-                  setListings(listings.map(l => l.id === editingListing.id ? { ...l, ...updatedData } : l));
+                  setListings(
+                    listings.map((l) => (l.id === editingListing.id ? { ...l, ...parsed.data } : l))
+                  )
                   setEditingListing(null)
                   alert("Listimi u përditësua me sukses!")
                 }

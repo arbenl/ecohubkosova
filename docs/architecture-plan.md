@@ -13,12 +13,11 @@ This document tracks the restructuring blueprint we agreed to while preparing Ec
 
 - ✅ Drejtoria, Qendra e Dijes, Tregu, and dashboard stats now fetch strictly on the server via `src/services/*`.
 - ✅ Client shells (e.g., `app/drejtoria/drejtoria-client-page.tsx`) only handle filters/pagination and mutate URL state.
-- 🔜 Extract remaining inline Supabase logic (profile forms, admin CRUD, auth provider) into those same service modules so React Native can import them.
+- ✅ Profile + admin CRUD flows now route through `src/services` (including the new `src/services/admin/*` helpers), so server actions stay thin and React Native can reuse the same logic.
 
 ## 3. Shared Validation
 
-- ✅ Zod schemas now back all auth, listing creation, and profile/organization updates (`src/validation/auth.ts`, `src/validation/listings.ts`, `src/validation/profile.ts`), and the corresponding server actions consume the sanitized payloads.
-- 🔜 Extend the pattern to the remaining admin CRUD flows and their UI so every mutation shares the same schema across web and RN.
+- ✅ Zod schemas now back all auth, listing creation, profile/organization updates, and every admin CRUD screen (`src/validation/{auth,listings,profile,admin}.ts`); server actions and client forms both reuse the sanitized payloads.
 
 ## 4. Testing & CI
 
@@ -41,9 +40,8 @@ This document tracks the restructuring blueprint we agreed to while preparing Ec
 
 ## Next Priorities
 
-1. Finish extracting profile/admin CRUD logic into service modules and expose them through server actions only.
-2. Extend the new Zod schema coverage to the remaining admin operations and plug them into both server actions and client forms.
-3. Adopt a proper migration tool (e.g., Supabase CLI/Drizzle) to replace the manual SQL scripts and keep schema history reviewable.
-4. Document and enforce the new `src/**`-only layout across generators (shadcn config, new modules, docs) so future code never drifts back to the root.
-5. Re-enable Playwright and introduce Vitest + React Testing Library so unit/component suites run locally and in CI.
-6. Publish the service layer via typed route handlers / SDK endpoints for React Native and other consumers once the above refactors land.
+1. Adopt a proper migration tool (e.g., Supabase CLI/Drizzle) to replace the manual SQL scripts and keep schema history reviewable.
+2. Document and enforce the new `src/**`-only layout across generators (shadcn config, new modules, docs) so future code never drifts back to the root.
+3. Re-enable Playwright and introduce Vitest + React Testing Library so unit/component suites run locally and in CI.
+4. Publish the service layer via typed route handlers / SDK endpoints for React Native and other consumers once the above refactors land.
+5. Investigate and harden the lingering cross-session sign-out issue once the above foundational work is complete.

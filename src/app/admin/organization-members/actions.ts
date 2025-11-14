@@ -1,43 +1,28 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
+import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { requireAdminRole } from "@/lib/auth/roles"
+import {
+  deleteOrganizationMemberRecord,
+  fetchAdminOrganizationMembers,
+  toggleOrganizationMemberApprovalRecord,
+  updateOrganizationMemberRecord,
+  type AdminOrganizationMemberUpdateInput,
+  type AdminOrganizationMemberWithDetails,
+} from "@/services/admin/organization-members"
+import { adminOrganizationMemberUpdateSchema } from "@/validation/admin"
 
-interface OrganizationMember {
-  id: string
-  organization_id: string
-  user_id: string
-  roli_ne_organizate: string
-  eshte_aprovuar: boolean
-  created_at: string
-}
-
-interface OrganizationMemberWithDetails extends OrganizationMember {
-  organization_name?: string
-  user_name?: string
-  user_email?: string
-}
-
-interface OrganizationMemberUpdateData {
-  roli_ne_organizate: string
-  eshte_aprovuar: boolean
-}
+type OrganizationMemberUpdateData = AdminOrganizationMemberUpdateInput
 
 type GetOrganizationMembersResult = {
-  data: OrganizationMemberWithDetails[] | null
+  data: AdminOrganizationMemberWithDetails[] | null
   error: string | null
 }
 
 export async function getOrganizationMembers(): Promise<GetOrganizationMembersResult> {
-  const supabase = createServerSupabaseClient()
-
   try {
-    const { data, error } = await supabase.from("organization_members").select(`
-          *,
-          organizations!inner(emri),
-          users!inner(emri_i_plote, email)
-        `)
+    const { data, error } = await fetchAdminOrganizationMembers()
 
     if (error) {
       console.error("Error fetching organization members:", error)
@@ -68,7 +53,7 @@ export async function deleteOrganizationMember(memberId: string) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await supabase.from("organization_members").delete().eq("id", memberId)
+    const { error } = await deleteOrganizationMemberRecord(supabase, memberId)
 
     if (error) {
       console.error("Error deleting organization member:", error)
@@ -87,14 +72,15 @@ export async function updateOrganizationMember(memberId: string, formData: Organ
   const supabase = createRouteHandlerSupabaseClient()
   await requireAdminRole(supabase)
 
+  const parsed = adminOrganizationMemberUpdateSchema.safeParse(formData)
+  if (!parsed.success) {
+    const message =
+      parsed.error.issues[0]?.message || "Të dhënat e anëtarit të organizatës nuk janë të vlefshme."
+    return { error: message }
+  }
+
   try {
-    const { error } = await supabase
-      .from("organization_members")
-      .update({
-        roli_ne_organizate: formData.roli_ne_organizate,
-        eshte_aprovuar: formData.eshte_aprovuar,
-      })
-      .eq("id", memberId)
+    const { error } = await updateOrganizationMemberRecord(supabase, memberId, parsed.data)
 
     if (error) {
       console.error("Error updating organization member:", error)
@@ -114,10 +100,7 @@ export async function toggleOrganizationMemberApproval(memberId: string, current
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await supabase
-      .from("organization_members")
-      .update({ eshte_aprovuar: !currentStatus })
-      .eq("id", memberId)
+    const { error } = await toggleOrganizationMemberApprovalRecord(supabase, memberId, currentStatus)
 
     if (error) {
       console.error("Error toggling approval status:", error)
