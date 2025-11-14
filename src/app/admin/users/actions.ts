@@ -1,39 +1,26 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
+import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { requireAdminRole } from "@/lib/auth/roles"
+import {
+  deleteUserRecord,
+  fetchAdminUsers,
+  updateUserRecord,
+  type AdminUser,
+  type AdminUserUpdateInput,
+} from "@/services/admin/users"
 
-interface User {
-  id: string
-  emri_i_plote: string
-  email: string
-  vendndodhja: string
-  roli: string
-  eshte_aprovuar: boolean
-  created_at: string
-  updated_at: string | null
-}
-
-interface UserUpdateData {
-  emri_i_plote: string
-  email: string
-  vendndodhja: string
-  roli: string
-  eshte_aprovuar: boolean
-  updated_at: string
-}
+type UserUpdateData = AdminUserUpdateInput
 
 type GetUsersResult = {
-  data: User[] | null
+  data: AdminUser[] | null
   error: string | null
 }
 
 export async function getUsers(): Promise<GetUsersResult> {
-  const supabase = createServerSupabaseClient()
-
   try {
-    const { data, error } = await supabase.from("users").select("*")
+    const { data, error } = await fetchAdminUsers()
 
     if (error) {
       console.error("Error fetching users:", error)
@@ -55,7 +42,7 @@ export async function deleteUser(userId: string) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await supabase.from("users").delete().eq("id", userId)
+    const { error } = await deleteUserRecord(supabase, userId)
 
     if (error) {
       console.error("Error deleting user:", error)
@@ -75,17 +62,7 @@ export async function updateUser(userId: string, formData: UserUpdateData) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await supabase
-      .from("users")
-      .update({
-        emri_i_plote: formData.emri_i_plote,
-        email: formData.email,
-        vendndodhja: formData.vendndodhja,
-        roli: formData.roli,
-        eshte_aprovuar: formData.eshte_aprovuar,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", userId)
+    const { error } = await updateUserRecord(supabase, userId, formData)
 
     if (error) {
       console.error("Error updating user:", error)

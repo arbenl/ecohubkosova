@@ -1,49 +1,26 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient, createServerSupabaseClient } from "@/lib/supabase/server"
+import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { requireAdminRole } from "@/lib/auth/roles"
+import {
+  deleteListingRecord,
+  fetchAdminListings,
+  updateListingRecord,
+  type AdminListing,
+  type AdminListingUpdateInput,
+} from "@/services/admin/listings"
 
-interface Listing {
-  id: string
-  created_by_user_id: string
-  organization_id: string | null
-  titulli: string
-  pershkrimi: string
-  kategori: string
-  cmimi: number
-  njesia: string
-  vendndodhja: string
-  sasia: string
-  lloji_listimit: string
-  eshte_aprovuar: boolean
-  created_at: string
-  updated_at: string | null
-}
-
-interface ListingUpdateData {
-  titulli: string
-  pershkrimi: string
-  kategori: string
-  cmimi: number
-  njesia: string
-  vendndodhja: string
-  sasia: string
-  lloji_listimit: string
-  eshte_aprovuar: boolean
-  updated_at: string
-}
+type ListingUpdateData = AdminListingUpdateInput
 
 type GetListingsResult = {
-  data: Listing[] | null
+  data: AdminListing[] | null
   error: string | null
 }
 
 export async function getListings(): Promise<GetListingsResult> {
-  const supabase = createServerSupabaseClient()
-
   try {
-    const { data, error } = await supabase.from("tregu_listime").select("*")
+    const { data, error } = await fetchAdminListings()
 
     if (error) {
       console.error("Error fetching listings:", error)
@@ -65,7 +42,7 @@ export async function deleteListing(listingId: string) {
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await supabase.from("tregu_listime").delete().eq("id", listingId)
+    const { error } = await deleteListingRecord(supabase, listingId)
 
     if (error) {
       console.error("Error deleting listing:", error)
@@ -85,21 +62,7 @@ export async function updateListing(listingId: string, formData: ListingUpdateDa
   await requireAdminRole(supabase)
 
   try {
-    const { error } = await supabase
-      .from("tregu_listime")
-      .update({
-        titulli: formData.titulli,
-        pershkrimi: formData.pershkrimi,
-        kategori: formData.kategori,
-        cmimi: formData.cmimi,
-        njesia: formData.njesia,
-        vendndodhja: formData.vendndodhja,
-        sasia: formData.sasia,
-        lloji_listimit: formData.lloji_listimit,
-        eshte_aprovuar: formData.eshte_aprovuar,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", listingId)
+    const { error } = await updateListingRecord(supabase, listingId, formData)
 
     if (error) {
       console.error("Error updating listing:", error)
