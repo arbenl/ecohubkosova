@@ -50,7 +50,7 @@ This document tracks the restructuring blueprint we agreed to while preparing Ec
 ## Upcoming Enhancements (from latest architecture audit)
 
 1. Add a `pnpm db:sync` script that chains `supabase db diff/push` with `pnpm drizzle:generate` so schema changes always refresh Drizzle types, and integrate it into CI.
-2. Introduce Prettier (script + optional pre-commit hook) to keep formatting consistent across contributors.
+2. ✅ Introduce Prettier (script + optional pre-commit hook) to keep formatting consistent across contributors (`pnpm format`, `pnpm format:check`).
 3. Expand Vitest coverage (ListingCard, tregu client flows, server actions) and keep Playwright scenarios up to date.
 4. Evaluate TanStack Query + Zustand for complex client/server state on pages like `tregu-client`, reducing ad-hoc state wiring.
 5. Add monitoring/observability (e.g., Sentry) before production launch.

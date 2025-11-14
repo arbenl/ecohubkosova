@@ -104,6 +104,15 @@ All responses are JSON in the shape `{ data: [...] }` or `{ error: string }`, an
 
 Playwright artifacts (HTML report, traces) are written to the default `playwright-report/` folder, and Vitest coverage is available under `coverage/` when needed.
 
+## Formatting
+
+Prettier enforces a consistent style across contributors:
+
+- `pnpm format` – formats the entire repository (honoring `.prettierignore`).
+- `pnpm format:check` – CI-friendly check.
+
+Consider wiring `pnpm format` into a pre-commit hook (e.g., via Husky) if you prefer automatic formatting before pushes.
+
 ## Roadmap / Next Steps
 
 See `docs/roadmap.md` and `docs/next-session-specs.md` for the current plan. Highlights include:
