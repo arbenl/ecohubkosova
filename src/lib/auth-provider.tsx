@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useContext, createContext, useMemo, u
 import { useRouter } from "next/navigation"
 import type { Session, User, AuthChangeEvent, AuthResponse, SignInWithPasswordCredentials } from "@supabase/supabase-js"
 import { createClientSupabaseClient } from "@/lib/supabase"
+import { createSignOutHandler } from "@/lib/auth/signout-handler"
 import type { UserProfile } from "@/types"
 
 interface AuthContextType {
@@ -41,68 +42,32 @@ export function AuthProvider({
   const supabase = useMemo(() => createClientSupabaseClient(), [])
   const signOutInFlightRef = useRef(false)
 
-  const resetAuthState = () => {
+  const resetAuthState = useCallback(() => {
     setUser(null)
     setSession(null)
     setUserProfile(null)
     setIsAdmin(false)
     setIsLoading(false)
-  }
+  }, [])
 
-  const fetchUserProfile = useCallback(
-    async (userId: string): Promise<UserProfile | null> => {
-      try {
-        const { data, error } = await supabase
-          .from("users")
-          .select("id, emri_i_plote, email, vendndodhja, roli, eshte_aprovuar, created_at")
-          .eq("id", userId)
-          .limit(1)
-          .maybeSingle()
-
-        if (error) {
-          console.error("Gabim në bazën e të dhënave:", error)
-          return null
-        }
-
-        if (!data) {
-          const { data: authUser } = await supabase.auth.getUser()
-          if (authUser.user) {
-            const newProfile: Omit<UserProfile, "created_at" | "vendndodhja"> & { vendndodhja?: string } = {
-              id: userId,
-              emri_i_plote: authUser.user.user_metadata?.full_name || authUser.user.email?.split("@")[0] || "User",
-              email: authUser.user.email || "",
-              roli: "Individ",
-              eshte_aprovuar: false,
-            }
-
-            const { data: createdProfile, error: createError } = await supabase
-              .from("users")
-              .insert(newProfile)
-              .select("id, emri_i_plote, email, vendndodhja, roli, eshte_aprovuar, created_at")
-              .single()
-
-            if (createError) {
-              console.error("Gabim në krijimin e profilit:", createError)
-              return null
-            }
-
-            return createdProfile
-          }
-          return null
-        }
-
-        return data
-      } catch (error) {
-        console.error("Dështoi marrja e profilit:", error)
-        return null
+  const fetchUserProfile = useCallback(async (): Promise<UserProfile | null> => {
+    try {
+      const response = await fetch("/api/auth/profile", { cache: "no-store" })
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null)
+        throw new Error(payload?.error || "Nuk u gjet profili i përdoruesit.")
       }
-    },
-    [supabase]
-  )
+      const payload = (await response.json()) as { profile: UserProfile | null }
+      return payload.profile
+    } catch (error) {
+      console.error("Dështoi marrja e profilit:", error)
+      return null
+    }
+  }, [])
 
   const refreshUserProfile = async () => {
     if (user) {
-      const profile = await fetchUserProfile(user.id)
+      const profile = await fetchUserProfile()
       setUserProfile(profile)
       setIsAdmin(profile?.roli === "Admin")
     }
@@ -118,7 +83,7 @@ export function AuthProvider({
       setUser(nextUser)
 
       try {
-        const profile = await fetchUserProfile(nextUser.id)
+        const profile = await fetchUserProfile()
         setUserProfile(profile)
         setIsAdmin(profile?.roli === "Admin")
       } catch (error) {
@@ -127,7 +92,7 @@ export function AuthProvider({
         setIsAdmin(false)
       }
     },
-    [fetchUserProfile]
+    [fetchUserProfile, resetAuthState]
   )
 
   useEffect(() => {
@@ -212,42 +177,17 @@ export function AuthProvider({
     }
   }, [hydrateUser, supabase])
 
-  const signOut = async () => {
-    if (signOutInFlightRef.current) {
-      return
-    }
-    signOutInFlightRef.current = true
-    setSignOutPending(true)
-
-    // Reset local auth state immediately so the UI reflects the sign-out intent.
-    resetAuthState()
-    router.replace("/auth/kycu")
-    router.refresh()
-
-    try {
-      await supabase.auth.signOut({ scope: "local" })
-    } catch (localError) {
-      console.error("Local sign-out cleanup error:", localError)
-    }
-
-    try {
-      const response = await fetch("/api/auth/signout", {
-        method: "POST",
-        cache: "no-store",
-        credentials: "include",
-      })
-
-      if (!response.ok) {
-        const payload = await response.json().catch(() => null)
-        throw new Error(payload?.error ?? "Nuk u arrit dalja nga llogaria.")
-      }
-    } catch (cookieError) {
-      console.error("Sign-out error:", cookieError)
-    } finally {
-      signOutInFlightRef.current = false
-      setSignOutPending(false)
-    }
-  }
+  const signOut = useMemo(
+    () =>
+      createSignOutHandler({
+        supabase,
+        router,
+        resetAuthState,
+        signOutInFlightRef,
+        setSignOutPending,
+      }),
+    [supabase, router, resetAuthState, setSignOutPending]
+  )
 
   const signInWithPassword = async (credentials: SignInWithPasswordCredentials) => {
     try {

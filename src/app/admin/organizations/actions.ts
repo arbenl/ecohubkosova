@@ -1,6 +1,5 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { requireAdminRole } from "@/lib/auth/roles"
 import {
@@ -39,8 +38,7 @@ export async function getOrganizations(): Promise<GetOrganizationsResult> {
 }
 
 export async function deleteOrganization(organizationId: string) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   try {
     const { error } = await deleteOrganizationRecord(organizationId)
@@ -59,8 +57,7 @@ export async function deleteOrganization(organizationId: string) {
 }
 
 export async function updateOrganization(organizationId: string, formData: OrganizationUpdateData) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   const parsed = adminOrganizationUpdateSchema.safeParse(formData)
   if (!parsed.success) {

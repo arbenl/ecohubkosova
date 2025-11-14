@@ -1,6 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
-import type { SupabaseClient } from "@supabase/supabase-js"
+import type { PostgrestSingleResponse, SupabaseClient } from "@supabase/supabase-js"
 import type { OrganizationProfileUpdateInput, UserProfileUpdateInput } from "@/validation/profile"
 
 export type ProfileUser = {
@@ -25,6 +25,15 @@ export type ProfileOrganization = {
   eshte_aprovuar: boolean
 }
 
+type AnySupabaseClient = SupabaseClient<any, any, any>
+
+async function selectUserProfileById(
+  supabase: AnySupabaseClient,
+  userId: string
+): Promise<PostgrestSingleResponse<ProfileUser>> {
+  return supabase.from("users").select("*").eq("id", userId).single<ProfileUser>()
+}
+
 export async function fetchCurrentUserProfile() {
   noStore()
   const supabase = createServerSupabaseClient()
@@ -39,11 +48,7 @@ export async function fetchCurrentUserProfile() {
   }
 
   try {
-    const { data: userProfile, error: userError } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", user.id)
-      .single()
+    const { data: userProfile, error: userError } = await selectUserProfileById(supabase, user.id)
 
     if (userError || !userProfile) {
       throw userError ?? new Error("Profili i përdoruesit nuk u gjet.")
@@ -84,7 +89,26 @@ export async function fetchCurrentUserProfile() {
   }
 }
 
-type AnySupabaseClient = SupabaseClient<any, any, any>
+export async function fetchUserProfileById(userId: string) {
+  noStore()
+  const supabase = createServerSupabaseClient()
+
+  try {
+    const { data, error } = await selectUserProfileById(supabase, userId)
+
+    if (error || !data) {
+      throw error ?? new Error("Profili i përdoruesit nuk ekziston.")
+    }
+
+    return { userProfile: data, error: null as string | null }
+  } catch (error) {
+    console.error("fetchUserProfileById error:", error)
+    return {
+      userProfile: null,
+      error: error instanceof Error ? error.message : "Gabim gjatë ngarkimit të profilit të përdoruesit.",
+    }
+  }
+}
 
 export async function updateUserProfileRecord(
   supabase: AnySupabaseClient,

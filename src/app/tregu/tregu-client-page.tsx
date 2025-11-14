@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState, useTransition, type FormEvent } from "react"
+import { useEffect, useMemo, useState, useTransition, type FormEvent, type KeyboardEvent } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -16,6 +16,9 @@ interface TreguClientPageProps {
   initialSearchQuery: string
   initialSelectedCategory: string
   initialPage: number
+  initialCondition: string
+  initialLocation: string
+  initialSortOrder: "newest" | "oldest"
   categories: string[]
 }
 
@@ -32,14 +35,18 @@ export default function TreguClientPage({
   initialSearchQuery,
   initialSelectedCategory,
   initialPage,
+  initialCondition,
+  initialLocation,
+  initialSortOrder,
   categories,
 }: TreguClientPageProps) {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
   const [selectedCategory, setSelectedCategory] = useState(initialSelectedCategory)
   const [activeTab, setActiveTab] = useState(initialTab)
-  const [sortOrder, setSortOrder] = useState("newest")
-  const [filters, setFilters] = useState({ condition: "", location: "" })
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">(initialSortOrder)
+  const [conditionFilter, setConditionFilter] = useState(initialCondition)
+  const [locationFilter, setLocationFilter] = useState(initialLocation)
   const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
@@ -54,16 +61,34 @@ export default function TreguClientPage({
     setActiveTab(initialTab)
   }, [initialTab])
 
+  useEffect(() => {
+    setConditionFilter(initialCondition)
+  }, [initialCondition])
+
+  useEffect(() => {
+    setLocationFilter(initialLocation)
+  }, [initialLocation])
+
+  useEffect(() => {
+    setSortOrder(initialSortOrder)
+  }, [initialSortOrder])
+
   const buildQuery = ({
     tab,
     category,
     search,
     page,
+    condition,
+    location,
+    sort,
   }: {
     tab: string
     category: string
     search: string
     page: number
+    condition: string
+    location: string
+    sort: "newest" | "oldest"
   }) => {
     const params = new URLSearchParams()
 
@@ -83,15 +108,40 @@ export default function TreguClientPage({
       params.set("page", String(page))
     }
 
+    if (condition.trim()) {
+      params.set("condition", condition.trim())
+    }
+
+    if (location.trim()) {
+      params.set("location", location.trim())
+    }
+
+    if (sort === "oldest") {
+      params.set("sort", sort)
+    }
+
     return params.toString()
   }
 
-  const pushQuery = (overrides?: { tab?: string; category?: string; search?: string; page?: number }) => {
+  const pushQuery = (
+    overrides?: {
+      tab?: string
+      category?: string
+      search?: string
+      page?: number
+      condition?: string
+      location?: string
+      sort?: "newest" | "oldest"
+    },
+  ) => {
     const query = buildQuery({
       tab: overrides?.tab ?? activeTab,
       category: overrides?.category ?? selectedCategory,
       search: overrides?.search ?? searchQuery,
       page: overrides?.page ?? 1,
+      condition: overrides?.condition ?? conditionFilter,
+      location: overrides?.location ?? locationFilter,
+      sort: overrides?.sort ?? sortOrder,
     })
 
     startTransition(() => {
@@ -114,35 +164,52 @@ export default function TreguClientPage({
     pushQuery({ page: 1, tab })
   }
 
+  const handleConditionChange = (value: string) => {
+    const normalized = value === "all" ? "" : value
+    setConditionFilter(normalized)
+    pushQuery({ page: 1, condition: normalized })
+  }
+
   const handlePageChange = (page: number) => {
     pushQuery({ page })
   }
 
-  const handleFilterChange = (key: "condition" | "location", value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: value }))
+  const listings = initialListings
+
+  const conditionOptions = useMemo(() => {
+    const values = new Set<string>()
+    initialListings.forEach((listing) => {
+      if (listing.gjendja) {
+        values.add(listing.gjendja)
+      }
+    })
+
+    if (conditionFilter) {
+      values.add(conditionFilter)
+    }
+
+    return Array.from(values)
+  }, [initialListings, conditionFilter])
+
+  const handleLocationInputChange = (value: string) => {
+    setLocationFilter(value)
   }
 
-  const filteredListings = useMemo(() => {
-    return initialListings
-      .filter((listing) => {
-        const matchesCondition = filters.condition ? listing.gjendja === filters.condition : true
-        const matchesLocation = filters.location
-          ? listing.vendndodhja.toLowerCase().includes(filters.location.toLowerCase())
-          : true
-        return matchesCondition && matchesLocation
-      })
-      .sort((a, b) => {
-        if (sortOrder === "oldest") {
-          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-        }
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      })
-  }, [initialListings, filters, sortOrder])
+  const applyLocationFilter = () => {
+    pushQuery({ page: 1, location: locationFilter })
+  }
 
-  const uniqueConditions = useMemo(
-    () => Array.from(new Set(initialListings.map((listing) => listing.gjendja))).filter(Boolean),
-    [initialListings],
-  )
+  const handleLocationKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault()
+      applyLocationFilter()
+    }
+  }
+
+  const handleSortChange = (value: "newest" | "oldest") => {
+    setSortOrder(value)
+    pushQuery({ page: 1, sort: value })
+  }
 
   const handleContactClick = (listing: Listing) => {
     router.push(`/tregu/${listing.id}`)
@@ -204,15 +271,15 @@ export default function TreguClientPage({
           </Select>
 
           <Select
-            onValueChange={(value) => handleFilterChange("condition", value === "all" ? "" : value)}
-            value={filters.condition || "all"}
+            onValueChange={handleConditionChange}
+            value={conditionFilter || "all"}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Gjendja" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Të gjitha gjendjet</SelectItem>
-              {uniqueConditions.map((condition) => (
+              {conditionOptions.map((condition) => (
                 <SelectItem key={condition} value={condition}>
                   {condition}
                 </SelectItem>
@@ -223,14 +290,16 @@ export default function TreguClientPage({
           <Input
             type="text"
             placeholder="Vendndodhja"
-            value={filters.location}
-            onChange={(e) => handleFilterChange("location", e.target.value)}
+            value={locationFilter}
+            onChange={(e) => handleLocationInputChange(e.target.value)}
+            onBlur={applyLocationFilter}
+            onKeyDown={handleLocationKeyDown}
             className="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
 
         <div className="flex justify-end">
-          <Select onValueChange={setSortOrder} value={sortOrder}>
+          <Select onValueChange={(value) => handleSortChange(value as "newest" | "oldest")} value={sortOrder}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Rendit sipas" />
             </SelectTrigger>
@@ -242,11 +311,11 @@ export default function TreguClientPage({
         </div>
       </div>
 
-      {filteredListings.length === 0 ? (
+      {listings.length === 0 ? (
         <p className="text-center text-gray-600 text-lg">Nuk u gjetën shpallje që përputhen me kriteret.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredListings.map((listing) => (
+          {listings.map((listing) => (
             <ListingCard key={listing.id} listing={listing} onContact={handleContactClick} />
           ))}
         </div>

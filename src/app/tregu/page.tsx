@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import TreguClientPage from "./tregu-client-page" // Will create this client component later
 import { getListingsData } from "./actions" // Import the new server action
-import { createServerSupabaseClient } from "@/lib/supabase/server" // Keep for user check
+import { getServerUser } from "@/lib/supabase/server" // Keep for user check
 
 interface TreguPageProps {
   searchParams: {
@@ -13,15 +13,15 @@ interface TreguPageProps {
     search?: string
     category?: string
     page?: string
+    condition?: string
+    location?: string
+    sort?: string
   }
 }
 
 export default async function TreguPage({ searchParams }: TreguPageProps) {
   // Fetch user securely for gating UI
-  const supabase = createServerSupabaseClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { user } = await getServerUser()
 
   const { initialListings, hasMoreInitial, error } = await getListingsData(searchParams)
 
@@ -30,6 +30,9 @@ export default async function TreguPage({ searchParams }: TreguPageProps) {
   const initialSearchQuery = searchParams.search || ""
   const initialSelectedCategory = searchParams.category || "all"
   const initialPage = Number.parseInt(searchParams.page || "1")
+  const initialCondition = searchParams.condition || ""
+  const initialLocation = searchParams.location || ""
+  const initialSortOrder = searchParams.sort === "oldest" ? "oldest" : "newest"
 
   const categories = [
     "Materiale të riciklueshme",
@@ -75,6 +78,9 @@ export default async function TreguPage({ searchParams }: TreguPageProps) {
             initialSearchQuery={initialSearchQuery}
             initialSelectedCategory={initialSelectedCategory}
             initialPage={Number.isNaN(initialPage) ? 1 : initialPage}
+            initialCondition={initialCondition}
+            initialLocation={initialLocation}
+            initialSortOrder={initialSortOrder}
             categories={categories}
           />
         </div>

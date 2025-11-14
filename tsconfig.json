@@ -27,7 +27,11 @@
       ]
     },
     "target": "ES2017",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ]
   },
   "include": [
     "next-env.d.ts",

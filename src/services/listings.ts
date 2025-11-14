@@ -9,6 +9,9 @@ export interface ListingListOptions {
   search?: string
   category?: string
   page?: number
+  condition?: string
+  location?: string
+  sort?: "newest" | "oldest"
 }
 
 export async function fetchListings({
@@ -16,6 +19,9 @@ export async function fetchListings({
   search = "",
   category = "all",
   page = 1,
+  condition = "",
+  location = "",
+  sort = "newest",
 }: ListingListOptions) {
   noStore()
   const supabase = createServerSupabaseClient()
@@ -34,7 +40,7 @@ export async function fetchListings({
       `
       )
       .eq("eshte_aprovuar", true)
-      .order("created_at", { ascending: false })
+      .order("created_at", { ascending: sort === "oldest" })
       .range(from, to)
 
     if (type !== "te-gjitha") {
@@ -47,6 +53,14 @@ export async function fetchListings({
 
     if (category !== "all") {
       query = query.eq("kategori", category)
+    }
+
+    if (condition.trim()) {
+      query = query.eq("gjendja", condition.trim())
+    }
+
+    if (location.trim()) {
+      query = query.ilike("vendndodhja", `%${location.trim()}%`)
     }
 
     const { data, error } = await query

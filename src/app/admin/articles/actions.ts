@@ -1,6 +1,5 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { requireAdminRole } from "@/lib/auth/roles"
 import {
@@ -42,8 +41,7 @@ export async function getArticles(): Promise<GetArticlesResult> {
 }
 
 export async function createArticle(formData: ArticleCreateData) {
-  const supabase = createRouteHandlerSupabaseClient()
-  const { user } = await requireAdminRole(supabase)
+  const { user } = await requireAdminRole()
 
   const parsed = adminArticleCreateSchema.safeParse(formData)
   if (!parsed.success) {
@@ -69,8 +67,7 @@ export async function createArticle(formData: ArticleCreateData) {
 }
 
 export async function deleteArticle(articleId: string) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   try {
     const { error } = await deleteArticleRecord(articleId)
@@ -89,8 +86,7 @@ export async function deleteArticle(articleId: string) {
 }
 
 export async function updateArticle(articleId: string, formData: ArticleUpdateData) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   const parsed = adminArticleUpdateSchema.safeParse(formData)
   if (!parsed.success) {

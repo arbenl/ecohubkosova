@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Calendar, MapPin, Package, Euro, User, Building } from "lucide-react"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { getServerUser } from "@/lib/supabase/server"
 import ContactListingButton from "./contact-listing-button" // Will create this client component later
 import { fetchListingById } from "@/services/listings"
 
@@ -31,10 +31,7 @@ interface Listing {
 }
 
 export default async function ListingDetailPage({ params }: { params: { id: string } }) {
-  const supabase = createServerSupabaseClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { user } = await getServerUser()
 
   const { data: listing, error } = await fetchListingById(params.id)
 

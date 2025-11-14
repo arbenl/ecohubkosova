@@ -1,6 +1,5 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { requireAdminRole } from "@/lib/auth/roles"
 import {
@@ -41,8 +40,7 @@ export async function getOrganizationMembers(): Promise<GetOrganizationMembersRe
 }
 
 export async function deleteOrganizationMember(memberId: string) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   try {
     const { error } = await deleteOrganizationMemberRecord(memberId)
@@ -61,8 +59,7 @@ export async function deleteOrganizationMember(memberId: string) {
 }
 
 export async function updateOrganizationMember(memberId: string, formData: OrganizationMemberUpdateData) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   const parsed = adminOrganizationMemberUpdateSchema.safeParse(formData)
   if (!parsed.success) {
@@ -88,8 +85,7 @@ export async function updateOrganizationMember(memberId: string, formData: Organ
 }
 
 export async function toggleOrganizationMemberApproval(memberId: string, currentStatus: boolean) {
-  const supabase = createRouteHandlerSupabaseClient()
-  await requireAdminRole(supabase)
+  await requireAdminRole()
 
   try {
     const { error } = await toggleOrganizationMemberApprovalRecord(memberId, currentStatus)

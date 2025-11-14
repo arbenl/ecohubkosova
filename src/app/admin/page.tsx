@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, Building, BookOpen, ShoppingCart, TrendingUp } from "lucide-react"
-import { getAdminStats, AdminStats } from "./actions"
+import { getAdminStats } from "./actions"
+import type { AdminStats } from "@/services/admin/stats"
 import AdminStatCard from "./admin-stat-card" // Will create this client component later
 import AdminQuickActionCard from "./admin-quick-action-card" // Will create this client component later
 
