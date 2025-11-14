@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
 import { marketplaceListings } from "@/db/schema"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
 import type { AdminListingUpdateInput } from "@/validation/admin"
 export type { AdminListingUpdateInput } from "@/validation/admin"
 
@@ -24,75 +23,23 @@ export interface AdminListing {
   updated_at: string | null
 }
 
-const LISTINGS_TABLE = "tregu_listime"
+const toError = (error: unknown) =>
+  error instanceof Error ? error : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
 
-const formatTimestamp = (value: Date | string | null | undefined) => {
-  if (!value) {
-    return null
-  }
-  return value instanceof Date ? value.toISOString() : new Date(value).toISOString()
-}
-
-const toError = (error: unknown) => {
-  if (!error) {
-    return null
-  }
-  return error instanceof Error ? error : new Error(typeof error === "object" && error && "message" in error ? String((error as any).message) : "Supabase error")
-}
-
-async function fetchAdminListingsViaSupabase() {
-  const supabase = createServerSupabaseClient()
-  const { data, error } = await supabase.from(LISTINGS_TABLE).select("*")
-
-  if (error) {
-    return { data: null, error: toError(error) }
-  }
-
-  const serialized =
-    ((data ?? []).map((listing: Record<string, any>) => ({
-      ...listing,
-      cmimi: Number(listing.cmimi),
-      created_at: formatTimestamp(listing.created_at) ?? "",
-      updated_at: formatTimestamp(listing.updated_at),
-    })) ?? []) as AdminListing[]
-
-  return { data: serialized, error: null }
-}
-
-async function deleteListingViaSupabase(listingId: string) {
-  const supabase = createServerSupabaseClient()
-  const { error } = await supabase.from(LISTINGS_TABLE).delete().eq("id", listingId)
-  return { error: toError(error) }
-}
-
-async function updateListingViaSupabase(listingId: string, data: AdminListingUpdateInput) {
-  const supabase = createServerSupabaseClient()
-  const { error } = await supabase
-    .from(LISTINGS_TABLE)
-    .update({
-      ...data,
-      cmimi: data.cmimi.toString(),
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", listingId)
-
-  return { error: toError(error) }
-}
+const serializeListing = (listing: AdminListingRow): AdminListing => ({
+  ...listing,
+  cmimi: Number(listing.cmimi),
+  created_at: listing.created_at.toISOString(),
+  updated_at: listing.updated_at ? listing.updated_at.toISOString() : null,
+})
 
 export async function fetchAdminListings() {
   try {
     const rows = await db.get().select().from(marketplaceListings)
-    const serialized: AdminListing[] = rows.map((listing) => ({
-      ...listing,
-      cmimi: Number(listing.cmimi),
-      created_at: listing.created_at.toISOString(),
-      updated_at: listing.updated_at ? listing.updated_at.toISOString() : null,
-    }))
-
-    return { data: serialized, error: null }
+    return { data: rows.map(serializeListing), error: null }
   } catch (error) {
-    console.warn("[services/admin/listings] Drizzle fetch failed; falling back to Supabase REST.", error)
-    return fetchAdminListingsViaSupabase()
+    console.error("[services/admin/listings] Failed to fetch listings:", error)
+    return { data: null, error: toError(error) }
   }
 }
 
@@ -101,8 +48,8 @@ export async function deleteListingRecord(listingId: string) {
     await db.get().delete(marketplaceListings).where(eq(marketplaceListings.id, listingId))
     return { error: null }
   } catch (error) {
-    console.warn("[services/admin/listings] Drizzle delete failed; falling back to Supabase REST.", error)
-    return deleteListingViaSupabase(listingId)
+    console.error("[services/admin/listings] Failed to delete listing:", error)
+    return { error: toError(error) }
   }
 }
 
@@ -120,7 +67,7 @@ export async function updateListingRecord(listingId: string, data: AdminListingU
 
     return { error: null }
   } catch (error) {
-    console.warn("[services/admin/listings] Drizzle update failed; falling back to Supabase REST.", error)
-    return updateListingViaSupabase(listingId, data)
+    console.error("[services/admin/listings] Failed to update listing:", error)
+    return { error: toError(error) }
   }
 }

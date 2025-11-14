@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
 import { organizationMembers, organizations, users } from "@/db/schema"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
 import type { AdminOrganizationMemberUpdateInput } from "@/validation/admin"
 export type { AdminOrganizationMemberUpdateInput } from "@/validation/admin"
 
@@ -22,83 +21,8 @@ export interface AdminOrganizationMemberWithDetails extends AdminOrganizationMem
   user_email?: string
 }
 
-const MEMBERS_TABLE = "organization_members"
-
-const formatTimestamp = (value: Date | string | null | undefined) => {
-  if (!value) {
-    return null
-  }
-  return value instanceof Date ? value.toISOString() : new Date(value).toISOString()
-}
-
-const toError = (error: unknown) => {
-  if (!error) {
-    return null
-  }
-  return error instanceof Error ? error : new Error(typeof error === "object" && error && "message" in error ? String((error as any).message) : "Supabase error")
-}
-
-async function fetchMembersViaSupabase() {
-  const supabase = createServerSupabaseClient()
-  const { data, error } = await supabase
-    .from(MEMBERS_TABLE)
-    .select(
-      `
-        id,
-        organization_id,
-        user_id,
-        roli_ne_organizate,
-        eshte_aprovuar,
-        created_at,
-        organizations!inner(emri),
-        users!inner(emri_i_plote, email)
-      `
-    )
-
-  if (error) {
-    return { data: null, error: toError(error) }
-  }
-
-  const formatted =
-    ((data ?? []).map((record: any) => ({
-      id: record.id,
-      organization_id: record.organization_id,
-      user_id: record.user_id,
-      roli_ne_organizate: record.roli_ne_organizate,
-      eshte_aprovuar: record.eshte_aprovuar,
-      created_at: formatTimestamp(record.created_at) ?? "",
-      organization_name: record.organizations?.emri,
-      user_name: record.users?.emri_i_plote,
-      user_email: record.users?.email,
-    })) ?? []) as AdminOrganizationMemberWithDetails[]
-
-  return { data: formatted, error: null }
-}
-
-async function deleteMemberViaSupabase(memberId: string) {
-  const supabase = createServerSupabaseClient()
-  const { error } = await supabase.from(MEMBERS_TABLE).delete().eq("id", memberId)
-  return { error: toError(error) }
-}
-
-async function updateMemberViaSupabase(memberId: string, data: AdminOrganizationMemberUpdateInput) {
-  const supabase = createServerSupabaseClient()
-  const { error } = await supabase
-    .from(MEMBERS_TABLE)
-    .update({
-      roli_ne_organizate: data.roli_ne_organizate,
-      eshte_aprovuar: data.eshte_aprovuar,
-    })
-    .eq("id", memberId)
-
-  return { error: toError(error) }
-}
-
-async function toggleMemberViaSupabase(memberId: string, nextStatus: boolean) {
-  const supabase = createServerSupabaseClient()
-  const { error } = await supabase.from(MEMBERS_TABLE).update({ eshte_aprovuar: nextStatus }).eq("id", memberId)
-  return { error: toError(error) }
-}
+const toError = (error: unknown) =>
+  error instanceof Error ? error : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
 
 export async function fetchAdminOrganizationMembers() {
   try {
@@ -124,8 +48,8 @@ export async function fetchAdminOrganizationMembers() {
 
     return { data: formatted, error: null }
   } catch (error) {
-    console.warn("[services/admin/organization-members] Drizzle fetch failed; falling back to Supabase REST.", error)
-    return fetchMembersViaSupabase()
+    console.error("[services/admin/organization-members] Failed to fetch members:", error)
+    return { data: null, error: toError(error) }
   }
 }
 
@@ -134,8 +58,8 @@ export async function deleteOrganizationMemberRecord(memberId: string) {
     await db.get().delete(organizationMembers).where(eq(organizationMembers.id, memberId))
     return { error: null }
   } catch (error) {
-    console.warn("[services/admin/organization-members] Drizzle delete failed; falling back to Supabase REST.", error)
-    return deleteMemberViaSupabase(memberId)
+    console.error("[services/admin/organization-members] Failed to delete member:", error)
+    return { error: toError(error) }
   }
 }
 
@@ -155,8 +79,8 @@ export async function updateOrganizationMemberRecord(
 
     return { error: null }
   } catch (error) {
-    console.warn("[services/admin/organization-members] Drizzle update failed; falling back to Supabase REST.", error)
-    return updateMemberViaSupabase(memberId, data)
+    console.error("[services/admin/organization-members] Failed to update member:", error)
+    return { error: toError(error) }
   }
 }
 
@@ -170,7 +94,7 @@ export async function toggleOrganizationMemberApprovalRecord(memberId: string, c
 
     return { error: null }
   } catch (error) {
-    console.warn("[services/admin/organization-members] Drizzle approval toggle failed; falling back to Supabase REST.", error)
-    return toggleMemberViaSupabase(memberId, !currentStatus)
+    console.error("[services/admin/organization-members] Failed to toggle approval:", error)
+    return { error: toError(error) }
   }
 }

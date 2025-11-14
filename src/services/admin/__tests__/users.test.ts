@@ -32,31 +32,6 @@ vi.mock("@/lib/drizzle", () => ({
   },
 }))
 
-const supabaseState = vi.hoisted(() => ({
-  selectData: [] as any[],
-  selectError: null as any,
-  deleteError: null as any,
-  updateError: null as any,
-}))
-
-const createSupabaseQueryBuilder = () => ({
-  select: vi.fn(() => Promise.resolve({ data: supabaseState.selectData, error: supabaseState.selectError })),
-  delete: vi.fn(() => ({
-    eq: vi.fn(() => Promise.resolve({ error: supabaseState.deleteError })),
-  })),
-  update: vi.fn(() => ({
-    eq: vi.fn(() => Promise.resolve({ error: supabaseState.updateError })),
-  })),
-})
-
-const supabase = vi.hoisted(() => ({
-  from: vi.fn(() => createSupabaseQueryBuilder()),
-}))
-
-vi.mock("@/lib/supabase/server", () => ({
-  createServerSupabaseClient: () => supabase,
-}))
-
 const eqMock = vi.hoisted(() => vi.fn((_column: unknown, value: unknown) => ({ value })))
 vi.mock("drizzle-orm", async (importOriginal) => {
   const actual = await importOriginal<any>()
@@ -72,11 +47,6 @@ describe("services/admin/users", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mocks.state.lastSetPayload = null
-    supabase.from.mockClear()
-    supabaseState.selectData = []
-    supabaseState.selectError = null
-    supabaseState.deleteError = null
-    supabaseState.updateError = null
     mocks.selectFrom.mockResolvedValue([
       {
         id: "1",
@@ -137,38 +107,17 @@ describe("services/admin/users", () => {
     expect(response.error).toBeNull()
   })
 
-  it("falls back to Supabase when Drizzle fails to fetch users", async () => {
+  it("returns errors when Drizzle operations fail", async () => {
     mocks.selectFrom.mockRejectedValueOnce(new Error("offline"))
-    supabaseState.selectData = [
-      {
-        id: "supabase-user",
-        emri_i_plote: "Fallback",
-        email: "fallback@example.com",
-        vendndodhja: "",
-        roli: "Admin",
-        eshte_aprovuar: true,
-        created_at: "2024-01-01T00:00:00.000Z",
-        updated_at: null,
-      },
-    ]
+    const fetchResult = await fetchAdminUsers()
+    expect(fetchResult.data).toBeNull()
+    expect(fetchResult.error?.message).toBe("offline")
 
-    const result = await fetchAdminUsers()
+    mocks.deleteWhere.mockRejectedValueOnce(new Error("delete-fail"))
+    const deleteResult = await deleteUserRecord("user-3")
+    expect(deleteResult.error?.message).toBe("delete-fail")
 
-    expect(supabase.from).toHaveBeenCalledWith("users")
-    expect(result.data?.[0].id).toBe("supabase-user")
-  })
-
-  it("falls back to Supabase when delete fails", async () => {
-    mocks.deleteWhere.mockRejectedValueOnce(new Error("offline"))
-
-    const response = await deleteUserRecord("user-3")
-
-    expect(supabase.from).toHaveBeenCalledWith("users")
-    expect(response.error).toBeNull()
-  })
-
-  it("falls back to Supabase when update fails", async () => {
-    mocks.updateWhere.mockRejectedValueOnce(new Error("offline"))
+    mocks.updateWhere.mockRejectedValueOnce(new Error("update-fail"))
     const payload = {
       emri_i_plote: "Fallback",
       email: "fallback@example.com",
@@ -177,9 +126,7 @@ describe("services/admin/users", () => {
       eshte_aprovuar: true,
     }
 
-    const response = await updateUserRecord("user-4", payload)
-
-    expect(supabase.from).toHaveBeenCalledWith("users")
-    expect(response.error).toBeNull()
+    const updateResult = await updateUserRecord("user-4", payload)
+    expect(updateResult.error?.message).toBe("update-fail")
   })
 })

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { eq } from "drizzle-orm"
-import { getServerUser, createServerSupabaseClient } from "@/lib/supabase/server"
+import { getServerUser } from "@/lib/supabase/server"
 import { db } from "@/lib/drizzle"
 import { users } from "@/db/schema"
 
@@ -17,37 +17,17 @@ export async function requireAdminRole() {
     redirect("/auth/kycu?message=Ju duhet të kyçeni për të vazhduar.")
   }
 
-  let role: string | null = null
-
-  try {
-    const [profile] = await db
-      .get()
-      .select({ roli: users.roli })
-      .from(users)
-      .where(eq(users.id, user.id))
-      .limit(1)
-
-    role = profile?.roli ?? null
-  } catch (error) {
-    console.warn("[requireAdminRole] Drizzle role lookup failed; falling back to Supabase REST.", error)
-    role = await fetchRoleViaSupabase(user.id)
-  }
+  const [profile] = await db
+    .get()
+    .select({ roli: users.roli })
+    .from(users)
+    .where(eq(users.id, user.id))
+    .limit(1)
+  const role = profile?.roli ?? null
 
   if (role !== "Admin") {
     redirect(`/auth/kycu?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`)
   }
 
   return { user, role }
-}
-
-async function fetchRoleViaSupabase(userId: string): Promise<string | null> {
-  const supabase = createServerSupabaseClient()
-  const { data, error } = await supabase.from("users").select("roli").eq("id", userId).single()
-
-  if (error) {
-    console.error("[requireAdminRole] Supabase fallback failed:", error)
-    return null
-  }
-
-  return (data as { roli?: string } | null)?.roli ?? null
 }
