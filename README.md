@@ -74,6 +74,18 @@ When you change the schema, generate refreshed Drizzle types with:
 pnpm drizzle:generate
 ```
 
+## Public API (React Native readiness)
+
+To give future React Native or partner clients a stable integration surface, the core read-model is now available under `/api/v1`:
+
+| Endpoint | Description |
+| --- | --- |
+| `GET /api/v1/listings?category=&type=&search=` | Returns approved marketplace listings. Optional filters for category, listing type (`shes` / `blej`), or title search. |
+| `GET /api/v1/organizations?lloji=&search=` | Returns approved organizations. Filter by organization type or search by name. |
+| `GET /api/v1/articles?category=&search=` | Returns published knowledge-base articles with optional category or title search filters. |
+
+All responses are JSON in the shape `{ data: [...] }` or `{ error: string }`, and they reuse the same Drizzle services that power the web UI so mobile clients and the web stay in sync automatically.
+
 ## Contributing Workflow
 
 1. Create a feature branch from `main`.
