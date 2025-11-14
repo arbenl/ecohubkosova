@@ -47,6 +47,14 @@ The app runs on [http://localhost:3000](http://localhost:3000).
 - `docs/roadmap.md` – High-level roadmap of upcoming initiatives.
 - `docs/next-session-specs.md` – The short-term TODO list for the next coding session.
 
+### Source Layout Guardrail
+
+All feature code lives under `src/**`. The shadcn UI generator (`components.json`) is configured with `@/components` / `@/lib` aliases so new components automatically land in `src/…`. To keep the tree clean, `pnpm lint` now runs `pnpm check:src-structure`, which fails the build if any `.ts/.tsx/.js/.jsx` file shows up outside the approved directories. Run the check manually at any time with:
+
+```bash
+pnpm check:src-structure
+```
+
 ## Database & Supabase CLI
 
 Database schema changes now live under `supabase/migrations/**` and seed data is in `supabase/seed.sql`. Use the Supabase CLI (via `pnpm dlx supabase` or a global install) for all DB work:

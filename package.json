@@ -5,7 +5,8 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint": "next lint",
+    "check:src-structure": "node scripts/check-src-structure.mjs",
+    "lint": "pnpm check:src-structure && next lint",
     "test": "echo \"No automated tests defined yet\"",
     "test:e2e": "playwright test",
     "start": "next start",
