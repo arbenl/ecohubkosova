@@ -1,25 +1,12 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server"
 import HeaderClient from "@/components/header-client"
+import { fetchCurrentUserProfile } from "@/services/profile"
 
 async function HeaderServer() {
-  const supabase = createServerSupabaseClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { userProfile } = await fetchCurrentUserProfile()
+  const fallbackName = userProfile?.emri_i_plote ?? null
+  const fallbackEmail = userProfile?.email ?? null
 
-  let fallbackName: string | null = null
-
-  if (user) {
-    const { data: profile } = await supabase
-      .from("users")
-      .select("emri_i_plote")
-      .eq("id", user.id)
-      .maybeSingle()
-
-    fallbackName = profile?.emri_i_plote || user.email?.split("@")[0] || null
-  }
-
-  return <HeaderClient fallbackUserName={fallbackName} fallbackUserEmail={user?.email ?? null} />
+  return <HeaderClient fallbackUserName={fallbackName} fallbackUserEmail={fallbackEmail} />
 }
 
 export function Header() {

@@ -21,6 +21,9 @@ export interface AdminOrganizationMemberWithDetails extends AdminOrganizationMem
   user_email?: string
 }
 
+const toError = (error: unknown) =>
+  error instanceof Error ? error : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
+
 export async function fetchAdminOrganizationMembers() {
   try {
     const rows = await db
@@ -45,7 +48,8 @@ export async function fetchAdminOrganizationMembers() {
 
     return { data: formatted, error: null }
   } catch (error) {
-    return { data: null, error: error as Error }
+    console.error("[services/admin/organization-members] Failed to fetch members:", error)
+    return { data: null, error: toError(error) }
   }
 }
 
@@ -54,7 +58,8 @@ export async function deleteOrganizationMemberRecord(memberId: string) {
     await db.get().delete(organizationMembers).where(eq(organizationMembers.id, memberId))
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/organization-members] Failed to delete member:", error)
+    return { error: toError(error) }
   }
 }
 
@@ -74,7 +79,8 @@ export async function updateOrganizationMemberRecord(
 
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/organization-members] Failed to update member:", error)
+    return { error: toError(error) }
   }
 }
 
@@ -88,6 +94,7 @@ export async function toggleOrganizationMemberApprovalRecord(memberId: string, c
 
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/organization-members] Failed to toggle approval:", error)
+    return { error: toError(error) }
   }
 }

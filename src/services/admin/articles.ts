@@ -19,19 +19,23 @@ export interface AdminArticle {
   updated_at: string | null
 }
 
+const toError = (error: unknown) =>
+  error instanceof Error ? error : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
+
+const serializeArticle = (article: AdminArticleRow): AdminArticle => ({
+  ...article,
+  tags: article.tags ?? null,
+  created_at: article.created_at.toISOString(),
+  updated_at: article.updated_at ? article.updated_at.toISOString() : null,
+})
+
 export async function fetchAdminArticles() {
   try {
     const rows = await db.get().select().from(articles)
-    const serialized: AdminArticle[] = rows.map((article) => ({
-      ...article,
-      tags: article.tags ?? null,
-      created_at: article.created_at.toISOString(),
-      updated_at: article.updated_at ? article.updated_at.toISOString() : null,
-    }))
-
-    return { data: serialized, error: null }
+    return { data: rows.map(serializeArticle), error: null }
   } catch (error) {
-    return { data: null, error: error as Error }
+    console.error("[services/admin/articles] Failed to fetch articles:", error)
+    return { data: null, error: toError(error) }
   }
 }
 
@@ -50,7 +54,8 @@ export async function insertArticleRecord(authorId: string, data: AdminArticleCr
 
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/articles] Failed to insert article:", error)
+    return { error: toError(error) }
   }
 }
 
@@ -59,7 +64,8 @@ export async function deleteArticleRecord(articleId: string) {
     await db.get().delete(articles).where(eq(articles.id, articleId))
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/articles] Failed to delete article:", error)
+    return { error: toError(error) }
   }
 }
 
@@ -77,6 +83,7 @@ export async function updateArticleRecord(articleId: string, data: AdminArticleU
 
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/articles] Failed to update article:", error)
+    return { error: toError(error) }
   }
 }

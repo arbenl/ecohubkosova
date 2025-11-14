@@ -106,4 +106,27 @@ describe("services/admin/users", () => {
     expect(mocks.state.lastSetPayload.updated_at).toBeInstanceOf(Date)
     expect(response.error).toBeNull()
   })
+
+  it("returns errors when Drizzle operations fail", async () => {
+    mocks.selectFrom.mockRejectedValueOnce(new Error("offline"))
+    const fetchResult = await fetchAdminUsers()
+    expect(fetchResult.data).toBeNull()
+    expect(fetchResult.error?.message).toBe("offline")
+
+    mocks.deleteWhere.mockRejectedValueOnce(new Error("delete-fail"))
+    const deleteResult = await deleteUserRecord("user-3")
+    expect(deleteResult.error?.message).toBe("delete-fail")
+
+    mocks.updateWhere.mockRejectedValueOnce(new Error("update-fail"))
+    const payload = {
+      emri_i_plote: "Fallback",
+      email: "fallback@example.com",
+      vendndodhja: "City",
+      roli: "Admin",
+      eshte_aprovuar: true,
+    }
+
+    const updateResult = await updateUserRecord("user-4", payload)
+    expect(updateResult.error?.message).toBe("update-fail")
+  })
 })

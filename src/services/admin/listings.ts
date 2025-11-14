@@ -23,19 +23,23 @@ export interface AdminListing {
   updated_at: string | null
 }
 
+const toError = (error: unknown) =>
+  error instanceof Error ? error : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
+
+const serializeListing = (listing: AdminListingRow): AdminListing => ({
+  ...listing,
+  cmimi: Number(listing.cmimi),
+  created_at: listing.created_at.toISOString(),
+  updated_at: listing.updated_at ? listing.updated_at.toISOString() : null,
+})
+
 export async function fetchAdminListings() {
   try {
     const rows = await db.get().select().from(marketplaceListings)
-    const serialized: AdminListing[] = rows.map((listing) => ({
-      ...listing,
-      cmimi: Number(listing.cmimi),
-      created_at: listing.created_at.toISOString(),
-      updated_at: listing.updated_at ? listing.updated_at.toISOString() : null,
-    }))
-
-    return { data: serialized, error: null }
+    return { data: rows.map(serializeListing), error: null }
   } catch (error) {
-    return { data: null, error: error as Error }
+    console.error("[services/admin/listings] Failed to fetch listings:", error)
+    return { data: null, error: toError(error) }
   }
 }
 
@@ -44,7 +48,8 @@ export async function deleteListingRecord(listingId: string) {
     await db.get().delete(marketplaceListings).where(eq(marketplaceListings.id, listingId))
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/listings] Failed to delete listing:", error)
+    return { error: toError(error) }
   }
 }
 
@@ -62,6 +67,7 @@ export async function updateListingRecord(listingId: string, data: AdminListingU
 
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/listings] Failed to update listing:", error)
+    return { error: toError(error) }
   }
 }

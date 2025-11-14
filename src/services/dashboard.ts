@@ -1,28 +1,33 @@
 import { unstable_noStore as noStore } from "next/cache"
-import { createServerSupabaseClient } from "@/lib/supabase/server"
+import { count, desc, eq } from "drizzle-orm"
+import { db } from "@/lib/drizzle"
+import { articles, marketplaceListings, organizations, users } from "@/db/schema"
 
 export async function fetchDashboardStats() {
   noStore()
-  const supabase = createServerSupabaseClient()
-
   try {
-    const [
-      { count: organizationsCount },
-      { count: articlesCount },
-      { count: usersCount },
-      { count: listingsCount },
-    ] = await Promise.all([
-      supabase.from("organizations").select("*", { count: "exact", head: true }).eq("eshte_aprovuar", true),
-      supabase.from("artikuj").select("*", { count: "exact", head: true }).eq("eshte_publikuar", true),
-      supabase.from("users").select("*", { count: "exact", head: true }),
-      supabase.from("tregu_listime").select("*", { count: "exact", head: true }).eq("eshte_aprovuar", true),
+    const database = db.get()
+    const [orgs, articlesCount, userCount, listings] = await Promise.all([
+      database
+        .select({ value: count() })
+        .from(organizations)
+        .where(eq(organizations.eshte_aprovuar, true)),
+      database
+        .select({ value: count() })
+        .from(articles)
+        .where(eq(articles.eshte_publikuar, true)),
+      database.select({ value: count() }).from(users),
+      database
+        .select({ value: count() })
+        .from(marketplaceListings)
+        .where(eq(marketplaceListings.eshte_aprovuar, true)),
     ])
 
     return {
-      organizationsCount: organizationsCount || 0,
-      articlesCount: articlesCount || 0,
-      usersCount: usersCount || 0,
-      listingsCount: listingsCount || 0,
+      organizationsCount: orgs[0]?.value ?? 0,
+      articlesCount: articlesCount[0]?.value ?? 0,
+      usersCount: userCount[0]?.value ?? 0,
+      listingsCount: listings[0]?.value ?? 0,
     }
   } catch (error) {
     console.error("fetchDashboardStats error:", error)
@@ -37,17 +42,26 @@ export async function fetchDashboardStats() {
 
 export async function fetchLatestArticles(limit = 3) {
   noStore()
-  const supabase = createServerSupabaseClient()
 
   try {
-    const { data: articles } = await supabase
-      .from("artikuj")
-      .select("*, users!inner(emri_i_plote)")
-      .eq("eshte_publikuar", true)
-      .order("created_at", { ascending: false })
+    const rows = await db
+      .get()
+      .select({
+        article: articles,
+        author_name: users.emri_i_plote,
+      })
+      .from(articles)
+      .leftJoin(users, eq(articles.autori_id, users.id))
+      .where(eq(articles.eshte_publikuar, true))
+      .orderBy(desc(articles.created_at))
       .limit(limit)
 
-    return articles || []
+    return rows.map(({ article, author_name }) => ({
+      ...article,
+      created_at: article.created_at.toISOString(),
+      updated_at: article.updated_at ? article.updated_at.toISOString() : null,
+      users: author_name ? { emri_i_plote: author_name } : null,
+    }))
   } catch (error) {
     console.error("fetchLatestArticles error:", error)
     return []
@@ -56,17 +70,20 @@ export async function fetchLatestArticles(limit = 3) {
 
 export async function fetchKeyPartners(limit = 5) {
   noStore()
-  const supabase = createServerSupabaseClient()
-
   try {
-    const { data: partners } = await supabase
-      .from("organizations")
-      .select("*")
-      .eq("eshte_aprovuar", true)
-      .order("created_at", { ascending: false })
+    const partners = await db
+      .get()
+      .select()
+      .from(organizations)
+      .where(eq(organizations.eshte_aprovuar, true))
+      .orderBy(desc(organizations.created_at))
       .limit(limit)
 
-    return partners || []
+    return partners.map((partner) => ({
+      ...partner,
+      created_at: partner.created_at.toISOString(),
+      updated_at: partner.updated_at ? partner.updated_at.toISOString() : null,
+    }))
   } catch (error) {
     console.error("fetchKeyPartners error:", error)
     return []

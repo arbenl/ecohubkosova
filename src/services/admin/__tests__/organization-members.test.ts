@@ -93,4 +93,14 @@ describe("services/admin/organization-members", () => {
     expect(result.error).toBeNull()
     expect(updateWhere.payload.eshte_aprovuar).toBe(false)
   })
+
+  it("returns errors when fetch fails", async () => {
+    chain.select.mockImplementationOnce(() => {
+      throw new Error("offline")
+    })
+
+    const result = await fetchAdminOrganizationMembers()
+    expect(result.data).toBeNull()
+    expect(result.error?.message).toBe("offline")
+  })
 })

@@ -17,18 +17,22 @@ export interface AdminUser {
   updated_at: string | null
 }
 
+const toError = (error: unknown) =>
+  error instanceof Error ? error : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
+
+const serializeUser = (user: AdminUserRow): AdminUser => ({
+  ...user,
+  created_at: user.created_at.toISOString(),
+  updated_at: user.updated_at ? user.updated_at.toISOString() : null,
+})
+
 export async function fetchAdminUsers() {
   try {
     const rows = await db.get().select().from(users)
-    const serialized: AdminUser[] = rows.map((user) => ({
-      ...user,
-      created_at: user.created_at.toISOString(),
-      updated_at: user.updated_at ? user.updated_at.toISOString() : null,
-    }))
-
-    return { data: serialized, error: null }
+    return { data: rows.map(serializeUser), error: null }
   } catch (error) {
-    return { data: null, error: error as Error }
+    console.error("[services/admin/users] Failed to fetch users:", error)
+    return { data: null, error: toError(error) }
   }
 }
 
@@ -37,7 +41,8 @@ export async function deleteUserRecord(userId: string) {
     await db.get().delete(users).where(eq(users.id, userId))
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/users] Failed to delete user:", error)
+    return { error: toError(error) }
   }
 }
 
@@ -54,6 +59,7 @@ export async function updateUserRecord(userId: string, data: AdminUserUpdateInpu
 
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/users] Failed to update user:", error)
+    return { error: toError(error) }
   }
 }

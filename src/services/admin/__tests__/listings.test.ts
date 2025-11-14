@@ -86,4 +86,12 @@ describe("services/admin/listings", () => {
     expect(updateWhere.payload).toMatchObject({ ...payload, cmimi: "10" })
     expect(updateWhere.payload.updated_at).toBeInstanceOf(Date)
   })
+
+  it("returns errors when fetch fails", async () => {
+    client.select.mockReturnValueOnce({ from: () => Promise.reject(new Error("offline")) })
+
+    const result = await fetchAdminListings()
+    expect(result.data).toBeNull()
+    expect(result.error?.message).toBe("offline")
+  })
 })

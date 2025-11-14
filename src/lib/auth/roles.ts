@@ -23,10 +23,11 @@ export async function requireAdminRole() {
     .from(users)
     .where(eq(users.id, user.id))
     .limit(1)
+  const role = profile?.roli ?? null
 
-  if (!profile || profile.roli !== "Admin") {
+  if (role !== "Admin") {
     redirect(`/auth/kycu?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`)
   }
 
-  return { user, role: profile.roli }
+  return { user, role }
 }

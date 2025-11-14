@@ -56,7 +56,7 @@ describe("profile actions", () => {
       const result = await updateUserProfile({ emri_i_plote: "John Doe", vendndodhja: "Prishtina" })
 
       expect(mocks.mockCreateSupabaseClient).toHaveBeenCalled()
-      expect(mocks.mockUpdateUserProfileRecord).toHaveBeenCalledWith(mocks.mockSupabaseClient, "user-123", {
+      expect(mocks.mockUpdateUserProfileRecord).toHaveBeenCalledWith("user-123", {
         emri_i_plote: "John Doe",
         vendndodhja: "Prishtina",
       })
@@ -114,7 +114,8 @@ describe("profile actions", () => {
 
       const result = await updateOrganizationProfile(organizationId, payload)
 
-      expect(mocks.mockUpdateOrganizationRecord).toHaveBeenCalledWith(mocks.mockSupabaseClient, organizationId, payload)
+      expect(mocks.mockEnsureOrganizationMembership).toHaveBeenCalledWith(organizationId, "user-123")
+      expect(mocks.mockUpdateOrganizationRecord).toHaveBeenCalledWith(organizationId, payload)
       expect(mocks.mockRevalidatePath).toHaveBeenCalledWith("/profili")
       expect(result).toEqual({ success: true })
     })

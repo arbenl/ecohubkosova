@@ -20,6 +20,9 @@ export interface AdminOrganization {
   updated_at: string | null
 }
 
+const toError = (error: unknown) =>
+  error instanceof Error ? error : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
+
 export async function fetchAdminOrganizations() {
   try {
     const rows = await db.get().select().from(organizations)
@@ -30,7 +33,8 @@ export async function fetchAdminOrganizations() {
     }))
     return { data: serialized, error: null }
   } catch (error) {
-    return { data: null, error: error as Error }
+    console.error("[services/admin/organizations] Failed to fetch organizations:", error)
+    return { data: null, error: toError(error) }
   }
 }
 
@@ -39,7 +43,8 @@ export async function deleteOrganizationRecord(organizationId: string) {
     await db.get().delete(organizations).where(eq(organizations.id, organizationId))
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/organizations] Failed to delete organization:", error)
+    return { error: toError(error) }
   }
 }
 
@@ -59,6 +64,7 @@ export async function updateOrganizationRecord(
 
     return { error: null }
   } catch (error) {
-    return { error: error as Error }
+    console.error("[services/admin/organizations] Failed to update organization:", error)
+    return { error: toError(error) }
   }
 }

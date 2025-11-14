@@ -93,4 +93,13 @@ describe("services/admin/articles", () => {
     expect(result.error).toBeNull()
     expect(updateWhere.payload.updated_at).toBeInstanceOf(Date)
   })
+
+  it("surfaces errors when fetch fails", async () => {
+    client.select.mockReturnValueOnce({ from: () => Promise.reject(new Error("offline")) })
+
+    const result = await fetchAdminArticles()
+
+    expect(result.data).toBeNull()
+    expect(result.error?.message).toBe("offline")
+  })
 })
