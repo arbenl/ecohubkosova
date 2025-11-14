@@ -94,6 +94,14 @@ All responses are JSON in the shape `{ data: [...] }` or `{ error: string }`, an
 4. Commit using conventional-ish messages (e.g., `feat: ...`, `fix: ...`, `chore: ...`).
 5. Open a PR against `main`.
 
+## Testing
+
+- `pnpm test` – runs the Vitest + React Testing Library suite (unit/component).
+- `pnpm test:watch` – watch mode for Vitest during local development.
+- `pnpm test:e2e` – re-enables the Playwright end-to-end tests; the config auto-starts `pnpm dev` on port 3000 if needed.
+
+Playwright artifacts (HTML report, traces) are written to the default `playwright-report/` folder, and Vitest coverage is available under `coverage/` when needed.
+
 ## Roadmap / Next Steps
 
 See `docs/roadmap.md` and `docs/next-session-specs.md` for the current plan. Highlights include:
