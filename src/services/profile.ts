@@ -1,6 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import type { SupabaseClient } from "@supabase/supabase-js"
+import type { OrganizationProfileUpdateInput, UserProfileUpdateInput } from "@/validation/profile"
 
 export type ProfileUser = {
   id: string
@@ -88,7 +89,7 @@ type AnySupabaseClient = SupabaseClient<any, any, any>
 export async function updateUserProfileRecord(
   supabase: AnySupabaseClient,
   userId: string,
-  data: { emri_i_plote: string; vendndodhja: string }
+  data: UserProfileUpdateInput
 ) {
   return supabase
     .from("users")
@@ -102,14 +103,7 @@ export async function updateUserProfileRecord(
 export async function updateOrganizationRecord(
   supabase: AnySupabaseClient,
   organizationId: string,
-  data: {
-    emri: string
-    pershkrimi: string
-    interesi_primar: string
-    person_kontakti: string
-    email_kontakti: string
-    vendndodhja: string
-  }
+  data: OrganizationProfileUpdateInput
 ) {
   return supabase
     .from("organizations")
@@ -122,4 +116,27 @@ export async function updateOrganizationRecord(
       vendndodhja: data.vendndodhja,
     })
     .eq("id", organizationId)
+}
+
+export async function ensureUserOrganizationMembership(
+  supabase: AnySupabaseClient,
+  organizationId: string,
+  userId: string
+) {
+  const { data, error } = await supabase
+    .from("organization_members")
+    .select("id")
+    .eq("organization_id", organizationId)
+    .eq("user_id", userId)
+    .single()
+
+  if (error) {
+    const code = (error as { code?: string } | null)?.code
+    if (code === "PGRST116") {
+      return { isMember: false, error: null }
+    }
+    return { isMember: false, error }
+  }
+
+  return { isMember: Boolean(data), error: null }
 }

@@ -5,12 +5,12 @@ module.exports = {
   overrides: [
     {
       files: [
-        'app/auth/sukses/page.tsx',
-        'app/faq/page.tsx',
-        'app/koalicioni/page.tsx',
-        'app/kontakti/page.tsx',
-        'app/kushtet-e-perdorimit/page.tsx',
-        'app/ndihme/page.tsx',
+        'src/app/auth/sukses/page.tsx',
+        'src/app/faq/page.tsx',
+        'src/app/koalicioni/page.tsx',
+        'src/app/kontakti/page.tsx',
+        'src/app/kushtet-e-perdorimit/page.tsx',
+        'src/app/ndihme/page.tsx',
       ],
       rules: {
         'react/no-unescaped-entities': 'off',
