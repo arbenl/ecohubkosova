@@ -2,7 +2,6 @@
 
 import React, { Component, ErrorInfo, ReactNode } from "react"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 
 interface Props {
   children: ReactNode
@@ -43,7 +42,7 @@ class ErrorBoundary extends Component<Props, State> {
             Na vjen keq, por aplikacioni hasi në një gabim të papritur.
           </p>
           <Button asChild>
-            <Link href="/">Kthehu në Faqen Kryesore</Link>
+            <a href="/">Kthehu në Faqen Kryesore</a>
           </Button>
           {process.env.NODE_ENV === "development" && this.state.error && (
             <details className="mt-8 p-4 bg-gray-100 rounded-lg text-left max-w-lg overflow-auto">

@@ -82,6 +82,7 @@ describe("ensureUserProfileExists", () => {
   })
 
   it("propagates supabase errors", async () => {
+    dbMocks.state.selectRows = []
     supabase.auth.getUser.mockResolvedValueOnce({
       data: { user: null },
       error: new Error("boom"),

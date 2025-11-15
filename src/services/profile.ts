@@ -53,8 +53,13 @@ const toProfileOrganization = (record: OrganizationRow): ProfileOrganization => 
 })
 
 async function findUserProfile(userId: string) {
-  const [record] = await db.get().select().from(users).where(eq(users.id, userId)).limit(1)
-  return record ? toProfileUser(record) : null
+  try {
+    const [record] = await db.get().select().from(users).where(eq(users.id, userId)).limit(1)
+    return record ? toProfileUser(record) : null
+  } catch (error) {
+    console.error("findUserProfile error:", error)
+    return null
+  }
 }
 
 export async function fetchCurrentUserProfile() {
@@ -73,12 +78,12 @@ export async function fetchCurrentUserProfile() {
   try {
     const userProfile = await findUserProfile(user.id)
     if (!userProfile) {
-      throw new Error("Profili i përdoruesit nuk u gjet.")
+      console.warn("fetchCurrentUserProfile: no profile, using auth user metadata")
     }
 
     let organization: ProfileOrganization | null = null
 
-    if (userProfile.roli !== "Individ" && userProfile.roli !== "Admin") {
+    if (userProfile && userProfile.roli !== "Individ" && userProfile.roli !== "Admin") {
       const [membership] = await db
         .get()
         .select({ organization_id: organizationMembers.organization_id })
@@ -100,7 +105,11 @@ export async function fetchCurrentUserProfile() {
       }
     }
 
-    return { userProfile, organization, error: null }
+    return {
+      userProfile,
+      organization,
+      error: userProfile ? null : "Profili i përdoruesit nuk u gjet.",
+    }
   } catch (error) {
     console.error("fetchCurrentUserProfile error:", error)
     return {

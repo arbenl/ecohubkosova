@@ -1,5 +1,5 @@
 import Link from "next/link"
-import HeaderClient from "@/components/header-client"
+import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { CheckCircle } from "lucide-react"
@@ -7,7 +7,7 @@ import { CheckCircle } from "lucide-react"
 export default function SuksesPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <HeaderClient />
+      <Header />
       <main className="flex-1 flex items-center justify-center py-12">
         <div className="container px-4 md:px-6 max-w-md">
           <div className="flex flex-col items-center text-center space-y-6">
