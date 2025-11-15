@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useEffect, useCallback, useContext, createContext, useMemo, useRef } from "react"
 import { useRouter } from "next/navigation"
-import type { Session, User, AuthChangeEvent, AuthResponse, SignInWithPasswordCredentials } from "@supabase/supabase-js"
+import type { User, AuthChangeEvent, AuthResponse, SignInWithPasswordCredentials } from "@supabase/supabase-js"
 import { createClientSupabaseClient } from "@/lib/supabase"
 import { createSignOutHandler } from "@/lib/auth/signout-handler"
 import type { UserProfile } from "@/types"
@@ -11,7 +11,6 @@ import type { UserProfile } from "@/types"
 interface AuthContextType {
   user: User | null
   userProfile: UserProfile | null
-  session: Session | null
   isLoading: boolean
   signOutPending: boolean
   isAdmin: boolean
@@ -23,18 +22,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 const SupabaseContext = createContext<ReturnType<typeof createClientSupabaseClient> | null>(null)
 
-export function AuthProvider({
-  children,
-  initialSession,
-  initialUser,
-}: {
+interface AuthProviderProps {
   children: React.ReactNode
-  initialSession: Session | null
   initialUser: User | null
-}) {
+}
+
+export function AuthProvider({ children, initialUser }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(initialUser ?? null)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [session, setSession] = useState<Session | null>(initialSession)
   const [isLoading, setIsLoading] = useState(true)
   const [signOutPending, setSignOutPending] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -44,7 +39,6 @@ export function AuthProvider({
 
   const resetAuthState = useCallback(() => {
     setUser(null)
-    setSession(null)
     setUserProfile(null)
     setIsAdmin(false)
     setIsLoading(false)
@@ -53,12 +47,13 @@ export function AuthProvider({
   const fetchUserProfile = useCallback(async (): Promise<UserProfile | null> => {
     try {
       const response = await fetch("/api/auth/profile", { cache: "no-store" })
+      const payload = await response.json().catch(() => null)
+
       if (!response.ok) {
-        const payload = await response.json().catch(() => null)
         throw new Error(payload?.error || "Nuk u gjet profili i përdoruesit.")
       }
-      const payload = (await response.json()) as { profile: UserProfile | null }
-      return payload.profile
+
+      return (payload?.profile ?? null) as UserProfile | null
     } catch (error) {
       console.error("Dështoi marrja e profilit:", error)
       return null
@@ -95,64 +90,36 @@ export function AuthProvider({
     [fetchUserProfile, resetAuthState]
   )
 
+  const primeUser = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser()
+
+      if (error) {
+        throw error
+      }
+
+      await hydrateUser(user ?? null)
+    } catch (error) {
+      console.error("Dështoi verifikimi i përdoruesit:", error)
+      await hydrateUser(null)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [hydrateUser, supabase])
+
   useEffect(() => {
     let active = true
 
-    const primeSession = async () => {
-      setIsLoading(true)
-      try {
-        const {
-          data: { session },
-          error: sessionError,
-        } = await supabase.auth.getSession()
-
-        if (!active) return
-
-        if (sessionError) {
-          throw sessionError
-        }
-
-        setSession(session ?? null)
-
-        if (!session) {
-          await hydrateUser(null)
-          return
-        }
-
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser()
-
-        if (userError) {
-          throw userError
-        }
-
-        await hydrateUser(user ?? null)
-      } catch (error) {
-        if (!active) return
-        console.error("Dështoi verifikimi i sesionit:", error)
-        await hydrateUser(null)
-      } finally {
-        if (active) {
-          setIsLoading(false)
-        }
-      }
-    }
-
-    primeSession()
+    primeUser()
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, newSession: Session | null) => {
+    } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent) => {
       if (!active) return
-
-      setSession(newSession)
-
-      if (!newSession) {
-        await hydrateUser(null)
-        return
-      }
 
       try {
         const {
@@ -166,7 +133,7 @@ export function AuthProvider({
 
         await hydrateUser(user ?? null)
       } catch (error) {
-        console.error("Dështoi sinkronizimi i sesionit pas ndryshimit:", error)
+        console.error("Dështoi sinkronizimi i përdoruesit pas ndryshimit:", error)
         await hydrateUser(null)
       }
     })
@@ -175,7 +142,7 @@ export function AuthProvider({
       active = false
       subscription.unsubscribe()
     }
-  }, [hydrateUser, supabase])
+  }, [hydrateUser, supabase, primeUser])
 
   const signOut = useMemo(
     () =>
@@ -186,7 +153,7 @@ export function AuthProvider({
         signOutInFlightRef,
         setSignOutPending,
       }),
-    [supabase, router, resetAuthState, setSignOutPending]
+    [supabase, router, resetAuthState]
   )
 
   const signInWithPassword = async (credentials: SignInWithPasswordCredentials) => {
@@ -195,19 +162,16 @@ export function AuthProvider({
       if (response.error) {
         throw response.error
       }
-      // The onAuthStateChange listener will handle the user and session update.
       return response
     } catch (error) {
       console.error("Sign in error:", error)
-      // Re-throw the error to be handled by the caller
       throw error
     }
   }
 
-  const value = {
+  const value: AuthContextType = {
     user,
     userProfile,
-    session,
     isLoading,
     signOutPending,
     isAdmin,

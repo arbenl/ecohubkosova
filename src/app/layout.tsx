@@ -5,7 +5,7 @@ import { AuthProvider } from "@/lib/auth-provider"
 import ErrorBoundary from "@/components/error-boundary" // Import the ErrorBoundary component
 import "./globals.css"
 import type { Metadata } from "next"
-import { createServerSupabaseClient, getServerUser } from "@/lib/supabase/server"
+import { getServerUser } from "@/lib/supabase/server"
 
 export const dynamic = "force-dynamic"
 
@@ -34,20 +34,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const supabase = createServerSupabaseClient()
-  const [
-    {
-      data: { session: initialSession },
-    },
-    { user: initialUser },
-  ] = await Promise.all([supabase.auth.getSession(), getServerUser()])
+  const { user: initialUser } = await getServerUser()
 
   return (
     <html lang="sq" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <ErrorBoundary>
-            <AuthProvider initialSession={initialSession} initialUser={initialUser}>
+            <AuthProvider initialUser={initialUser}>
               {children}
             </AuthProvider>
           </ErrorBoundary>
