@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient } from "@supabase/ssr"
 import { incrementSessionVersion } from "@/services/session"
 import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_OPTIONS } from "@/lib/auth/session-version"
 import { logAuthAction } from "@/lib/auth/logging"
@@ -18,10 +18,25 @@ export async function GET(request: Request) {
     redirectTo,
   })
 
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
 
   if (code) {
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          },
+        },
+      }
+    )
 
     try {
       await supabase.auth.exchangeCodeForSession(code)
@@ -39,7 +54,7 @@ export async function GET(request: Request) {
         const newVersion = await incrementSessionVersion(user.id)
 
         if (newVersion !== null) {
-          cookieStore.set(SESSION_VERSION_COOKIE, String(newVersion), SESSION_VERSION_COOKIE_OPTIONS)
+          (await cookies()).set(SESSION_VERSION_COOKIE, String(newVersion), SESSION_VERSION_COOKIE_OPTIONS)
 
           logAuthAction("authCallback", "Session established", {
             userId: user.id,

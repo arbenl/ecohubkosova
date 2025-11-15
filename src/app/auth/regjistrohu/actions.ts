@@ -25,7 +25,7 @@ interface RegistrationFormData {
 }
 
 export async function registerUser(formData: RegistrationFormData) {
-  const supabase = createServerActionSupabaseClient()
+  const supabase = await createServerActionSupabaseClient()
 
   try {
     const parsed = registrationSchema.safeParse(formData)
@@ -102,7 +102,7 @@ emri_i_plote: payload.emri_i_plote,
       }
     })
 
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     cookieStore.set(SESSION_VERSION_COOKIE, "1", SESSION_VERSION_COOKIE_OPTIONS)
 
     // Revalidate paths that might display user/organization data

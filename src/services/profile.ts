@@ -64,7 +64,7 @@ async function findUserProfile(userId: string) {
 
 export async function fetchCurrentUserProfile() {
   noStore()
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   const {
     data: { user },

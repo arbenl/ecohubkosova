@@ -31,7 +31,7 @@ async function withRetry<T>(
 
 export async function GET() {
   try {
-    const supabase = createRouteHandlerSupabaseClient()
+    const supabase = await createRouteHandlerSupabaseClient()
 
     logAuthAction("profileEndpoint", "Profile request")
 

@@ -24,7 +24,7 @@ export async function signIn(prevState: any, formData: FormData): Promise<SignIn
 
   logAuthAction("signIn", "Login attempt", { email })
 
-  const supabase = createServerActionSupabaseClient()
+  const supabase = await createServerActionSupabaseClient()
 
   const parsed = loginSchema.safeParse({
     email,
@@ -72,7 +72,7 @@ export async function signIn(prevState: any, formData: FormData): Promise<SignIn
     }
   }
 
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   cookieStore.set(SESSION_VERSION_COOKIE, String(newVersion), SESSION_VERSION_COOKIE_OPTIONS)
 
   logAuthAction("signIn", "Login successful", {
@@ -88,9 +88,9 @@ export async function signIn(prevState: any, formData: FormData): Promise<SignIn
 export async function signInWithGoogle(): Promise<SignInWithGoogleResponse> {
   logAuthAction("signInWithGoogle", "OAuth login initiated")
 
-  const supabase = createServerActionSupabaseClient()
+  const supabase = await createServerActionSupabaseClient()
   const { headers } = await import("next/headers")
-  const origin = headers().get("origin")
+  const origin = (await headers()).get("origin")
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",

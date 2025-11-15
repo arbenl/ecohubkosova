@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic"
 export async function GET() {
   if (process.env.NEXT_PUBLIC_FORCE_DEV_SIGNOUT === "true") {
     try {
-      const supabase = createRouteHandlerSupabaseClient()
+      const supabase = await createRouteHandlerSupabaseClient()
       await supabase.auth.signOut({ scope: "global" })
       
       logAuthAction("homeRedirect", "Auto sign-out on home redirect")
