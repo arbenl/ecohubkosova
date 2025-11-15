@@ -2,6 +2,7 @@ import { BaseLayout } from "@/components/base-layout"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Building, Users, MapPin } from "lucide-react"
+import { PartnereCTA } from "./cta"
 
 export default function PartnerePage() {
   return (
@@ -100,9 +101,7 @@ export default function PartnerePage() {
                 <Button asChild className="bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:shadow-md transition">
                   <Link href="/drejtoria">Shiko të gjithë partnerët</Link>
                 </Button>
-                <Button asChild variant="outline">
-                  <Link href="/auth/regjistrohu">Regjistrohu si partner</Link>
-                </Button>
+                <PartnereCTA />
               </div>
             </div>
           </div>

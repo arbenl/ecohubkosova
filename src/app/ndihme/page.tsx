@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { BookOpen, MessageCircle, Video, Download, ExternalLink } from "lucide-react"
+import { NdhimeCTA } from "./cta"
 
 export default function NdihmePage() {
   return (
@@ -91,9 +92,7 @@ export default function NdihmePage() {
                     <li>• Konfirmoni email-in tuaj</li>
                     <li>• Prisni aprovimin (për organizata)</li>
                   </ul>
-                  <Button asChild className="w-full mt-4" size="sm">
-                    <Link href="/auth/regjistrohu">Regjistrohu tani</Link>
-                  </Button>
+                  <NdhimeCTA />
                 </CardContent>
               </Card>
 

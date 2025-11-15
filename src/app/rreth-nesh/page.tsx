@@ -2,6 +2,7 @@ import { BaseLayout } from "@/components/base-layout"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Sparkles, Target, Globe, Users, CheckCircle, ArrowRight } from "lucide-react"
+import { RrethNeshHeroCTA, RrethNeshBottomCTA } from "./cta"
 
 export default function RrethNeshPage() {
   return (
@@ -29,22 +30,7 @@ export default function RrethNeshPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Button asChild size="lg" className="bg-gradient-to-r from-emerald-500 to-emerald-700 hover:shadow-xl hover:shadow-emerald-400/30 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105">
-                <Link href="/auth/regjistrohu">
-                  <Users className="mr-2 h-5 w-5" />
-                  Regjistrohu Tani
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="rounded-2xl px-8 py-4 text-lg font-semibold border-2 border-gray-200 hover:border-emerald-600 hover:text-emerald-700 transition-all duration-300 hover:scale-105 bg-transparent"
-              >
-                <Link href="/kontakti">
-                  Na kontaktoni
-                </Link>
-              </Button>
+              <RrethNeshHeroCTA />
             </div>
           </div>
 
@@ -130,14 +116,7 @@ export default function RrethNeshPage() {
               <h2 className="text-2xl font-bold mb-2">Bashkohu me Ne</h2>
               <p className="text-gray-600 mb-6">Bëhu pjesë e lëvizjes për një ekonomi më të qëndrueshme në Kosovë</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild>
-                  <Link href="/auth/regjistrohu">
-                    Regjistrohu tani <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link href="/kontakti">Na kontaktoni</Link>
-                </Button>
+                <RrethNeshBottomCTA />
               </div>
             </div>
           </div>
