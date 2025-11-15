@@ -2,6 +2,7 @@ import type { MutableRefObject } from "react"
 import type { SupabaseClient } from "@supabase/supabase-js"
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import { logAuthAction } from "@/lib/auth/logging"
+import { resetSupabaseBrowserClient } from "@/lib/supabase-browser"
 
 interface SignOutDeps {
   supabase: SupabaseClient<any, any, any>
@@ -30,10 +31,7 @@ export function createSignOutHandler({
     logAuthAction("signOut", "Sign-out initiated")
 
     try {
-      resetAuthState()
-      router.replace("/auth/kycu")
-      router.refresh()
-
+      // Step 1: Clear client-side auth state first
       try {
         await supabase.auth.signOut({ scope: "local" })
         logAuthAction("signOut", "Client-side sign-out successful")
@@ -43,6 +41,11 @@ export function createSignOutHandler({
         })
       }
 
+      // Step 2: Reset the browser client singleton to clear cached session
+      resetSupabaseBrowserClient()
+      logAuthAction("signOut", "Browser client singleton reset")
+
+      // Step 3: Server-side sign-out and cookie cleanup - WAIT for this to complete
       try {
         const response = await fetch("/api/auth/signout", {
           method: "POST",
@@ -52,18 +55,40 @@ export function createSignOutHandler({
 
         if (!response.ok) {
           const payload = await response.json().catch(() => null)
-          throw new Error(payload?.error ?? "Nuk u arrit dalja nga llogaria.")
+          logAuthAction("signOut", "Server-side sign-out error", {
+            status: response.status,
+            error: payload?.error,
+          })
+        } else {
+          logAuthAction("signOut", "Server-side sign-out successful")
         }
-
-        logAuthAction("signOut", "Server-side sign-out successful")
       } catch (error) {
-        logAuthAction("signOut", "Server-side sign-out error (non-fatal)", {
+        logAuthAction("signOut", "Server-side sign-out fetch error (non-fatal)", {
           error: error instanceof Error ? error.message : String(error),
         })
       }
-    } finally {
+
+      // Step 3: Give server time to set cookies before navigation
+      await new Promise((resolve) => setTimeout(resolve, 100))
+
+      // Step 4: Reset UI state immediately
+      resetAuthState()
+
+      // Step 5: Clear the in-flight flag BEFORE navigation to prevent blocking on new page
       signOutInFlightRef.current = false
       setSignOutPending(false)
+
+      // Step 6: Force navigation with window.location.replace for immediate effect
+      // This is more reliable than href as it prevents back button issues
+      window.location.replace("/auth/kycu")
+    } catch (error) {
+      logAuthAction("signOut", "Unexpected error during sign-out", {
+        error: error instanceof Error ? error.message : String(error),
+      })
+      signOutInFlightRef.current = false
+      setSignOutPending(false)
+      // Force navigation even on error
+      window.location.replace("/auth/kycu")
     }
   }
 }

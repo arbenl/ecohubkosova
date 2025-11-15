@@ -4,21 +4,22 @@ import DrejtoriaClientPage from "./drejtoria-client-page" // Will create this cl
 import { getOrganizationsData } from "./actions"
 
 interface DrejtoriaPageProps {
-  searchParams: {
+  searchParams: Promise<{
     search?: string
     type?: string
     interest?: string
     page?: string
-  }
+  }>
 }
 
 export default async function DrejtoriaPage({ searchParams }: DrejtoriaPageProps) {
-  const { initialOrganizations, hasMoreInitial, error } = await getOrganizationsData(searchParams)
+  const params = await searchParams
+  const { initialOrganizations, hasMoreInitial, error } = await getOrganizationsData(params)
 
-  const initialSearchQuery = searchParams.search || ""
-  const initialSelectedType = searchParams.type || "all"
-  const initialSelectedInterest = searchParams.interest || "all"
-  const initialPage = Number.parseInt(searchParams.page || "1")
+  const initialSearchQuery = params.search || ""
+  const initialSelectedType = params.type || "all"
+  const initialSelectedInterest = params.interest || "all"
+  const initialPage = Number.parseInt(params.page || "1")
 
   // TODO: Handle the error state in the UI
   if (error) {

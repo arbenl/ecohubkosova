@@ -72,12 +72,14 @@ export async function middleware(req: NextRequest) {
     const isAdminRoute = ADMIN_PREFIXES.some((prefix) => pathname.startsWith(prefix))
     const isAuthRoute = AUTH_PREFIXES.some((prefix) => pathname.startsWith(prefix))
 
+    // Clear stale session cookie if no session exists
     if (!hasSession && cookieSessionVersion) {
       logMiddlewareEvent(pathname, "Clearing stale session cookie")
       res.cookies.set(SESSION_VERSION_COOKIE, "", SESSION_VERSION_COOKIE_CLEAR_OPTIONS)
     }
 
-    if (sessionUserId) {
+    // Only query database if user is authenticated AND accessing protected routes or admin routes
+    if (sessionUserId && (isProtected || isAdminRoute)) {
       logMiddlewareEvent(pathname, "Validating session", { userId: sessionUserId })
 
       const { data: userRow, error: userError } = await supabase
@@ -90,6 +92,7 @@ export async function middleware(req: NextRequest) {
         logMiddlewareEvent(pathname, "Session validation failed", {
           error: userError?.message ?? "User not found",
         })
+        // Don't redirect here, let the route handle missing user
       } else {
         const userRole = userRow.roli
         const dbSessionVersion = userRow.session_version
@@ -101,6 +104,7 @@ export async function middleware(req: NextRequest) {
           role: userRole,
         })
 
+        // Session version mismatch indicates concurrent login - force re-login
         if (cookieSessionVersion && cookieSessionVersion !== dbVersionString) {
           logMiddlewareEvent(pathname, "Session version mismatch - logging out", {
             cookieVersion: cookieSessionVersion,
@@ -126,6 +130,7 @@ export async function middleware(req: NextRequest) {
           return redirectResponse
         }
 
+        // Sync cookie with database session version
         if (!cookieSessionVersion || cookieSessionVersion !== dbVersionString) {
           logMiddlewareEvent(pathname, "Syncing session version cookie", {
             old: cookieSessionVersion,
@@ -135,6 +140,7 @@ export async function middleware(req: NextRequest) {
           res.cookies.set(AUTH_STATE_COOKIE, "authenticated", AUTH_STATE_COOKIE_OPTIONS)
         }
 
+        // Admin route access control
         if (isAdminRoute && !userRole?.includes("Admin")) {
           logMiddlewareEvent(pathname, "Unauthorized admin access", {
             userId: sessionUserId,

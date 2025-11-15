@@ -6,8 +6,17 @@ import { Users, ArrowRight } from "lucide-react"
 import { useAuth } from "@/lib/auth-provider"
 
 export function EksploroCTA() {
-  const { user } = useAuth()
+  const { user, isLoading } = useAuth()
   const isAuthenticated = Boolean(user)
+
+  // Don't show anything while loading to prevent flash of wrong content
+  if (isLoading) {
+    return (
+      <div className="flex flex-col sm:flex-row gap-6 justify-center">
+        <div className="h-14 w-48 bg-gray-200 animate-pulse rounded-2xl" />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col sm:flex-row gap-6 justify-center">

@@ -49,8 +49,9 @@ export async function signIn(prevState: any, formData: FormData): Promise<SignIn
       email,
       error: error.message,
     })
+    // Use generic error message to prevent email enumeration attacks
     return {
-      message: error.message,
+      message: "Email ose fjalekalim i gabuar. Ju lutemi provoni perseri.",
     }
   }
 
@@ -65,21 +66,21 @@ export async function signIn(prevState: any, formData: FormData): Promise<SignIn
 
   const newVersion = await incrementSessionVersion(userId)
 
-  if (newVersion === null) {
-    logAuthAction("signIn", "Failed to increment session version", { userId })
-    return {
-      message: "Gabim gjatë përditësimit të sesionit.",
-    }
+  if (newVersion !== null) {
+    const cookieStore = await cookies()
+    cookieStore.set(SESSION_VERSION_COOKIE, String(newVersion), SESSION_VERSION_COOKIE_OPTIONS)
+
+    logAuthAction("signIn", "Login successful with session versioning", {
+      userId,
+      email,
+      sessionVersion: newVersion,
+    })
+  } else {
+    logAuthAction("signIn", "Login successful (session versioning unavailable)", {
+      userId,
+      email,
+    })
   }
-
-  const cookieStore = await cookies()
-  cookieStore.set(SESSION_VERSION_COOKIE, String(newVersion), SESSION_VERSION_COOKIE_OPTIONS)
-
-  logAuthAction("signIn", "Login successful", {
-    userId,
-    email,
-    sessionVersion: newVersion,
-  })
 
   // Return success instead of using redirect() to avoid the Response.clone error
   return { success: true }
@@ -89,13 +90,18 @@ export async function signInWithGoogle(): Promise<SignInWithGoogleResponse> {
   logAuthAction("signInWithGoogle", "OAuth login initiated")
 
   const supabase = await createServerActionSupabaseClient()
-  const { headers } = await import("next/headers")
-  const origin = (await headers()).get("origin")
+  
+  // Use hardcoded site URL to prevent open redirect vulnerability
+  const redirectUrl = process.env.NEXT_PUBLIC_SITE_URL
+  if (!redirectUrl) {
+    logAuthAction("signInWithGoogle", "Missing NEXT_PUBLIC_SITE_URL environment variable")
+    return { error: "Konfigurimi i shërbimit nuk është i saktë. Kontaktoni suportën." }
+  }
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${origin}/auth/callback`,
+      redirectTo: `${redirectUrl}/auth/callback`,
     },
   })
 

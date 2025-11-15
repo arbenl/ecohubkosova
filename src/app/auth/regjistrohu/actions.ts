@@ -102,8 +102,13 @@ emri_i_plote: payload.emri_i_plote,
       }
     })
 
-    const cookieStore = await cookies()
-    cookieStore.set(SESSION_VERSION_COOKIE, "1", SESSION_VERSION_COOKIE_OPTIONS)
+    try {
+      const cookieStore = await cookies()
+      cookieStore.set(SESSION_VERSION_COOKIE, "1", SESSION_VERSION_COOKIE_OPTIONS)
+    } catch (cookieError) {
+      // Session versioning is optional, don't fail registration if it fails
+      console.warn("Failed to set session version cookie:", cookieError)
+    }
 
     // Revalidate paths that might display user/organization data
     revalidatePath("/dashboard")
@@ -113,6 +118,7 @@ emri_i_plote: payload.emri_i_plote,
     return { success: true }
   } catch (error: any) {
     console.error("Server Action Error (registerUser):", error)
-    return { error: error.message || "Gabim i panjohur gjatë regjistrimit. Ju lutemi provoni përsëri." }
+    // Use generic error message to prevent account enumeration
+    return { error: "Regjistrimi dështoi. Ju lutemi provoni më vonë ose kontaktoni suportën." }
   }
 }

@@ -10,7 +10,7 @@ const baseCookieOptions = {
 
 export const SESSION_VERSION_COOKIE_OPTIONS = {
   ...baseCookieOptions,
-  maxAge: 60 * 60 * 24 * 30,
+  maxAge: 60 * 60 * 24 * 7, // 7 days instead of 30 (industry standard for session timeout)
 }
 
 export const SESSION_VERSION_COOKIE_CLEAR_OPTIONS = {

@@ -8,7 +8,7 @@ import { getListingsData } from "./actions" // Import the new server action
 import { getServerUser } from "@/lib/supabase/server" // Keep for user check
 
 interface TreguPageProps {
-  searchParams: {
+  searchParams: Promise<{
     lloji?: string
     search?: string
     category?: string
@@ -16,23 +16,26 @@ interface TreguPageProps {
     condition?: string
     location?: string
     sort?: string
-  }
+  }>
 }
 
 export default async function TreguPage({ searchParams }: TreguPageProps) {
+  // Await searchParams as it's now a Promise in Next.js 16
+  const params = await searchParams
+  
   // Fetch user securely for gating UI
   const { user } = await getServerUser()
 
-  const { initialListings, hasMoreInitial, error } = await getListingsData(searchParams)
+  const { initialListings, hasMoreInitial, error } = await getListingsData(params)
 
   const initialTab =
-    searchParams.lloji === "blej" ? "blej" : searchParams.lloji === "shes" ? "shes" : "te-gjitha"
-  const initialSearchQuery = searchParams.search || ""
-  const initialSelectedCategory = searchParams.category || "all"
-  const initialPage = Number.parseInt(searchParams.page || "1")
-  const initialCondition = searchParams.condition || ""
-  const initialLocation = searchParams.location || ""
-  const initialSortOrder = searchParams.sort === "oldest" ? "oldest" : "newest"
+    params.lloji === "blej" ? "blej" : params.lloji === "shes" ? "shes" : "te-gjitha"
+  const initialSearchQuery = params.search || ""
+  const initialSelectedCategory = params.category || "all"
+  const initialPage = Number.parseInt(params.page || "1")
+  const initialCondition = params.condition || ""
+  const initialLocation = params.location || ""
+  const initialSortOrder = params.sort === "oldest" ? "oldest" : "newest"
 
   const categories = [
     "Materiale të riciklueshme",

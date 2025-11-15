@@ -14,3 +14,9 @@ export const getSupabaseBrowserClient = () => {
   }
   return browserClient
 }
+
+// Force reset the browser client - clears all cached session state
+export const resetSupabaseBrowserClient = () => {
+  browserClient = null
+}
+
