@@ -37,7 +37,14 @@ export async function middleware(req: NextRequest) {
   const isAuthRoute = AUTH_PREFIXES.some((prefix) => pathname.startsWith(prefix))
 
   // Always forward Set-Cookie headers so Supabase sessions persist across redirects.
-  const redirectWithCookies = (url: URL) => NextResponse.redirect(url, { headers: res.headers })
+  const redirectWithCookies = (url: URL) => {
+    const redirectResponse = NextResponse.redirect(url)
+    const setCookieHeaders = (res.headers as Headers & { getSetCookie?: () => string[] }).getSetCookie?.() ?? []
+    for (const cookie of setCookieHeaders) {
+      redirectResponse.headers.append("set-cookie", cookie)
+    }
+    return redirectResponse
+  }
 
   if (isProtected && !hasSession) {
     const redirectUrl = req.nextUrl.clone()
