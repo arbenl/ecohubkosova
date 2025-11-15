@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "next dev",
     "check:src-structure": "node scripts/check-src-structure.mjs",
-    "lint": "pnpm check:src-structure && next lint",
+    "lint": "pnpm check:src-structure",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",

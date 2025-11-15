@@ -390,7 +390,12 @@ export default function NdihmePage() {
             </CardHeader>
             <CardContent className="text-center">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                <Button asChild>\n                  <Link href=\"/contact\">\n                    <MessageCircle className=\"h-4 w-4 mr-2\" />\n                    Kontaktoni mbështetjen\n                  </Link>\n                </Button>
+                <Button asChild>
+                  <Link href="/contact">
+                    <MessageCircle className="h-4 w-4 mr-2" />
+                    Kontaktoni mbështetjen
+                  </Link>
+                </Button>
                 <Button asChild variant="outline">
                   <Link href="/faq">
                     <BookOpen className="h-4 w-4 mr-2" />
