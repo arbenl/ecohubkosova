@@ -17,7 +17,7 @@ These must NEVER be exposed to the client:
 
 ```
 SUPABASE_SERVICE_ROLE_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_DB_URL = postgresql://postgres.xjyseqtfuxcuviiankhy:PASSWORD@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require
+SUPABASE_DB_URL = postgresql://postgres.[PROJECT_ID]:[PASSWORD]@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require
 ```
 
 ## How to Find Your Credentials
@@ -29,273 +29,184 @@ SUPABASE_DB_URL = postgresql://postgres.xjyseqtfuxcuviiankhy:PASSWORD@aws-1-eu-w
 
 ### 2. NEXT_PUBLIC_SUPABASE_ANON_KEY
 - Go to: Supabase Dashboard → Project Settings → API
-- Under "Project API Keys", find "anon public"
-- Copy the key value
+- Under "Project API Keys", find "anon" / "public"
+- Format: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` (JWT token)
 
 ### 3. SUPABASE_SERVICE_ROLE_KEY
 - Go to: Supabase Dashboard → Project Settings → API
 - Under "Project API Keys", find "service_role secret"
-- ⚠️ **NEVER share this publicly** - it has full database access!
-- Only used in API routes and server actions
+- Format: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` (JWT token)
+- ⚠️ **CRITICAL**: This is a SECRET. Keep it private. Never share or commit it.
 
 ### 4. SUPABASE_DB_URL
 - Go to: Supabase Dashboard → Project Settings → Database
 - Copy the "Connection String" → "URI"
 - Format: `postgresql://postgres.[project-id]:[password]@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require`
+- ⚠️ **CRITICAL**: This contains your database password. Keep it private. Never share or commit it.
 
 ## Setting Up Vercel Environment Variables
 
-### Option 1: Via Vercel Dashboard (Recommended)
+### Option 1: Vercel Dashboard (Recommended for beginners)
 
-1. Go to: https://vercel.com/dashboard
-2. Select your project
-3. Settings → Environment Variables
-4. Add each variable:
-   - **Name**: `NEXT_PUBLIC_SUPABASE_URL`
-   - **Value**: Your URL from Supabase
-   - **Environments**: Production, Preview, Development
-   - Click "Save"
-5. Repeat for all 4 variables
+1. Go to: [Vercel Dashboard](https://vercel.com/dashboard) → Select Your Project
+2. Click: **Settings** → **Environment Variables**
+3. Add each variable one by one:
 
-### Option 2: Via Vercel CLI
+```
+Name: NEXT_PUBLIC_SUPABASE_URL
+Value: https://your-project.supabase.co
+Environments: ✓ Production, ✓ Preview, (Optional) Development
 
-```bash
-# Install Vercel CLI if not already installed
-npm i -g vercel
+Name: NEXT_PUBLIC_SUPABASE_ANON_KEY
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Environments: ✓ Production, ✓ Preview, (Optional) Development
 
-# Link your local project
-vercel link
+Name: SUPABASE_SERVICE_ROLE_KEY
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Environments: ✓ Production, ✓ Preview
 
-# Add environment variables
-vercel env add NEXT_PUBLIC_SUPABASE_URL
-vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
-vercel env add SUPABASE_SERVICE_ROLE_KEY
-vercel env add SUPABASE_DB_URL
-
-# Pull them locally
-vercel env pull
+Name: SUPABASE_DB_URL
+Value: postgresql://postgres.[project-id]:[password]@...
+Environments: ✓ Production, ✓ Preview
 ```
 
-## Environment Variable Scope
+4. Click **Save** after each variable
+5. Trigger a redeploy: `git push` or manually redeploy in Vercel
 
-Set each variable for the appropriate environments:
-
-| Variable | Scope | Usage |
-|----------|-------|-------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Production, Preview, Development | Client & server auth |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Production, Preview, Development | Client-side authentication |
-| `SUPABASE_SERVICE_ROLE_KEY` | Production, Preview | Server-side DB operations (keep secret) |
-| `SUPABASE_DB_URL` | Production, Preview | Direct database access via Drizzle ORM |
-
-## Checking Current Deployment
-
-### View Environment Variables in Vercel
+### Option 2: Vercel CLI (For developers who like the terminal)
 
 ```bash
 # Login to Vercel
 vercel login
 
-# View all environment variables for your project
-vercel env list
+# Interactive setup - adds to Vercel dashboard
+vercel env add NEXT_PUBLIC_SUPABASE_URL
+vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
+vercel env add SUPABASE_SERVICE_ROLE_KEY
+vercel env add SUPABASE_DB_URL
 
-# View specific environment variable (for public vars only)
-vercel env pull .env.production.local
+# Pull them locally to .env.local (optional, for local testing)
+vercel env pull
+
+# Redeploy with new environment variables
+vercel deploy --prod
 ```
 
-### Check What Your App Sees
+## Environment Variables Summary
 
-Create a debug page at `src/app/debug/env.tsx`:
+| Variable | Type | Required? | Where to Get | Scope |
+|----------|------|-----------|--------------|-------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Public | ✅ Yes | Supabase Dashboard → Settings → API | Client & Server |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public | ✅ Yes | Supabase Dashboard → Settings → API | Client & Server |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secret | ⚠️ Optional | Supabase Dashboard → Settings → API | Production, Preview |
+| `SUPABASE_DB_URL` | Secret | ✅ Yes | Supabase Dashboard → Settings → Database | Production, Preview |
+
+## Checking Current Deployment
+
+To verify environment variables are set correctly, create a test page at `src/app/api/test-env/route.ts`:
 
 ```typescript
-export default function EnvDebug() {
-  return (
-    <div className="p-4">
-      <h1>Environment Variables</h1>
-      <pre>{JSON.stringify({
-        SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-        SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? '✓ SET' : '✗ MISSING',
-        DB_URL_STATUS: process.env.SUPABASE_DB_URL ? '✓ SET' : '✗ MISSING',
-        SERVICE_ROLE: process.env.SUPABASE_SERVICE_ROLE_KEY ? '✓ SET' : '✗ MISSING',
-      }, null, 2)}</pre>
-    </div>
-  )
+export async function GET() {
+  return Response.json({
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ? '✓ SET' : '✗ MISSING',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? '✓ SET' : '✗ MISSING',
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? '✓ SET' : '✗ MISSING',
+    SUPABASE_DB_URL: process.env.SUPABASE_DB_URL ? '✓ SET' : '✗ MISSING',
+  }, { status: 200 })
 }
 ```
 
-Then visit: `https://your-vercel-app.vercel.app/debug/env`
+Visit: `https://your-domain.vercel.app/api/test-env`
 
-## Common Issues & Fixes
+You should see all variables marked as `✓ SET`.
 
-### Issue 1: 500 Error on Profile Endpoint
+## Using Vercel CLI for Local Development
 
-**Symptom**: `/api/auth/profile` returns 500 in production but works locally
+Once environment variables are added to Vercel:
 
-**Cause**: `SUPABASE_DB_URL` is missing in Vercel
+```bash
+# Pull all Vercel environment variables to .env.local
+vercel env pull .env.local
 
-**Fix**:
-1. Go to Vercel Dashboard → Settings → Environment Variables
-2. Add `SUPABASE_DB_URL` for Production and Preview environments
+# Now pnpm dev will use these values
+pnpm dev
+```
+
+This is useful for testing production configuration locally before deploying.
+
+## Common Setup Issues
+
+### Issue: Variables set in Vercel but not working locally
+
+**Solution**: Run `vercel env pull .env.local` to sync local environment with Vercel.
+
+### Issue: "Cannot find module 'supabase'" or connection fails
+
+**Cause**: Missing `SUPABASE_DB_URL` or `SUPABASE_SERVICE_ROLE_KEY`
+
+**Solution**:
+1. Verify all 4 variables are set in Vercel Dashboard
+2. Double-check values are copied completely (not truncated)
 3. Redeploy: `git push`
 
-### Issue 2: Redirect Loop (kycu ↔ dashboard)
+### Issue: ANSI codes or formatting issues with connection string
 
-**Symptom**: Login redirects to kycu, which redirects back to dashboard
+**Cause**: Password contains special characters
 
-**Causes**:
-- Missing `SUPABASE_DB_URL` (profile endpoint returns 500)
-- Missing `NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- Incorrect keys (copy-paste error, truncated value)
+**Solution**:
+- Connection strings with special characters should work fine
+- If issues persist, regenerate the connection string in Supabase
 
-**Fix**:
-1. Verify all 4 variables are set in Vercel
-2. Copy full values (don't truncate)
-3. Redeploy
-4. Check browser console for auth errors
+## Security Best Practices
 
-### Issue 3: "Auth Session Missing" on Profile Fetch
+✅ **DO:**
+- Store secrets in Vercel environment variables (never in code)
+- Use Vercel's "Secret" type for sensitive variables
+- Rotate keys regularly (at least quarterly)
+- Use different keys for Production vs Preview
+- Use service role key only in server-side code (never send to client)
 
-**Symptom**: Profile fetch returns 401 unauthorized
+❌ **DON'T:**
+- Commit `.env.local` or any file with secrets to Git
+- Share connection strings or API keys
+- Use the same secret across multiple projects
+- Hardcode secrets in code
+- Expose `SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE_DB_URL` to the client
 
-**Causes**:
-- Anon key doesn't have proper RLS permissions
-- Session cookie not being sent with request
-- CORS misconfiguration
+## Testing Connection After Setup
 
-**Fix**:
-1. Verify RLS policies in Supabase Dashboard → SQL Editor
-2. Check that cookies are properly configured in both `supabase-server.ts` and route handlers
-3. Verify `NEXT_PUBLIC_SUPABASE_URL` matches your Supabase project
+Once variables are set:
 
-### Issue 4: Database Connection Refused
-
-**Symptom**: Drizzle ORM queries fail in production
-
-**Cause**: `SUPABASE_DB_URL` is incorrect or expired
-
-**Fix**:
-1. Go to Supabase Dashboard → Database → Connection String
-2. Copy the full URI (including password)
-3. Update `SUPABASE_DB_URL` in Vercel
-4. Note: Connection strings sometimes expire - refresh if older than 30 days
-
-## Security Checklist
-
-- ✅ `NEXT_PUBLIC_*` variables: Safe to expose, used in client code
-- ✅ `SUPABASE_SERVICE_ROLE_KEY`: Only in server-side API routes, NEVER in client
-- ✅ `SUPABASE_DB_URL`: Only in server-side Drizzle ORM, NEVER in client
-- ✅ All secrets are unique per environment (Production ≠ Preview ≠ Development)
-- ✅ Rotate keys if you suspect compromise
-- ✅ Don't commit `.env.local` to git (add to `.gitignore`)
-
-## Testing Your Configuration
-
-After setting variables in Vercel, test each layer:
-
-### 1. Test Authentication
 ```bash
-# Try logging in at /auth/kycu
-# Check browser DevTools → Application → Cookies for auth session
+# Trigger a redeploy to apply environment variables
+git push
+
+# Wait for build to complete (watch on Vercel dashboard)
+
+# Test a simple endpoint that uses the database
+curl https://your-domain.vercel.app/api/v1/articles?limit=1
+
+# Should return JSON (not 500 error)
 ```
 
-### 2. Test Profile Fetch
-```bash
-# After login, check Network tab in DevTools
-# GET /api/auth/profile should return 200 with profile data
-```
+## If Something Goes Wrong
 
-### 3. Test Dashboard Access
-```bash
-# After login, navigate to /dashboard
-# Should display without errors
-```
+1. Check Vercel Build Logs: Vercel Dashboard → Deployments → (Click a deployment) → Logs
+2. Look for error messages like "Cannot find env variable" or connection timeouts
+3. Verify all 4 variables are set: Vercel Dashboard → Settings → Environment Variables
+4. Make sure values are complete (not truncated)
+5. Try redeploying: `git push` or click "Redeploy" in Vercel
 
-### 4. Test Logout
-```bash
-# Click logout
-# Should redirect to /auth/kycu
-# Cookies should be cleared
-```
+## Next Steps
 
-## Deployment Workflow
-
-1. **Local Testing** (using `.env.local`)
-   ```bash
-   npm run dev
-   ```
-
-2. **Push to GitHub**
-   ```bash
-   git add -A
-   git commit -m "Feature: xyz"
-   git push origin next_upgrade
-   ```
-
-3. **Vercel Auto-Deploy**
-   - Vercel webhook triggers
-   - Uses environment variables from dashboard
-   - Builds and deploys to preview/production
-
-4. **Verify Deployment**
-   - Visit preview URL
-   - Test login flow
-   - Check for errors in Vercel logs
-
-## Troubleshooting with Vercel Logs
-
-### View Build Logs
-```bash
-vercel logs --follow
-```
-
-### View Runtime Logs
-```bash
-vercel logs --tail
-```
-
-### View Specific Deployment
-```bash
-vercel inspect [deployment-url]
-```
-
-## Step-by-Step Setup for Fresh Deployment
-
-If starting from scratch:
-
-1. **Copy your local variables**
-   ```bash
-   cat .env.local | grep -E "NEXT_PUBLIC_|SUPABASE_"
-   ```
-
-2. **Go to Vercel Dashboard** → Your Project → Settings → Environment Variables
-
-3. **Add each variable:**
-   - Copy from `.env.local`
-   - Set scope to: Production, Preview, Development
-   - Save
-
-4. **Redeploy:**
-   ```bash
-   git push origin next_upgrade
-   ```
-
-5. **Verify:**
-   - Check Vercel logs during build
-   - Visit app URL after deploy
-   - Test auth flow
-
-6. **Monitor:**
-   - Check Vercel Dashboard for errors
-   - Review application logs in `/debug/session` or browser console
-   - Monitor Supabase Dashboard for usage/errors
+1. ✅ Add all 4 variables to Vercel Dashboard
+2. ✅ Trigger a redeploy (`git push`)
+3. ✅ Test with `curl` or visit your app
+4. ✅ Check logs if any errors occur
+5. ✅ Keep secrets safe and rotate regularly
 
 ---
 
-## Current Status
-
-Your local environment has all required variables set in `.env.local`:
-- ✅ `NEXT_PUBLIC_SUPABASE_URL`
-- ✅ `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- ✅ `SUPABASE_SERVICE_ROLE_KEY`
-- ✅ `SUPABASE_DB_URL`
-
-**Next Step**: Ensure these same 4 variables are added to your **Vercel dashboard** for Production and Preview environments.
+**Troubleshooting Guide**: See [`VERCEL_DEPLOYMENT_TROUBLESHOOTING.md`](./VERCEL_DEPLOYMENT_TROUBLESHOOTING.md) if you encounter issues after setup.

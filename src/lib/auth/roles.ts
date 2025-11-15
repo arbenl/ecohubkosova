@@ -14,7 +14,7 @@ export async function requireAdminRole() {
   const { user, error: authError } = await getServerUser()
 
   if (authError || !user) {
-    redirect("/auth/kycu?message=Ju duhet të kyçeni për të vazhduar.")
+    redirect("/login?message=Ju duhet të kyçeni për të vazhduar.")
   }
 
   const [profile] = await db
@@ -26,7 +26,7 @@ export async function requireAdminRole() {
   const role = profile?.roli ?? null
 
   if (role !== "Admin") {
-    redirect(`/auth/kycu?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`)
+    redirect(`/login?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`)
   }
 
   return { user, role }

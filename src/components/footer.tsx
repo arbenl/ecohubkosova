@@ -24,7 +24,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/eksploro"
+                  href="/explore"
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Eksploro
@@ -40,7 +40,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/tregu"
+                  href="/marketplace"
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Tregu

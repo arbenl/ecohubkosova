@@ -80,7 +80,7 @@ export function createSignOutHandler({
 
       // Step 6: Force navigation with window.location.replace for immediate effect
       // This is more reliable than href as it prevents back button issues
-      window.location.replace("/auth/kycu")
+      window.location.replace("/login")
     } catch (error) {
       logAuthAction("signOut", "Unexpected error during sign-out", {
         error: error instanceof Error ? error.message : String(error),
@@ -88,7 +88,7 @@ export function createSignOutHandler({
       signOutInFlightRef.current = false
       setSignOutPending(false)
       // Force navigation even on error
-      window.location.replace("/auth/kycu")
+      window.location.replace("/login")
     }
   }
 }
