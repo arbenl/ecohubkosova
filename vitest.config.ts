@@ -20,10 +20,12 @@ export default defineConfig({
         "src/test/**",
         "src/types/**",
       ],
-      lines: 80,
-      functions: 80,
-      branches: 75,
-      statements: 80,
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 75,
+        statements: 80,
+      },
     },
   },
   resolve: {
