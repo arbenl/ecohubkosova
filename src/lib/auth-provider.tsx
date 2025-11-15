@@ -134,6 +134,7 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
 
       logAuthAction("hydrateUser", "Hydrating user", { userId: nextUser.id })
       setUser(nextUser)
+      setIsLoading(true)
 
       try {
         const profile = await fetchUserProfile(nextUser.id)
@@ -151,6 +152,8 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
         })
         setUserProfile(null)
         setIsAdmin(false)
+      } finally {
+        setIsLoading(false)
       }
     },
     [fetchUserProfile, resetAuthState]
@@ -204,7 +207,12 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
           throw userError
         }
 
-        await hydrateUser(user ?? null)
+        // Force immediate hydration for SIGNED_IN events
+        if (event === "SIGNED_IN" || event === "USER_UPDATED") {
+          await hydrateUser(user ?? null)
+        } else {
+          await hydrateUser(user ?? null)
+        }
       } catch (error) {
         logAuthAction("onAuthStateChange", "Error handling auth change", {
           event,
