@@ -127,7 +127,7 @@ export default async function DashboardPage() {
               className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
               asChild
             >
-              <Link href="/qendra-e-dijes">
+              <Link href="/knowledge">
                 <BookOpen className="h-8 w-8 text-emerald-600" />
                 <span className="text-sm font-medium text-center">Qendra e dijes</span>
               </Link>

@@ -105,7 +105,7 @@ export default async function Home() {
                     className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 hover:shadow-xl hover:shadow-purple-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href="/partnere">
+                    <Link href="/partners">
                       <Search className="mr-2 h-4 w-4" />
                       Shiko Partnerët
                     </Link>

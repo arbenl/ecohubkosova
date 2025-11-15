@@ -31,7 +31,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
               <h1 className="text-2xl font-bold mb-4">Artikulli nuk u gjet</h1>
               <p className="text-gray-600 mb-6">{error}</p>
               <Button asChild>
-                <Link href="/qendra-e-dijes">
+                <Link href="/knowledge">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Kthehu në Qendrën e Dijes
                 </Link>
@@ -49,7 +49,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
         <div className="container px-4 md:px-6 max-w-4xl">
           <div className="mb-6">
             <Button variant="ghost" asChild>
-              <Link href="/qendra-e-dijes">
+              <Link href="/knowledge">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Kthehu në Qendrën e Dijes
               </Link>
@@ -96,7 +96,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
 
           <div className="mt-8 text-center">
             <Button asChild>
-              <Link href="/qendra-e-dijes">Shiko më shumë artikuj</Link>
+              <Link href="/knowledge">Shiko më shumë artikuj</Link>
             </Button>
           </div>
         </div>

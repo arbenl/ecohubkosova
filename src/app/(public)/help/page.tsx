@@ -54,7 +54,7 @@ export default function NdihmePage() {
               <CardContent className="text-center">
                 <p className="text-sm text-gray-600 mb-4">Kontaktoni ekipin tonë për ndihmë</p>
                 <Button size="sm" variant="outline" asChild>
-                  <Link href="/kontakti">Kontaktoni</Link>
+                  <Link href="/contact">Kontaktoni</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -218,7 +218,7 @@ export default function NdihmePage() {
                     </div>
                   </div>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
-                    <Link href="/qendra-e-dijes">Shiko artikujt</Link>
+                    <Link href="/knowledge">Shiko artikujt</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -390,12 +390,7 @@ export default function NdihmePage() {
             </CardHeader>
             <CardContent className="text-center">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild>
-                  <Link href="/kontakti">
-                    <MessageCircle className="h-4 w-4 mr-2" />
-                    Kontaktoni mbështetjen
-                  </Link>
-                </Button>
+                                <Button asChild>\n                  <Link href=\"/contact\">\n                    <MessageCircle className=\"h-4 w-4 mr-2\" />\n                    Kontaktoni mbështetjen\n                  </Link>\n                </Button>
                 <Button asChild variant="outline">
                   <Link href="/faq">
                     <BookOpen className="h-4 w-4 mr-2" />

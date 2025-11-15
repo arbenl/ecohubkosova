@@ -30,7 +30,7 @@ export function LatestArticles({ latestArticles }: { latestArticles: any[] }) {
             ))}
             <div className="pt-2">
               <Button variant="outline" size="sm" className="w-full rounded-xl bg-transparent" asChild>
-                <Link href="/qendra-e-dijes">Shiko të gjithë artikujt</Link>
+                <Link href="/knowledge">Shiko të gjithë artikujt</Link>
               </Button>
             </div>
           </>

@@ -411,7 +411,7 @@ export default function RegjistrohuPage() {
                       <div className="flex-1">
                         <Label htmlFor="terms" className="text-sm font-medium leading-relaxed cursor-pointer">
                           Pranoj{" "}
-                          <Link href="/kushtet-e-perdorimit" className="text-[#00C896] hover:text-[#00A07E] underline">
+                          <Link href="/legal/terms" className="text-[#00C896] hover:text-[#00A07E] underline">
                             kushtet e përdorimit
                           </Link>{" "}
                           dhe{" "}

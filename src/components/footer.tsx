@@ -32,7 +32,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/partnere"
+                  href="/partners"
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Partnerët
@@ -48,7 +48,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/qendra-e-dijes"
+                  href="/knowledge"
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Qendra e Dijes
@@ -62,7 +62,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/kush-jemi"
+                  href="/about/vision"
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Kush jemi ne
@@ -70,7 +70,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/misioni"
+                  href="/about/mission"
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Misioni ynë
@@ -78,7 +78,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/koalicioni"
+                  href="/about/coalition"
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Koalicioni
@@ -92,7 +92,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/kontakti"
+                  href="/contact"
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Kontakti
@@ -105,7 +105,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/ndihme"
+                  href="/help"
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Ndihmë
@@ -113,7 +113,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/kushtet-e-perdorimit"
+                  href="/legal/terms"
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Kushtet e përdorimit

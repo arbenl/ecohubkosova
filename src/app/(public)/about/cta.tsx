@@ -35,7 +35,7 @@ export function RrethNeshHeroCTA() {
         size="lg"
         className="rounded-2xl px-8 py-4 text-lg font-semibold border-2 border-gray-200 hover:border-emerald-600 hover:text-emerald-700 transition-all duration-300 hover:scale-105 bg-transparent"
       >
-        <Link href="/kontakti">
+        <Link href="/contact">
           Na kontaktoni
         </Link>
       </Button>
@@ -65,7 +65,7 @@ export function RrethNeshBottomCTA() {
         </Link>
       </Button>
       <Button asChild variant="outline">
-        <Link href="/kontakti">Na kontaktoni</Link>
+        <Link href="/contact">Na kontaktoni</Link>
       </Button>
     </>
   ) : (
@@ -76,7 +76,7 @@ export function RrethNeshBottomCTA() {
         </Link>
       </Button>
       <Button asChild variant="outline">
-        <Link href="/kontakti">Na kontaktoni</Link>
+        <Link href="/contact">Na kontaktoni</Link>
       </Button>
     </>
   )
