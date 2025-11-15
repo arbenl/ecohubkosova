@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic"
 
 export async function POST() {
   try {
-    const supabase = createRouteHandlerSupabaseClient()
+    const supabase = await createRouteHandlerSupabaseClient()
 
     logAuthAction("signoutEndpoint", "Sign-out request received")
 

@@ -4,19 +4,20 @@ import QendraEDijesClientPage from "./qendra-e-dijes-client-page" // Will create
 import { getArticlesData } from "./actions"
 
 interface QendraEDijesPageProps {
-  searchParams: {
+  searchParams: Promise<{
     search?: string
     category?: string
     page?: string
-  }
+  }>
 }
 
 export default async function QendraEDijesPage({ searchParams }: QendraEDijesPageProps) {
-  const { initialArticles, hasMoreInitial, error } = await getArticlesData(searchParams)
+  const params = await searchParams
+  const { initialArticles, hasMoreInitial, error } = await getArticlesData(params)
 
-  const initialSearchQuery = searchParams.search || ""
-  const initialSelectedCategory = searchParams.category || "all"
-  const initialPage = Number.parseInt(searchParams.page || "1")
+  const initialSearchQuery = params.search || ""
+  const initialSelectedCategory = params.category || "all"
+  const initialPage = Number.parseInt(params.page || "1")
 
   // TODO: Handle the error state in the UI
   if (error) {

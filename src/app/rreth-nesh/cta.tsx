@@ -6,8 +6,13 @@ import { Users, ArrowRight } from "lucide-react"
 import { useAuth } from "@/lib/auth-provider"
 
 export function RrethNeshHeroCTA() {
-  const { user } = useAuth()
-  const isAuthenticated = Boolean(user)
+  const { user, isLoading, userProfile } = useAuth()
+  const isAuthenticated = Boolean(user?.id)
+
+  // Don't show anything while loading to prevent flash of wrong content
+  if (isLoading) {
+    return <div className="h-14 w-48 bg-gray-200 animate-pulse rounded-2xl" />
+  }
 
   return isAuthenticated ? (
     <Button asChild size="lg" className="bg-gradient-to-r from-emerald-500 to-emerald-700 hover:shadow-xl hover:shadow-emerald-400/30 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105">
@@ -39,8 +44,18 @@ export function RrethNeshHeroCTA() {
 }
 
 export function RrethNeshBottomCTA() {
-  const { user } = useAuth()
-  const isAuthenticated = Boolean(user)
+  const { user, isLoading, userProfile } = useAuth()
+  const isAuthenticated = Boolean(user?.id)
+
+  // Don't show anything while loading to prevent flash of wrong content
+  if (isLoading) {
+    return (
+      <>
+        <div className="h-10 w-32 bg-gray-200 animate-pulse rounded" />
+        <div className="h-10 w-32 bg-gray-200 animate-pulse rounded" />
+      </>
+    )
+  }
 
   return isAuthenticated ? (
     <>

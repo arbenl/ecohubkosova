@@ -1,14 +1,34 @@
 import { cache } from "react"
 import { cookies } from "next/headers"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createServerClient } from "@supabase/ssr"
 import type { User } from "@supabase/supabase-js"
 
 /**
  * Cached Supabase client for server components. Ensures a single instance per request.
  */
-export const createServerSupabaseClient = cache(() => {
-  const cookieStore = cookies()
-  return createServerComponentClient({ cookies: () => cookieStore })
+export const createServerSupabaseClient = cache(async () => {
+  const cookieStore = await cookies()
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // The `set` method was called from a Server Component.
+            // This can be ignored if you have middleware handling cookie setting.
+          }
+        },
+      },
+    }
+  )
 })
 
 /**
@@ -19,7 +39,7 @@ export const getServerUser = cache(async (): Promise<{
   user: User | null
   error: Error | null
 }> => {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   const isSessionMissing = (err: unknown) =>
     typeof err === "object" &&

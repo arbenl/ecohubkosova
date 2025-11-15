@@ -22,12 +22,14 @@ const allowedDomains = Array.from(new Set([...DEFAULT_IMAGE_DOMAINS, ...extraHos
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ["@supabase/supabase-js"],
-  },
+  serverExternalPackages: ["@supabase/supabase-js"],
   transpilePackages: ["@supabase/auth-js", "@supabase/ssr"],
   images: {
-    domains: allowedDomains,
+    remotePatterns: allowedDomains.map((domain) => ({
+      protocol: "https",
+      hostname: domain,
+      pathname: "/**",
+    })),
     formats: ["image/avif", "image/webp"],
   },
 }

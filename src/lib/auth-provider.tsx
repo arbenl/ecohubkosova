@@ -12,10 +12,14 @@ import {
   useTransition,
 } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import type { User, AuthChangeEvent, AuthResponse, SignInWithPasswordCredentials } from "@supabase/supabase-js"
+import type { User, AuthResponse, SignInWithPasswordCredentials } from "@supabase/supabase-js"
 import { createClientSupabaseClient } from "@/lib/supabase"
 import { createSignOutHandler } from "@/lib/auth/signout-handler"
 import { logAuthAction } from "@/lib/auth/logging"
+import { ProfileManager } from "@/lib/auth/profile-manager"
+import { UserStateManager } from "@/lib/auth/user-state-manager"
+import { SupabaseInitializer } from "@/lib/auth/supabase-initializer"
+import { SessionExpirationHandler } from "@/lib/auth/session-expiration-handler"
 import type { UserProfile } from "@/types"
 
 interface AuthContextType {
@@ -37,98 +41,76 @@ interface AuthProviderProps {
   initialUser: User | null
 }
 
-const PROFILE_FETCH_TIMEOUT = 5000
-const MAX_PROFILE_RETRIES = 2
-
 export function AuthProvider({ children, initialUser }: AuthProviderProps) {
+  // State management
   const [user, setUser] = useState<User | null>(initialUser ?? null)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [signOutPending, setSignOutPending] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
+
+  // Navigation and Supabase
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = useMemo(() => createClientSupabaseClient(), [])
-  const signOutInFlightRef = useRef(false)
-  const profileFetchAbortRef = useRef<AbortController | null>(null)
   const [, startTransition] = useTransition()
 
-  const resetAuthState = useCallback(() => {
-    setUser(null)
-    setUserProfile(null)
-    setIsAdmin(false)
-    setIsLoading(false)
-  }, [])
+  // Refs for managing async operations
+  const signOutInFlightRef = useRef(false)
+  const profileFetchAbortRef = useRef<AbortController | null>(null)
+  const hydrationInFlightRef = useRef(false)
 
-  const fetchUserProfile = useCallback(
-    async (userId: string, attempt: number = 1): Promise<UserProfile | null> => {
-      try {
-        if (profileFetchAbortRef.current) {
-          profileFetchAbortRef.current.abort()
-        }
-
-        const abortController = new AbortController()
-        profileFetchAbortRef.current = abortController
-
-        const timeout = setTimeout(() => abortController.abort(), PROFILE_FETCH_TIMEOUT)
-
-        try {
-          const response = await fetch("/api/auth/profile", {
-            cache: "no-store",
-            signal: abortController.signal,
-          })
-
-          clearTimeout(timeout)
-
-          const payload = await response.json().catch(() => null)
-
-          if (!response.ok) {
-            if (attempt < MAX_PROFILE_RETRIES && response.status !== 401) {
-              logAuthAction("fetchUserProfile", `Retry attempt ${attempt + 1}`, {
-                userId,
-                status: response.status,
-              })
-
-              await new Promise((resolve) => setTimeout(resolve, 1000 * attempt))
-              return fetchUserProfile(userId, attempt + 1)
-            }
-
-            throw new Error(payload?.error || `HTTP ${response.status}`)
-          }
-
-          return (payload?.profile ?? null) as UserProfile | null
-        } catch (fetchError) {
-          if (fetchError instanceof Error && fetchError.name === "AbortError") {
-            logAuthAction("fetchUserProfile", "Profile fetch timeout", { userId })
-            return null
-          }
-          throw fetchError
-        }
-      } catch (error) {
-        logAuthAction("fetchUserProfile", `Error on attempt ${attempt}`, {
-          userId,
-          error: error instanceof Error ? error.message : String(error),
-        })
-        return null
-      }
-    },
+  // Initialize managers
+  const userStateManager = useMemo(
+    () => new UserStateManager(setUser, setUserProfile, setIsLoading, setIsAdmin),
     []
   )
 
+  const profileManager = useMemo(
+    () => new ProfileManager(profileFetchAbortRef),
+    []
+  )
+
+  const supabaseInitializer = useMemo(
+    () => new SupabaseInitializer(supabase, profileManager, userStateManager, profileFetchAbortRef),
+    [supabase, profileManager, userStateManager]
+  )
+
+  const sessionExpirationHandler = useMemo(
+    () => new SessionExpirationHandler(
+      () => userStateManager.reset(),
+      startTransition
+    ),
+    [userStateManager, startTransition]
+  )
+
+  // Reset auth state callback
+  const resetAuthState = useCallback(() => {
+    userStateManager.reset()
+  }, [userStateManager])
+
+  // Refresh user profile
   const refreshUserProfile = useCallback(async () => {
     if (user) {
       logAuthAction("refreshUserProfile", "Refreshing profile", { userId: user.id })
-      const profile = await fetchUserProfile(user.id)
+      const profile = await profileManager.fetchUserProfile(user.id)
       setUserProfile(profile)
       setIsAdmin(profile?.roli === "Admin")
     }
-  }, [user, fetchUserProfile])
+  }, [user, profileManager])
 
+  // Hydrate user from current session
   const hydrateUser = useCallback(
     async (nextUser: User | null) => {
+      // Don't hydrate if sign out is in progress
+      if (signOutInFlightRef.current) {
+        logAuthAction("hydrateUser", "Skipping hydration - sign out in progress")
+        return
+      }
+
       if (!nextUser) {
         logAuthAction("hydrateUser", "Clearing user state (no user)")
-        resetAuthState()
+        userStateManager.reset()
         return
       }
 
@@ -137,9 +119,8 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
       setIsLoading(true)
 
       try {
-        const profile = await fetchUserProfile(nextUser.id)
-        setUserProfile(profile)
-        setIsAdmin(profile?.roli === "Admin")
+        const profile = await profileManager.fetchUserProfile(nextUser.id)
+        userStateManager.hydrateUser(nextUser, profile)
 
         logAuthAction("hydrateUser", "User hydrated successfully", {
           userId: nextUser.id,
@@ -150,15 +131,13 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
           userId: nextUser.id,
           error: error instanceof Error ? error.message : String(error),
         })
-        setUserProfile(null)
-        setIsAdmin(false)
-      } finally {
-        setIsLoading(false)
+        userStateManager.clearUser()
       }
     },
-    [fetchUserProfile, resetAuthState]
+    [profileManager, userStateManager, signOutInFlightRef]
   )
 
+  // Prime user on mount
   const primeUser = useCallback(async () => {
     logAuthAction("primeUser", "Priming user on mount")
     setIsLoading(true)
@@ -183,63 +162,29 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
     }
   }, [hydrateUser, supabase])
 
+  // Setup auth state listener on mount
   useEffect(() => {
     let active = true
 
     primeUser()
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
-      if (!active) return
-
-      logAuthAction("onAuthStateChange", `Auth event: ${event}`, {
-        hasSession: !!session,
-      })
-
-      try {
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser()
-
-        if (userError) {
-          throw userError
-        }
-
-        // Force immediate hydration for SIGNED_IN events
-        if (event === "SIGNED_IN" || event === "USER_UPDATED") {
-          await hydrateUser(user ?? null)
-        } else {
-          await hydrateUser(user ?? null)
-        }
-      } catch (error) {
-        logAuthAction("onAuthStateChange", "Error handling auth change", {
-          event,
-          error: error instanceof Error ? error.message : String(error),
-        })
-        await hydrateUser(null)
-      }
-    })
+    const unsubscribe = supabaseInitializer.setupAuthStateListener(primeUser)
 
     return () => {
       active = false
-      subscription.unsubscribe()
+      unsubscribe()
       if (profileFetchAbortRef.current) {
         profileFetchAbortRef.current.abort()
       }
     }
-  }, [hydrateUser, supabase, primeUser])
+  }, [supabaseInitializer, primeUser])
 
+  // Handle session expiration
   useEffect(() => {
-    if (searchParams.get("session_expired") === "true") {
-      logAuthAction("sessionExpired", "Session expired detected in URL params")
-      startTransition(() => {
-        resetAuthState()
-      })
-    }
-  }, [searchParams, resetAuthState, startTransition])
+    sessionExpirationHandler.handleSessionExpired(searchParams)
+  }, [searchParams, sessionExpirationHandler])
 
+  // Create sign out function
   const signOut = useMemo(
     () =>
       createSignOutHandler({
@@ -252,22 +197,24 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
     [supabase, router, resetAuthState]
   )
 
+  // Sign in with password
   const signInWithPassword = async (credentials: SignInWithPasswordCredentials) => {
-  try {
-    const response = await supabase.auth.signInWithPassword(credentials)
-    if (response.error) {
-      throw response.error
+    try {
+      const response = await supabase.auth.signInWithPassword(credentials)
+      if (response.error) {
+        throw response.error
+      }
+      return response
+    } catch (error) {
+      logAuthAction("signInWithPassword", "Error", {
+        credential: "email" in credentials ? credentials.email : credentials.phone,
+        error: error instanceof Error ? error.message : String(error),
+      })
+      throw error
     }
-    return response
-  } catch (error) {
-    logAuthAction("signInWithPassword", "Error", {
-      credential: "email" in credentials ? credentials.email : credentials.phone,
-      error: error instanceof Error ? error.message : String(error),
-    })
-    throw error
   }
-}
 
+  // Build context value
   const value: AuthContextType = {
     user,
     userProfile,

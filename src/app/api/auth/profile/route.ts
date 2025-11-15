@@ -31,7 +31,7 @@ async function withRetry<T>(
 
 export async function GET() {
   try {
-    const supabase = createRouteHandlerSupabaseClient()
+    const supabase = await createRouteHandlerSupabaseClient()
 
     logAuthAction("profileEndpoint", "Profile request")
 
@@ -71,9 +71,23 @@ export async function GET() {
 
       return NextResponse.json({ profile })
     } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : String(err)
+      
+      // Check if this is a database connection error
+      if (errorMsg.includes("SUPABASE_DB_URL") || errorMsg.includes("connection")) {
+        logAuthAction("profileEndpoint", "Database connection error - allowing login without profile", {
+          userId: user.id,
+          error: errorMsg,
+        })
+        
+        // Return success with null profile instead of error
+        // This allows login to proceed even if DB is temporarily unavailable
+        return NextResponse.json({ profile: null })
+      }
+
       logAuthAction("profileEndpoint", "Failed to fetch profile after retries", {
         userId: user.id,
-        error: err instanceof Error ? err.message : String(err),
+        error: errorMsg,
       })
 
       return NextResponse.json(

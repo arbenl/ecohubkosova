@@ -34,7 +34,7 @@ export async function getProfileData(): Promise<ProfileDataResult> {
 export type UserProfileUpdate = UserProfileUpdateInput
 
 export async function updateUserProfile(formData: UserProfileUpdateInput) {
-  const supabase = createRouteHandlerSupabaseClient()
+  const supabase = await createRouteHandlerSupabaseClient()
 
   const {
     data: { user },
@@ -71,7 +71,7 @@ export async function updateOrganizationProfile(
   organizationId: string,
   formData: OrganizationProfileUpdateInput
 ) {
-  const supabase = createRouteHandlerSupabaseClient()
+  const supabase = await createRouteHandlerSupabaseClient()
 
   const {
     data: { user },
