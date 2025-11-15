@@ -2,6 +2,6 @@
 import { redirect } from "next/navigation"
 
 export default async function HomeRedirect() {
-  // Just redirect to auth - let the route handler or auth flow handle signout
-  redirect("/auth/kycu")
+  // Redirect to landing page to let users explore before auth
+  redirect("/landing")
 }
