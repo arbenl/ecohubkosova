@@ -65,6 +65,21 @@
       "permanent": true
     },
     {
+      "source": "/koalicioni",
+      "destination": "/about/coalition",
+      "permanent": true
+    },
+    {
+      "source": "/misioni",
+      "destination": "/about/mission",
+      "permanent": true
+    },
+    {
+      "source": "/kush-jemi",
+      "destination": "/about/vision",
+      "permanent": true
+    },
+    {
       "source": "/qendra-e-dijes",
       "destination": "/knowledge",
       "permanent": true
