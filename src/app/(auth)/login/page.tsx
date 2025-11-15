@@ -86,7 +86,7 @@ export default function KycuPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    
+
     // Prevent duplicate submissions
     if (isSubmitting || redirectInProgressRef.current) return
 
@@ -187,7 +187,10 @@ export default function KycuPage() {
         <div className="text-center mt-6">
           <p className="text-gray-600">
             Nuk ke llogari?{" "}
-            <a href="/register" className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors">
+            <a
+              href="/register"
+              className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors"
+            >
               Regjistrohu këtu
             </a>
           </p>
