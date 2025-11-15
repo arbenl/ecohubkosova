@@ -30,13 +30,63 @@
   ],
   "redirects": [
     {
-      "source": "/login",
-      "destination": "/auth/kycu",
+      "source": "/auth/kycu",
+      "destination": "/login",
       "permanent": true
     },
     {
-      "source": "/register",
-      "destination": "/auth/regjistrohu",
+      "source": "/auth/regjistrohu",
+      "destination": "/register",
+      "permanent": true
+    },
+    {
+      "source": "/landing",
+      "destination": "/home",
+      "permanent": true
+    },
+    {
+      "source": "/profili",
+      "destination": "/profile",
+      "permanent": true
+    },
+    {
+      "source": "/eksploro",
+      "destination": "/explore",
+      "permanent": true
+    },
+    {
+      "source": "/tregu",
+      "destination": "/marketplace",
+      "permanent": true
+    },
+    {
+      "source": "/rreth-nesh",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/qendra-e-dijes",
+      "destination": "/knowledge",
+      "permanent": true
+    },
+    {
+      "source": "/partnere",
+      "destination": "/partners",
+      "permanent": true
+    },
+    {
+      "source": "/kontakti",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/ndihme",
+      "destination": "/help",
+      "permanent": true
+    },
+    {
+      "source": "/kushtet-e-perdorimit",
+      "destination": "/legal/terms",
       "permanent": true
     }
   ]
