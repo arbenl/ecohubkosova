@@ -68,6 +68,6 @@ Because the URL now targets the Supabase connection pool (`aws-1-eu-west-1.poole
 
 ## 6. Force clean sessions during development
 
-If you don’t want previous Supabase sessions to auto-load in dev, keep `NEXT_PUBLIC_FORCE_DEV_SIGNOUT="true"` in `.env.local`. The middleware will sign out any existing session the moment you hit `/` or the auth routes, so every browser refresh shows the sign-in state. Remove or set it to `"false"` for staging/production so users can stay signed in.
+If you don’t want previous Supabase sessions to auto-load in dev, keep `NEXT_PUBLIC_FORCE_DEV_SIGNOUT="true"` in `.env.local`. Hitting `/` now calls Supabase `signOut()` on the server before redirecting to `/auth/kycu`, so every fresh browser session lands on a clean login state. Remove or set it to `"false"` for staging/production so users can stay signed in.
 
 With the shell exports + ping helper in place, you can quickly confirm connectivity before running `pnpm dev`, `pnpm db:sync`, or any scripts that touch Supabase.
