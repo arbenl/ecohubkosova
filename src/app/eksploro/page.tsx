@@ -2,6 +2,7 @@ import { BaseLayout } from "@/components/base-layout"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Sparkles, Users, Leaf, ArrowRight } from "lucide-react"
+import { EksploroCTA } from "./cta"
 
 export default function EksploroPage() {
   return (
@@ -28,29 +29,7 @@ export default function EksploroPage() {
               Bashkohu me komunitetin tonë për të ndërtuar një të ardhme më të qëndrueshme.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Button
-                asChild
-                size="lg"
-                className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
-              >
-                <Link href="/auth/regjistrohu">
-                  <Users className="mr-2 h-5 w-5" />
-                  Regjistrohu Tani
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="rounded-2xl px-8 py-4 text-lg font-semibold border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all duration-300 hover:scale-105 bg-transparent"
-              >
-                <Link href="/auth/kycu">
-                  <ArrowRight className="mr-2 h-5 w-5" />
-                  Kyçu
-                </Link>
-              </Button>
-            </div>
+            <EksploroCTA />
           </div>
 
           {/* Features Grid */}

@@ -1,23 +1,21 @@
 "use client"
 
-import { useFormState, useFormStatus } from "react-dom"
+import { useEffect, useRef, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Alert, AlertCircle, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useSearchParams } from "next/navigation"
 import { signIn, signInWithGoogle } from "./actions"
 
-function SubmitButton() {
-  const { pending } = useFormStatus()
-
+function SubmitButton({ isSubmitting }: { isSubmitting: boolean }) {
   return (
     <Button
       type="submit"
       className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl py-3 font-semibold transition-all duration-300 hover:scale-[1.02]"
-      disabled={pending}
+      disabled={isSubmitting}
     >
-      {pending ? (
+      {isSubmitting ? (
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
           Duke u kyçur...
@@ -29,17 +27,22 @@ function SubmitButton() {
   )
 }
 
-function GoogleSignInButton() {
-  const { pending } = useFormStatus()
+function GoogleSignInButton({ isSubmitting }: { isSubmitting: boolean }) {
+  const handleGoogleSignIn = async () => {
+    const result = await signInWithGoogle()
+    if (result.redirectUrl) {
+      window.location.href = result.redirectUrl
+    }
+  }
 
   return (
-    <Button
-      type="submit"
-      variant="outline"
-      className="w-full rounded-xl py-3 font-semibold transition-all duration-300 hover:scale-[1.02] flex items-center gap-2"
-      disabled={pending}
+    <button
+      onClick={handleGoogleSignIn}
+      disabled={isSubmitting}
+      type="button"
+      className="w-full rounded-xl py-3 font-semibold transition-all duration-300 hover:scale-[1.02] flex items-center gap-2 border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      {pending ? (
+      {isSubmitting ? (
         <>
           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900 mr-2"></div>
           Duke u ridrejtuar...
@@ -63,14 +66,56 @@ function GoogleSignInButton() {
           Kyçu me Google
         </>
       )}
-    </Button>
+    </button>
   )
 }
 
 export default function KycuPage() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const message = searchParams.get("message")
-  const [state, formAction] = useFormState(signIn, null)
+  const [error, setError] = useState<string>("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const redirectInProgressRef = useRef(false)
+
+  // Reset the redirect flag when navigating back to this page
+  useEffect(() => {
+    redirectInProgressRef.current = false
+    setIsSubmitting(false)
+  }, [searchParams])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    
+    // Prevent duplicate submissions
+    if (isSubmitting || redirectInProgressRef.current) return
+
+    setIsSubmitting(true)
+    setError("")
+
+    try {
+      const formData = new FormData(e.currentTarget)
+      const result = await signIn(null, formData)
+
+      // Handle errors
+      if (result.message) {
+        setError(result.message)
+        setIsSubmitting(false)
+        return
+      }
+
+      // Handle successful login
+      if (result.success === true) {
+        redirectInProgressRef.current = true
+        // Give the browser a moment to update state before redirecting
+        await new Promise((resolve) => setTimeout(resolve, 100))
+        router.push("/dashboard")
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gabim gjatë kyçjes")
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5">
@@ -87,14 +132,14 @@ export default function KycuPage() {
           </Alert>
         )}
 
-        {state?.message && (
+        {error && (
           <Alert className="mb-6 border-red-200 bg-red-50">
             <AlertCircle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red-800">{state.message}</AlertDescription>
+            <AlertDescription className="text-red-800">{error}</AlertDescription>
           </Alert>
         )}
 
-        <form action={formAction} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="email" className="text-gray-700 font-medium">
               Email
@@ -107,6 +152,7 @@ export default function KycuPage() {
               autoComplete="email"
               className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
               required
+              disabled={isSubmitting}
             />
           </div>
 
@@ -120,10 +166,11 @@ export default function KycuPage() {
               autoComplete="current-password"
               className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
               required
+              disabled={isSubmitting}
             />
           </div>
 
-          <SubmitButton />
+          <SubmitButton isSubmitting={isSubmitting} />
         </form>
 
         <div className="relative my-6">
@@ -135,9 +182,7 @@ export default function KycuPage() {
           </div>
         </div>
 
-        <form action={signInWithGoogle}>
-          <GoogleSignInButton />
-        </form>
+        <GoogleSignInButton isSubmitting={isSubmitting} />
 
         <div className="text-center mt-6">
           <p className="text-gray-600">

@@ -66,4 +66,16 @@ Because the URL now targets the Supabase connection pool (`aws-1-eu-west-1.poole
 | `pnpm db:sync` fails with Docker error | Start Docker Desktop first; the CLI needs it for shadow databases. |
 | Supabase CLI commands demand login | `pnpm dlx supabase login` and re-run the command; the linked project is `xjyseqtfuxcuviiankhy`. |
 
+## 6. Force clean sessions during development
+
+If you don’t want previous Supabase sessions to auto-load in dev, keep `NEXT_PUBLIC_FORCE_DEV_SIGNOUT="true"` in `.env.local`. Hitting `/` now calls Supabase `signOut()` on the server before redirecting to `/auth/kycu`, so every fresh browser session lands on a clean login state. Remove or set it to `"false"` for staging/production so users can stay signed in.
+
+## 7. Single active session enforcement
+
+- `users.session_version` (see the latest migration) increments every time a user signs in. Password/OAuth login handlers update the column and drop the cookie `eco_session_version` with the new value.
+- Middleware compares the cookie to the DB value on every request; if they differ (meaning the same account signed in elsewhere), it signs the browser out and forces `/auth/kycu`.
+- The API sign-out route and forced-dev-signout hook clear the cookie so stale versions never linger.
+
+Result: only one browser remains signed in at a time—opening EcoHub on a second device rotates the `session_version`, and the first device is logged out on its next request.
+
 With the shell exports + ping helper in place, you can quickly confirm connectivity before running `pnpm dev`, `pnpm db:sync`, or any scripts that touch Supabase.

@@ -1,4 +1,4 @@
-import { boolean, numeric, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core"
+import { boolean, integer, numeric, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const users = pgTable("users", {
@@ -8,6 +8,7 @@ export const users = pgTable("users", {
   vendndodhja: text("vendndodhja").notNull(),
   roli: text("roli").notNull(),
   eshte_aprovuar: boolean("eshte_aprovuar").default(true).notNull(),
+  session_version: integer("session_version").notNull().default(1),
   created_at: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
   updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
 })
@@ -77,6 +78,7 @@ export const marketplaceListings = pgTable("tregu_listime", {
   vendndodhja: text("vendndodhja").notNull(),
   sasia: text("sasia").notNull(),
   lloji_listimit: text("lloji_listimit").notNull(),
+  gjendja: text("gjendja"),
   eshte_aprovuar: boolean("eshte_aprovuar").default(false).notNull(),
   created_at: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
   updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),

@@ -25,7 +25,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm">
       <div className="container flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link href="/landing" className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-xl eco-gradient flex items-center justify-center text-white font-bold text-lg">
             E
           </div>
