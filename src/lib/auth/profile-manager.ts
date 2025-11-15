@@ -33,7 +33,13 @@ export class ProfileManager {
         const payload = await response.json().catch(() => null)
 
         if (!response.ok) {
-          if (attempt < MAX_PROFILE_RETRIES && response.status !== 401) {
+          // Don't retry on 401 (Unauthorized) or 5xx (Server Errors)
+          if (response.status === 401 || response.status >= 500) {
+            throw new Error(payload?.error || `HTTP ${response.status}`)
+          }
+
+          // Retry on other client/temporary errors (4xx except 401, network issues)
+          if (attempt < MAX_PROFILE_RETRIES) {
             logAuthAction("fetchUserProfile", `Retry attempt ${attempt + 1}`, {
               userId,
               status: response.status,
