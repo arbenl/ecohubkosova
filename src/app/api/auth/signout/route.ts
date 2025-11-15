@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
+import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_CLEAR_OPTIONS } from "@/lib/auth/session-version"
 
 export const dynamic = "force-dynamic"
 
@@ -26,6 +27,8 @@ export async function POST() {
     secure: process.env.NODE_ENV === "production",
     maxAge: 0,
   })
+
+  response.cookies.set(SESSION_VERSION_COOKIE, "", SESSION_VERSION_COOKIE_CLEAR_OPTIONS)
 
   if (error) {
     response.cookies.set("logout_error", error.message, { path: "/", maxAge: 5 })

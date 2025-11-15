@@ -1,4 +1,4 @@
-import { boolean, numeric, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core"
+import { boolean, integer, numeric, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const users = pgTable("users", {
@@ -8,6 +8,7 @@ export const users = pgTable("users", {
   vendndodhja: text("vendndodhja").notNull(),
   roli: text("roli").notNull(),
   eshte_aprovuar: boolean("eshte_aprovuar").default(true).notNull(),
+  session_version: integer("session_version").notNull().default(1),
   created_at: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
   updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
 })

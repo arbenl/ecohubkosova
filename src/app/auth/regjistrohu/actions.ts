@@ -2,9 +2,11 @@
 
 import { createServerActionSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
+import { cookies } from "next/headers"
 import { registrationSchema } from "@/validation/auth"
 import { db } from "@/lib/drizzle"
 import { organizationMembers, organizations, users } from "@/db/schema"
+import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_OPTIONS } from "@/lib/auth/session-version"
 
 type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani"
 
@@ -99,6 +101,9 @@ emri_i_plote: payload.emri_i_plote,
         })
       }
     })
+
+    const cookieStore = cookies()
+    cookieStore.set(SESSION_VERSION_COOKIE, "1", SESSION_VERSION_COOKIE_OPTIONS)
 
     // Revalidate paths that might display user/organization data
     revalidatePath("/dashboard")
