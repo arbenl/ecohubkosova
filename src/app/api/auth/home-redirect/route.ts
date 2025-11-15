@@ -14,7 +14,7 @@ export async function GET() {
       
       logAuthAction("homeRedirect", "Auto sign-out on home redirect")
 
-      const response = NextResponse.redirect(new URL("/auth/kycu", process.env.NEXT_PUBLIC_SUPABASE_URL || "http://localhost:3000"))
+      const response = NextResponse.redirect(new URL("/login", process.env.NEXT_PUBLIC_SUPABASE_URL || "http://localhost:3000"))
       response.cookies.set(SESSION_VERSION_COOKIE, "", SESSION_VERSION_COOKIE_CLEAR_OPTIONS)
       response.cookies.set("__session", "", {
         path: "/",
@@ -32,5 +32,5 @@ export async function GET() {
     }
   }
 
-  return NextResponse.redirect(new URL("/auth/kycu", process.env.NEXT_PUBLIC_SUPABASE_URL || "http://localhost:3000"))
+  return NextResponse.redirect(new URL("/login", process.env.NEXT_PUBLIC_SUPABASE_URL || "http://localhost:3000"))
 }

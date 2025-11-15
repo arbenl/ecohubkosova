@@ -65,14 +65,14 @@ export function Sidebar({ userRole }: SidebarProps) {
     {
       label: "Tregu",
       icon: ShoppingCart,
-      href: "/tregu",
-      active: pathname === "/tregu",
+      href: "/marketplace",
+      active: pathname === "/marketplace",
     },
     {
       label: "Profili",
       icon: User,
-      href: "/profili",
-      active: pathname === "/profili",
+      href: "/profile",
+      active: pathname === "/profile",
     },
   ]
 
@@ -113,7 +113,7 @@ export function Sidebar({ userRole }: SidebarProps) {
       >
         {/* Mobile Sidebar Header */}
         <div className="p-4 border-b border-gray-200">
-          <Link href="/landing" className="flex items-center gap-2">
+          <Link href="/home" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg eco-gradient flex items-center justify-center">
               <span className="text-white font-bold text-sm">E</span>
             </div>

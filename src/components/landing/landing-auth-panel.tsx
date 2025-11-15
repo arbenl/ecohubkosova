@@ -37,7 +37,7 @@ export function LandingAuthPanel() {
             asChild
             className="flex-1 rounded-xl border-emerald-200 text-emerald-700 hover:bg-emerald-50 font-semibold"
           >
-            <Link href="/profili">Menaxho Profilin</Link>
+            <Link href="/profile">Menaxho Profilin</Link>
           </Button>
         </div>
       </div>
@@ -55,7 +55,7 @@ export function LandingAuthPanel() {
           asChild
           className="flex-1 eco-gradient text-white rounded-xl font-semibold hover:shadow-xl hover:shadow-[#00C896]/25"
         >
-          <Link href="/auth/kycu">
+          <Link href="/login">
             <LogIn className="mr-2 h-4 w-4" />
             Kyçu
           </Link>
@@ -65,7 +65,7 @@ export function LandingAuthPanel() {
           asChild
           className="flex-1 rounded-xl border-gray-200 font-semibold text-gray-800 hover:bg-gray-50"
         >
-          <Link href="/auth/regjistrohu">
+          <Link href="/register">
             <UserPlus className="mr-2 h-4 w-4" />
             Krijo llogari
           </Link>

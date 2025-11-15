@@ -36,7 +36,7 @@ describe("createSignOutHandler", () => {
     await handler()
 
     expect(resetAuthState).toHaveBeenCalled()
-    expect(router.replace).toHaveBeenCalledWith("/auth/kycu")
+    expect(router.replace).toHaveBeenCalledWith("/login")
     expect(supabase.auth.signOut).toHaveBeenCalledWith({ scope: "local" })
     expect(global.fetch).toHaveBeenCalledWith(
       "/api/auth/signout",

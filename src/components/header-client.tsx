@@ -25,7 +25,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm">
       <div className="container flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href="/landing" className="flex items-center gap-3 group">
+        <Link href="/home" className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-xl eco-gradient flex items-center justify-center text-white font-bold text-lg">
             E
           </div>
@@ -36,14 +36,14 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
 
         <nav className="hidden md:flex gap-8">
           <Link
-            href="/eksploro"
+            href="/explore"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             Eksploro
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
-            href="/partnere"
+            href="/partners"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             Partnerët
@@ -51,7 +51,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
           </Link>
          
           <Link
-            href="/tregu"
+            href="/marketplace"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             Tregu
@@ -59,7 +59,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
           </Link>
 
            <Link
-            href="/rreth-nesh"
+            href="/about"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             Rreth Nesh
@@ -103,13 +103,13 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                 asChild
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
               >
-                <Link href="/auth/kycu">Kycu</Link>
+                <Link href="/login">Kycu</Link>
               </Button>
               <Button
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
                 asChild
               >
-                <Link href="/auth/regjistrohu">Fillo Bashkëpunimin</Link>
+                <Link href="/register">Fillo Bashkëpunimin</Link>
               </Button>
             </>
           )}
@@ -128,28 +128,28 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
         <div className="md:hidden border-t border-white/20 bg-white/95 backdrop-blur-md">
           <nav className="container px-4 py-6 space-y-4">
             <Link
-              href="/eksploro"
+              href="/explore"
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
               Eksploro
             </Link>
             <Link
-              href="/partnere"
+              href="/partners"
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
               Partnerët
             </Link>
             <Link
-              href="/rreth-nesh"
+              href="/about"
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
               Rreth Nesh
             </Link>
             <Link
-              href="/tregu"
+              href="/marketplace"
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -181,12 +181,12 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
               ) : (
                 <>
                   <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
-                    <Link href="/auth/kycu" onClick={() => setIsMenuOpen(false)}>
+                    <Link href="/login" onClick={() => setIsMenuOpen(false)}>
                       Kycu
                     </Link>
                   </Button>
                   <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
-                    <Link href="/auth/regjistrohu" onClick={() => setIsMenuOpen(false)}>
+                    <Link href="/register" onClick={() => setIsMenuOpen(false)}>
                       Fillo Bashkëpunimin
                     </Link>
                   </Button>

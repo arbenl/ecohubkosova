@@ -11,9 +11,9 @@ import {
 } from "@/lib/auth/session-version"
 import { logMiddlewareEvent } from "@/lib/auth/logging"
 
-const PROTECTED_PREFIXES = ["/admin", "/dashboard", "/profili", "/tregu/shto"]
+const PROTECTED_PREFIXES = ["/admin", "/dashboard", "/profile", "/marketplace/add"]
 const ADMIN_PREFIXES = ["/admin"]
-const AUTH_PREFIXES = ["/auth/kycu", "/auth/regjistrohu"]
+const AUTH_PREFIXES = ["/login", "/register"]
 const IGNORED_PREFIXES = [
   "/_next",
   "/favicon.ico",
@@ -114,7 +114,7 @@ export async function middleware(req: NextRequest) {
           await supabase.auth.signOut({ scope: "global" })
 
           const redirectUrl = req.nextUrl.clone()
-          redirectUrl.pathname = "/auth/kycu"
+          redirectUrl.pathname = "/login"
           redirectUrl.searchParams.set("session_expired", "true")
 
           const redirectResponse = NextResponse.redirect(redirectUrl)
@@ -147,7 +147,7 @@ export async function middleware(req: NextRequest) {
             role: userRole,
           })
 
-          return NextResponse.redirect(new URL("/auth/kycu?message=Unauthorized", req.url))
+          return NextResponse.redirect(new URL("/login?message=Unauthorized", req.url))
         }
       }
     }
@@ -155,7 +155,7 @@ export async function middleware(req: NextRequest) {
     if (isProtected && !hasSession) {
       logMiddlewareEvent(pathname, "Protected route - no session")
       const redirectUrl = req.nextUrl.clone()
-      redirectUrl.pathname = "/auth/kycu"
+      redirectUrl.pathname = "/login"
       redirectUrl.searchParams.set("redirectedFrom", pathname)
       return NextResponse.redirect(redirectUrl)
     }
