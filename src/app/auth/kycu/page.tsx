@@ -1,11 +1,12 @@
 "use client"
 
+import { useEffect } from "react"
 import { useFormState, useFormStatus } from "react-dom"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Alert, AlertCircle, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useSearchParams } from "next/navigation"
 import { signIn, signInWithGoogle } from "./actions"
 
 function SubmitButton() {
@@ -32,12 +33,19 @@ function SubmitButton() {
 function GoogleSignInButton() {
   const { pending } = useFormStatus()
 
+  const handleGoogleSignIn = async () => {
+    const result = await signInWithGoogle()
+    if (result.redirectUrl) {
+      window.location.href = result.redirectUrl
+    }
+  }
+
   return (
-    <Button
-      type="submit"
-      variant="outline"
-      className="w-full rounded-xl py-3 font-semibold transition-all duration-300 hover:scale-[1.02] flex items-center gap-2"
+    <button
+      onClick={handleGoogleSignIn}
       disabled={pending}
+      type="button"
+      className="w-full rounded-xl py-3 font-semibold transition-all duration-300 hover:scale-[1.02] flex items-center gap-2 border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {pending ? (
         <>
@@ -63,14 +71,32 @@ function GoogleSignInButton() {
           Kyçu me Google
         </>
       )}
-    </Button>
+    </button>
   )
 }
 
 export default function KycuPage() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const message = searchParams.get("message")
   const [state, formAction] = useFormState(signIn, null)
+
+  // Handle client-side redirect after successful login or Google OAuth redirect
+  useEffect(() => {
+    if (!state) return
+
+    // Handle successful login - redirect to dashboard
+    if (state.success === true) {
+      router.push("/dashboard")
+      return
+    }
+
+    // Handle Google OAuth redirect
+    if ("redirectUrl" in state && state.redirectUrl) {
+      window.location.href = state.redirectUrl
+      return
+    }
+  }, [state, router])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5">
@@ -135,9 +161,7 @@ export default function KycuPage() {
           </div>
         </div>
 
-        <form action={signInWithGoogle}>
-          <GoogleSignInButton />
-        </form>
+        <GoogleSignInButton />
 
         <div className="text-center mt-6">
           <p className="text-gray-600">

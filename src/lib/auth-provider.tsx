@@ -245,20 +245,20 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
   )
 
   const signInWithPassword = async (credentials: SignInWithPasswordCredentials) => {
-    try {
-      const response = await supabase.auth.signInWithPassword(credentials)
-      if (response.error) {
-        throw response.error
-      }
-      return response
-    } catch (error) {
-      logAuthAction("signInWithPassword", "Error", {
-        email: credentials.email,
-        error: error instanceof Error ? error.message : String(error),
-      })
-      throw error
+  try {
+    const response = await supabase.auth.signInWithPassword(credentials)
+    if (response.error) {
+      throw response.error
     }
+    return response
+  } catch (error) {
+    logAuthAction("signInWithPassword", "Error", {
+      credential: "email" in credentials ? credentials.email : credentials.phone,
+      error: error instanceof Error ? error.message : String(error),
+    })
+    throw error
   }
+}
 
   const value: AuthContextType = {
     user,

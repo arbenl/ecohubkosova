@@ -1,3 +1,4 @@
+// Alternative fix for middleware.ts - replace the middleware function with:
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
@@ -33,9 +34,9 @@ export async function middleware(req: NextRequest) {
 
   logMiddlewareEvent(pathname, "Middleware executed")
 
-  const res = NextResponse.next()
-
   try {
+    // Create response first, then pass to middleware client
+    const res = NextResponse.next()
     const supabase = createMiddlewareClient({ req, res })
 
     const {
@@ -95,7 +96,6 @@ export async function middleware(req: NextRequest) {
 
           const redirectUrl = req.nextUrl.clone()
           redirectUrl.pathname = "/auth/kycu"
-          redirectUrl.searchParams.delete("redirectedFrom")
           redirectUrl.searchParams.set("session_expired", "true")
 
           const redirectResponse = NextResponse.redirect(redirectUrl)
@@ -120,69 +120,36 @@ export async function middleware(req: NextRequest) {
           res.cookies.set(AUTH_STATE_COOKIE, "authenticated", AUTH_STATE_COOKIE_OPTIONS)
         }
 
-        if (isAdminRoute) {
-          const isAdmin = userRole === "Admin"
+        if (isAdminRoute && !userRole?.includes("Admin")) {
+          logMiddlewareEvent(pathname, "Unauthorized admin access", {
+            userId: sessionUserId,
+            role: userRole,
+          })
 
-          if (!isAdmin) {
-            logMiddlewareEvent(pathname, "Unauthorized admin access", {
-              userId: sessionUserId,
-              role: userRole,
-            })
-
-            const redirectUrl = req.nextUrl.clone()
-            redirectUrl.pathname = "/auth/kycu"
-            redirectUrl.searchParams.set("message", "Nuk jeni i autorizuar të qaseni në këtë zonë.")
-            redirectUrl.searchParams.delete("redirectedFrom")
-
-            const redirectResponse = NextResponse.redirect(redirectUrl)
-            return redirectResponse
-          }
+          return NextResponse.redirect(new URL("/auth/kycu?message=Unauthorized", req.url))
         }
       }
     }
 
     if (isProtected && !hasSession) {
-      logMiddlewareEvent(pathname, "Protected route - no session", {
-        isProtected,
-        hasSession,
-      })
-
+      logMiddlewareEvent(pathname, "Protected route - no session")
       const redirectUrl = req.nextUrl.clone()
       redirectUrl.pathname = "/auth/kycu"
       redirectUrl.searchParams.set("redirectedFrom", pathname)
-
-      const redirectResponse = NextResponse.redirect(redirectUrl)
-      return redirectResponse
+      return NextResponse.redirect(redirectUrl)
     }
 
     if (isAuthRoute && hasSession) {
-      logMiddlewareEvent(pathname, "Auth route - user already authenticated, redirecting", {
-        targetPath: "/dashboard",
-      })
-
-      const redirectUrl = req.nextUrl.clone()
-      redirectUrl.pathname = "/dashboard"
-      redirectUrl.searchParams.delete("redirectedFrom")
-
-      const redirectResponse = NextResponse.redirect(redirectUrl)
-      return redirectResponse
+      logMiddlewareEvent(pathname, "Redirecting authenticated user to dashboard")
+      return NextResponse.redirect(new URL("/dashboard", req.url))
     }
-
-    logMiddlewareEvent(pathname, "Route allowed", {
-      isProtected,
-      isAdminRoute,
-      isAuthRoute,
-      hasSession,
-    })
 
     return res
   } catch (error) {
     logMiddlewareEvent(pathname, "Middleware error", {
       error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
     })
-
-    return res
+    return NextResponse.next()
   }
 }
 

@@ -1,3 +1,4 @@
+// Update: src/services/session.ts
 import { db } from "@/lib/drizzle"
 import { users } from "@/db/schema"
 import { eq, sql } from "drizzle-orm"
@@ -12,15 +13,18 @@ interface SessionInfo {
 
 export async function getSessionInfo(userId: string): Promise<SessionInfo | null> {
   try {
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-      columns: {
-        id: true,
-        session_version: true,
-        roli: true,
-        email: true,
-      },
-    })
+    const user = await db
+      .get()
+      .select({
+        id: users.id,
+        session_version: users.session_version,
+        roli: users.roli,
+        email: users.email,
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1)
+      .then((result) => result[0] ?? null)
 
     if (!user) {
       logAuthAction("getSessionInfo", "User not found", { userId })
@@ -51,6 +55,7 @@ export async function getSessionInfo(userId: string): Promise<SessionInfo | null
 export async function incrementSessionVersion(userId: string): Promise<number | null> {
   try {
     const [updated] = await db
+      .get()
       .update(users)
       .set({ session_version: sql`${users.session_version} + 1` })
       .where(eq(users.id, userId))
