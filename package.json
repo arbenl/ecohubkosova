@@ -85,12 +85,29 @@
     "drizzle-kit": "0.31.7",
     "eslint": "9.16.0",
     "eslint-config-next": "16.0.3",
+    "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
     "jsdom": "24.0.0",
+    "lint-staged": "^16.2.6",
     "postcss": "8.5.0",
     "prettier": "^3.6.2",
     "tailwindcss": "3.4.17",
     "typescript": "5.6.3",
     "vitest": "1.6.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{js,jsx}": [
+      "prettier --write"
+    ],
+    "*.json": [
+      "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write"
+    ]
   },
   "packageManager": "pnpm@10.16.1+sha512.0e155aa2629db8672b49e8475da6226aa4bdea85fdcdfdc15350874946d4f3c91faaf64cbdc4a5d1ab8002f473d5c3fcedcd197989cf0390f9badd3c04678706"
 }

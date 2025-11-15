@@ -25,8 +25,8 @@ export default async function Home() {
               </h1>
 
               <p className="max-w-4xl text-xl md:text-2xl text-gray-600 leading-relaxed">
-                Platforma e parë e ekonomisë qarkulluese në Kosovë. Lidhu me partnerë, zbulo mundësi dhe krijo qarkullim
-                të qëndrueshëm për një të ardhme më të gjelbër.
+                Platforma e parë e ekonomisë qarkulluese në Kosovë. Lidhu me partnerë, zbulo mundësi
+                dhe krijo qarkullim të qëndrueshëm për një të ardhme më të gjelbër.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-6 pt-4">
@@ -35,7 +35,7 @@ export default async function Home() {
                   className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
                   asChild
                 >
-                  <Link href="/auth/regjistrohu">
+                  <Link href="/register">
                     <UserPlus className="mr-2 h-5 w-5" />
                     Fillo Bashkëpunimin
                   </Link>
@@ -63,7 +63,9 @@ export default async function Home() {
         <section className="py-24 relative">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center text-center space-y-6 mb-16 animate-slide-up">
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Si Funksionon</h2>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
+                Si Funksionon
+              </h2>
               <p className="text-xl text-gray-600 max-w-3xl leading-relaxed">
                 Tre hapa të thjeshtë për të filluar bashkëpunimin në ekonominë qarkulluese
               </p>
@@ -77,8 +79,8 @@ export default async function Home() {
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Krijo Profilin Tënd</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Regjistrohu si individ ose organizatë dhe krijo profilin tënd në platformë për të filluar
-                    rrjetëzimin.
+                    Regjistrohu si individ ose organizatë dhe krijo profilin tënd në platformë për
+                    të filluar rrjetëzimin.
                   </p>
                   <Button
                     className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 hover:shadow-xl hover:shadow-blue-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
@@ -99,7 +101,8 @@ export default async function Home() {
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Zbulo Mundësitë</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Eksploro partnerët potencialë, artikujt e dijes dhe mundësitë e bashkëpunimit në treg.
+                    Eksploro partnerët potencialë, artikujt e dijes dhe mundësitë e bashkëpunimit në
+                    treg.
                   </p>
                   <Button
                     className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 hover:shadow-xl hover:shadow-purple-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
@@ -120,14 +123,15 @@ export default async function Home() {
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Fillo Bisedimet</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Kontakto partnerët potencialë dhe fillo bashkëpunimin për projekte të qëndrueshme dhe inovative.
+                    Kontakto partnerët potencialë dhe fillo bashkëpunimin për projekte të
+                    qëndrueshme dhe inovative.
                   </p>
                   <Button
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
                     <Link href="/marketplace">
-               <MessageCircle className="mr-2 h-4 w-4" />
+                      <MessageCircle className="mr-2 h-4 w-4" />
                       Shiko Tregun
                     </Link>
                   </Button>
@@ -159,8 +163,8 @@ export default async function Home() {
                     <h3 className="text-2xl font-bold text-gray-900">Për Shitje</h3>
                   </div>
                   <p className="text-gray-600 leading-relaxed">
-                    Zbulo materialet, produktet dhe shërbimet e disponueshme nga partnerët në rrjet për ekonomi
-                    qarkulluese.
+                    Zbulo materialet, produktet dhe shërbimet e disponueshme nga partnerët në rrjet
+                    për ekonomi qarkulluese.
                   </p>
                   <Button
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
@@ -183,8 +187,8 @@ export default async function Home() {
                     <h3 className="text-2xl font-bold text-gray-900">Kërkoj të Blej</h3>
                   </div>
                   <p className="text-gray-600 leading-relaxed">
-                    Zbulo kërkesat për materiale, produkte dhe shërbime nga partnerët në rrjet për projekte të
-                    përbashkëta.
+                    Zbulo kërkesat për materiale, produkte dhe shërbime nga partnerët në rrjet për
+                    projekte të përbashkëta.
                   </p>
                   <Button
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
