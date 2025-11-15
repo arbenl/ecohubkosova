@@ -77,6 +77,7 @@ export const marketplaceListings = pgTable("tregu_listime", {
   vendndodhja: text("vendndodhja").notNull(),
   sasia: text("sasia").notNull(),
   lloji_listimit: text("lloji_listimit").notNull(),
+  gjendja: text("gjendja"),
   eshte_aprovuar: boolean("eshte_aprovuar").default(false).notNull(),
   created_at: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
   updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
