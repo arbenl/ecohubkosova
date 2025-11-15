@@ -6,8 +6,8 @@ import { Users, ArrowRight } from "lucide-react"
 import { useAuth } from "@/lib/auth-provider"
 
 export function RrethNeshHeroCTA() {
-  const { user, isLoading } = useAuth()
-  const isAuthenticated = Boolean(user)
+  const { user, isLoading, userProfile } = useAuth()
+  const isAuthenticated = Boolean(user?.id)
 
   // Don't show anything while loading to prevent flash of wrong content
   if (isLoading) {
@@ -44,8 +44,8 @@ export function RrethNeshHeroCTA() {
 }
 
 export function RrethNeshBottomCTA() {
-  const { user, isLoading } = useAuth()
-  const isAuthenticated = Boolean(user)
+  const { user, isLoading, userProfile } = useAuth()
+  const isAuthenticated = Boolean(user?.id)
 
   // Don't show anything while loading to prevent flash of wrong content
   if (isLoading) {
