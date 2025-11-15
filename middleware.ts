@@ -66,13 +66,6 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (isAuthRoute && hasSession) {
-    const redirectUrl = req.nextUrl.clone()
-    redirectUrl.pathname = "/dashboard"
-    redirectUrl.searchParams.delete("redirectedFrom")
-    return redirectWithCookies(redirectUrl)
-  }
-
   return res
 }
 
