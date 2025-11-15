@@ -1,11 +1,21 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useCallback, useContext, createContext, useMemo, useRef } from "react"
-import { useRouter } from "next/navigation"
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  createContext,
+  useMemo,
+  useRef,
+  useTransition,
+} from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import type { User, AuthChangeEvent, AuthResponse, SignInWithPasswordCredentials } from "@supabase/supabase-js"
 import { createClientSupabaseClient } from "@/lib/supabase"
 import { createSignOutHandler } from "@/lib/auth/signout-handler"
+import { logAuthAction } from "@/lib/auth/logging"
 import type { UserProfile } from "@/types"
 
 interface AuthContextType {
@@ -27,6 +37,9 @@ interface AuthProviderProps {
   initialUser: User | null
 }
 
+const PROFILE_FETCH_TIMEOUT = 5000
+const MAX_PROFILE_RETRIES = 2
+
 export function AuthProvider({ children, initialUser }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(initialUser ?? null)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
@@ -34,8 +47,11 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
   const [signOutPending, setSignOutPending] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = useMemo(() => createClientSupabaseClient(), [])
   const signOutInFlightRef = useRef(false)
+  const profileFetchAbortRef = useRef<AbortController | null>(null)
+  const [, startTransition] = useTransition()
 
   const resetAuthState = useCallback(() => {
     setUser(null)
@@ -44,45 +60,95 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
     setIsLoading(false)
   }, [])
 
-  const fetchUserProfile = useCallback(async (): Promise<UserProfile | null> => {
-    try {
-      const response = await fetch("/api/auth/profile", { cache: "no-store" })
-      const payload = await response.json().catch(() => null)
+  const fetchUserProfile = useCallback(
+    async (userId: string, attempt: number = 1): Promise<UserProfile | null> => {
+      try {
+        if (profileFetchAbortRef.current) {
+          profileFetchAbortRef.current.abort()
+        }
 
-      if (!response.ok) {
-        throw new Error(payload?.error || "Nuk u gjet profili i përdoruesit.")
+        const abortController = new AbortController()
+        profileFetchAbortRef.current = abortController
+
+        const timeout = setTimeout(() => abortController.abort(), PROFILE_FETCH_TIMEOUT)
+
+        try {
+          const response = await fetch("/api/auth/profile", {
+            cache: "no-store",
+            signal: abortController.signal,
+          })
+
+          clearTimeout(timeout)
+
+          const payload = await response.json().catch(() => null)
+
+          if (!response.ok) {
+            if (attempt < MAX_PROFILE_RETRIES && response.status !== 401) {
+              logAuthAction("fetchUserProfile", `Retry attempt ${attempt + 1}`, {
+                userId,
+                status: response.status,
+              })
+
+              await new Promise((resolve) => setTimeout(resolve, 1000 * attempt))
+              return fetchUserProfile(userId, attempt + 1)
+            }
+
+            throw new Error(payload?.error || `HTTP ${response.status}`)
+          }
+
+          return (payload?.profile ?? null) as UserProfile | null
+        } catch (fetchError) {
+          if (fetchError instanceof Error && fetchError.name === "AbortError") {
+            logAuthAction("fetchUserProfile", "Profile fetch timeout", { userId })
+            return null
+          }
+          throw fetchError
+        }
+      } catch (error) {
+        logAuthAction("fetchUserProfile", `Error on attempt ${attempt}`, {
+          userId,
+          error: error instanceof Error ? error.message : String(error),
+        })
+        return null
       }
+    },
+    []
+  )
 
-      return (payload?.profile ?? null) as UserProfile | null
-    } catch (error) {
-      console.error("Dështoi marrja e profilit:", error)
-      return null
-    }
-  }, [])
-
-  const refreshUserProfile = async () => {
+  const refreshUserProfile = useCallback(async () => {
     if (user) {
-      const profile = await fetchUserProfile()
+      logAuthAction("refreshUserProfile", "Refreshing profile", { userId: user.id })
+      const profile = await fetchUserProfile(user.id)
       setUserProfile(profile)
       setIsAdmin(profile?.roli === "Admin")
     }
-  }
+  }, [user, fetchUserProfile])
 
   const hydrateUser = useCallback(
     async (nextUser: User | null) => {
       if (!nextUser) {
+        logAuthAction("hydrateUser", "Clearing user state (no user)")
         resetAuthState()
         return
       }
 
+      logAuthAction("hydrateUser", "Hydrating user", { userId: nextUser.id })
       setUser(nextUser)
 
       try {
-        const profile = await fetchUserProfile()
+        const profile = await fetchUserProfile(nextUser.id)
         setUserProfile(profile)
         setIsAdmin(profile?.roli === "Admin")
+
+        logAuthAction("hydrateUser", "User hydrated successfully", {
+          userId: nextUser.id,
+          hasProfile: !!profile,
+        })
       } catch (error) {
-        console.error("Dështoi rifreskimi i profilit:", error)
+        logAuthAction("hydrateUser", "Error hydrating user", {
+          userId: nextUser.id,
+          error: error instanceof Error ? error.message : String(error),
+        })
         setUserProfile(null)
         setIsAdmin(false)
       }
@@ -91,6 +157,7 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
   )
 
   const primeUser = useCallback(async () => {
+    logAuthAction("primeUser", "Priming user on mount")
     setIsLoading(true)
     try {
       const {
@@ -104,7 +171,9 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
 
       await hydrateUser(user ?? null)
     } catch (error) {
-      console.error("Dështoi verifikimi i përdoruesit:", error)
+      logAuthAction("primeUser", "Error during priming", {
+        error: error instanceof Error ? error.message : String(error),
+      })
       await hydrateUser(null)
     } finally {
       setIsLoading(false)
@@ -118,8 +187,12 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent) => {
+    } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
       if (!active) return
+
+      logAuthAction("onAuthStateChange", `Auth event: ${event}`, {
+        hasSession: !!session,
+      })
 
       try {
         const {
@@ -133,7 +206,10 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
 
         await hydrateUser(user ?? null)
       } catch (error) {
-        console.error("Dështoi sinkronizimi i përdoruesit pas ndryshimit:", error)
+        logAuthAction("onAuthStateChange", "Error handling auth change", {
+          event,
+          error: error instanceof Error ? error.message : String(error),
+        })
         await hydrateUser(null)
       }
     })
@@ -141,8 +217,20 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
     return () => {
       active = false
       subscription.unsubscribe()
+      if (profileFetchAbortRef.current) {
+        profileFetchAbortRef.current.abort()
+      }
     }
   }, [hydrateUser, supabase, primeUser])
+
+  useEffect(() => {
+    if (searchParams.get("session_expired") === "true") {
+      logAuthAction("sessionExpired", "Session expired detected in URL params")
+      startTransition(() => {
+        resetAuthState()
+      })
+    }
+  }, [searchParams, resetAuthState, startTransition])
 
   const signOut = useMemo(
     () =>
@@ -164,7 +252,10 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
       }
       return response
     } catch (error) {
-      console.error("Sign in error:", error)
+      logAuthAction("signInWithPassword", "Error", {
+        email: credentials.email,
+        error: error instanceof Error ? error.message : String(error),
+      })
       throw error
     }
   }

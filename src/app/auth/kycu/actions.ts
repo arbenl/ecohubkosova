@@ -2,26 +2,32 @@
 
 import { redirect } from "next/navigation"
 import { headers, cookies } from "next/headers"
-import { sql, eq } from "drizzle-orm"
 import { createServerActionSupabaseClient } from "@/lib/supabase/server"
 import { loginSchema } from "@/validation/auth"
-import { db } from "@/lib/drizzle"
-import { users } from "@/db/schema"
+import { incrementSessionVersion } from "@/services/session"
 import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_OPTIONS } from "@/lib/auth/session-version"
+import { logAuthAction } from "@/lib/auth/logging"
 
 export async function signIn(prevState: any, formData: FormData) {
+  const email = formData.get("email")
+  const password = formData.get("password")
+
+  logAuthAction("signIn", "Login attempt", { email })
+
   const supabase = createServerActionSupabaseClient()
 
   const parsed = loginSchema.safeParse({
-    email: formData.get("email"),
-    password: formData.get("password"),
+    email,
+    password,
   })
 
   if (!parsed.success) {
+    logAuthAction("signIn", "Validation failed", {
+      email,
+      errors: parsed.error.errors.map((e) => e.message),
+    })
     return { message: parsed.error.errors[0]?.message ?? "Të dhëna të pavlefshme." }
   }
-
-  const { email, password } = parsed.data
 
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
@@ -29,7 +35,10 @@ export async function signIn(prevState: any, formData: FormData) {
   })
 
   if (error) {
-    console.error("Sign in error:", error)
+    logAuthAction("signIn", "Authentication failed", {
+      email,
+      error: error.message,
+    })
     return {
       message: error.message,
     }
@@ -38,26 +47,36 @@ export async function signIn(prevState: any, formData: FormData) {
   const userId = data.user?.id
 
   if (!userId) {
+    logAuthAction("signIn", "No user ID after successful auth", { email })
     return {
       message: "Përdoruesi nuk u gjet pas kyçjes.",
     }
   }
 
-  const [updated] = await db
-    .get()
-    .update(users)
-    .set({ session_version: sql<number>`${users.session_version} + 1` })
-    .where(eq(users.id, userId))
-    .returning({ sessionVersion: users.session_version })
+  const newVersion = await incrementSessionVersion(userId)
 
-  const version = updated?.sessionVersion ?? 1
+  if (newVersion === null) {
+    logAuthAction("signIn", "Failed to increment session version", { userId })
+    return {
+      message: "Gabim gjatë përditësimit të sesionit.",
+    }
+  }
+
   const cookieStore = cookies()
-  cookieStore.set(SESSION_VERSION_COOKIE, String(version), SESSION_VERSION_COOKIE_OPTIONS)
+  cookieStore.set(SESSION_VERSION_COOKIE, String(newVersion), SESSION_VERSION_COOKIE_OPTIONS)
+
+  logAuthAction("signIn", "Login successful", {
+    userId,
+    email,
+    sessionVersion: newVersion,
+  })
 
   return redirect("/dashboard")
 }
 
 export async function signInWithGoogle() {
+  logAuthAction("signInWithGoogle", "OAuth login initiated")
+
   const supabase = createServerActionSupabaseClient()
   const origin = headers().get("origin")
 
@@ -69,8 +88,10 @@ export async function signInWithGoogle() {
   })
 
   if (error) {
-    console.error("Sign in with Google error:", error)
-    return redirect(`/auth/kycu?message=${error.message}`)
+    logAuthAction("signInWithGoogle", "OAuth initiation failed", {
+      error: error.message,
+    })
+    return redirect(`/auth/kycu?message=${encodeURIComponent(error.message)}`)
   }
 
   return redirect(data.url)
