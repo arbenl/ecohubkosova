@@ -46,6 +46,15 @@ export async function middleware(req: NextRequest) {
     return redirectResponse
   }
 
+  const shouldForceDevSignOut =
+    process.env.NEXT_PUBLIC_FORCE_DEV_SIGNOUT === "true" && (pathname === "/" || isAuthRoute)
+
+  if (shouldForceDevSignOut && hasSession) {
+    await supabase.auth.signOut()
+    const redirectUrl = req.nextUrl.clone()
+    return redirectWithCookies(redirectUrl)
+  }
+
   if (isProtected && !hasSession) {
     const redirectUrl = req.nextUrl.clone()
     redirectUrl.pathname = "/auth/kycu"
