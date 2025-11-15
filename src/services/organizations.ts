@@ -78,12 +78,13 @@ export async function fetchOrganizationById(id: string) {
   noStore()
 
   try {
-    const [row] = await db
+    const rows = await db
       .get()
       .select()
       .from(organizations)
       .where(and(eq(organizations.id, id), eq(organizations.eshte_aprovuar, true)))
       .limit(1)
+    const row = rows[0]
 
     if (!row) {
       throw new Error("Organizata nuk u gjet ose nuk është e aprovuar.")

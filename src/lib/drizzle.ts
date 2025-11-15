@@ -21,6 +21,10 @@ const ensureConnection = () => {
 
   queryClient = postgres(connectionString, {
     ssl: "require",
+    max: 20, // Maximum number of connections in the pool
+    idle_timeout: 30, // Close idle connections after 30 seconds
+    max_lifetime: 600, // Maximum lifetime of a connection is 10 minutes
+    connect_timeout: 10, // Timeout for establishing a connection
   })
 
   dbInstance = drizzle(queryClient, { schema })

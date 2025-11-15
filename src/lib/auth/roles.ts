@@ -17,12 +17,13 @@ export async function requireAdminRole() {
     redirect("/login?message=Ju duhet të kyçeni për të vazhduar.")
   }
 
-  const [profile] = await db
+  const profiles = await db
     .get()
     .select({ roli: users.roli })
     .from(users)
     .where(eq(users.id, user.id))
     .limit(1)
+  const profile = profiles[0]
   const role = profile?.roli ?? null
 
   if (role !== "Admin") {

@@ -134,7 +134,7 @@ export async function fetchListingById(id: string) {
   noStore()
 
   try {
-    const [record] = await db
+    const records = await db
       .get()
       .select({
         listing: marketplaceListings,
@@ -147,8 +147,9 @@ export async function fetchListingById(id: string) {
       .from(marketplaceListings)
       .leftJoin(users, eq(marketplaceListings.created_by_user_id, users.id))
       .leftJoin(organizations, eq(marketplaceListings.organization_id, organizations.id))
-      .where(and(eq(marketplaceListings.id, id), eq(marketplaceListings.eshte_aprovuar, true)))
+      .where(eq(marketplaceListings.id, id))
       .limit(1)
+    const record = records[0]
 
     if (!record) {
       throw new Error("Listimi nuk u gjet ose nuk është i aprovuar.")
@@ -174,12 +175,13 @@ const formatPrice = (value: ListingCreateInput["cmimi"]) => {
 }
 
 async function findApprovedOrganizationId(userId: string) {
-  const [membership] = await db
+  const memberships = await db
     .get()
     .select({ organization_id: organizationMembers.organization_id })
     .from(organizationMembers)
     .where(and(eq(organizationMembers.user_id, userId), eq(organizationMembers.eshte_aprovuar, true)))
     .limit(1)
+  const membership = memberships[0]
 
   return membership?.organization_id ?? null
 }
@@ -231,7 +233,7 @@ export async function updateUserListing(
   }
 
   try {
-    const [updated] = await db
+    const updateResult = await db
       .get()
       .update(marketplaceListings)
       .set({
@@ -249,6 +251,8 @@ export async function updateUserListing(
       .where(and(eq(marketplaceListings.id, listingId), eq(marketplaceListings.created_by_user_id, userId)))
       .returning({ id: marketplaceListings.id })
 
+    const updated = updateResult?.[0]
+
     if (!updated) {
       return { error: "Listimi nuk u gjet ose nuk keni të drejta ta ndryshoni." }
     }
@@ -262,11 +266,13 @@ export async function updateUserListing(
 
 export async function deleteUserListing(listingId: string, userId: string): Promise<ListingMutationResult> {
   try {
-    const [deleted] = await db
+    const deleteResult = await db
       .get()
       .delete(marketplaceListings)
       .where(and(eq(marketplaceListings.id, listingId), eq(marketplaceListings.created_by_user_id, userId)))
       .returning({ id: marketplaceListings.id })
+
+    const deleted = deleteResult?.[0]
 
     if (!deleted) {
       return { error: "Listimi nuk u gjet ose nuk keni të drejta ta fshini." }

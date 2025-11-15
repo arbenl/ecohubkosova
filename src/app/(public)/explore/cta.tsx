@@ -9,6 +9,16 @@ export function EksploroCTA() {
   const { user, isLoading, userProfile } = useAuth()
   const isAuthenticated = Boolean(user?.id)
 
+  // Debug logging
+  if (typeof window !== "undefined") {
+    console.log("[EksploroCTA Debug]", {
+      isAuthenticated,
+      isLoading,
+      userId: user?.id || "none",
+      userEmail: user?.email || "none",
+    })
+  }
+
   // Don't show anything while loading to prevent flash of wrong content
   if (isLoading) {
     return (

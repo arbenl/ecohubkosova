@@ -54,14 +54,14 @@ export async function getSessionInfo(userId: string): Promise<SessionInfo | null
 
 export async function incrementSessionVersion(userId: string): Promise<number | null> {
   try {
-    const [updated] = await db
+    const updated = await db
       .get()
       .update(users)
       .set({ session_version: sql`${users.session_version} + 1` })
       .where(eq(users.id, userId))
       .returning({ sessionVersion: users.session_version })
 
-    const newVersion = updated?.sessionVersion ?? null
+    const newVersion = updated?.[0]?.sessionVersion ?? null
 
     logAuthAction("incrementSessionVersion", "Session version incremented", {
       userId,

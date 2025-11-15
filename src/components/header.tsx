@@ -18,7 +18,6 @@ async function HeaderServer() {
 }
 
 export function Header() {
-  // @ts-expect-error Async Server Component
   return <HeaderServer />
 }
 

@@ -23,7 +23,8 @@ export async function ensureUserProfileExists(
   supabase: AnySupabaseClient,
   userId: string
 ): Promise<UserProfile | null> {
-  const [existing] = await db.get().select().from(users).where(eq(users.id, userId)).limit(1)
+  const records = await db.get().select().from(users).where(eq(users.id, userId)).limit(1)
+  const existing = records[0]
 
   if (existing) {
     return {
@@ -52,7 +53,7 @@ export async function ensureUserProfileExists(
 
   const newProfile = await buildNewProfilePayload(userId, user)
 
-  const [createdProfile] = await db
+  const created = await db
     .get()
     .insert(users)
     .values({
@@ -64,6 +65,8 @@ export async function ensureUserProfileExists(
       eshte_aprovuar: newProfile.eshte_aprovuar,
     })
     .returning()
+
+  const createdProfile = created?.[0]
 
   if (!createdProfile) {
     return null

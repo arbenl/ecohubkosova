@@ -54,7 +54,8 @@ const toProfileOrganization = (record: OrganizationRow): ProfileOrganization => 
 
 async function findUserProfile(userId: string) {
   try {
-    const [record] = await db.get().select().from(users).where(eq(users.id, userId)).limit(1)
+    const records = await db.get().select().from(users).where(eq(users.id, userId)).limit(1)
+    const record = records[0]
     return record ? toProfileUser(record) : null
   } catch (error) {
     console.error("findUserProfile error:", error)
@@ -84,20 +85,22 @@ export async function fetchCurrentUserProfile() {
     let organization: ProfileOrganization | null = null
 
     if (userProfile && userProfile.roli !== "Individ" && userProfile.roli !== "Admin") {
-      const [membership] = await db
+      const memberships = await db
         .get()
         .select({ organization_id: organizationMembers.organization_id })
         .from(organizationMembers)
         .where(and(eq(organizationMembers.user_id, user.id), eq(organizationMembers.eshte_aprovuar, true)))
         .limit(1)
+      const membership = memberships[0]
 
       if (membership?.organization_id) {
-        const [orgRecord] = await db
+        const orgRecords = await db
           .get()
           .select()
           .from(organizations)
           .where(eq(organizations.id, membership.organization_id))
           .limit(1)
+        const orgRecord = orgRecords[0]
 
         if (orgRecord) {
           organization = toProfileOrganization(orgRecord)
@@ -188,12 +191,13 @@ export async function ensureUserOrganizationMembership(
   userId: string
 ) {
   try {
-    const [record] = await db
+    const records = await db
       .get()
       .select({ id: organizationMembers.id })
       .from(organizationMembers)
       .where(and(eq(organizationMembers.organization_id, organizationId), eq(organizationMembers.user_id, userId)))
       .limit(1)
+    const record = records[0]
 
     return { isMember: Boolean(record), error: null }
   } catch (error) {

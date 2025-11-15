@@ -85,7 +85,7 @@ export async function fetchArticleById(id: string) {
   noStore()
 
   try {
-    const [record] = await db
+    const records = await db
       .get()
       .select({
         article: articles,
@@ -93,8 +93,9 @@ export async function fetchArticleById(id: string) {
       })
       .from(articles)
       .leftJoin(users, eq(articles.autori_id, users.id))
-      .where(and(eq(articles.id, id), eq(articles.eshte_publikuar, true)))
+      .where(eq(articles.id, id))
       .limit(1)
+    const record = records[0]
 
     if (!record) {
       throw new Error("Artikulli nuk u gjet ose nuk është i publikuar.")
