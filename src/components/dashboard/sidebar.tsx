@@ -113,7 +113,7 @@ export function Sidebar({ userRole }: SidebarProps) {
       >
         {/* Mobile Sidebar Header */}
         <div className="p-4 border-b border-gray-200">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/landing" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg eco-gradient flex items-center justify-center">
               <span className="text-white font-bold text-sm">E</span>
             </div>
