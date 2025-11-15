@@ -75,7 +75,7 @@ describe("profile actions", () => {
       mocks.mockAuthGetUser.mockResolvedValueOnce({ data: { user: null } })
 
       await expect(updateUserProfile({ emri_i_plote: "John", vendndodhja: "City" })).rejects.toThrow(
-        /REDIRECT:\/auth\/kycu/
+        /REDIRECT:\/login/
       )
     })
   })

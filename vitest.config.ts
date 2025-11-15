@@ -9,7 +9,21 @@ export default defineConfig({
     exclude: ["e2e/**", "node_modules/**", "playwright-report/**", "dist/**", ".next/**"],
     coverage: {
       provider: "v8",
-      reporter: ["text", "lcov"],
+      reporter: ["text", "lcov", "html"],
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/**/__tests__/**",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "src/**/*.spec.ts",
+        "src/**/*.spec.tsx",
+        "src/test/**",
+        "src/types/**",
+      ],
+      lines: 80,
+      functions: 80,
+      branches: 75,
+      statements: 80,
     },
   },
   resolve: {

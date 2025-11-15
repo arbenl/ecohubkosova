@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from "vitest"
+import { describe, expect, it, vi, beforeEach, afterEach } from "vitest"
 import { createSignOutHandler } from "../signout-handler"
 
 const supabase = {
@@ -22,6 +22,13 @@ describe("createSignOutHandler", () => {
     vi.clearAllMocks()
     signOutInFlightRef.current = false
     global.fetch = vi.fn(async () => ({ ok: true, json: async () => ({}) })) as any
+    // Mock window.location.replace
+    delete (window as any).location
+    window.location = { replace: vi.fn() } as any
+  })
+
+  afterEach(() => {
+    vi.clearAllMocks()
   })
 
   it("signs out locally and hits the API", async () => {
@@ -36,7 +43,7 @@ describe("createSignOutHandler", () => {
     await handler()
 
     expect(resetAuthState).toHaveBeenCalled()
-    expect(router.replace).toHaveBeenCalledWith("/login")
+    expect(window.location.replace).toHaveBeenCalledWith("/login")
     expect(supabase.auth.signOut).toHaveBeenCalledWith({ scope: "local" })
     expect(global.fetch).toHaveBeenCalledWith(
       "/api/auth/signout",
