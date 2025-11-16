@@ -1,6 +1,6 @@
 // Create new file: src/app/api/auth/home-redirect/route.ts
 import { NextResponse } from "next/server"
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_CLEAR_OPTIONS } from "@/lib/auth/session-version"
 import { logAuthAction } from "@/lib/auth/logging"
 
@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic"
 export async function GET() {
   if (process.env.NEXT_PUBLIC_FORCE_DEV_SIGNOUT === "true") {
     try {
-      const supabase = await createRouteHandlerSupabaseClient()
+      const supabase = await createServerSupabaseClient()
       await supabase.auth.signOut({ scope: "global" })
       
       logAuthAction("homeRedirect", "Auto sign-out on home redirect")

@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useLocale } from "next-intl"
 import { Alert, AlertCircle, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { signIn, signInWithGoogle } from "./actions"
+import type { Locale } from "@/lib/locales"
 
 function SubmitButton({ isSubmitting }: { isSubmitting: boolean }) {
   return (
@@ -72,6 +74,7 @@ function GoogleSignInButton({ isSubmitting }: { isSubmitting: boolean }) {
 
 export default function KycuPage() {
   const router = useRouter()
+  const locale = useLocale() as Locale
   const searchParams = useSearchParams()
   const message = searchParams.get("message")
   const [error, setError] = useState<string>("")
@@ -109,7 +112,7 @@ export default function KycuPage() {
         redirectInProgressRef.current = true
         // Give the browser a moment to update state before redirecting
         await new Promise((resolve) => setTimeout(resolve, 100))
-        router.push("/dashboard")
+        router.push(`/${locale}/dashboard`)
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gabim gjatë kyçjes")

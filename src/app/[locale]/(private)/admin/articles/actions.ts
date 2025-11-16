@@ -22,6 +22,9 @@ type GetArticlesResult = {
 }
 
 export async function getArticles(): Promise<GetArticlesResult> {
+  // Verify admin authorization before proceeding
+  await requireAdminRole()
+
   try {
     const { data, error } = await fetchAdminArticles()
 

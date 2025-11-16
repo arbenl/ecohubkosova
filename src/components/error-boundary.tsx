@@ -1,4 +1,5 @@
 "use client"
+import { useLocale } from "next-intl"
 
 import React, { Component, ErrorInfo, ReactNode } from "react"
 import { Button } from "@/components/ui/button"

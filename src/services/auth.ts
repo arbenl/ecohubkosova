@@ -3,7 +3,7 @@
  * Centralizes auth logic to reduce duplication between login and register pages.
  */
 
-import { createServerActionSupabaseClient } from "@/lib/supabase/server"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { logAuthAction } from "@/lib/auth/logging"
 
 export type AuthResponse = {
@@ -40,7 +40,7 @@ export async function validateAuthCredentials(email: string, password: string, s
  * Handles Supabase sign-in with error logging
  */
 export async function handleSupabaseSignIn(email: string, password: string): Promise<AuthResponse> {
-  const supabase = await createServerActionSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   logAuthAction("signIn", "Attempting sign-in", { email })
 
@@ -74,7 +74,7 @@ export async function handleSupabaseSignUp(
   password: string,
   userData: Record<string, any>
 ): Promise<AuthResponse> {
-  const supabase = await createServerActionSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   logAuthAction("signUp", "Attempting sign-up", { email })
 

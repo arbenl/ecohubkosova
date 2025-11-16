@@ -1,5 +1,6 @@
 "use server"
 
+import { requireAdminRole } from "@/lib/auth/roles"
 import { fetchAdminStats, type AdminStats } from "@/services/admin/stats"
 
 type GetAdminStatsResult = {
@@ -8,6 +9,9 @@ type GetAdminStatsResult = {
 }
 
 export async function getAdminStats(): Promise<GetAdminStatsResult> {
+  // Verify admin authorization before proceeding
+  await requireAdminRole()
+
   const { data, error } = await fetchAdminStats()
 
   if (error) {

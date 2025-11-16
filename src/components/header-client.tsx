@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
+import { useLocale } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Menu, X, User } from "lucide-react"
 import { useAuth } from "@/lib/auth-provider"
@@ -14,6 +15,7 @@ interface HeaderClientProps {
 
 export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: HeaderClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const locale = useLocale()
   const { user, userProfile, isLoading } = useAuth()
   const derivedName =
     userProfile?.emri_i_plote ||
@@ -25,7 +27,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm">
       <div className="container flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href="/home" className="flex items-center gap-3 group">
+        <Link href={`/${locale}/home`} className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-xl eco-gradient flex items-center justify-center text-white font-bold text-lg">
             E
           </div>
@@ -36,14 +38,14 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
 
         <nav className="hidden md:flex gap-8">
           <Link
-            href="/explore"
+            href={`/${locale}/explore`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             Eksploro
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
-            href="/partners"
+            href={`/${locale}/partners`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             Partnerët
@@ -51,7 +53,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
           </Link>
          
           <Link
-            href="/marketplace"
+            href={`/${locale}/marketplace`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             Tregu
@@ -59,7 +61,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
           </Link>
 
            <Link
-            href="/about"
+            href={`/${locale}/about`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             Rreth Nesh
@@ -88,7 +90,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                 asChild
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
               >
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href={`/${locale}/dashboard`}>Dashboard</Link>
               </Button>
               <SignOutButton
                 variant="ghost"
@@ -103,13 +105,13 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                 asChild
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
               >
-                <Link href="/login">Kycu</Link>
+                <Link href={`/${locale}/login`}>Kycu</Link>
               </Button>
               <Button
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
                 asChild
               >
-                <Link href="/register">Fillo Bashkëpunimin</Link>
+                <Link href={`/${locale}/register`}>Fillo Bashkëpunimin</Link>
               </Button>
             </>
           )}
@@ -124,32 +126,31 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
         </button>
       </div>
 
-      {isMenuOpen && (
         <div className="md:hidden border-t border-white/20 bg-white/95 backdrop-blur-md">
           <nav className="container px-4 py-6 space-y-4">
             <Link
-              href="/explore"
+              href={`/${locale}/explore`}
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
               Eksploro
             </Link>
             <Link
-              href="/partners"
+              href={`/${locale}/partners`}
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
               Partnerët
             </Link>
             <Link
-              href="/about"
+              href={`/${locale}/about`}
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
               Rreth Nesh
             </Link>
             <Link
-              href="/marketplace"
+              href={`/${locale}/marketplace`}
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -168,7 +169,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                     Mirë se erdhe, {derivedName}
                   </div>
                   <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
-                    <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                    <Link href={`/${locale}/dashboard`} onClick={() => setIsMenuOpen(false)}>
                       Dashboard
                     </Link>
                   </Button>
@@ -181,12 +182,12 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
               ) : (
                 <>
                   <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
-                    <Link href="/login" onClick={() => setIsMenuOpen(false)}>
+                    <Link href={`/${locale}/login`} onClick={() => setIsMenuOpen(false)}>
                       Kycu
                     </Link>
                   </Button>
                   <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
-                    <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+                    <Link href={`/${locale}/register`} onClick={() => setIsMenuOpen(false)}>
                       Fillo Bashkëpunimin
                     </Link>
                   </Button>
@@ -195,7 +196,6 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
             </div>
           </nav>
         </div>
-      )}
     </header>
   )
 }

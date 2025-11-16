@@ -4,6 +4,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useLocale } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,6 +20,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
 import { registerUser } from "./actions" // Import the Server Action
+import type { Locale } from "@/lib/locales"
 
 type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani"
 
@@ -43,6 +45,7 @@ export default function RegjistrohuPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+  const locale = useLocale() as Locale
 
   const [formData, setFormData] = useState<FormData>({
     emri_i_plote: "",
@@ -171,7 +174,7 @@ export default function RegjistrohuPage() {
     if (result.error) {
       setError(result.error)
     } else {
-      router.push("/auth/sukses") // Redirect to success page upon successful registration
+      router.push(`/${locale}/auth/sukses`) // Redirect to success page upon successful registration
     }
     setLoading(false) // Reset loading state
   }

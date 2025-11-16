@@ -1,6 +1,5 @@
 import type React from "react"
 import { ThemeProvider } from "@/components/theme-provider"
-import { AuthProvider } from "@/lib/auth-provider"
 import ErrorBoundary from "@/components/error-boundary" // Import the ErrorBoundary component
 import "./globals.css"
 import type { Metadata } from "next"
@@ -32,17 +31,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // Simplified for testing - getServerUser call deferred to auth provider
-  const initialUser = null
-
   return (
     <html lang="sq" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <ErrorBoundary>
-            <AuthProvider initialUser={initialUser}>
-              {children}
-            </AuthProvider>
+            {children}
           </ErrorBoundary>
         </ThemeProvider>
       </body>

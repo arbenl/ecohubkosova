@@ -5,7 +5,10 @@ import { loginSchema, registrationSchema } from "@/validation/auth"
 vi.mock(
   "@/lib/supabase/server",
   () => ({
+    createServerSupabaseClient: vi.fn(),
+    // Deprecated aliases for backward compatibility
     createServerActionSupabaseClient: vi.fn(),
+    createRouteHandlerSupabaseClient: vi.fn(),
   })
 )
 

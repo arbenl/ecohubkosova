@@ -1,10 +1,9 @@
 import { getRequestConfig } from "next-intl/server"
 import { headers } from "next/headers"
+import { defaultLocale } from "./locales"
+import type { Locale } from "./locales"
 
-export const locales = ["sq", "en"] as const
-export type Locale = (typeof locales)[number]
-
-export const defaultLocale: Locale = "sq"
+export { locales, type Locale, defaultLocale } from "./locales"
 
 export default getRequestConfig(async () => {
   const headersList = await headers()

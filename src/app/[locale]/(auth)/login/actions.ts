@@ -2,7 +2,7 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { createServerActionSupabaseClient } from "@/lib/supabase/server"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { loginSchema } from "@/validation/auth"
 import { incrementSessionVersion } from "@/services/session"
 import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_OPTIONS } from "@/lib/auth/session-version"
@@ -24,7 +24,7 @@ export async function signIn(prevState: any, formData: FormData): Promise<SignIn
 
   logAuthAction("signIn", "Login attempt", { email })
 
-  const supabase = await createServerActionSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   const parsed = loginSchema.safeParse({
     email,
@@ -89,7 +89,7 @@ export async function signIn(prevState: any, formData: FormData): Promise<SignIn
 export async function signInWithGoogle(): Promise<SignInWithGoogleResponse> {
   logAuthAction("signInWithGoogle", "OAuth login initiated")
 
-  const supabase = await createServerActionSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   // Use hardcoded site URL to prevent open redirect vulnerability
   const redirectUrl = process.env.NEXT_PUBLIC_SITE_URL

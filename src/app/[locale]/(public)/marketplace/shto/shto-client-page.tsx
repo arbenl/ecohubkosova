@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useLocale } from "next-intl"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,9 +16,11 @@ import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useAuth } from "@/lib/auth-provider"
 import { createListing } from "./actions" // Import the server action
+import type { Locale } from "@/lib/locales"
 
 export default function ShtoListimClientPage() {
   const router = useRouter()
+  const locale = useLocale() as Locale
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -87,7 +90,7 @@ export default function ShtoListimClientPage() {
 
       // Redirect after 3 seconds
       setTimeout(() => {
-        router.push("/marketplace")
+        router.push(`/${locale}/marketplace`)
       }, 3000)
     }
     setLoading(false)

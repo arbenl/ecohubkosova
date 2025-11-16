@@ -2,6 +2,8 @@
 
 import { useRef, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useLocale } from "next-intl"
+import type { Locale } from "@/lib/locales"
 
 /**
  * Shared hook for managing auth form state and submission logic.
@@ -9,6 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation"
  */
 export function useAuthForm() {
   const router = useRouter()
+  const locale = useLocale() as Locale
   const searchParams = useSearchParams()
   const message = searchParams.get("message")
   const [error, setError] = useState<string>("")
@@ -44,7 +47,7 @@ export function useAuthForm() {
 
         if (result?.success !== false) {
           redirectInProgressRef.current = true
-          router.push("/auth/success")
+          router.push(`/${locale}/auth/success`)
         }
       } catch (err) {
         const errorMessage =
@@ -53,7 +56,7 @@ export function useAuthForm() {
         setIsSubmitting(false)
       }
     },
-    [router]
+    [router, locale]
   )
 
   return {

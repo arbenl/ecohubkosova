@@ -1,6 +1,6 @@
 "use server"
 
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import {
@@ -34,7 +34,7 @@ export async function getProfileData(): Promise<ProfileDataResult> {
 export type UserProfileUpdate = UserProfileUpdateInput
 
 export async function updateUserProfile(formData: UserProfileUpdateInput) {
-  const supabase = await createRouteHandlerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   const {
     data: { user },
@@ -71,7 +71,7 @@ export async function updateOrganizationProfile(
   organizationId: string,
   formData: OrganizationProfileUpdateInput
 ) {
-  const supabase = await createRouteHandlerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   const {
     data: { user },

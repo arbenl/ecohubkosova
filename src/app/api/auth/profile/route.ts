@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { ensureUserProfileExists } from "@/lib/auth/profile-service"
 import { logAuthAction } from "@/lib/auth/logging"
 
@@ -50,7 +50,7 @@ async function withRetry<T>(
 
 export async function GET() {
   try {
-    const supabase = await createRouteHandlerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
 
     logAuthAction("profileEndpoint", "Profile request")
 

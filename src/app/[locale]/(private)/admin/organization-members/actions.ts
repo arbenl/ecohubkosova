@@ -20,6 +20,9 @@ type GetOrganizationMembersResult = {
 }
 
 export async function getOrganizationMembers(): Promise<GetOrganizationMembersResult> {
+  // Verify admin authorization before proceeding
+  await requireAdminRole()
+
   try {
     const { data, error } = await fetchAdminOrganizationMembers()
 

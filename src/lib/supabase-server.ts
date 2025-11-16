@@ -5,8 +5,15 @@ import type { User } from "@supabase/supabase-js"
 
 /**
  * Cached Supabase client for server components. Ensures a single instance per request.
+ * Use this for components that need the same auth state throughout the request.
+ *
+ * @returns Promise<SupabaseClient>
+ *
+ * Usage:
+ * - Server Components
+ * - Server-side data fetching with caching
  */
-export const createServerSupabaseClient = cache(async () => {
+export const createCachedServerSupabaseClient = cache(async () => {
   const cookieStore = await cookies()
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || "",
@@ -32,6 +39,13 @@ export const createServerSupabaseClient = cache(async () => {
 })
 
 /**
+ * Deprecated: Use createCachedServerSupabaseClient instead.
+ * Kept for backward compatibility.
+ * @deprecated Use createCachedServerSupabaseClient
+ */
+export const createServerSupabaseClient = createCachedServerSupabaseClient
+
+/**
  * Fetches the authenticated user via Supabase Auth, ensuring data is verified
  * directly with the Auth service rather than trusting cookie contents.
  */
@@ -39,7 +53,7 @@ export const getServerUser = cache(async (): Promise<{
   user: User | null
   error: Error | null
 }> => {
-  const supabase = await createServerSupabaseClient()
+  const supabase = await createCachedServerSupabaseClient()
 
   const isSessionMissing = (err: unknown) =>
     typeof err === "object" &&

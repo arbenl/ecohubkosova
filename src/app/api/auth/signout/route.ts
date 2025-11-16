@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { createRouteHandlerSupabaseClient } from "@/lib/supabase/server"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_CLEAR_OPTIONS } from "@/lib/auth/session-version"
 import { logAuthAction } from "@/lib/auth/logging"
 
@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic"
 
 export async function POST() {
   try {
-    const supabase = await createRouteHandlerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
 
     logAuthAction("signoutEndpoint", "Sign-out request received")
 

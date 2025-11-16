@@ -1,0 +1,10 @@
+# MCP Servers Directory
+# These are Model Context Protocol servers for development tools
+# They should NOT be included in the Next.js build
+
+# Ignore all files except documentation
+*
+!.gitkeep
+!README.md
+!*.md
+!/.gitignore

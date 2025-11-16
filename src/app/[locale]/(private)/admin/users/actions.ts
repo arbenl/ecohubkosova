@@ -19,6 +19,9 @@ type GetUsersResult = {
 }
 
 export async function getUsers(): Promise<GetUsersResult> {
+  // Verify admin authorization before proceeding
+  await requireAdminRole()
+
   try {
     const { data, error } = await fetchAdminUsers()
 

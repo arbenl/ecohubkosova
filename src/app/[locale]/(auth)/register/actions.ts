@@ -1,6 +1,6 @@
 "use server"
 
-import { createServerActionSupabaseClient } from "@/lib/supabase/server"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 import { registrationSchema } from "@/validation/auth"
@@ -25,7 +25,7 @@ interface RegistrationFormData {
 }
 
 export async function registerUser(formData: RegistrationFormData) {
-  const supabase = await createServerActionSupabaseClient()
+  const supabase = await createServerSupabaseClient()
 
   try {
     const parsed = registrationSchema.safeParse(formData)

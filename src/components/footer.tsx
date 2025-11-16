@@ -1,6 +1,10 @@
+"use client"
+
 import Link from "next/link"
+import { useLocale } from "next-intl"
 
 export function Footer() {
+  const locale = useLocale()
   return (
     <footer className="bg-white/80 backdrop-blur-sm border-t border-white/20 py-16 mt-auto shadow-lg">
       <div className="container px-4 md:px-6">
@@ -24,7 +28,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/explore"
+                  href={`/${locale}/explore`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Eksploro
@@ -32,7 +36,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/partners"
+                  href={`/${locale}/partners`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Partnerët
@@ -40,7 +44,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/marketplace"
+                  href={`/${locale}/marketplace`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Tregu
@@ -48,7 +52,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/knowledge"
+                  href={`/${locale}/knowledge`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Qendra e Dijes
@@ -62,7 +66,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/about/vision"
+                  href={`/${locale}/about/vision`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Kush jemi ne
@@ -70,7 +74,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/about/mission"
+                  href={`/${locale}/about/mission`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Misioni ynë
@@ -78,7 +82,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/about/coalition"
+                  href={`/${locale}/about/coalition`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Koalicioni
@@ -92,20 +96,20 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/contact"
+                  href={`/${locale}/contact`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Kontakti
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm">
+                <Link href={`/${locale}/faq`} className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm">
                   Pyetje të shpeshta
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/help"
+                  href={`/${locale}/help`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Ndihmë
@@ -113,7 +117,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/legal/terms"
+                  href={`/${locale}/legal/terms`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
                   Kushtet e përdorimit

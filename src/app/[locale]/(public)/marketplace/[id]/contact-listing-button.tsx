@@ -2,8 +2,10 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useLocale } from "next-intl"
 import { Button } from "@/components/ui/button"
 import type { User } from "@supabase/supabase-js"
+import type { Locale } from "@/lib/locales"
 
 interface Listing {
   id: string
@@ -26,6 +28,7 @@ interface ContactListingButtonProps {
 export default function ContactListingButton({ listing, user }: ContactListingButtonProps) {
   const [showContactModal, setShowContactModal] = useState(false)
   const router = useRouter()
+  const locale = useLocale() as Locale
 
   return (
     <>
@@ -35,7 +38,7 @@ export default function ContactListingButton({ listing, user }: ContactListingBu
           if (user) {
             setShowContactModal(true)
           } else {
-            router.push("/login?message=Ju duhet të kyçeni për të kontaktuar shitësin")
+            router.push(`/${locale}/login?message=Ju duhet të kyçeni për të kontaktuar shitësin`)
           }
         }}
       >

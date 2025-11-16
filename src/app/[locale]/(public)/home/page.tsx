@@ -1,9 +1,15 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { UserPlus, Search, MessageCircle, ShoppingCart, Sparkles, Leaf, Users } from "lucide-react"
 import { LandingAuthPanel } from "@/components/landing/landing-auth-panel"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import { useLocale } from "next-intl"
 
-export default async function Home() {
+export default function Home() {
+  const locale = useLocale()
+  
   return (
     <>
       <main className="flex-1">
@@ -11,6 +17,11 @@ export default async function Home() {
         <section className="py-24 md:py-32 relative overflow-hidden">
           <div className="absolute inset-0 eco-gradient-light"></div>
           <div className="container px-4 md:px-6 relative">
+            {/* Language Switcher */}
+            <div className="flex justify-end mb-4">
+              <LanguageSwitcher />
+            </div>
+            
             <div className="flex flex-col items-center text-center space-y-10 animate-fade-in">
               <div className="inline-flex items-center rounded-full glass-card px-4 py-2 text-sm font-semibold transition-all duration-300 hover:scale-105">
                 <Sparkles className="w-4 h-4 mr-2 text-[#00C896]" />
@@ -35,7 +46,7 @@ export default async function Home() {
                   className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
                   asChild
                 >
-                  <Link href="/register">
+                  <Link href={`/${locale}/register`}>
                     <UserPlus className="mr-2 h-5 w-5" />
                     Fillo Bashkëpunimin
                   </Link>
@@ -45,7 +56,7 @@ export default async function Home() {
                   className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
                   asChild
                 >
-                  <Link href="/marketplace">
+                  <Link href={`/${locale}/marketplace`}>
                     <Search className="mr-2 h-5 w-5" />
                     Eksploro Tregun
                   </Link>
@@ -86,7 +97,7 @@ export default async function Home() {
                     className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 hover:shadow-xl hover:shadow-blue-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href="/explore">
+                    <Link href={`/${locale}/explore`}>
                       <UserPlus className="mr-2 h-4 w-4" />
                       Eksploro Tani
                     </Link>
@@ -108,7 +119,7 @@ export default async function Home() {
                     className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 hover:shadow-xl hover:shadow-purple-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href="/partners">
+                    <Link href={`/${locale}/partners`}>
                       <Search className="mr-2 h-4 w-4" />
                       Shiko Partnerët
                     </Link>
@@ -130,7 +141,7 @@ export default async function Home() {
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href="/marketplace">
+                    <Link href={`/${locale}/marketplace`}>
                       <MessageCircle className="mr-2 h-4 w-4" />
                       Shiko Tregun
                     </Link>
@@ -170,7 +181,7 @@ export default async function Home() {
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href="/marketplace?lloji=shes">
+                    <Link href={`/${locale}/marketplace?lloji=shes`}>
                       <Leaf className="mr-2 h-4 w-4" />
                       Shiko Ofertat
                     </Link>
@@ -194,7 +205,7 @@ export default async function Home() {
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href="/marketplace?lloji=blej">
+                    <Link href={`/${locale}/marketplace?lloji=blej`}>
                       <Search className="mr-2 h-4 w-4" />
                       Shiko Kërkesat
                     </Link>

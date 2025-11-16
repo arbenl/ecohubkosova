@@ -23,7 +23,10 @@ const mocks = vi.hoisted(() => {
 })
 
 vi.mock("@/lib/supabase/server", () => ({
+  createServerSupabaseClient: mocks.mockCreateSupabaseClient,
+  // Deprecated aliases for backward compatibility
   createRouteHandlerSupabaseClient: mocks.mockCreateSupabaseClient,
+  createServerActionSupabaseClient: mocks.mockCreateSupabaseClient,
 }))
 
 vi.mock("@/services/profile", () => ({

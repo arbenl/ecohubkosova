@@ -110,8 +110,9 @@ vi.mock("@/lib/supabase/server", async () => {
 
   return {
     createServerSupabaseClient: vi.fn(() => mockSupabaseClient),
-    createRouteHandlerSupabaseClient: vi.fn(() => mockSupabaseClient),
-    createServerActionSupabaseClient: vi.fn(() => mockSupabaseClient),
+    createCachedServerSupabaseClient: vi.fn(() => mockSupabaseClient),
+    createRouteHandlerSupabaseClient: vi.fn(() => mockSupabaseClient), // Deprecated alias
+    createServerActionSupabaseClient: vi.fn(() => mockSupabaseClient), // Deprecated alias
     getServerUser: vi.fn().mockResolvedValue(null),
   }
 })

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "e2e-test-generator": {
+      "command": "node",
+      "args": ["/Users/arbenlila/development/e2e-test-generator-mcp/build/index.js"]
+    }
+  }
+}

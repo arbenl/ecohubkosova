@@ -12,6 +12,7 @@ import {
   useTransition,
 } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useLocale } from "next-intl"
 import type { User, AuthResponse, SignInWithPasswordCredentials } from "@supabase/supabase-js"
 import { createClientSupabaseClient } from "@/lib/supabase"
 import { createSignOutHandler } from "@/lib/auth/signout-handler"
@@ -21,6 +22,7 @@ import { UserStateManager } from "@/lib/auth/user-state-manager"
 import { SupabaseInitializer } from "@/lib/auth/supabase-initializer"
 import { SessionExpirationHandler } from "@/lib/auth/session-expiration-handler"
 import type { UserProfile } from "@/types"
+import type { Locale } from "@/lib/locales"
 
 interface AuthContextType {
   user: User | null
@@ -51,6 +53,7 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
 
   // Navigation and Supabase
   const router = useRouter()
+  const locale = useLocale() as Locale
   const searchParams = useSearchParams()
   const supabase = useMemo(() => createClientSupabaseClient(), [])
   const [, startTransition] = useTransition()
@@ -192,11 +195,12 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
       createSignOutHandler({
         supabase,
         router,
+        locale,
         resetAuthState,
         signOutInFlightRef,
         setSignOutPending,
       }),
-    [supabase, router, resetAuthState]
+    [supabase, router, locale, resetAuthState]
   )
 
   // Sign in with password

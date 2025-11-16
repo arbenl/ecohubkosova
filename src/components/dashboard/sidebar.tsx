@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useLocale } from "next-intl"
 import { cn } from "@/lib/utils"
 import { LayoutDashboard, BookOpen, Users, ShoppingCart, User, Settings, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -14,6 +15,7 @@ interface SidebarProps {
 
 export function Sidebar({ userRole }: SidebarProps) {
   const pathname = usePathname()
+  const locale = useLocale()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const handleBeforeSignOut = () => setIsMobileMenuOpen(false)
 
@@ -113,7 +115,7 @@ export function Sidebar({ userRole }: SidebarProps) {
       >
         {/* Mobile Sidebar Header */}
         <div className="p-4 border-b border-gray-200">
-          <Link href="/home" className="flex items-center gap-2">
+          <Link href={`/${locale}/home`} className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg eco-gradient flex items-center justify-center">
               <span className="text-white font-bold text-sm">E</span>
             </div>

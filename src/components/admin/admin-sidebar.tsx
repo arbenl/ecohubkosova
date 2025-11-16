@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useLocale } from "next-intl"
 import { cn } from "@/lib/utils"
 import { Users, Building, BookOpen, ShoppingCart, LayoutDashboard, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -10,6 +11,7 @@ import { SignOutButton } from "@/components/sign-out-button"
 
 export function AdminSidebar() {
   const pathname = usePathname()
+  const locale = useLocale()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const handleBeforeSignOut = () => setIsMobileMenuOpen(false)
 
@@ -85,7 +87,7 @@ export function AdminSidebar() {
         >
           {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
-        <Link href="/admin" className="flex items-center gap-2">
+        <Link href={`/${locale}/admin`} className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg eco-gradient flex items-center justify-center text-white font-bold text-xs">
             A
           </div>
@@ -109,7 +111,7 @@ export function AdminSidebar() {
       >
         {/* Mobile Sidebar Header */}
         <div className="p-4 border-b border-gray-200">
-          <Link href="/admin" className="flex items-center gap-2">
+          <Link href={`/${locale}/admin`} className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg eco-gradient flex items-center justify-center text-white font-bold text-sm">
               A
             </div>
@@ -154,7 +156,7 @@ export function AdminSidebar() {
       <div className="hidden md:flex md:flex-col md:w-72 md:bg-white md:border-r md:border-gray-200 md:h-screen md:sticky md:top-0">
         {/* Desktop Header */}
         <div className="p-6 border-b border-gray-200">
-          <Link href="/admin" className="flex items-center gap-3">
+          <Link href={`/${locale}/admin`} className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl eco-gradient flex items-center justify-center text-white font-bold text-lg">
               A
             </div>

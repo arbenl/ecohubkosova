@@ -3,10 +3,12 @@ import type { SupabaseClient } from "@supabase/supabase-js"
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import { logAuthAction } from "@/lib/auth/logging"
 import { resetSupabaseBrowserClient } from "@/lib/supabase-browser"
+import type { Locale } from "@/lib/locales"
 
 interface SignOutDeps {
   supabase: SupabaseClient<any, any, any>
   router: AppRouterInstance
+  locale: Locale
   resetAuthState: () => void
   signOutInFlightRef: MutableRefObject<boolean>
   setSignOutPending: (value: boolean) => void
@@ -15,6 +17,7 @@ interface SignOutDeps {
 export function createSignOutHandler({
   supabase,
   router,
+  locale,
   resetAuthState,
   signOutInFlightRef,
   setSignOutPending,
@@ -80,7 +83,7 @@ export function createSignOutHandler({
 
       // Step 6: Force navigation with window.location.replace for immediate effect
       // This is more reliable than href as it prevents back button issues
-      window.location.replace("/login")
+      window.location.replace(`/${locale}/login`)
     } catch (error) {
       logAuthAction("signOut", "Unexpected error during sign-out", {
         error: error instanceof Error ? error.message : String(error),
@@ -88,7 +91,7 @@ export function createSignOutHandler({
       signOutInFlightRef.current = false
       setSignOutPending(false)
       // Force navigation even on error
-      window.location.replace("/login")
+      window.location.replace(`/${locale}/login`)
     }
   }
 }

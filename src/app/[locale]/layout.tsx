@@ -1,6 +1,7 @@
 import type React from "react"
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessagesForLocale } from '@/lib/messages'
+import { AuthProvider } from "@/lib/auth-provider"
 
 export default async function LocaleLayout({
   children,
@@ -14,10 +15,13 @@ export default async function LocaleLayout({
 
   // Provide default empty messages if loading fails
   const safeMessages = messages || {}
+  const initialUser = null
 
   return (
     <NextIntlClientProvider locale={locale} messages={safeMessages}>
-      {children}
+      <AuthProvider initialUser={initialUser}>
+        {children}
+      </AuthProvider>
     </NextIntlClientProvider>
   )
 }
