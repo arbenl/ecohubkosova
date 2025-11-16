@@ -1,5 +1,9 @@
 const DEFAULT_IMAGE_DOMAINS = ["images.unsplash.com", "placehold.co"]
 
+import createNextIntlPlugin from 'next-intl/plugin'
+
+const withNextIntl = createNextIntlPlugin('./src/lib/i18n.ts')
+
 const parseCsvList = (value) =>
   value
     ?.split(",")
@@ -88,4 +92,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default withNextIntl(nextConfig)

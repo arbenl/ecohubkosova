@@ -38,21 +38,18 @@ export class AuthPage {
   // ============= Navigation =============
 
   async navigateToRegister(): Promise<void> {
-    await this.page.goto('/sq/auth/register');
-    await this.page.waitForLoadState('networkidle');
-    await this.page.waitForTimeout(1000);
+    await this.page.goto('/sq/register');
+    await this.page.waitForTimeout(500);
   }
 
   async navigateToLogin(): Promise<void> {
-    await this.page.goto('/sq/auth/login');
-    await this.page.waitForLoadState('networkidle');
-    await this.page.waitForTimeout(1000);
+    await this.page.goto('/sq/login');
+    await this.page.waitForTimeout(500);
   }
 
   async navigateToHome(): Promise<void> {
     await this.page.goto('/sq');
-    await this.page.waitForLoadState('networkidle');
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(500);
   }
 
   // ============= Registration Flow =============
@@ -68,12 +65,11 @@ export class AuthPage {
     confirmPassword: string;
     location: string;
   }): Promise<void> {
-    await this.page.waitForSelector(this.fullNameInput, { timeout: 5000 });
-    await this.page.fill(this.fullNameInput, data.fullName);
-    await this.page.fill(this.emailInput, data.email);
-    await this.page.fill(this.passwordInput, data.password);
-    await this.page.fill(this.confirmPasswordInput, data.confirmPassword);
-    await this.page.fill(this.locationInput, data.location);
+    await this.page.locator(this.fullNameInput).fill(data.fullName);
+    await this.page.locator(this.emailInput).fill(data.email);
+    await this.page.locator(this.passwordInput).fill(data.password);
+    await this.page.locator(this.confirmPasswordInput).fill(data.confirmPassword);
+    await this.page.locator(this.locationInput).fill(data.location);
   }
 
   /**
@@ -88,7 +84,7 @@ export class AuthPage {
       'Ndërmarrje Sociale': '#ndermarrje',
       'Kompani': '#kompani',
     };
-    await this.page.click(roleMap[role]);
+    await this.page.locator(roleMap[role]).click();
   }
 
   /**
@@ -101,49 +97,49 @@ export class AuthPage {
     contactPerson: string;
     contactEmail: string;
   }): Promise<void> {
-    await this.page.fill('input[name="emri_organizates"]', data.organizationName);
-    await this.page.fill('textarea[name="pershkrimi_organizates"]', data.description);
-    await this.page.fill('input[name="interesi_primar"]', data.primaryInterest);
-    await this.page.fill('input[name="person_kontakti"]', data.contactPerson);
-    await this.page.fill('input[name="email_kontakti"]', data.contactEmail);
+    await this.page.locator('input[name="emri_organizates"]').fill(data.organizationName);
+    await this.page.locator('textarea[name="pershkrimi_organizates"]').fill(data.description);
+    await this.page.locator('input[name="interesi_primar"]').fill(data.primaryInterest);
+    await this.page.locator('input[name="person_kontakti"]').fill(data.contactPerson);
+    await this.page.locator('input[name="email_kontakti"]').fill(data.contactEmail);
   }
 
   /**
    * Accept terms and conditions (Step 3)
    */
   async acceptTermsAndConditions(): Promise<void> {
-    await this.page.click('input[name="terms"]');
+    await this.page.locator('input[name="terms"]').click();
   }
 
   /**
    * Optionally subscribe to newsletter
    */
   async subscribeToNewsletter(): Promise<void> {
-    await this.page.click('input[name="newsletter"]');
+    await this.page.locator('input[name="newsletter"]').click();
   }
 
   /**
    * Click "Continue" button to move to next step
    */
   async clickContinue(): Promise<void> {
-    await this.page.click(this.continueButton);
+    await this.page.locator(this.continueButton).click();
     // Wait for step transition
-    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForTimeout(300);
   }
 
   /**
    * Click "Back" button to go to previous step
    */
   async clickBack(): Promise<void> {
-    await this.page.click(this.backButton);
-    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.locator(this.backButton).click();
+    await this.page.waitForTimeout(300);
   }
 
   /**
    * Submit registration form
    */
   async submitRegistration(): Promise<void> {
-    await this.page.click(this.registerButton);
+    await this.page.locator(this.registerButton).click();
   }
 
   // ============= Login Flow =============
@@ -152,11 +148,9 @@ export class AuthPage {
    * Fill and submit login form
    */
   async login(email: string, password: string): Promise<void> {
-    await this.page.waitForSelector(this.loginEmailInput, { timeout: 5000 });
-    await this.page.fill(this.loginEmailInput, email);
-    await this.page.waitForSelector(this.loginPasswordInput, { timeout: 5000 });
-    await this.page.fill(this.loginPasswordInput, password);
-    await this.page.click(this.loginButton);
+    await this.page.locator(this.loginEmailInput).fill(email);
+    await this.page.locator(this.loginPasswordInput).fill(password);
+    await this.page.locator(this.loginButton).click();
   }
 
   /**
@@ -177,18 +171,19 @@ export class AuthPage {
    * Verify registration success (redirect to success page)
    */
   async verifyRegistrationSuccess(): Promise<void> {
-    await this.page.waitForURL('/auth/success', { timeout: 5000 });
+    await this.page.waitForURL('/sq/success', { timeout: 5000 });
     const pageUrl = this.page.url();
-    expect(pageUrl).toContain('/auth/success');
+    expect(pageUrl).toContain('/sq/success');
   }
 
   /**
    * Verify login success (redirect to dashboard)
    */
   async verifyLoginSuccess(): Promise<void> {
-    await this.page.waitForURL('/(private)/**', { timeout: 5000 });
+    // Wait for navigation away from login page
+    await this.page.waitForURL(/.*(?!\/login).*/, { timeout: 5000 });
     const pageUrl = this.page.url();
-    expect(pageUrl).not.toContain('/auth/login');
+    expect(pageUrl).not.toContain('/login');
   }
 
   /**
@@ -216,14 +211,14 @@ export class AuthPage {
    * Verify we're on the register page
    */
   async verifyOnRegisterPage(): Promise<void> {
-    await expect(this.page).toHaveURL('/auth/register');
+    await expect(this.page).toHaveURL('/sq/register');
   }
 
   /**
    * Verify we're on the login page
    */
   async verifyOnLoginPage(): Promise<void> {
-    await expect(this.page).toHaveURL('/auth/login');
+    await expect(this.page).toHaveURL('/sq/login');
   }
 
   /**

@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/react';
+import type { Preview, StoryFn } from '@storybook/react';
 import '../src/app/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 
@@ -10,7 +10,7 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story) => (
+    (Story: StoryFn) => (
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <Story />
       </ThemeProvider>
@@ -19,3 +19,4 @@ const preview: Preview = {
 };
 
 export default preview;
+

@@ -1,0 +1,116 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "E ECO HUB KOSOVA" [ref=e5] [cursor=pointer]:
+          - /url: /home
+          - generic [ref=e6]: E
+          - generic [ref=e7]: ECO HUB KOSOVA
+        - navigation [ref=e8]:
+          - link "Eksploro" [ref=e9] [cursor=pointer]:
+            - /url: /explore
+            - text: Eksploro
+          - link "Partnerët" [ref=e10] [cursor=pointer]:
+            - /url: /partners
+            - text: Partnerët
+          - link "Tregu" [ref=e11] [cursor=pointer]:
+            - /url: /marketplace
+            - text: Tregu
+          - link "Rreth Nesh" [ref=e12] [cursor=pointer]:
+            - /url: /about
+            - text: Rreth Nesh
+        - generic [ref=e13]:
+          - link "Kycu" [ref=e14] [cursor=pointer]:
+            - /url: /login
+          - link "Fillo Bashkëpunimin" [ref=e15] [cursor=pointer]:
+            - /url: /register
+    - main [ref=e16]:
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - generic [ref=e21]: Bashkohu me ne
+          - generic [ref=e22]: Hapi 3 nga 3 - Kushtet dhe konfirmimi
+        - generic [ref=e24]:
+          - generic [ref=e25]:
+            - generic [ref=e26]:
+              - checkbox "Pranoj kushtet e përdorimit dhe politikën e privatësisë" [ref=e27] [cursor=pointer]
+              - checkbox [active]
+              - generic [ref=e29] [cursor=pointer]:
+                - text: Pranoj
+                - link "kushtet e përdorimit" [ref=e30]:
+                  - /url: /legal/terms
+                - text: dhe
+                - link "politikën e privatësisë" [ref=e31]:
+                  - /url: /privatesia
+            - generic [ref=e32]:
+              - checkbox "Dëshiroj të marr njoftime dhe përditësime nga ECO HUB KOSOVA" [ref=e33] [cursor=pointer]
+              - checkbox
+              - generic [ref=e34]:
+                - text: Dëshiroj të marr njoftime dhe përditësime nga ECO HUB KOSOVA
+                - paragraph [ref=e35]: Mund ta ndryshoni këtë preferencë në çdo kohë nga profili juaj.
+          - generic [ref=e36]:
+            - button "Kthehu" [ref=e37] [cursor=pointer]
+            - button "Regjistrohu" [ref=e38] [cursor=pointer]
+        - generic [ref=e40]:
+          - text: Keni tashmë një llogari?
+          - link "Kyçu këtu" [ref=e41] [cursor=pointer]:
+            - /url: /login
+    - contentinfo [ref=e42]:
+      - generic [ref=e43]:
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - generic [ref=e46]:
+              - generic [ref=e47]: E
+              - generic [ref=e48]: ECO HUB KOSOVA
+            - paragraph [ref=e49]: Platforma e parë e ekonomisë qarkulluese në Kosovë për një të ardhme të qëndrueshme.
+          - generic [ref=e50]:
+            - heading "Lidhje" [level=3] [ref=e51]
+            - list [ref=e52]:
+              - listitem [ref=e53]:
+                - link "Eksploro" [ref=e54] [cursor=pointer]:
+                  - /url: /explore
+              - listitem [ref=e55]:
+                - link "Partnerët" [ref=e56] [cursor=pointer]:
+                  - /url: /partners
+              - listitem [ref=e57]:
+                - link "Tregu" [ref=e58] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e59]:
+                - link "Qendra e Dijes" [ref=e60] [cursor=pointer]:
+                  - /url: /knowledge
+          - generic [ref=e61]:
+            - heading "Rreth Nesh" [level=3] [ref=e62]
+            - list [ref=e63]:
+              - listitem [ref=e64]:
+                - link "Kush jemi ne" [ref=e65] [cursor=pointer]:
+                  - /url: /about/vision
+              - listitem [ref=e66]:
+                - link "Misioni ynë" [ref=e67] [cursor=pointer]:
+                  - /url: /about/mission
+              - listitem [ref=e68]:
+                - link "Koalicioni" [ref=e69] [cursor=pointer]:
+                  - /url: /about/coalition
+          - generic [ref=e70]:
+            - heading "Mbështetje" [level=3] [ref=e71]
+            - list [ref=e72]:
+              - listitem [ref=e73]:
+                - link "Kontakti" [ref=e74] [cursor=pointer]:
+                  - /url: /contact
+              - listitem [ref=e75]:
+                - link "Pyetje të shpeshta" [ref=e76] [cursor=pointer]:
+                  - /url: /faq
+              - listitem [ref=e77]:
+                - link "Ndihmë" [ref=e78] [cursor=pointer]:
+                  - /url: /help
+              - listitem [ref=e79]:
+                - link "Kushtet e përdorimit" [ref=e80] [cursor=pointer]:
+                  - /url: /legal/terms
+        - generic [ref=e81]:
+          - paragraph [ref=e82]: © 2025 ECO HUB KOSOVA. Të gjitha të drejtat e rezervuara.
+          - paragraph [ref=e83]: Mbështetur nga Koalicioni i Ekonomisë Qarkulluese
+  - button "Open Next.js Dev Tools" [ref=e89] [cursor=pointer]:
+    - img [ref=e90]
+  - alert [ref=e93]
+```

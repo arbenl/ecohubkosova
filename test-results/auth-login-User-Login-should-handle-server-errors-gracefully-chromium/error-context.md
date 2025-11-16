@@ -1,0 +1,111 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "E ECO HUB KOSOVA" [ref=e5] [cursor=pointer]:
+          - /url: /home
+          - generic [ref=e6]: E
+          - generic [ref=e7]: ECO HUB KOSOVA
+        - navigation [ref=e8]:
+          - link "Eksploro" [ref=e9] [cursor=pointer]:
+            - /url: /explore
+            - text: Eksploro
+          - link "Partnerët" [ref=e10] [cursor=pointer]:
+            - /url: /partners
+            - text: Partnerët
+          - link "Tregu" [ref=e11] [cursor=pointer]:
+            - /url: /marketplace
+            - text: Tregu
+          - link "Rreth Nesh" [ref=e12] [cursor=pointer]:
+            - /url: /about
+            - text: Rreth Nesh
+        - generic [ref=e13]:
+          - link "Kycu" [ref=e14] [cursor=pointer]:
+            - /url: /login
+          - link "Fillo Bashkëpunimin" [ref=e15] [cursor=pointer]:
+            - /url: /register
+    - main [ref=e16]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - heading "Mirë se erdhe" [level=1] [ref=e20]
+          - paragraph [ref=e21]: Kyçu në llogarinë tënde
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - text: Email
+            - textbox "Email" [ref=e24]:
+              - /placeholder: example@example.com
+              - text: test@example.com
+          - generic [ref=e25]:
+            - text: Fjalëkalimi
+            - textbox "Fjalëkalimi" [active] [ref=e26]:
+              - /placeholder: ••••••••
+              - text: password
+          - button "Kyçu" [ref=e27] [cursor=pointer]
+        - generic [ref=e32]: Ose vazhdo me
+        - button "Kyçu me Google" [ref=e33] [cursor=pointer]:
+          - img [ref=e34]
+          - text: Kyçu me Google
+        - paragraph [ref=e37]:
+          - text: Nuk ke llogari?
+          - link "Regjistrohu këtu" [ref=e38] [cursor=pointer]:
+            - /url: /register
+    - contentinfo [ref=e39]:
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]:
+              - generic [ref=e44]: E
+              - generic [ref=e45]: ECO HUB KOSOVA
+            - paragraph [ref=e46]: Platforma e parë e ekonomisë qarkulluese në Kosovë për një të ardhme të qëndrueshme.
+          - generic [ref=e47]:
+            - heading "Lidhje" [level=3] [ref=e48]
+            - list [ref=e49]:
+              - listitem [ref=e50]:
+                - link "Eksploro" [ref=e51] [cursor=pointer]:
+                  - /url: /explore
+              - listitem [ref=e52]:
+                - link "Partnerët" [ref=e53] [cursor=pointer]:
+                  - /url: /partners
+              - listitem [ref=e54]:
+                - link "Tregu" [ref=e55] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e56]:
+                - link "Qendra e Dijes" [ref=e57] [cursor=pointer]:
+                  - /url: /knowledge
+          - generic [ref=e58]:
+            - heading "Rreth Nesh" [level=3] [ref=e59]
+            - list [ref=e60]:
+              - listitem [ref=e61]:
+                - link "Kush jemi ne" [ref=e62] [cursor=pointer]:
+                  - /url: /about/vision
+              - listitem [ref=e63]:
+                - link "Misioni ynë" [ref=e64] [cursor=pointer]:
+                  - /url: /about/mission
+              - listitem [ref=e65]:
+                - link "Koalicioni" [ref=e66] [cursor=pointer]:
+                  - /url: /about/coalition
+          - generic [ref=e67]:
+            - heading "Mbështetje" [level=3] [ref=e68]
+            - list [ref=e69]:
+              - listitem [ref=e70]:
+                - link "Kontakti" [ref=e71] [cursor=pointer]:
+                  - /url: /contact
+              - listitem [ref=e72]:
+                - link "Pyetje të shpeshta" [ref=e73] [cursor=pointer]:
+                  - /url: /faq
+              - listitem [ref=e74]:
+                - link "Ndihmë" [ref=e75] [cursor=pointer]:
+                  - /url: /help
+              - listitem [ref=e76]:
+                - link "Kushtet e përdorimit" [ref=e77] [cursor=pointer]:
+                  - /url: /legal/terms
+        - generic [ref=e78]:
+          - paragraph [ref=e79]: © 2025 ECO HUB KOSOVA. Të gjitha të drejtat e rezervuara.
+          - paragraph [ref=e80]: Mbështetur nga Koalicioni i Ekonomisë Qarkulluese
+  - button "Open Next.js Dev Tools" [ref=e86] [cursor=pointer]:
+    - img [ref=e87]
+  - alert [ref=e90]
+```

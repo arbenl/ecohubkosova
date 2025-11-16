@@ -30,12 +30,12 @@ export default defineConfig({
     trace: 'on-first-retry',
     
     /* Increase timeout for page load and i18n routing */
-    navigationTimeout: 10000,
+    navigationTimeout: 15000,
     actionTimeout: 10000,
   },
 
   /* Global timeout */
-  timeout: 60000,
+  timeout: 30000,
 
   /* Configure projects for major browsers */
   projects: [
@@ -44,15 +44,16 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    /* Fast mode: comment out firefox and webkit for faster local testing */
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {

@@ -5,9 +5,6 @@ import ErrorBoundary from "@/components/error-boundary" // Import the ErrorBound
 import "./globals.css"
 import type { Metadata } from "next"
 
-// Initialize next-intl by importing config
-import '../../i18n'
-
 export const dynamic = "force-dynamic"
 
 const inter = { className: "font-sans" }

@@ -51,19 +51,16 @@ export class MarketplacePage {
 
   async navigateToMarketplace(): Promise<void> {
     await this.page.goto('/sq/marketplace');
-    await this.page.waitForLoadState('networkidle');
     await this.page.waitForTimeout(1000);
   }
 
   async navigateToCreateListing(): Promise<void> {
     await this.page.goto('/sq/marketplace/shto');
-    await this.page.waitForLoadState('networkidle');
     await this.page.waitForTimeout(1000);
   }
 
   async navigateToListingDetails(listingId: string): Promise<void> {
     await this.page.goto(`/sq/marketplace/${listingId}`);
-    await this.page.waitForLoadState('networkidle');
     await this.page.waitForTimeout(1000);
   }
 
@@ -198,14 +195,14 @@ export class MarketplacePage {
    * Verify we're on marketplace page
    */
   async verifyOnMarketplacePage(): Promise<void> {
-    await expect(this.page).toHaveURL('/marketplace');
+    await expect(this.page).toHaveURL('/sq/marketplace');
   }
 
   /**
    * Verify we're on create listing page
    */
   async verifyOnCreateListingPage(): Promise<void> {
-    await expect(this.page).toHaveURL('/marketplace/shto');
+    await expect(this.page).toHaveURL('/sq/marketplace/shto');
   }
 
   /**

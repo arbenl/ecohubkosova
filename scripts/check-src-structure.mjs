@@ -13,6 +13,7 @@ const ALLOWED_TOP_LEVEL_DIRS = new Set([
   "scripts",
   "styles",
   "e2e",
+  ".storybook",
 ])
 
 const SKIP_DIRS = new Set(["node_modules", ".git", ".next", ".pnpm-store", "drizzle", "playwright-report", "test-results"])
