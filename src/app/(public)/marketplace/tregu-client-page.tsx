@@ -83,7 +83,7 @@ export default function TreguClientPage({
   }
 
   const handleContactClick = (listing: Listing) => {
-    router.push(`/tregu/${listing.id}`)
+    router.push(`/marketplace/${listing.id}`)
   }
 
   return (

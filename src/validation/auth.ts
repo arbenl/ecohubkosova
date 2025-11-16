@@ -1,7 +1,14 @@
 import { z } from "zod"
 
+// Email validation regex - RFC 5322 compliant
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export const loginSchema = z.object({
-  email: z.string({ required_error: "Email është i detyrueshëm." }).email("Ju lutemi vendosni një email të vlefshëm."),
+  email: z
+    .string({ required_error: "Email është i detyrueshëm." })
+    .toLowerCase()
+    .trim()
+    .email("Ju lutemi vendosni një email të vlefshëm."),
   password: z
     .string({ required_error: "Fjalëkalimi është i detyrueshëm." })
     .min(6, "Fjalëkalimi duhet të ketë të paktën 6 karaktere."),
@@ -9,7 +16,11 @@ export const loginSchema = z.object({
 
 const baseRegistrationSchema = z.object({
   emri_i_plote: z.string().min(2, "Shkruani emrin e plotë."),
-  email: z.string().email("Email i pavlefshëm."),
+  email: z
+    .string({ required_error: "Email është i detyrueshëm." })
+    .toLowerCase()
+    .trim()
+    .email("Email i pavlefshëm."),
   password: z.string().min(6, "Fjalëkalimi duhet të ketë të paktën 6 karaktere."),
   vendndodhja: z.string().min(2, "Vendndodhja është e detyrueshme."),
   roli: z.enum(["Individ", "OJQ", "Ndërmarrje Sociale", "Kompani"]),
@@ -17,7 +28,14 @@ const baseRegistrationSchema = z.object({
   pershkrimi_organizates: z.string().optional(),
   interesi_primar: z.string().optional(),
   person_kontakti: z.string().optional(),
-  email_kontakti: z.string().email().optional(),
+  email_kontakti: z
+    .string()
+    .toLowerCase()
+    .trim()
+    .refine((email) => email === "" || emailRegex.test(email), {
+      message: "Email i pavlefshëm.",
+    })
+    .optional(),
   newsletter: z.boolean().optional(),
 })
 

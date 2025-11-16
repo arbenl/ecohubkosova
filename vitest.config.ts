@@ -1,7 +1,20 @@
 import { defineConfig } from "vitest/config"
 import path from "node:path"
 
+function aliasPlugin() {
+  return {
+    name: "custom-alias",
+    resolveId(source: string) {
+      if (source.startsWith("@/")) {
+        return path.resolve(__dirname, "src", source.slice(2))
+      }
+      return null
+    },
+  }
+}
+
 export default defineConfig({
+  plugins: [aliasPlugin()],
   test: {
     environment: "jsdom",
     globals: true,
@@ -21,6 +34,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      "@/lib/supabase/server": path.resolve(__dirname, "src/lib/supabase/server.ts"),
       "@": path.resolve(__dirname, "src"),
     },
   },
