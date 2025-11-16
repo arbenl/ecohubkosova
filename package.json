@@ -10,6 +10,8 @@
     "test": "NODE_OPTIONS='--max-old-space-size=2048' vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "storybook": "storybook dev -p 6006",
+    "build:storybook": "storybook build",
     "start": "next start",
     "drizzle:generate": "drizzle-kit generate",
     "db:sync": "SUPABASE_DB_URL=${SUPABASE_DB_URL} pnpm dlx supabase db diff --file auto-update --db-url \"$SUPABASE_DB_URL\" && SUPABASE_DB_URL=${SUPABASE_DB_URL} pnpm dlx supabase db push --db-url \"$SUPABASE_DB_URL\" && pnpm drizzle:generate",
