@@ -1,45 +1,15 @@
 "use client"
 
-import { useState } from "react"
-import { deleteListing, updateListing } from "./actions" // Import Server Actions
 import { adminListingUpdateSchema } from "@/validation/admin"
-
-interface Listing {
-  id: string
-  created_by_user_id: string
-  organization_id: string | null
-  titulli: string
-  pershkrimi: string
-  kategori: string
-  cmimi: number
-  njesia: string
-  vendndodhja: string
-  sasia: string
-  lloji_listimit: string
-  eshte_aprovuar: boolean
-  created_at: string
-  updated_at: string | null
-}
+import { useAdminListings } from "@/hooks/use-admin-listings"
 
 interface ListingsClientPageProps {
-  initialListings: Listing[]
+  initialListings: Parameters<typeof useAdminListings>[0]
 }
 
 export default function ListingsClientPage({ initialListings }: ListingsClientPageProps) {
-  const [listings, setListings] = useState<Listing[]>(initialListings)
-  const [editingListing, setEditingListing] = useState<Listing | null>(null)
-
-  const handleDelete = async (id: string) => {
-    if (window.confirm("A jeni i sigurt që doni ta fshini këtë listim?")) {
-      const result = await deleteListing(id)
-      if (result.error) {
-        alert(result.error)
-      } else {
-        setListings(listings.filter((listing) => listing.id !== id))
-        alert("Listimi u fshi me sukses!")
-      }
-    }
-  }
+  const { listings, editingListing, setEditingListing, handleDelete, handleUpdate } =
+    useAdminListings(initialListings)
 
   return (
     <>
@@ -120,16 +90,10 @@ export default function ListingsClientPage({ initialListings }: ListingsClientPa
                   return
                 }
 
-                const result = await updateListing(editingListing.id, parsed.data)
+                const response = await handleUpdate(editingListing.id, parsed.data)
 
-                if (result.error) {
-                  alert(result.error)
-                } else {
-                  setListings(
-                    listings.map((l) => (l.id === editingListing.id ? { ...l, ...parsed.data } : l))
-                  )
+                if (!response?.error) {
                   setEditingListing(null)
-                  alert("Listimi u përditësua me sukses!")
                 }
               }}
               className="space-y-4"

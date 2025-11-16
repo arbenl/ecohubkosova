@@ -1,107 +1,72 @@
 "use client"
 
-import { useState } from "react"
-import { deleteOrganizationMember, updateOrganizationMember, toggleOrganizationMemberApproval } from "./actions" // Import Server Actions
 import { adminOrganizationMemberUpdateSchema } from "@/validation/admin"
-
-interface OrganizationMember {
-  id: string
-  organization_id: string
-  user_id: string
-  roli_ne_organizate: string
-  eshte_aprovuar: boolean
-  created_at: string
-}
-
-interface OrganizationMemberWithDetails extends OrganizationMember {
-  organization_name?: string
-  user_name?: string
-  user_email?: string
-}
+import { useAdminOrganizationMembers } from "@/hooks/use-admin-organization-members"
 
 interface OrganizationMembersClientPageProps {
-  initialMembers: OrganizationMemberWithDetails[]
+  initialMembers: Parameters<typeof useAdminOrganizationMembers>[0]
 }
 
 export default function OrganizationMembersClientPage({ initialMembers }: OrganizationMembersClientPageProps) {
-  const [members, setMembers] = useState<OrganizationMemberWithDetails[]>(initialMembers)
-  const [editingMember, setEditingMember] = useState<OrganizationMemberWithDetails | null>(null)
-
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm("A jeni i sigurt që doni ta fshini këtë anëtar?")
-    if (!confirmDelete) return
-
-    const result = await deleteOrganizationMember(id)
-    if (result.error) {
-      alert(result.error)
-    } else {
-      setMembers(members.filter((member) => member.id !== id))
-      alert("Anëtari u fshi me sukses!")
-    }
-  }
-
-  const handleApprovalToggle = async (id: string, currentStatus: boolean) => {
-    const result = await toggleOrganizationMemberApproval(id, currentStatus)
-    if (result.error) {
-      alert(result.error)
-    } else {
-      setMembers(
-        members.map((member) =>
-          member.id === id ? { ...member, eshte_aprovuar: !currentStatus } : member
-        )
-      )
-      alert(`Anëtari u ${!currentStatus ? "aprovua" : "çaprovua"} me sukses!`)
-    }
-  }
+  const {
+    members,
+    editingMember,
+    setEditingMember,
+    handleDelete,
+    handleToggleApproval,
+    handleUpdate,
+  } = useAdminOrganizationMembers(initialMembers)
 
   return (
     <>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="py-2 px-4 border-b">Organizata</th>
-              <th className="py-2 px-4 border-b">Përdoruesi</th>
-              <th className="py-2 px-4 border-b">Email</th>
-              <th className="py-2 px-4 border-b">Roli në Organizatë</th>
-              <th className="py-2 px-4 border-b">Aprovuar</th>
-              <th className="py-2 px-4 border-b">Veprime</th>
+      <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+        <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-3 text-left font-medium text-gray-600">Organizata</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-600">Përdoruesi</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-600">Email</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-600">Roli</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-600">Aprovuar</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-600">Veprime</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-gray-100">
             {members.map((member) => (
               <tr key={member.id} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b">{member.organization_name}</td>
-                <td className="py-2 px-4 border-b">{member.user_name}</td>
-                <td className="py-2 px-4 border-b">{member.user_email}</td>
-                <td className="py-2 px-4 border-b">{member.roli_ne_organizate}</td>
-                <td className="py-2 px-4 border-b">
+                <td className="px-4 py-3">{member.organization_name}</td>
+                <td className="px-4 py-3">{member.user_name}</td>
+                <td className="px-4 py-3">{member.user_email}</td>
+                <td className="px-4 py-3">{member.roli_ne_organizate}</td>
+                <td className="px-4 py-3">
                   <span
-                    className={`px-2 py-1 rounded text-sm ${member.eshte_aprovuar ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                    className={`px-2 py-1 rounded-full text-xs ${
+                      member.eshte_aprovuar ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                    }`}
                   >
                     {member.eshte_aprovuar ? "Po" : "Jo"}
                   </span>
                 </td>
-                <td className="py-2 px-4 border-b">
+                <td className="px-4 py-3 space-x-2">
                   <button
-                    onClick={() => handleApprovalToggle(member.id, member.eshte_aprovuar)}
-                    className={`${
-                      member.eshte_aprovuar ? "bg-orange-500 hover:bg-orange-700" : "bg-green-500 hover:bg-green-700"
-                    } text-white font-bold py-2 px-4 rounded mr-2`}
-                  >
-                    {member.eshte_aprovuar ? "Çaprovo" : "Aprovo"}
-                  </button>
-                  <button
+                    className="rounded-md bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
                     onClick={() => setEditingMember(member)}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                   >
                     Edito
                   </button>
                   <button
-                    onClick={() => handleDelete(member.id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    className={`rounded-md px-3 py-1 text-xs text-white ${
+                      member.eshte_aprovuar ? "bg-orange-500 hover:bg-orange-600" : "bg-green-600 hover:bg-green-700"
+                    }`}
+                    onClick={() => handleToggleApproval(member.id, member.eshte_aprovuar)}
                   >
-                    Fshije
+                    {member.eshte_aprovuar ? "Çaprovo" : "Aprovo"}
+                  </button>
+                  <button
+                    className="rounded-md bg-red-600 px-3 py-1 text-xs text-white hover:bg-red-700"
+                    onClick={() => handleDelete(member.id)}
+                  >
+                    Fshi
                   </button>
                 </td>
               </tr>
@@ -111,79 +76,54 @@ export default function OrganizationMembersClientPage({ initialMembers }: Organi
       </div>
 
       {editingMember && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <h3 className="text-lg font-semibold mb-4">Edito Anëtarin e Organizatës</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+            <h3 className="text-lg font-semibold mb-3">Edito anëtarin</h3>
             <form
-              onSubmit={async (e) => {
-                e.preventDefault()
-                if (!editingMember) return
+              className="space-y-3"
+              onSubmit={async (event) => {
+                event.preventDefault()
 
-                const formData = new FormData(e.currentTarget)
-                const updatedData = {
+                const formData = new FormData(event.currentTarget)
+                const payload = {
                   roli_ne_organizate: formData.get("roli_ne_organizate") as string,
                   eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
                 }
 
-                const parsed = adminOrganizationMemberUpdateSchema.safeParse(updatedData)
+                const parsed = adminOrganizationMemberUpdateSchema.safeParse(payload)
                 if (!parsed.success) {
                   alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
                   return
                 }
 
-                const result = await updateOrganizationMember(editingMember.id, parsed.data)
-
-                if (result.error) {
-                  alert(result.error)
-                } else {
-                  setMembers(
-                    members.map((m) =>
-                      m.id === editingMember.id ? { ...m, ...parsed.data } : m
-                    )
-                  )
+                const response = await handleUpdate(editingMember.id, parsed.data)
+                if (!response?.error) {
                   setEditingMember(null)
-                  alert("Anëtari u përditësua me sukses!")
                 }
               }}
-              className="space-y-4"
             >
-              <div>
-                <label htmlFor="roli_ne_organizate" className="block text-gray-700 text-sm font-bold mb-2">
-                  Roli në Organizatë:
-                </label>
-                <input
-                  type="text"
-                  id="roli_ne_organizate"
-                  name="roli_ne_organizate"
-                  defaultValue={editingMember.roli_ne_organizate}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
-              <div>
-                <label htmlFor="eshte_aprovuar" className="block text-gray-700 text-sm font-bold mb-2">
-                  Eshte Aprovuar:
-                </label>
-                <input
-                  type="checkbox"
-                  id="eshte_aprovuar"
-                  name="eshte_aprovuar"
-                  defaultChecked={editingMember.eshte_aprovuar}
-                  className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  type="submit"
-                >
-                  Ruaj Ndryshimet
-                </button>
+              <input
+                name="roli_ne_organizate"
+                defaultValue={editingMember.roli_ne_organizate}
+                className="w-full rounded-md border px-3 py-2"
+              />
+              <label className="inline-flex items-center gap-2 text-sm">
+                <input type="checkbox" name="eshte_aprovuar" defaultChecked={editingMember.eshte_aprovuar} />
+                Aprobimi
+              </label>
+              <div className="flex justify-end gap-2">
                 <button
                   type="button"
+                  className="rounded-md bg-gray-200 px-3 py-1 text-sm"
                   onClick={() => setEditingMember(null)}
-                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
                   Anulo
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-md bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
+                >
+                  Ruaj
                 </button>
               </div>
             </form>

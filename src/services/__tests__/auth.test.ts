@@ -1,29 +1,31 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import {
-  validateAuthCredentials,
-  handleSupabaseSignIn,
-  handleSupabaseSignUp,
-} from "@/services/auth"
 import { loginSchema, registrationSchema } from "@/validation/auth"
 
 // Mock Supabase client
-vi.mock("@/lib/supabase/server", () => ({
-  createServerActionSupabaseClient: vi.fn(),
-}))
+vi.mock(
+  "@/lib/supabase/server",
+  () => ({
+    createServerActionSupabaseClient: vi.fn(),
+  }),
+  { virtual: true }
+)
 
 // Mock auth logging
 vi.mock("@/lib/auth/logging", () => ({
   logAuthAction: vi.fn(),
 }))
 
+let authService: typeof import("@/services/auth")
+
 describe("Auth Service", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks()
+    authService = await import("@/services/auth")
   })
 
   describe("validateAuthCredentials", () => {
     it("should validate correct email and password", async () => {
-      const result = await validateAuthCredentials("test@example.com", "Password123!", loginSchema)
+    const result = await authService.validateAuthCredentials("test@example.com", "Password123!", loginSchema)
 
       expect(result.data).toBeDefined()
       expect(result.data?.email).toBe("test@example.com")
@@ -32,21 +34,21 @@ describe("Auth Service", () => {
     })
 
     it("should reject invalid email", async () => {
-      const result = await validateAuthCredentials("invalid-email", "Password123!", loginSchema)
+    const result = await authService.validateAuthCredentials("invalid-email", "Password123!", loginSchema)
 
       expect(result.error).toBeDefined()
       expect(result.data).toBeUndefined()
     })
 
     it("should reject invalid password (too short)", async () => {
-      const result = await validateAuthCredentials("test@example.com", "123", loginSchema)
+    const result = await authService.validateAuthCredentials("test@example.com", "123", loginSchema)
 
       expect(result.error).toBeDefined()
       expect(result.data).toBeUndefined()
     })
 
     it("should reject when both email and password are invalid", async () => {
-      const result = await validateAuthCredentials("invalid", "123", loginSchema)
+    const result = await authService.validateAuthCredentials("invalid", "123", loginSchema)
 
       expect(result.error).toBeDefined()
       expect(result.data).toBeUndefined()
@@ -71,7 +73,7 @@ describe("Auth Service", () => {
         require("@/lib/supabase/server").createServerActionSupabaseClient
       ).mockResolvedValueOnce(mockSupabase)
 
-      const result = await handleSupabaseSignIn("test@example.com", "Password123!")
+      const result = await authService.handleSupabaseSignIn("test@example.com", "Password123!")
 
       expect(result.success).toBe(true)
       expect(result.error).toBeUndefined()
@@ -91,7 +93,7 @@ describe("Auth Service", () => {
         require("@/lib/supabase/server").createServerActionSupabaseClient
       ).mockResolvedValueOnce(mockSupabase)
 
-      const result = await handleSupabaseSignIn("test@example.com", "wrongpassword")
+      const result = await authService.handleSupabaseSignIn("test@example.com", "wrongpassword")
 
       expect(result.error).toBeDefined()
       expect(result.success).toBeUndefined()
@@ -111,7 +113,7 @@ describe("Auth Service", () => {
         require("@/lib/supabase/server").createServerActionSupabaseClient
       ).mockResolvedValueOnce(mockSupabase)
 
-      const result = await handleSupabaseSignIn("test@example.com", "Password123!")
+      const result = await authService.handleSupabaseSignIn("test@example.com", "Password123!")
 
       expect(result.error).toBeDefined()
       expect(result.success).toBeUndefined()
@@ -136,7 +138,7 @@ describe("Auth Service", () => {
         require("@/lib/supabase/server").createServerActionSupabaseClient
       ).mockResolvedValueOnce(mockSupabase)
 
-      const result = await handleSupabaseSignUp("test@example.com", "Password123!", {
+      const result = await authService.handleSupabaseSignUp("test@example.com", "Password123!", {
         name: "Test User",
       })
 
@@ -158,7 +160,7 @@ describe("Auth Service", () => {
         require("@/lib/supabase/server").createServerActionSupabaseClient
       ).mockResolvedValueOnce(mockSupabase)
 
-      const result = await handleSupabaseSignUp("existing@example.com", "Password123!", {
+      const result = await authService.handleSupabaseSignUp("existing@example.com", "Password123!", {
         name: "Test User",
       })
 
@@ -179,7 +181,7 @@ describe("Auth Service", () => {
         require("@/lib/supabase/server").createServerActionSupabaseClient
       ).mockResolvedValueOnce(mockSupabase)
 
-      const result = await handleSupabaseSignUp("test@example.com", "weak", {
+      const result = await authService.handleSupabaseSignUp("test@example.com", "weak", {
         name: "Test User",
       })
 
@@ -201,7 +203,7 @@ describe("Auth Service", () => {
         require("@/lib/supabase/server").createServerActionSupabaseClient
       ).mockResolvedValueOnce(mockSupabase)
 
-      const result = await handleSupabaseSignUp("test@example.com", "Password123!", {
+      const result = await authService.handleSupabaseSignUp("test@example.com", "Password123!", {
         name: "Test User",
       })
 

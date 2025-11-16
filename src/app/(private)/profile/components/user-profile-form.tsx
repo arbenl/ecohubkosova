@@ -1,14 +1,12 @@
 "use client"
 
-import { useState } from "react"
 import { AlertCircle, CheckCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import type { UserProfileUpdateInput } from "@/validation/profile"
-import { userProfileUpdateSchema } from "@/validation/profile"
 import { updateUserProfile } from "../actions"
+import { useUserProfileForm } from "@/hooks/use-profile-forms"
 
 interface UserProfileFormProps {
   initialFullName: string
@@ -16,58 +14,12 @@ interface UserProfileFormProps {
   initialLocation: string
 }
 
-interface FieldErrors {
-  emri_i_plote?: string
-  vendndodhja?: string
-}
-
 export function UserProfileForm({ initialFullName, initialEmail, initialLocation }: UserProfileFormProps) {
-  const [formData, setFormData] = useState({
-    emri_i_plote: initialFullName,
-    vendndodhja: initialLocation,
+  const { formData, fieldErrors, saving, error, success, handleChange, handleSubmit } = useUserProfileForm({
+    initialFullName,
+    initialLocation,
+    submit: updateUserProfile,
   })
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-    setFieldErrors((prev) => ({ ...prev, [name]: undefined }))
-  }
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    setSaving(true)
-    setError(null)
-    setSuccess(null)
-
-    const parsed = userProfileUpdateSchema.safeParse(formData as UserProfileUpdateInput)
-
-    if (!parsed.success) {
-      const { fieldErrors } = parsed.error.flatten()
-      setFieldErrors({
-        emri_i_plote: fieldErrors.emri_i_plote?.[0],
-        vendndodhja: fieldErrors.vendndodhja?.[0],
-      })
-      setError("Kontrolloni fushat e shënuara dhe provoni përsëri.")
-      setSaving(false)
-      return
-    }
-
-    setFieldErrors({})
-
-    const result = await updateUserProfile(parsed.data)
-
-    if (result.error) {
-      setError(result.error)
-    } else {
-      setSuccess("Profili u përditësua me sukses!")
-    }
-
-    setSaving(false)
-  }
 
   return (
     <div>

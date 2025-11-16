@@ -42,9 +42,13 @@ const mocks = vi.hoisted(() => {
   return { state, get }
 })
 
-vi.mock("@/lib/supabase/server", () => ({
-  createServerSupabaseClient: () => supabase,
-}))
+vi.mock(
+  "@/lib/supabase/server",
+  () => ({
+    createServerSupabaseClient: () => supabase,
+  }),
+  { virtual: true }
+)
 
 vi.mock("@/lib/drizzle", () => ({
   db: {

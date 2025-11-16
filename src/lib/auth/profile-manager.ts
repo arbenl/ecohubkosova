@@ -4,6 +4,12 @@ import type { UserProfile } from "@/types"
 const PROFILE_FETCH_TIMEOUT = 5000
 const MAX_PROFILE_RETRIES = 2
 
+export interface ProfileFetchResult {
+  profile: UserProfile | null
+  dbUnavailable: boolean
+  error?: string
+}
+
 export class ProfileManager {
   private profileFetchAbortRef: React.MutableRefObject<AbortController | null>
 
@@ -11,7 +17,10 @@ export class ProfileManager {
     this.profileFetchAbortRef = abortRef
   }
 
-  async fetchUserProfile(userId: string, attempt: number = 1): Promise<UserProfile | null> {
+  async fetchUserProfile(
+    userId: string,
+    attempt: number = 1
+  ): Promise<ProfileFetchResult> {
     try {
       if (this.profileFetchAbortRef.current) {
         this.profileFetchAbortRef.current.abort()
@@ -33,13 +42,23 @@ export class ProfileManager {
         const payload = await response.json().catch(() => null)
 
         if (!response.ok) {
-          // Don't retry on 401 (Unauthorized) or 5xx (Server Errors)
-          if (response.status === 401 || response.status >= 500) {
+          // Check if database is unavailable
+          if (payload?.dbUnavailable) {
+            logAuthAction("fetchUserProfile", "Database unavailable", { userId })
+            return {
+              profile: null,
+              dbUnavailable: true,
+              error: payload?.error,
+            }
+          }
+
+          // Don't retry on 401 (Unauthorized)
+          if (response.status === 401) {
             throw new Error(payload?.error || `HTTP ${response.status}`)
           }
 
-          // Retry on other client/temporary errors (4xx except 401, network issues)
-          if (attempt < MAX_PROFILE_RETRIES) {
+          // Retry on 5xx errors up to MAX_PROFILE_RETRIES times
+          if (response.status >= 500 && attempt < MAX_PROFILE_RETRIES) {
             logAuthAction("fetchUserProfile", `Retry attempt ${attempt + 1}`, {
               userId,
               status: response.status,
@@ -52,11 +71,18 @@ export class ProfileManager {
           throw new Error(payload?.error || `HTTP ${response.status}`)
         }
 
-        return (payload?.profile ?? null) as UserProfile | null
+        return {
+          profile: (payload?.profile ?? null) as UserProfile | null,
+          dbUnavailable: payload?.dbUnavailable || false,
+        }
       } catch (fetchError) {
         if (fetchError instanceof Error && fetchError.name === "AbortError") {
           logAuthAction("fetchUserProfile", "Profile fetch timeout", { userId })
-          return null
+          return {
+            profile: null,
+            dbUnavailable: false,
+            error: "Request timeout",
+          }
         }
         throw fetchError
       }
@@ -65,7 +91,11 @@ export class ProfileManager {
         userId,
         error: error instanceof Error ? error.message : String(error),
       })
-      return null
+      return {
+        profile: null,
+        dbUnavailable: false,
+        error: error instanceof Error ? error.message : String(error),
+      }
     }
   }
 

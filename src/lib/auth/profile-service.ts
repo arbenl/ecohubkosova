@@ -3,6 +3,7 @@ import type { SupabaseClient, User as SupabaseUser } from "@supabase/supabase-js
 import type { UserProfile } from "@/types"
 import { db } from "@/lib/drizzle"
 import { users } from "@/db/schema"
+import { logAuthAction } from "@/lib/auth/logging"
 
 type AnySupabaseClient = SupabaseClient<any, any, any>
 
@@ -23,7 +24,21 @@ export async function ensureUserProfileExists(
   supabase: AnySupabaseClient,
   userId: string
 ): Promise<UserProfile | null> {
-  const records = await db.get().select().from(users).where(eq(users.id, userId)).limit(1)
+  let records
+  try {
+    records = await db.get().select().from(users).where(eq(users.id, userId)).limit(1)
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    logAuthAction("profileService", "DB select failed", { userId, error: message })
+    if (
+      message.includes("SUPABASE_DB_URL") ||
+      message.includes("connection") ||
+      message.includes("Failed query")
+    ) {
+      return null
+    }
+    throw error
+  }
   const existing = records[0]
 
   if (existing) {
@@ -53,18 +68,32 @@ export async function ensureUserProfileExists(
 
   const newProfile = await buildNewProfilePayload(userId, user)
 
-  const created = await db
-    .get()
-    .insert(users)
-    .values({
-      id: userId,
-      emri_i_plote: newProfile.emri_i_plote,
-      email: newProfile.email,
-      vendndodhja: newProfile.vendndodhja,
-      roli: newProfile.roli,
-      eshte_aprovuar: newProfile.eshte_aprovuar,
-    })
-    .returning()
+  let created
+  try {
+    created = await db
+      .get()
+      .insert(users)
+      .values({
+        id: userId,
+        emri_i_plote: newProfile.emri_i_plote,
+        email: newProfile.email,
+        vendndodhja: newProfile.vendndodhja,
+        roli: newProfile.roli,
+        eshte_aprovuar: newProfile.eshte_aprovuar,
+      })
+      .returning()
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    logAuthAction("profileService", "DB insert failed", { userId, error: message })
+    if (
+      message.includes("SUPABASE_DB_URL") ||
+      message.includes("connection") ||
+      message.includes("Failed query")
+    ) {
+      return null
+    }
+    throw error
+  }
 
   const createdProfile = created?.[0]
 

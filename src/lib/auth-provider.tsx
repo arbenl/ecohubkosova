@@ -93,9 +93,10 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
   const refreshUserProfile = useCallback(async () => {
     if (user) {
       logAuthAction("refreshUserProfile", "Refreshing profile", { userId: user.id })
-      const profile = await profileManager.fetchUserProfile(user.id)
-      setUserProfile(profile)
-      setIsAdmin(profile?.roli === "Admin")
+      const profileResult = await profileManager.fetchUserProfile(user.id)
+      const fetchedProfile = profileResult.profile
+      setUserProfile(fetchedProfile)
+      setIsAdmin(fetchedProfile?.roli === "Admin")
     }
   }, [user, profileManager])
 
@@ -119,12 +120,13 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
       setIsLoading(true)
 
       try {
-        const profile = await profileManager.fetchUserProfile(nextUser.id)
-        userStateManager.hydrateUser(nextUser, profile)
+        const profileResult = await profileManager.fetchUserProfile(nextUser.id)
+        const fetchedProfile = profileResult.profile
+        userStateManager.hydrateUser(nextUser, fetchedProfile)
 
         logAuthAction("hydrateUser", "User hydrated successfully", {
           userId: nextUser.id,
-          hasProfile: !!profile,
+          hasProfile: !!fetchedProfile,
         })
       } catch (error) {
         logAuthAction("hydrateUser", "Error hydrating user", {

@@ -1,43 +1,15 @@
-"use client"
+ "use client"
 
-import { useState } from "react"
-import { deleteOrganization, updateOrganization } from "./actions" // Import Server Actions
 import { adminOrganizationUpdateSchema } from "@/validation/admin"
-
-interface Organization {
-  id: string
-  emri: string
-  pershkrimi: string
-  interesi_primar: string
-  person_kontakti: string
-  email_kontakti: string
-  vendndodhja: string
-  lloji: string
-  eshte_aprovuar: boolean
-  created_at: string
-  updated_at: string | null
-}
+import { useAdminOrganizations } from "@/hooks/use-admin-organizations"
 
 interface OrganizationsClientPageProps {
-  initialOrganizations: Organization[]
+  initialOrganizations: Parameters<typeof useAdminOrganizations>[0]
 }
 
 export default function OrganizationsClientPage({ initialOrganizations }: OrganizationsClientPageProps) {
-  const [organizations, setOrganizations] = useState<Organization[]>(initialOrganizations)
-  const [editingOrg, setEditingOrg] = useState<Organization | null>(null)
-
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm("A jeni i sigurt që doni ta fshini këtë organizatë?")
-    if (!confirmDelete) return
-
-    const result = await deleteOrganization(id)
-    if (result.error) {
-      alert(result.error)
-    } else {
-      setOrganizations(organizations.filter((org) => org.id !== id))
-      alert("Organizata u fshi me sukses!")
-    }
-  }
+  const { organizations, editingOrganization, setEditingOrganization, handleDelete, handleUpdate } =
+    useAdminOrganizations(initialOrganizations)
 
   return (
     <>
@@ -68,10 +40,10 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                 <td className="py-2 px-4 border-b">{org.lloji}</td>
                 <td className="py-2 px-4 border-b">{org.eshte_aprovuar ? "Po" : "Jo"}</td>
                 <td className="py-2 px-4 border-b">
-                  <button
-                    onClick={() => setEditingOrg(org)}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                  >
+        <button
+          onClick={() => setEditingOrganization(org)}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+        >
                     Edito
                   </button>
                   <button
@@ -87,45 +59,38 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
         </table>
       </div>
 
-      {editingOrg && (
+      {editingOrganization && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
           <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <h3 className="text-lg font-semibold mb-4">Edito Organizaten</h3>
             <form
-              onSubmit={async (e) => {
-                e.preventDefault()
-                if (!editingOrg) return
+                  onSubmit={async (e) => {
+                    e.preventDefault()
+                    if (!editingOrganization) return
 
-                const formData = new FormData(e.currentTarget)
-                const updatedData = {
-                  emri: formData.get("emri") as string,
-                  pershkrimi: formData.get("pershkrimi") as string,
-                  interesi_primar: formData.get("interesi_primar") as string,
-                  person_kontakti: formData.get("person_kontakti") as string,
-                  email_kontakti: formData.get("email_kontakti") as string,
-                  vendndodhja: formData.get("vendndodhja") as string,
-                  lloji: formData.get("lloji") as string,
-                  eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
-                }
+                    const formData = new FormData(e.currentTarget)
+                    const updatedData = {
+                      emri: formData.get("emri") as string,
+                      pershkrimi: formData.get("pershkrimi") as string,
+                      interesi_primar: formData.get("interesi_primar") as string,
+                      person_kontakti: formData.get("person_kontakti") as string,
+                      email_kontakti: formData.get("email_kontakti") as string,
+                      vendndodhja: formData.get("vendndodhja") as string,
+                      lloji: formData.get("lloji") as string,
+                      eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
+                    }
 
-                const parsed = adminOrganizationUpdateSchema.safeParse(updatedData)
-                if (!parsed.success) {
-                  alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
-                  return
-                }
+                    const parsed = adminOrganizationUpdateSchema.safeParse(updatedData)
+                    if (!parsed.success) {
+                      alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
+                      return
+                    }
 
-                const result = await updateOrganization(editingOrg.id, parsed.data)
-
-                if (result.error) {
-                  alert(result.error)
-                } else {
-                  setOrganizations(
-                    organizations.map((o) => (o.id === editingOrg.id ? { ...o, ...parsed.data } : o))
-                  )
-                  setEditingOrg(null)
-                  alert("Organizata u përditësua me sukses!")
-                }
-              }}
+                    const response = await handleUpdate(editingOrganization.id, parsed.data)
+                    if (!response?.error) {
+                      setEditingOrganization(null)
+                    }
+                  }}
               className="space-y-4"
             >
               <div>
@@ -136,7 +101,7 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                   type="text"
                   id="emri"
                   name="emri"
-                  defaultValue={editingOrg.emri}
+                  defaultValue={editingOrganization.emri}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -147,7 +112,7 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                 <textarea
                   id="pershkrimi"
                   name="pershkrimi"
-                  defaultValue={editingOrg.pershkrimi}
+                  defaultValue={editingOrganization.pershkrimi}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -159,7 +124,7 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                   type="text"
                   id="interesi_primar"
                   name="interesi_primar"
-                  defaultValue={editingOrg.interesi_primar}
+                  defaultValue={editingOrganization.interesi_primar}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -171,7 +136,7 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                   type="text"
                   id="person_kontakti"
                   name="person_kontakti"
-                  defaultValue={editingOrg.person_kontakti}
+                  defaultValue={editingOrganization.person_kontakti}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -183,7 +148,7 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                   type="email"
                   id="email_kontakti"
                   name="email_kontakti"
-                  defaultValue={editingOrg.email_kontakti}
+                  defaultValue={editingOrganization.email_kontakti}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -195,7 +160,7 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                   type="text"
                   id="vendndodhja"
                   name="vendndodhja"
-                  defaultValue={editingOrg.vendndodhja}
+                  defaultValue={editingOrganization.vendndodhja}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -206,7 +171,7 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                 <select
                   id="lloji"
                   name="lloji"
-                  defaultValue={editingOrg.lloji}
+                  defaultValue={editingOrganization.lloji}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   required
                 >
@@ -223,7 +188,7 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                   type="checkbox"
                   id="eshte_aprovuar"
                   name="eshte_aprovuar"
-                  defaultChecked={editingOrg.eshte_aprovuar}
+                  defaultChecked={editingOrganization?.eshte_aprovuar}
                   className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -236,7 +201,7 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                 </button>
                 <button
                   type="button"
-                  onClick={() => setEditingOrg(null)}
+                  onClick={() => setEditingOrganization(null)}
                   className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
                   Anulo
