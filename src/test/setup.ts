@@ -131,12 +131,26 @@ vi.mock("@/lib/drizzle", () => {
     limit: vi.fn(function (this: any) {
       return this
     }),
-    offset: vi.fn(function (this: any) {
-      return this
-    }),
+    offset: vi.fn().mockResolvedValue([]),
     orderBy: vi.fn(function (this: any) {
       return this
     }),
+    insert: vi.fn(function (this: any) {
+      return this
+    }),
+    update: vi.fn(function (this: any) {
+      return this
+    }),
+    delete: vi.fn(function (this: any) {
+      return this
+    }),
+    values: vi.fn(function (this: any) {
+      return this
+    }),
+    set: vi.fn(function (this: any) {
+      return this
+    }),
+    returning: vi.fn().mockResolvedValue([]),
     execute: vi.fn().mockResolvedValue([]),
   }
 

@@ -7,7 +7,7 @@
     "dev": "next dev",
     "check:src-structure": "node scripts/check-src-structure.mjs",
     "lint": "pnpm check:src-structure",
-    "test": "vitest run",
+    "test": "NODE_OPTIONS='--max-old-space-size=2048' vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "start": "next start",

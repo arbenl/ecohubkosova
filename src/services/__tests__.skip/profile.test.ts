@@ -46,8 +46,7 @@ vi.mock(
   "@/lib/supabase/server",
   () => ({
     createServerSupabaseClient: () => supabase,
-  }),
-  { virtual: true }
+  })
 )
 
 vi.mock("@/lib/drizzle", () => ({
