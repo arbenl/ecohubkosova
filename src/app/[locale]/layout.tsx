@@ -12,8 +12,11 @@ export default async function LocaleLayout({
   const { locale } = await params
   const messages = await getMessagesForLocale(locale)
 
+  // Provide default empty messages if loading fails
+  const safeMessages = messages || {}
+
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider locale={locale} messages={safeMessages}>
       {children}
     </NextIntlClientProvider>
   )
