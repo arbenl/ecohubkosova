@@ -1,6 +1,8 @@
 import { getRequestConfig } from 'next-intl/server'
 
-export default getRequestConfig(async ({ requestLocale }) => {
+export default getRequestConfig(async ({ requestLocale: localeOrPromise }) => {
+  // Handle both string and Promise<string | undefined>
+  const requestLocale = await Promise.resolve(localeOrPromise)
   const locale = requestLocale || 'sq'
   
   try {
