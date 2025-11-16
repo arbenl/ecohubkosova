@@ -1,14 +1,12 @@
-"use client"
-
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { UserPlus, Search, MessageCircle, ShoppingCart, Sparkles, Leaf, Users } from "lucide-react"
 import { LandingAuthPanel } from "@/components/landing/landing-auth-panel"
 import { LanguageSwitcher } from "@/components/language-switcher"
-import { useLocale } from "next-intl"
+import { getLocale } from "next-intl/server"
 
-export default function Home() {
-  const locale = useLocale()
+export default async function Home() {
+  const locale = await getLocale() as string
   
   return (
     <>
