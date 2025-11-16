@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
-import TreguClientPage from "./tregu-client-page" // Will create this client component later
+import MarketplaceClientPage from "./marketplace-client-page" // Will create this client component later
 import { getListingsData } from "./actions" // Import the new server action
 import { getServerUser } from "@/lib/supabase/server" // Keep for user check
 
@@ -71,7 +71,7 @@ export default async function TreguPage({ searchParams }: TreguPageProps) {
             )}
           </div>
 
-          <TreguClientPage
+          <MarketplaceClientPage
             initialListings={initialListings}
             hasMoreInitial={hasMoreInitial}
             initialTab={initialTab}

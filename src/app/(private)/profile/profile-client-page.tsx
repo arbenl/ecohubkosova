@@ -28,7 +28,7 @@ interface Organization {
   eshte_aprovuar: boolean
 }
 
-interface ProfiliClientPageProps {
+interface ProfileClientPageProps {
   userProfile: UserProfile | null
   organization: Organization | null
 }
@@ -40,7 +40,7 @@ type TabConfig = {
   show: boolean
 }
 
-export default function ProfiliClientPage({ userProfile, organization }: ProfiliClientPageProps) {
+export default function ProfileClientPage({ userProfile, organization }: ProfileClientPageProps) {
   if (!userProfile) {
     return null
   }

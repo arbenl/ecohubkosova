@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 
-import ProfiliClientPage from "./profili-client-page"
+import ProfileClientPage from "./profile-client-page"
 import { getProfileData } from "./actions"
 
 // The interfaces are now defined in actions.ts, but we can keep them here
@@ -65,7 +65,7 @@ export default async function ProfiliPage() {
               <p className="text-red-600 mb-6">{error}</p>
             </div>
           ) : (
-            <ProfiliClientPage userProfile={userProfile} organization={organization} />
+            <ProfileClientPage userProfile={userProfile} organization={organization} />
           )}
         </div>
       </main>

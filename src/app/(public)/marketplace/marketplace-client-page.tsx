@@ -10,7 +10,7 @@ import { Listing } from "@/types"
 import { Search, SlidersHorizontal } from "lucide-react"
 import { useMarketplaceFilters } from "@/hooks/use-marketplace-filters"
 
-interface TreguClientPageProps {
+interface MarketplaceClientPageProps {
   initialListings: Listing[]
   hasMoreInitial: boolean
   initialTab: string
@@ -29,7 +29,7 @@ const TAB_OPTIONS = [
   { value: "blej", label: "Kërkoj të Blej" },
 ]
 
-export default function TreguClientPage({
+export default function MarketplaceClientPage({
   initialListings,
   hasMoreInitial,
   initialTab,
@@ -40,7 +40,7 @@ export default function TreguClientPage({
   initialLocation,
   initialSortOrder,
   categories,
-}: TreguClientPageProps) {
+}: MarketplaceClientPageProps) {
   const {
     searchQuery,
     setSearchQuery,

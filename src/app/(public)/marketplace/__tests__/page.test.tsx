@@ -10,8 +10,8 @@ vi.mock("next/link", () => ({
 }))
 
 // Mock server components
-vi.mock("../tregu-client-page", () => ({
-  default: () => <div data-testid="tregu-client-page">Marketplace Client Page</div>,
+vi.mock("../marketplace-client-page", () => ({
+  default: () => <div data-testid="marketplace-client-page">Marketplace Client Page</div>,
 }))
 
 vi.mock("../actions", () => ({
@@ -52,7 +52,7 @@ describe("TreguPage (Marketplace)", () => {
         searchParams: Promise.resolve({}),
       })
     )
-    const clientPage = screen.getByTestId("tregu-client-page")
+    const clientPage = screen.getByTestId("marketplace-client-page")
     expect(clientPage).toBeInTheDocument()
   })
 
@@ -62,7 +62,7 @@ describe("TreguPage (Marketplace)", () => {
         searchParams: Promise.resolve({ search: "test", lloji: "shes" }),
       })
     )
-    expect(screen.getByTestId("tregu-client-page")).toBeInTheDocument()
+    expect(screen.getByTestId("marketplace-client-page")).toBeInTheDocument()
   })
 
   it("renders the main container", async () => {
