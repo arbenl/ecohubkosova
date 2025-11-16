@@ -74,9 +74,6 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    instrumentationHook: true, // Enable instrumentation for graceful shutdown and connection management
-  },
   serverExternalPackages: ["@supabase/supabase-js"],
   transpilePackages: ["@supabase/auth-js", "@supabase/ssr"],
   async headers() {
