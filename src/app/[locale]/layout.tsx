@@ -1,6 +1,6 @@
 import type React from "react"
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
+import { getMessagesForLocale } from '@/lib/messages'
 
 export default async function LocaleLayout({
   children,
@@ -10,7 +10,7 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>
 }>) {
   const { locale } = await params
-  const messages = await getMessages()
+  const messages = await getMessagesForLocale(locale)
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
