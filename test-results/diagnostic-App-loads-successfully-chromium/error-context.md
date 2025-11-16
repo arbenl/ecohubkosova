@@ -1,0 +1,168 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "E ECO HUB KOSOVA" [ref=e5] [cursor=pointer]:
+          - /url: /home
+          - generic [ref=e6]: E
+          - generic [ref=e7]: ECO HUB KOSOVA
+        - navigation [ref=e8]:
+          - link "Eksploro" [ref=e9] [cursor=pointer]:
+            - /url: /explore
+            - text: Eksploro
+          - link "Partnerët" [ref=e10] [cursor=pointer]:
+            - /url: /partners
+            - text: Partnerët
+          - link "Tregu" [ref=e11] [cursor=pointer]:
+            - /url: /marketplace
+            - text: Tregu
+          - link "Rreth Nesh" [ref=e12] [cursor=pointer]:
+            - /url: /about
+            - text: Rreth Nesh
+        - generic [ref=e13]:
+          - link "Kycu" [ref=e14] [cursor=pointer]:
+            - /url: /login
+          - link "Fillo Bashkëpunimin" [ref=e15] [cursor=pointer]:
+            - /url: /register
+    - main [ref=e16]:
+      - main [ref=e18]:
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - img [ref=e24]
+            - text: Mbështetur nga Koalicioni i Ekonomisë Qarkulluese
+          - heading "Lidhu. Bashkëpuno. Krijo Qarkullim." [level=1] [ref=e26]
+          - paragraph [ref=e27]: Platforma e parë e ekonomisë qarkulluese në Kosovë. Lidhu me partnerë, zbulo mundësi dhe krijo qarkullim të qëndrueshëm për një të ardhme më të gjelbër.
+          - generic [ref=e28]:
+            - link "Fillo Bashkëpunimin" [ref=e29] [cursor=pointer]:
+              - /url: /register
+              - img
+              - text: Fillo Bashkëpunimin
+            - link "Eksploro Tregun" [ref=e30] [cursor=pointer]:
+              - /url: /marketplace
+              - img
+              - text: Eksploro Tregun
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - paragraph [ref=e34]: Ke llogari ekzistuese?
+              - paragraph [ref=e35]: Kyçu ose krijo një llogari të re për të filluar bashkëpunimin.
+            - generic [ref=e36]:
+              - link "Kyçu" [ref=e37] [cursor=pointer]:
+                - /url: /login
+                - img
+                - text: Kyçu
+              - link "Krijo llogari" [ref=e38] [cursor=pointer]:
+                - /url: /register
+                - img
+                - text: Krijo llogari
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - heading "Si Funksionon" [level=2] [ref=e42]
+            - paragraph [ref=e43]: Tre hapa të thjeshtë për të filluar bashkëpunimin në ekonominë qarkulluese
+          - generic [ref=e44]:
+            - generic [ref=e46]:
+              - img [ref=e48]
+              - heading "Krijo Profilin Tënd" [level=3] [ref=e51]
+              - paragraph [ref=e52]: Regjistrohu si individ ose organizatë dhe krijo profilin tënd në platformë për të filluar rrjetëzimin.
+              - link "Eksploro Tani" [ref=e53] [cursor=pointer]:
+                - /url: /explore
+                - img
+                - text: Eksploro Tani
+            - generic [ref=e55]:
+              - img [ref=e57]
+              - heading "Zbulo Mundësitë" [level=3] [ref=e60]
+              - paragraph [ref=e61]: Eksploro partnerët potencialë, artikujt e dijes dhe mundësitë e bashkëpunimit në treg.
+              - link "Shiko Partnerët" [ref=e62] [cursor=pointer]:
+                - /url: /partners
+                - img
+                - text: Shiko Partnerët
+            - generic [ref=e64]:
+              - img [ref=e66]
+              - heading "Fillo Bisedimet" [level=3] [ref=e68]
+              - paragraph [ref=e69]: Kontakto partnerët potencialë dhe fillo bashkëpunimin për projekte të qëndrueshme dhe inovative.
+              - link "Shiko Tregun" [ref=e70] [cursor=pointer]:
+                - /url: /marketplace
+                - img
+                - text: Shiko Tregun
+        - generic [ref=e72]:
+          - generic [ref=e73]:
+            - heading "Tregu i Ekonomisë Qarkulluese" [level=2] [ref=e74]
+            - paragraph [ref=e75]: Zbulo mundësitë e tregut për materiale, produkte dhe shërbime të qëndrueshme
+          - generic [ref=e76]:
+            - generic [ref=e78]:
+              - generic [ref=e79]:
+                - img [ref=e81]
+                - heading "Për Shitje" [level=3] [ref=e85]
+              - paragraph [ref=e86]: Zbulo materialet, produktet dhe shërbimet e disponueshme nga partnerët në rrjet për ekonomi qarkulluese.
+              - link "Shiko Ofertat" [ref=e87] [cursor=pointer]:
+                - /url: /marketplace?lloji=shes
+                - img
+                - text: Shiko Ofertat
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - img [ref=e92]
+                - heading "Kërkoj të Blej" [level=3] [ref=e97]
+              - paragraph [ref=e98]: Zbulo kërkesat për materiale, produkte dhe shërbime nga partnerët në rrjet për projekte të përbashkëta.
+              - link "Shiko Kërkesat" [ref=e99] [cursor=pointer]:
+                - /url: /marketplace?lloji=blej
+                - img
+                - text: Shiko Kërkesat
+    - contentinfo [ref=e100]:
+      - generic [ref=e101]:
+        - generic [ref=e102]:
+          - generic [ref=e103]:
+            - generic [ref=e104]:
+              - generic [ref=e105]: E
+              - generic [ref=e106]: ECO HUB KOSOVA
+            - paragraph [ref=e107]: Platforma e parë e ekonomisë qarkulluese në Kosovë për një të ardhme të qëndrueshme.
+          - generic [ref=e108]:
+            - heading "Lidhje" [level=3] [ref=e109]
+            - list [ref=e110]:
+              - listitem [ref=e111]:
+                - link "Eksploro" [ref=e112] [cursor=pointer]:
+                  - /url: /explore
+              - listitem [ref=e113]:
+                - link "Partnerët" [ref=e114] [cursor=pointer]:
+                  - /url: /partners
+              - listitem [ref=e115]:
+                - link "Tregu" [ref=e116] [cursor=pointer]:
+                  - /url: /marketplace
+              - listitem [ref=e117]:
+                - link "Qendra e Dijes" [ref=e118] [cursor=pointer]:
+                  - /url: /knowledge
+          - generic [ref=e119]:
+            - heading "Rreth Nesh" [level=3] [ref=e120]
+            - list [ref=e121]:
+              - listitem [ref=e122]:
+                - link "Kush jemi ne" [ref=e123] [cursor=pointer]:
+                  - /url: /about/vision
+              - listitem [ref=e124]:
+                - link "Misioni ynë" [ref=e125] [cursor=pointer]:
+                  - /url: /about/mission
+              - listitem [ref=e126]:
+                - link "Koalicioni" [ref=e127] [cursor=pointer]:
+                  - /url: /about/coalition
+          - generic [ref=e128]:
+            - heading "Mbështetje" [level=3] [ref=e129]
+            - list [ref=e130]:
+              - listitem [ref=e131]:
+                - link "Kontakti" [ref=e132] [cursor=pointer]:
+                  - /url: /contact
+              - listitem [ref=e133]:
+                - link "Pyetje të shpeshta" [ref=e134] [cursor=pointer]:
+                  - /url: /faq
+              - listitem [ref=e135]:
+                - link "Ndihmë" [ref=e136] [cursor=pointer]:
+                  - /url: /help
+              - listitem [ref=e137]:
+                - link "Kushtet e përdorimit" [ref=e138] [cursor=pointer]:
+                  - /url: /legal/terms
+        - generic [ref=e139]:
+          - paragraph [ref=e140]: © 2025 ECO HUB KOSOVA. Të gjitha të drejtat e rezervuara.
+          - paragraph [ref=e141]: Mbështetur nga Koalicioni i Ekonomisë Qarkulluese
+  - button "Open Next.js Dev Tools" [ref=e147] [cursor=pointer]:
+    - img [ref=e148]
+  - alert [ref=e151]
+```
