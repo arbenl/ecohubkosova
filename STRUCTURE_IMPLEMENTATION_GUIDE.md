@@ -108,7 +108,7 @@ Create new pages in the appropriate route groups:
 
 **src/app/(private)/profile/page.tsx**
 ```tsx
-// Copy content from src/app/profili/page.tsx
+// Copy content from src/app/(private)/profile/page.tsx (consolidated; previous profili route removed)
 ```
 
 ### Step 4: Update Links (15 minutes)
@@ -124,7 +124,7 @@ Search: /misioni        Replace: /about/mission
 Search: /koalicioni     Replace: /about/coalition
 Search: /eksploro       Replace: /explore
 Search: /drejtoria      Replace: /explore/opportunities
-Search: /tregu          Replace: /explore/marketplace
+Search: /tregu          Replace: /marketplace
 Search: /qendra-e-dijes Replace: /explore/knowledge
 Search: /partnere       Replace: /partners
 Search: /kontakti       Replace: /contact

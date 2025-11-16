@@ -3,8 +3,23 @@ require("@rushstack/eslint-patch/modern-module-resolution")
 module.exports = {
   extends: ["next/core-web-vitals"],
   rules: {
-    // Import rules to prevent architectural violations
-    "import/no-restricted-paths": "off", // Disabled until eslint config is migrated
+    "import/no-restricted-paths": [
+      "error",
+      {
+        zones: [
+          {
+            target: "./src/app/**",
+            from: "./src/services/**",
+            message: "Direct service imports are not allowed inside app components. Use a server action instead.",
+          },
+          {
+            target: "./src/app/**",
+            from: "./src/db/**",
+            message: "App components should not import from the database layer directly.",
+          },
+        ],
+      },
+    ],
   },
   overrides: [
     {

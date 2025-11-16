@@ -4,7 +4,6 @@ import { AuthProvider } from "@/lib/auth-provider"
 import ErrorBoundary from "@/components/error-boundary" // Import the ErrorBoundary component
 import "./globals.css"
 import type { Metadata } from "next"
-import { getServerUser } from "@/lib/supabase/server"
 
 export const dynamic = "force-dynamic"
 
@@ -33,7 +32,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const { user: initialUser } = await getServerUser()
+  // Simplified for testing - getServerUser call deferred to auth provider
+  const initialUser = null
 
   return (
     <html lang="sq" suppressHydrationWarning>

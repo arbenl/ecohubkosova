@@ -1,4 +1,4 @@
-// Alternative fix for middleware.ts - replace the middleware function with:
+// Middleware handling authentication (i18n routing handled by [locale] layout)
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
@@ -13,7 +13,7 @@ import { logMiddlewareEvent } from "@/lib/auth/logging"
 
 const PROTECTED_PREFIXES = ["/admin", "/dashboard", "/profile", "/marketplace/add"]
 const ADMIN_PREFIXES = ["/admin"]
-const AUTH_PREFIXES = ["/login", "/register"]
+const AUTH_PREFIXES = ["/login", "/register", "/auth/login", "/auth/register"]
 const IGNORED_PREFIXES = [
   "/_next",
   "/favicon.ico",
@@ -22,15 +22,21 @@ const IGNORED_PREFIXES = [
   "/auth/callback",
   "/api/public",
   "/api/auth",
+  "/api",
 ]
 
 export async function middleware(req: NextRequest) {
-  const pathname = req.nextUrl.pathname
+  let pathname = req.nextUrl.pathname
   const isStaticAsset = /\.[a-zA-Z0-9]+$/.test(pathname)
 
   if (IGNORED_PREFIXES.some((prefix) => pathname.startsWith(prefix)) || isStaticAsset) {
     return NextResponse.next()
   }
+
+  // Extract locale and relative path
+  const pathSegments = pathname.split("/").filter(Boolean)
+  const locale = pathSegments[0]
+  const relativePathname = "/" + pathSegments.slice(1).join("/")
 
   logMiddlewareEvent(pathname, "Middleware executed")
 
@@ -68,9 +74,9 @@ export async function middleware(req: NextRequest) {
       hasCookie: !!cookieSessionVersion,
     })
 
-    const isProtected = PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix))
-    const isAdminRoute = ADMIN_PREFIXES.some((prefix) => pathname.startsWith(prefix))
-    const isAuthRoute = AUTH_PREFIXES.some((prefix) => pathname.startsWith(prefix))
+    const isProtected = PROTECTED_PREFIXES.some((prefix) => relativePathname.startsWith(prefix))
+    const isAdminRoute = ADMIN_PREFIXES.some((prefix) => relativePathname.startsWith(prefix))
+    const isAuthRoute = AUTH_PREFIXES.some((prefix) => relativePathname.startsWith(prefix))
 
     // Clear stale session cookie if no session exists
     if (!hasSession && cookieSessionVersion) {
@@ -114,7 +120,7 @@ export async function middleware(req: NextRequest) {
           await supabase.auth.signOut({ scope: "global" })
 
           const redirectUrl = req.nextUrl.clone()
-          redirectUrl.pathname = "/login"
+          redirectUrl.pathname = `/${locale}/login`
           redirectUrl.searchParams.set("session_expired", "true")
 
           const redirectResponse = NextResponse.redirect(redirectUrl)
@@ -147,7 +153,7 @@ export async function middleware(req: NextRequest) {
             role: userRole,
           })
 
-          return NextResponse.redirect(new URL("/login?message=Unauthorized", req.url))
+          return NextResponse.redirect(new URL(`/${locale}/login?message=Unauthorized`, req.url))
         }
       }
     }
@@ -155,14 +161,14 @@ export async function middleware(req: NextRequest) {
     if (isProtected && !hasSession) {
       logMiddlewareEvent(pathname, "Protected route - no session")
       const redirectUrl = req.nextUrl.clone()
-      redirectUrl.pathname = "/login"
+      redirectUrl.pathname = `/${locale}/auth/login`
       redirectUrl.searchParams.set("redirectedFrom", pathname)
       return NextResponse.redirect(redirectUrl)
     }
 
     if (isAuthRoute && hasSession) {
       logMiddlewareEvent(pathname, "Redirecting authenticated user to dashboard")
-      return NextResponse.redirect(new URL("/dashboard", req.url))
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url))
     }
 
     return res

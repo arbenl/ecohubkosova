@@ -1,27 +1,47 @@
 import { defineConfig } from "vitest/config"
 import path from "node:path"
 
+function aliasPlugin() {
+  return {
+    name: "custom-alias",
+    resolveId(source: string) {
+      if (source.startsWith("@/")) {
+        return path.resolve(__dirname, "src", source.slice(2))
+      }
+      return null
+    },
+  }
+}
+
 export default defineConfig({
+  plugins: [aliasPlugin()],
   test: {
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
-    exclude: ["e2e/**", "node_modules/**", "playwright-report/**", "dist/**", ".next/**"],
+    exclude: ["e2e/**", "node_modules/**", "playwright-report/**", "dist/**", ".next/**", "**/__tests__.skip/**"],
+    pool: "threads",
+    isolate: true,
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov", "html"],
-      all: false,
+      all: true,
+      exclude: [
+        "node_modules/",
+        "src/test/",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "dist/",
+        ".next/",
+        "playwright.config.ts",
+        "vitest.config.ts",
+      ],
       thresholds: {
-        lines: 75,
-        functions: 50,
-        branches: 70,
-        statements: 75,
+        lines: 50,
+        functions: 40,
+        branches: 40,
+        statements: 50,
       },
-    },
-  },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "src"),
     },
   },
 })

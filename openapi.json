@@ -1,0 +1,374 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ECO HUB KOSOVA API",
+    "description": "API documentation for ECO HUB KOSOVA - Circular Economy Platform",
+    "version": "1.0.0",
+    "contact": {
+      "name": "ECO HUB KOSOVA Support",
+      "url": "https://ecohubkosova.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://ecohubkosova.com/api/v1",
+      "description": "Production API"
+    },
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Development API"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Listing": {
+        "type": "object",
+        "required": ["id", "title", "description", "category", "type"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique listing identifier"
+          },
+          "title": {
+            "type": "string",
+            "description": "Listing title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed listing description"
+          },
+          "category": {
+            "type": "string",
+            "description": "Product/Service category"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["shes", "blej"],
+            "description": "Listing type - sell or buy"
+          },
+          "price": {
+            "type": "number",
+            "description": "Price in EUR"
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit of measurement"
+          },
+          "quantity": {
+            "type": "number",
+            "description": "Available quantity"
+          },
+          "location": {
+            "type": "string",
+            "description": "Geographic location"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Image URLs"
+          },
+          "condition": {
+            "type": "string",
+            "enum": ["new", "used", "refurbished"],
+            "description": "Product condition"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "inactive", "sold"],
+            "description": "Listing status"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          }
+        }
+      },
+      "Organization": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique organization identifier"
+          },
+          "name": {
+            "type": "string",
+            "description": "Organization name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Organization email"
+          },
+          "description": {
+            "type": "string",
+            "description": "Organization description"
+          },
+          "website": {
+            "type": "string",
+            "format": "uri",
+            "description": "Organization website URL"
+          },
+          "address": {
+            "type": "string",
+            "description": "Physical address"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Contact phone number"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "inactive", "suspended"],
+            "description": "Organization status"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": ["id", "email"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique user identifier"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User email address"
+          },
+          "name": {
+            "type": "string",
+            "description": "User full name"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["user", "admin", "moderator"],
+            "description": "User role"
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Associated organization ID"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Account creation timestamp"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error message"
+          },
+          "details": {
+            "type": "object",
+            "description": "Error details"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT Bearer token for authentication"
+      },
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "auth_token",
+        "description": "Session cookie authentication"
+      }
+    }
+  },
+  "paths": {
+    "/listings": {
+      "get": {
+        "summary": "Get all public listings",
+        "description": "Retrieve a list of all public marketplace listings with optional filtering",
+        "tags": ["Listings"],
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter by category",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter by listing type (sell/buy)",
+            "schema": {
+              "type": "string",
+              "enum": ["shes", "blej"]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search by title or description",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Listing"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations": {
+      "get": {
+        "summary": "Get all organizations",
+        "description": "Retrieve list of all active organizations",
+        "tags": ["Organizations"],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Organization"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/articles": {
+      "get": {
+        "summary": "Get blog articles",
+        "description": "Retrieve published blog articles about circular economy",
+        "tags": ["Content"],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "type": "string"
+                          },
+                          "author": {
+                            "type": "string"
+                          },
+                          "publishedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Listings",
+      "description": "Marketplace listing operations"
+    },
+    {
+      "name": "Organizations",
+      "description": "Organization management"
+    },
+    {
+      "name": "Content",
+      "description": "Blog and educational content"
+    },
+    {
+      "name": "Authentication",
+      "description": "User authentication and authorization"
+    }
+  ]
+}
