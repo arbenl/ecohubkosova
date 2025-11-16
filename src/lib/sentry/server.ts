@@ -14,11 +14,8 @@ Sentry.init({
   environment: process.env.NODE_ENV,
   enabled: process.env.NODE_ENV !== 'test',
   
-  // Integrations
-  integrations: [
-    new Sentry.Integrations.OnUncaughtException(),
-    new Sentry.Integrations.OnUnhandledRejection(),
-  ],
+  // Integrations - simplified for compatibility
+  integrations: [],
   
   // Configuration
   attachStacktrace: true,

@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react"
 import type { AdminUser } from "@/services/admin/users"
 import type { AdminUserUpdateInput } from "@/validation/admin"
-import { deleteUser, updateUser } from "@/app/(private)/admin/users/actions"
+import { deleteUser, updateUser } from "@/app/[locale]/(private)/admin/users/actions"
 
 type UpdateResponse = { error?: string }
 

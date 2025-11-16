@@ -1,5 +1,9 @@
-import { test as base } from '@playwright/test';
+import { test as base, type Page } from '@playwright/test';
 import { AuthPage } from './pages/auth.page';
+
+type TestFixtures = {
+  authPage: AuthPage;
+};
 
 /**
  * Fixture for Auth Page Object
@@ -8,7 +12,7 @@ import { AuthPage } from './pages/auth.page';
  *   await authPage.navigateToLogin();
  * });
  */
-export const test = base.extend({
+export const test = base.extend<TestFixtures>({
   authPage: async ({ page }, use) => {
     const authPage = new AuthPage(page);
     await use(authPage);

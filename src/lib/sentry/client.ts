@@ -8,11 +8,12 @@ Sentry.init({
   
   // Set sample rate for error events
   integrations: [
-    new Sentry.Replay({
-      // Mask all text content, but keep media playback
-      maskAllText: true,
-      blockAllMedia: false,
-    }),
+    // Replay integration commented out due to version compatibility
+    // new Sentry.Replay({
+    //   // Mask all text content, but keep media playback
+    //   maskAllText: true,
+    //   blockAllMedia: false,
+    // }),
   ],
   
   // Capture 10% of all sessions
