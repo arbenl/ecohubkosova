@@ -38,18 +38,21 @@ export class AuthPage {
   // ============= Navigation =============
 
   async navigateToRegister(): Promise<void> {
-    await this.page.goto('/auth/register');
+    await this.page.goto('/sq/auth/register');
     await this.page.waitForLoadState('networkidle');
+    await this.page.waitForTimeout(1000);
   }
 
   async navigateToLogin(): Promise<void> {
-    await this.page.goto('/auth/login');
+    await this.page.goto('/sq/auth/login');
     await this.page.waitForLoadState('networkidle');
+    await this.page.waitForTimeout(1000);
   }
 
   async navigateToHome(): Promise<void> {
-    await this.page.goto('/');
+    await this.page.goto('/sq');
     await this.page.waitForLoadState('networkidle');
+    await this.page.waitForTimeout(1000);
   }
 
   // ============= Registration Flow =============
@@ -65,6 +68,7 @@ export class AuthPage {
     confirmPassword: string;
     location: string;
   }): Promise<void> {
+    await this.page.waitForSelector(this.fullNameInput, { timeout: 5000 });
     await this.page.fill(this.fullNameInput, data.fullName);
     await this.page.fill(this.emailInput, data.email);
     await this.page.fill(this.passwordInput, data.password);
@@ -148,7 +152,9 @@ export class AuthPage {
    * Fill and submit login form
    */
   async login(email: string, password: string): Promise<void> {
+    await this.page.waitForSelector(this.loginEmailInput, { timeout: 5000 });
     await this.page.fill(this.loginEmailInput, email);
+    await this.page.waitForSelector(this.loginPasswordInput, { timeout: 5000 });
     await this.page.fill(this.loginPasswordInput, password);
     await this.page.click(this.loginButton);
   }

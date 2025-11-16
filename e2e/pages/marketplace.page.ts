@@ -50,18 +50,21 @@ export class MarketplacePage {
   // ============= Navigation =============
 
   async navigateToMarketplace(): Promise<void> {
-    await this.page.goto('/marketplace');
+    await this.page.goto('/sq/marketplace');
     await this.page.waitForLoadState('networkidle');
+    await this.page.waitForTimeout(1000);
   }
 
   async navigateToCreateListing(): Promise<void> {
-    await this.page.goto('/marketplace/shto');
+    await this.page.goto('/sq/marketplace/shto');
     await this.page.waitForLoadState('networkidle');
+    await this.page.waitForTimeout(1000);
   }
 
   async navigateToListingDetails(listingId: string): Promise<void> {
-    await this.page.goto(`/marketplace/${listingId}`);
+    await this.page.goto(`/sq/marketplace/${listingId}`);
     await this.page.waitForLoadState('networkidle');
+    await this.page.waitForTimeout(1000);
   }
 
   // ============= Create Listing Flow =============
@@ -79,6 +82,7 @@ export class MarketplacePage {
     quantity: string;
     type: 'shes' | 'blej';
   }): Promise<void> {
+    await this.page.waitForSelector(this.titleInput, { timeout: 5000 });
     await this.page.fill(this.titleInput, data.title);
     await this.page.fill(this.descriptionInput, data.description);
     await this.page.selectOption(this.categorySelect, data.category);
