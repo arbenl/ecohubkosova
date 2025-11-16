@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "build:analyze": "ANALYZE=true next build",
     "dev": "next dev",
     "check:src-structure": "node scripts/check-src-structure.mjs",
     "lint": "pnpm check:src-structure",
@@ -47,6 +48,7 @@
     "@radix-ui/react-toggle": "1.1.9",
     "@radix-ui/react-toggle-group": "1.1.10",
     "@radix-ui/react-tooltip": "1.2.7",
+    "@sentry/nextjs": "^10.25.0",
     "@supabase/ssr": "0.7.0",
     "@supabase/supabase-js": "2.50.3",
     "autoprefixer": "10.4.20",
@@ -74,6 +76,7 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.0.3",
     "@playwright/test": "^1.56.1",
     "@solana/wallet-standard-features": "1.2.0",
     "@storybook/addon-essentials": "^8.6.14",
