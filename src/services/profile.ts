@@ -63,6 +63,42 @@ async function findUserProfile(userId: string) {
   }
 }
 
+type ProfileWithOrganizationRow = {
+  user?: UserRow
+  organization?: OrganizationRow | null
+}
+
+const shouldAttachOrganization = (role?: string) => {
+  return !!role && role !== "Individ" && role !== "Admin"
+}
+
+async function findUserProfileWithOrganization(userId: string) {
+  try {
+    const records = await db
+      .get()
+      .select({
+        user: users,
+        organization: organizations,
+      })
+      .from(users)
+      .leftJoin(
+        organizationMembers,
+        and(
+          eq(organizationMembers.user_id, users.id),
+          eq(organizationMembers.eshte_aprovuar, true)
+        )
+      )
+      .leftJoin(organizations, eq(organizations.id, organizationMembers.organization_id))
+      .where(eq(users.id, userId))
+      .limit(1)
+
+    return (records[0] ?? null) as ProfileWithOrganizationRow | null
+  } catch (error) {
+    console.error("findUserProfileWithOrganization error:", error)
+    return null
+  }
+}
+
 export async function fetchCurrentUserProfile() {
   noStore()
   const supabase = await createServerSupabaseClient()
@@ -77,35 +113,16 @@ export async function fetchCurrentUserProfile() {
   }
 
   try {
-    const userProfile = await findUserProfile(user.id)
+    const profileRow = await findUserProfileWithOrganization(user.id)
+    const userProfile = profileRow?.user ? toProfileUser(profileRow.user) : null
+
     if (!userProfile) {
       console.warn("fetchCurrentUserProfile: no profile, using auth user metadata")
     }
 
     let organization: ProfileOrganization | null = null
-
-    if (userProfile && userProfile.roli !== "Individ" && userProfile.roli !== "Admin") {
-      const memberships = await db
-        .get()
-        .select({ organization_id: organizationMembers.organization_id })
-        .from(organizationMembers)
-        .where(and(eq(organizationMembers.user_id, user.id), eq(organizationMembers.eshte_aprovuar, true)))
-        .limit(1)
-      const membership = memberships[0]
-
-      if (membership?.organization_id) {
-        const orgRecords = await db
-          .get()
-          .select()
-          .from(organizations)
-          .where(eq(organizations.id, membership.organization_id))
-          .limit(1)
-        const orgRecord = orgRecords[0]
-
-        if (orgRecord) {
-          organization = toProfileOrganization(orgRecord)
-        }
-      }
+    if (userProfile && shouldAttachOrganization(userProfile.roli) && profileRow?.organization) {
+      organization = toProfileOrganization(profileRow.organization)
     }
 
     return {

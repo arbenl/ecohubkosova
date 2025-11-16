@@ -1,10 +1,10 @@
 "use client"
 
-import React from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { type ReactNode } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UserProfileForm } from "./components/user-profile-form"
 import { OrganizationProfileForm } from "./components/org-profile-form"
+import { ProfileSectionCard } from "./components/profile-section-card"
 
 interface UserProfile {
   id: string
@@ -28,84 +28,96 @@ interface Organization {
   eshte_aprovuar: boolean
 }
 
-type UserFieldErrors = {
-  emri_i_plote?: string
-  vendndodhja?: string
-}
-
-type OrgFieldErrors = {
-  emri?: string
-  pershkrimi?: string
-  interesi_primar?: string
-  person_kontakti?: string
-  email_kontakti?: string
-  vendndodhja?: string
-}
-
 interface ProfiliClientPageProps {
   userProfile: UserProfile | null
   organization: Organization | null
 }
 
+type TabConfig = {
+  value: "personal" | "organization" | "password"
+  label: string
+  content: ReactNode
+  show: boolean
+}
+
 export default function ProfiliClientPage({ userProfile, organization }: ProfiliClientPageProps) {
+  if (!userProfile) {
+    return null
+  }
+
+  const tabs: TabConfig[] = [
+    {
+      value: "personal",
+      label: "Informacione personale",
+      show: true,
+      content: (
+        <ProfileSectionCard
+          title="Profili Personal"
+          description="Ndrysho informacionet personale."
+        >
+          <UserProfileForm
+            initialFullName={userProfile.emri_i_plote}
+            initialEmail={userProfile.email}
+            initialLocation={userProfile.vendndodhja}
+          />
+        </ProfileSectionCard>
+      ),
+    },
+    {
+      value: "organization",
+      label: "Profili i organizatës",
+      show: true,
+      content: (
+        <ProfileSectionCard
+          title="Profili i organizatës"
+          description="Ndrysho të dhënat e organizatës."
+        >
+          {organization ? (
+            <OrganizationProfileForm
+              organizationId={organization.id}
+              initialData={{
+                emri: organization.emri,
+                pershkrimi: organization.pershkrimi,
+                interesi_primar: organization.interesi_primar,
+                person_kontakti: organization.person_kontakti,
+                email_kontakti: organization.email_kontakti,
+                vendndodhja: organization.vendndodhja,
+              }}
+            />
+          ) : (
+            <p className="text-sm text-gray-500">Nuk ka organizatë për të përditësuar.</p>
+          )}
+        </ProfileSectionCard>
+      ),
+    },
+    {
+      value: "password",
+      label: "Ndrysho fjalëkalimin",
+      show: true,
+      content: (
+        <ProfileSectionCard title="Ndrysho fjalëkalimin" description="Zëvendëso fjalëkalimin ekzistues me një të ri.">
+          <p>Forma për ndryshim fjalëkalimi do të shtohet këtu.</p>
+        </ProfileSectionCard>
+      ),
+    },
+  ]
+
+  const visibleTabs = tabs.filter((tab) => tab.show)
+
   return (
     <Tabs defaultValue="personal" className="space-y-6">
       <TabsList>
-        <TabsTrigger value="personal">Informacione personale</TabsTrigger>
-        {organization && <TabsTrigger value="organization">Profili i organizatës</TabsTrigger>}
-        <TabsTrigger value="password">Ndrysho fjalëkalimin</TabsTrigger>
+        {visibleTabs.map((tab) => (
+          <TabsTrigger key={tab.value} value={tab.value}>
+            {tab.label}
+          </TabsTrigger>
+        ))}
       </TabsList>
-      <TabsContent value="personal">
-        <Card>
-          <CardHeader>
-            <CardTitle>Profili Personal</CardTitle>
-            <CardDescription>Ndrysho informacionet personale.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <UserProfileForm
-              initialFullName={userProfile?.emri_i_plote || ""}
-              initialEmail={userProfile?.email || ""}
-              initialLocation={userProfile?.vendndodhja || ""}
-            />
-          </CardContent>
-        </Card>
-      </TabsContent>
-      <TabsContent value="organization">
-        <Card>
-          <CardHeader>
-            <CardTitle>Profili i organizatës</CardTitle>
-            <CardDescription>Ndrysho të dhënat e organizatës.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {organization ? (
-              <OrganizationProfileForm
-                organizationId={organization.id}
-                initialData={{
-                  emri: organization.emri || "",
-                  pershkrimi: organization.pershkrimi || "",
-                  interesi_primar: organization.interesi_primar || "",
-                  person_kontakti: organization.person_kontakti || "",
-                  email_kontakti: organization.email_kontakti || "",
-                  vendndodhja: organization.vendndodhja || "",
-                }}
-              />
-            ) : (
-              <p className="text-sm text-gray-500">Nuk ka organizatë për të përditësuar.</p>
-            )}
-          </CardContent>
-        </Card>
-      </TabsContent>
-      <TabsContent value="password">
-        <Card>
-          <CardHeader>
-            <CardTitle>Ndrysho fjalëkalimin</CardTitle>
-            <CardDescription>Zëvendëso fjalëkalimin ekzistues me një të ri.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>Forma për ndryshim fjalëkalimi do të shtohet këtu.</p>
-          </CardContent>
-        </Card>
-      </TabsContent>
+      {visibleTabs.map((tab) => (
+        <TabsContent key={tab.value} value={tab.value}>
+          {tab.content}
+        </TabsContent>
+      ))}
     </Tabs>
   )
 }

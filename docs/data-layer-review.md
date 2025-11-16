@@ -20,6 +20,7 @@ This review audits the current implementation of the service layer under `src/se
 ### Profile (`src/services/profile.ts`)
 - Fetches user details and organization membership with targeted queries (`.limit(1)` everywhere).
 - `ensureUserOrganizationMembership` is idempotent and index-friendly.
+- Querying the profile now joins `organization_members`/`organizations` in a single round-trip, so the dashboard/profile helpers fetch both the user and their approved organization without awaiting multiple sequential queries.
 - *Follow-up*: route `console.warn/error` through centralized logging later.
 
 ### Public API (`src/services/public/*`)

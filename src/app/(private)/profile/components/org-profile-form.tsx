@@ -1,11 +1,10 @@
 "use client"
 
-import { AlertCircle, CheckCircle } from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
+import { FormField } from "./form-field"
+import { FormStatus } from "./form-status"
 import { updateOrganizationProfile } from "../actions"
 import type { OrganizationProfileUpdateInput } from "@/validation/profile"
 import { useOrganizationProfileForm } from "@/hooks/use-profile-forms"
@@ -24,51 +23,26 @@ export function OrganizationProfileForm({ organizationId, initialData }: OrgProf
 
   return (
     <div>
-      {error && (
-        <Alert variant="destructive" className="mb-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Gabim</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-      {success && (
-        <Alert className="mb-4 bg-green-50 text-green-700 border-green-200">
-          <CheckCircle className="h-4 w-4" />
-          <AlertTitle>Sukses</AlertTitle>
-          <AlertDescription>{success}</AlertDescription>
-        </Alert>
-      )}
+      <FormStatus error={error} success={success} />
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <Label htmlFor="emri">Emri</Label>
+        <FormField label="Emri" name="emri" error={fieldErrors.emri}>
           <Input name="emri" value={formData.emri} onChange={handleChange} />
-          {fieldErrors.emri && <p className="text-sm text-red-600">{fieldErrors.emri}</p>}
-        </div>
-        <div>
-          <Label htmlFor="pershkrimi">Përshkrimi</Label>
+        </FormField>
+        <FormField label="Përshkrimi" name="pershkrimi" error={fieldErrors.pershkrimi}>
           <Textarea name="pershkrimi" value={formData.pershkrimi} onChange={handleChange} />
-          {fieldErrors.pershkrimi && <p className="text-sm text-red-600">{fieldErrors.pershkrimi}</p>}
-        </div>
-        <div>
-          <Label htmlFor="interesi_primar">Interesi Primar</Label>
+        </FormField>
+        <FormField label="Interesi Primar" name="interesi_primar" error={fieldErrors.interesi_primar}>
           <Input name="interesi_primar" value={formData.interesi_primar} onChange={handleChange} />
-          {fieldErrors.interesi_primar && <p className="text-sm text-red-600">{fieldErrors.interesi_primar}</p>}
-        </div>
-        <div>
-          <Label htmlFor="person_kontakti">Person Kontakti</Label>
+        </FormField>
+        <FormField label="Person Kontakti" name="person_kontakti" error={fieldErrors.person_kontakti}>
           <Input name="person_kontakti" value={formData.person_kontakti} onChange={handleChange} />
-          {fieldErrors.person_kontakti && <p className="text-sm text-red-600">{fieldErrors.person_kontakti}</p>}
-        </div>
-        <div>
-          <Label htmlFor="email_kontakti">Email Kontakti</Label>
+        </FormField>
+        <FormField label="Email Kontakti" name="email_kontakti" error={fieldErrors.email_kontakti}>
           <Input name="email_kontakti" value={formData.email_kontakti} onChange={handleChange} />
-          {fieldErrors.email_kontakti && <p className="text-sm text-red-600">{fieldErrors.email_kontakti}</p>}
-        </div>
-        <div>
-          <Label htmlFor="vendndodhja">Vendndodhja</Label>
+        </FormField>
+        <FormField label="Vendndodhja" name="vendndodhja" error={fieldErrors.vendndodhja}>
           <Input name="vendndodhja" value={formData.vendndodhja} onChange={handleChange} />
-          {fieldErrors.vendndodhja && <p className="text-sm text-red-600">{fieldErrors.vendndodhja}</p>}
-        </div>
+        </FormField>
         <Button type="submit" disabled={saving}>
           {saving ? "Duke ruajtur..." : "Ruaj"}
         </Button>

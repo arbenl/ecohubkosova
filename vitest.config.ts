@@ -20,6 +20,13 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
     exclude: ["e2e/**", "node_modules/**", "playwright-report/**", "dist/**", ".next/**"],
+    pool: "forks",
+    poolOptions: {
+      forks: {
+        singleFork: true,
+      },
+    },
+    isolate: true,
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov", "html"],
@@ -30,12 +37,6 @@ export default defineConfig({
         branches: 70,
         statements: 75,
       },
-    },
-  },
-  resolve: {
-    alias: {
-      "@/lib/supabase/server": path.resolve(__dirname, "src/lib/supabase/server.ts"),
-      "@": path.resolve(__dirname, "src"),
     },
   },
 })

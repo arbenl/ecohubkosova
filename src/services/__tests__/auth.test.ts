@@ -6,8 +6,7 @@ vi.mock(
   "@/lib/supabase/server",
   () => ({
     createServerActionSupabaseClient: vi.fn(),
-  }),
-  { virtual: true }
+  })
 )
 
 // Mock auth logging

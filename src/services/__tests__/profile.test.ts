@@ -77,15 +77,73 @@ describe("services/profile", () => {
   describe("fetchCurrentUserProfile", () => {
     it("fetches current user profile and organization", async () => {
       supabase.auth.getUser.mockResolvedValue({ data: { user: { id: "user-1" } }, error: null })
-      mocks.state.selectResponses = [
-        { rows: [{ id: "user-1", emri_i_plote: "John", email: "john@example.com", vendndodhja: "Prishtina", roli: "OJQ", eshte_aprovuar: true, created_at: new Date("2024-01-01T00:00:00.000Z") }] },
-        { rows: [{ organization_id: "org-1" }] },
-        { rows: [{ id: "org-1", emri: "Org", pershkrimi: "Desc", interesi_primar: "Green", person_kontakti: "Jane", email_kontakti: "jane@example.com", vendndodhja: "Prishtina", lloji: "OJQ", eshte_aprovuar: true }] },
-      ]
+    mocks.state.selectResponses = [
+      {
+        rows: [
+          {
+            user: {
+              id: "user-1",
+              emri_i_plote: "John",
+              email: "john@example.com",
+              vendndodhja: "Prishtina",
+              roli: "OJQ",
+              eshte_aprovuar: true,
+              created_at: new Date("2024-01-01T00:00:00.000Z"),
+            },
+            organization: {
+              id: "org-1",
+              emri: "Org",
+              pershkrimi: "Desc",
+              interesi_primar: "Green",
+              person_kontakti: "Jane",
+              email_kontakti: "jane@example.com",
+              vendndodhja: "Prishtina",
+              lloji: "OJQ",
+              eshte_aprovuar: true,
+            },
+          },
+        ],
+      },
+    ]
 
       const result = await fetchCurrentUserProfile()
       expect(result.userProfile?.id).toBe("user-1")
       expect(result.organization?.id).toBe("org-1")
+    })
+
+    it("does not attach organization when the user role is Individ", async () => {
+      supabase.auth.getUser.mockResolvedValue({ data: { user: { id: "user-1" } }, error: null })
+      mocks.state.selectResponses = [
+        {
+          rows: [
+            {
+              user: {
+                id: "user-1",
+                emri_i_plote: "John",
+                email: "john@example.com",
+                vendndodhja: "Prishtina",
+                roli: "Individ",
+                eshte_aprovuar: true,
+                created_at: new Date("2024-01-01T00:00:00.000Z"),
+              },
+              organization: {
+                id: "org-1",
+                emri: "Org",
+                pershkrimi: "Desc",
+                interesi_primar: "Green",
+                person_kontakti: "Jane",
+                email_kontakti: "jane@example.com",
+                vendndodhja: "Prishtina",
+                lloji: "OJQ",
+                eshte_aprovuar: true,
+              },
+            },
+          ],
+        },
+      ]
+
+      const result = await fetchCurrentUserProfile()
+      expect(result.organization).toBeNull()
     })
 
     it("returns error when not authenticated", async () => {
