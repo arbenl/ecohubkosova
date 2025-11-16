@@ -7,7 +7,8 @@ import { getServerUser } from "@/lib/supabase/server"
 import { StatsCards } from "./stats-cards"
 import { LatestArticles } from "./latest-articles"
 import { KeyPartners } from "./key-partners"
-import { DashboardChart } from "./dashboard-chart"
+import { DashboardChartCard } from "./dashboard-chart-card"
+import { QuickActionsCard } from "./quick-actions-card"
 import { StatsCardsSkeleton } from "@/components/dashboard/stats-cards-skeleton"
 import { LatestArticlesSkeleton } from "@/components/dashboard/latest-articles-skeleton"
 import { KeyPartnersSkeleton } from "@/components/dashboard/key-partners-skeleton"
@@ -30,11 +31,17 @@ export default async function DashboardPage() {
   }
 
   const stats = await getStats()
+
+  const buildTrend = (value: number) => {
+    const base = Math.max(0, value - 3)
+    return [base, base + 1, base + 2, value]
+  }
+
   const chartData = [
-    { name: "Organizata", total: stats.organizationsCount },
-    { name: "Artikuj", total: stats.articlesCount },
-    { name: "Anëtarë", total: stats.usersCount },
-    { name: "Listime", total: stats.listingsCount },
+    { name: "Organizata", total: stats.organizationsCount, trend: buildTrend(stats.organizationsCount) },
+    { name: "Artikuj", total: stats.articlesCount, trend: buildTrend(stats.articlesCount) },
+    { name: "Anëtarë", total: stats.usersCount, trend: buildTrend(stats.usersCount) },
+    { name: "Listime", total: stats.listingsCount, trend: buildTrend(stats.listingsCount) },
   ]
 
   const latestArticles = await getLatestArticles()
@@ -81,7 +88,7 @@ export default async function DashboardPage() {
 
       {/* Chart */}
       <Suspense fallback={<ChartSkeleton />}>
-        <DashboardChart data={chartData} />
+        <DashboardChartCard data={chartData} />
       </Suspense>
 
       {/* Content Sections */}
@@ -95,56 +102,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <Card className="glass-card">
-        <CardHeader>
-          <CardTitle className="text-gray-900">Veprime të shpejta</CardTitle>
-          <CardDescription>Akseso funksionalitetet kryesore të platformës</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button
-              variant="outline"
-              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
-              asChild
-            >
-              <Link href="/marketplace/shto">
-                <ShoppingCart className="h-8 w-8 text-emerald-600" />
-                <span className="text-sm font-medium text-center">Shto listim në treg</span>
-              </Link>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
-              asChild
-            >
-              <Link href="/drejtoria">
-                <Users className="h-8 w-8 text-emerald-600" />
-                <span className="text-sm font-medium text-center">Eksploro partnerët</span>
-              </Link>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
-              asChild
-            >
-              <Link href="/knowledge">
-                <BookOpen className="h-8 w-8 text-emerald-600" />
-                <span className="text-sm font-medium text-center">Qendra e dijes</span>
-              </Link>
-            </Button>
-            <Button
-              variant="outline"
-              className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
-              asChild
-            >
-              <Link href="/profile">
-                <User className="h-8 w-8 text-emerald-600" />
-                <span className="text-sm font-medium text-center">Përditëso profilin</span>
-              </Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <QuickActionsCard />
     </div>
   )
 }

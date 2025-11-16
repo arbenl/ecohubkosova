@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import type React from "react";
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import type React from "react"
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Card,
   CardContent,
@@ -14,35 +14,35 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
-import { registerUser } from "./actions"; // Import the Server Action
+} from "@/components/ui/card"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Textarea } from "@/components/ui/textarea"
+import { registerUser } from "./actions" // Import the Server Action
 
-type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani";
+type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani"
 
 interface FormData {
-  emri_i_plote: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  vendndodhja: string;
-  roli: UserRole;
-  emri_organizates?: string;
-  pershkrimi_organizates?: string;
-  interesi_primar?: string;
-  person_kontakti?: string;
-  email_kontakti?: string;
-  terms: boolean;
-  newsletter: boolean;
+  emri_i_plote: string
+  email: string
+  password: string
+  confirmPassword: string
+  vendndodhja: string
+  roli: UserRole
+  emri_organizates?: string
+  pershkrimi_organizates?: string
+  interesi_primar?: string
+  person_kontakti?: string
+  email_kontakti?: string
+  terms: boolean
+  newsletter: boolean
 }
 
 export default function RegjistrohuPage() {
-  const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  const [step, setStep] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   const [formData, setFormData] = useState<FormData>({
     emri_i_plote: "",
@@ -58,24 +58,22 @@ export default function RegjistrohuPage() {
     email_kontakti: "",
     terms: false,
     newsletter: false,
-  });
+  })
 
   /**
    * Handles changes for input and textarea elements.
    * Updates the formData state based on input name and value/checked status.
    * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} e - The change event.
    */
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value, type } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target
     // For checkboxes, use the 'checked' property, otherwise use 'value'
-    const checked = (e.target as HTMLInputElement).checked;
+    const checked = (e.target as HTMLInputElement).checked
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
-    });
-  };
+    })
+  }
 
   /**
    * Handles changes for the RadioGroup (user role selection).
@@ -83,8 +81,8 @@ export default function RegjistrohuPage() {
    * @param {UserRole} value - The selected role value.
    */
   const handleRoleChange = (value: UserRole) => {
-    setFormData({ ...formData, roli: value });
-  };
+    setFormData({ ...formData, roli: value })
+  }
 
   /**
    * Handles advancing to the next step in the multi-step registration form.
@@ -100,16 +98,16 @@ export default function RegjistrohuPage() {
         !formData.confirmPassword ||
         !formData.vendndodhja
       ) {
-        setError("Ju lutemi plotësoni të gjitha fushat e detyrueshme.");
-        return;
+        setError("Ju lutemi plotësoni të gjitha fushat e detyrueshme.")
+        return
       }
       if (formData.password !== formData.confirmPassword) {
-        setError("Fjalëkalimet nuk përputhen.");
-        return;
+        setError("Fjalëkalimet nuk përputhen.")
+        return
       }
       if (formData.password.length < 6) {
-        setError("Fjalëkalimi duhet të ketë të paktën 6 karaktere.");
-        return;
+        setError("Fjalëkalimi duhet të ketë të paktën 6 karaktere.")
+        return
       }
     }
 
@@ -122,22 +120,22 @@ export default function RegjistrohuPage() {
         !formData.person_kontakti ||
         !formData.email_kontakti
       ) {
-        setError("Ju lutemi plotësoni të gjitha fushat e organizatës.");
-        return;
+        setError("Ju lutemi plotësoni të gjitha fushat e organizatës.")
+        return
       }
     }
 
-    setError(null); // Clear any previous errors
-    setStep(step + 1); // Move to the next step
-  };
+    setError(null) // Clear any previous errors
+    setStep(step + 1) // Move to the next step
+  }
 
   /**
    * Handles going back to the previous step in the multi-step registration form.
    */
   const handlePrevStep = () => {
-    setStep(step - 1);
-    setError(null); // Clear errors when going back
-  };
+    setStep(step - 1)
+    setError(null) // Clear errors when going back
+  }
 
   /**
    * Handles the final submission of the registration form.
@@ -145,16 +143,16 @@ export default function RegjistrohuPage() {
    * @param {React.FormEvent} e - The form submission event.
    */
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault() // Prevent default form submission behavior
 
     // Final validation: Terms and conditions must be accepted
     if (!formData.terms) {
-      setError("Ju duhet të pranoni kushtet e përdorimit.");
-      return;
+      setError("Ju duhet të pranoni kushtet e përdorimit.")
+      return
     }
 
-    setLoading(true); // Set loading state
-    setError(null); // Clear previous errors
+    setLoading(true) // Set loading state
+    setError(null) // Clear previous errors
 
     const result = await registerUser({
       emri_i_plote: formData.emri_i_plote,
@@ -168,15 +166,15 @@ export default function RegjistrohuPage() {
       person_kontakti: formData.person_kontakti,
       email_kontakti: formData.email_kontakti,
       newsletter: formData.newsletter,
-    });
+    })
 
     if (result.error) {
-      setError(result.error);
+      setError(result.error)
     } else {
-      router.push("/auth/sukses"); // Redirect to success page upon successful registration
+      router.push("/auth/sukses") // Redirect to success page upon successful registration
     }
-    setLoading(false); // Reset loading state
-  };
+    setLoading(false) // Reset loading state
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5 py-12">
@@ -186,7 +184,11 @@ export default function RegjistrohuPage() {
             <CardTitle className="text-3xl font-bold text-gray-900">Bashkohu me ne</CardTitle>
             <CardDescription className="text-gray-600">
               Hapi {step} nga 3 -{" "}
-              {step === 1 ? "Informacioni bazë" : step === 2 ? "Detajet e organizatës" : "Kushtet dhe konfirmimi"}
+              {step === 1
+                ? "Informacioni bazë"
+                : step === 2
+                  ? "Detajet e organizatës"
+                  : "Kushtet dhe konfirmimi"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -194,17 +196,17 @@ export default function RegjistrohuPage() {
               {step === 1 && (
                 <>
                   <div className="space-y-2">
-<Label htmlFor="emri_i_plote" className="text-gray-700 font-medium">
-              Emri i Plotë
-            </Label>
-            <Input
-              id="emri_i_plote"
-              name="emri_i_plote"
-              value={formData.emri_i_plote}
-              onChange={handleChange}
-              className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
-              required
-            />
+                    <Label htmlFor="emri_i_plote" className="text-gray-700 font-medium">
+                      Emri i Plotë
+                    </Label>
+                    <Input
+                      id="emri_i_plote"
+                      name="emri_i_plote"
+                      value={formData.emri_i_plote}
+                      onChange={handleChange}
+                      className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                      required
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-gray-700 font-medium">
@@ -322,7 +324,10 @@ export default function RegjistrohuPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="pershkrimi_organizates" className="text-gray-700 font-medium">
+                        <Label
+                          htmlFor="pershkrimi_organizates"
+                          className="text-gray-700 font-medium"
+                        >
                           Përshkrimi i organizatës
                         </Label>
                         <Textarea
@@ -380,17 +385,30 @@ export default function RegjistrohuPage() {
                           required
                         />
                       </div>
-
                     </>
                   ) : (
                     <div className="text-center py-12">
                       <div className="w-16 h-16 mx-auto mb-4 rounded-full eco-gradient flex items-center justify-center">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        <svg
+                          className="w-8 h-8 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
                         </svg>
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">Gati për hapin tjetër!</h3>
-                      <p className="text-gray-500">Nuk ka informacione shtesë të nevojshme për individët.</p>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        Gati për hapin tjetër!
+                      </h3>
+                      <p className="text-gray-500">
+                        Nuk ka informacione shtesë të nevojshme për individët.
+                      </p>
                     </div>
                   )}
                 </>
@@ -404,18 +422,29 @@ export default function RegjistrohuPage() {
                         id="terms"
                         name="terms"
                         checked={formData.terms}
-                        onCheckedChange={(checked) => setFormData({ ...formData, terms: checked as boolean })}
+                        onCheckedChange={(checked) =>
+                          setFormData({ ...formData, terms: checked as boolean })
+                        }
                         required
                         className="mt-1"
                       />
                       <div className="flex-1">
-                        <Label htmlFor="terms" className="text-sm font-medium leading-relaxed cursor-pointer">
+                        <Label
+                          htmlFor="terms"
+                          className="text-sm font-medium leading-relaxed cursor-pointer"
+                        >
                           Pranoj{" "}
-                          <Link href="/legal/terms" className="text-[#00C896] hover:text-[#00A07E] underline">
+                          <Link
+                            href="/legal/terms"
+                            className="text-[#00C896] hover:text-[#00A07E] underline"
+                          >
                             kushtet e përdorimit
                           </Link>{" "}
                           dhe{" "}
-                          <Link href="/privatesia" className="text-[#00C896] hover:text-[#00A07E] underline">
+                          <Link
+                            href="/privatesia"
+                            className="text-[#00C896] hover:text-[#00A07E] underline"
+                          >
                             politikën e privatësisë
                           </Link>
                         </Label>
@@ -426,11 +455,16 @@ export default function RegjistrohuPage() {
                         id="newsletter"
                         name="newsletter"
                         checked={formData.newsletter}
-                        onCheckedChange={(checked) => setFormData({ ...formData, newsletter: checked as boolean })}
+                        onCheckedChange={(checked) =>
+                          setFormData({ ...formData, newsletter: checked as boolean })
+                        }
                         className="mt-1"
                       />
                       <div className="flex-1">
-                        <Label htmlFor="newsletter" className="text-sm font-medium leading-relaxed cursor-pointer">
+                        <Label
+                          htmlFor="newsletter"
+                          className="text-sm font-medium leading-relaxed cursor-pointer"
+                        >
                           Dëshiroj të marr njoftime dhe përditësime nga ECO HUB KOSOVA
                         </Label>
                         <p className="text-xs text-gray-500 mt-1">
@@ -490,7 +524,10 @@ export default function RegjistrohuPage() {
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-center text-gray-600">
               Keni tashmë një llogari?{" "}
-              <Link href="/login" className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors">
+              <Link
+                href="/login"
+                className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors"
+              >
                 Kyçu këtu
               </Link>
             </div>

@@ -1,78 +1,26 @@
 "use client"
 
-import { useState } from "react"
 import { AlertCircle, CheckCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import type { OrganizationProfileUpdateInput } from "@/validation/profile"
-import { organizationProfileUpdateSchema } from "@/validation/profile"
 import { updateOrganizationProfile } from "../actions"
+import type { OrganizationProfileUpdateInput } from "@/validation/profile"
+import { useOrganizationProfileForm } from "@/hooks/use-profile-forms"
 
 interface OrgProfileFormProps {
   organizationId: string
-  initialData: {
-    emri: string
-    pershkrimi: string
-    interesi_primar: string
-    person_kontakti: string
-    email_kontakti: string
-    vendndodhja: string
-  }
+  initialData: OrganizationProfileUpdateInput
 }
 
-type FieldErrors = Partial<Record<keyof OrganizationProfileUpdateInput, string>>
-
 export function OrganizationProfileForm({ organizationId, initialData }: OrgProfileFormProps) {
-  const [formData, setFormData] = useState(initialData)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-    setFieldErrors((prev) => ({ ...prev, [name]: undefined }))
-  }
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    setSaving(true)
-    setError(null)
-    setSuccess(null)
-
-    const parsed = organizationProfileUpdateSchema.safeParse(formData)
-
-    if (!parsed.success) {
-      const { fieldErrors } = parsed.error.flatten()
-      setFieldErrors({
-        emri: fieldErrors.emri?.[0],
-        pershkrimi: fieldErrors.pershkrimi?.[0],
-        interesi_primar: fieldErrors.interesi_primar?.[0],
-        person_kontakti: fieldErrors.person_kontakti?.[0],
-        email_kontakti: fieldErrors.email_kontakti?.[0],
-        vendndodhja: fieldErrors.vendndodhja?.[0],
-      })
-      setError("Kontrolloni fushat e shënuara dhe provoni përsëri.")
-      setSaving(false)
-      return
-    }
-
-    setFieldErrors({})
-
-    const result = await updateOrganizationProfile(organizationId, parsed.data)
-
-    if (result.error) {
-      setError(result.error)
-    } else {
-      setSuccess("Profili i organizatës u përditësua me sukses!")
-    }
-
-    setSaving(false)
-  }
+  const { formData, fieldErrors, saving, error, success, handleChange, handleSubmit } = useOrganizationProfileForm({
+    organizationId,
+    initialData,
+    submit: updateOrganizationProfile,
+  })
 
   return (
     <div>

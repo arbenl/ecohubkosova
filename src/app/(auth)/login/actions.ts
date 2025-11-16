@@ -1,4 +1,4 @@
-// Update: src/app/auth/kycu/actions.ts
+// Login server action for handling user authentication
 "use server"
 
 import { cookies } from "next/headers"
@@ -90,7 +90,7 @@ export async function signInWithGoogle(): Promise<SignInWithGoogleResponse> {
   logAuthAction("signInWithGoogle", "OAuth login initiated")
 
   const supabase = await createServerActionSupabaseClient()
-  
+
   // Use hardcoded site URL to prevent open redirect vulnerability
   const redirectUrl = process.env.NEXT_PUBLIC_SITE_URL
   if (!redirectUrl) {

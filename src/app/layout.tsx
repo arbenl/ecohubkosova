@@ -1,5 +1,4 @@
 import type React from "react"
-import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/lib/auth-provider"
 import ErrorBoundary from "@/components/error-boundary" // Import the ErrorBoundary component
@@ -9,7 +8,7 @@ import { getServerUser } from "@/lib/supabase/server"
 
 export const dynamic = "force-dynamic"
 
-const inter = Inter({ subsets: ["latin", "latin-ext"] })
+const inter = { className: "font-sans" }
 
 export const metadata: Metadata = {
   title: "ECO HUB KOSOVA | Lidhu. Bashkëpuno. Krijo Qarkullim.",

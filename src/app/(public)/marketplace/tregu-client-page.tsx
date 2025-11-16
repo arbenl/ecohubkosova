@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState, useTransition, type FormEvent, type KeyboardEvent } from "react"
+import { type FormEvent, type KeyboardEvent } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ListingCard } from "@/components/listings/ListingCard"
 import { Listing } from "@/types"
 import { Search, SlidersHorizontal } from "lucide-react"
+import { useMarketplaceFilters } from "@/hooks/use-marketplace-filters"
 
 interface TreguClientPageProps {
   initialListings: Listing[]
@@ -40,175 +41,45 @@ export default function TreguClientPage({
   initialSortOrder,
   categories,
 }: TreguClientPageProps) {
-  const router = useRouter()
-  const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
-  const [selectedCategory, setSelectedCategory] = useState(initialSelectedCategory)
-  const [activeTab, setActiveTab] = useState(initialTab)
-  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">(initialSortOrder)
-  const [conditionFilter, setConditionFilter] = useState(initialCondition)
-  const [locationFilter, setLocationFilter] = useState(initialLocation)
-  const [isPending, startTransition] = useTransition()
-
-  useEffect(() => {
-    setSearchQuery(initialSearchQuery)
-  }, [initialSearchQuery])
-
-  useEffect(() => {
-    setSelectedCategory(initialSelectedCategory)
-  }, [initialSelectedCategory])
-
-  useEffect(() => {
-    setActiveTab(initialTab)
-  }, [initialTab])
-
-  useEffect(() => {
-    setConditionFilter(initialCondition)
-  }, [initialCondition])
-
-  useEffect(() => {
-    setLocationFilter(initialLocation)
-  }, [initialLocation])
-
-  useEffect(() => {
-    setSortOrder(initialSortOrder)
-  }, [initialSortOrder])
-
-  const buildQuery = ({
-    tab,
-    category,
-    search,
+  const {
+    searchQuery,
+    setSearchQuery,
+    selectedCategory,
+    activeTab,
+    sortOrder,
+    conditionFilter,
+    locationFilter,
+    isPending,
     page,
-    condition,
-    location,
-    sort,
-  }: {
-    tab: string
-    category: string
-    search: string
-    page: number
-    condition: string
-    location: string
-    sort: "newest" | "oldest"
-  }) => {
-    const params = new URLSearchParams()
+    conditionOptions,
+    handleSearchSubmit,
+    handleCategoryChange,
+    handleTabChange,
+    handleConditionChange,
+    handleLocationInputChange,
+    applyLocationFilter,
+    handleSortChange,
+    handlePageChange,
+  } = useMarketplaceFilters({
+    initialTab,
+    initialSearchQuery,
+    initialSelectedCategory,
+    initialPage,
+    initialCondition,
+    initialLocation,
+    initialSortOrder,
+    listings: initialListings,
+  })
 
-    if (tab !== "te-gjitha") {
-      params.set("lloji", tab)
-    }
-
-    if (category !== "all") {
-      params.set("category", category)
-    }
-
-    if (search.trim()) {
-      params.set("search", search.trim())
-    }
-
-    if (page > 1) {
-      params.set("page", String(page))
-    }
-
-    if (condition.trim()) {
-      params.set("condition", condition.trim())
-    }
-
-    if (location.trim()) {
-      params.set("location", location.trim())
-    }
-
-    if (sort === "oldest") {
-      params.set("sort", sort)
-    }
-
-    return params.toString()
-  }
-
-  const pushQuery = (
-    overrides?: {
-      tab?: string
-      category?: string
-      search?: string
-      page?: number
-      condition?: string
-      location?: string
-      sort?: "newest" | "oldest"
-    },
-  ) => {
-    const query = buildQuery({
-      tab: overrides?.tab ?? activeTab,
-      category: overrides?.category ?? selectedCategory,
-      search: overrides?.search ?? searchQuery,
-      page: overrides?.page ?? 1,
-      condition: overrides?.condition ?? conditionFilter,
-      location: overrides?.location ?? locationFilter,
-      sort: overrides?.sort ?? sortOrder,
-    })
-
-    startTransition(() => {
-      router.push(query ? `?${query}` : "?")
-    })
-  }
-
-  const handleSearchSubmit = (event: FormEvent) => {
-    event.preventDefault()
-    pushQuery({ page: 1, search: searchQuery })
-  }
-
-  const handleCategoryChange = (value: string) => {
-    setSelectedCategory(value)
-    pushQuery({ page: 1, category: value })
-  }
-
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab)
-    pushQuery({ page: 1, tab })
-  }
-
-  const handleConditionChange = (value: string) => {
-    const normalized = value === "all" ? "" : value
-    setConditionFilter(normalized)
-    pushQuery({ page: 1, condition: normalized })
-  }
-
-  const handlePageChange = (page: number) => {
-    pushQuery({ page })
-  }
+  const router = useRouter()
 
   const listings = initialListings
-
-  const conditionOptions = useMemo(() => {
-    const values = new Set<string>()
-    initialListings.forEach((listing) => {
-      if (listing.gjendja) {
-        values.add(listing.gjendja)
-      }
-    })
-
-    if (conditionFilter) {
-      values.add(conditionFilter)
-    }
-
-    return Array.from(values)
-  }, [initialListings, conditionFilter])
-
-  const handleLocationInputChange = (value: string) => {
-    setLocationFilter(value)
-  }
-
-  const applyLocationFilter = () => {
-    pushQuery({ page: 1, location: locationFilter })
-  }
 
   const handleLocationKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault()
       applyLocationFilter()
     }
-  }
-
-  const handleSortChange = (value: "newest" | "oldest") => {
-    setSortOrder(value)
-    pushQuery({ page: 1, sort: value })
   }
 
   const handleContactClick = (listing: Listing) => {
@@ -324,16 +195,16 @@ export default function TreguClientPage({
       <div className="flex justify-between items-center mt-10">
         <Button
           variant="outline"
-          disabled={initialPage <= 1 || isPending}
-          onClick={() => handlePageChange(Math.max(1, initialPage - 1))}
+          disabled={page <= 1 || isPending}
+          onClick={() => handlePageChange(Math.max(1, page - 1))}
         >
           Më parë
         </Button>
         <div className="text-sm text-gray-500">
-          Faqja {initialPage}
+          Faqja {page}
           {isPending && <span className="ml-2 italic">Duke u ngarkuar...</span>}
         </div>
-        <Button variant="outline" disabled={!hasMoreInitial || isPending} onClick={() => handlePageChange(initialPage + 1)}>
+        <Button variant="outline" disabled={!hasMoreInitial || isPending} onClick={() => handlePageChange(page + 1)}>
           Më pas
         </Button>
       </div>

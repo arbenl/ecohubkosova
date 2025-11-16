@@ -32,8 +32,8 @@ export class SupabaseInitializer {
         if (event === "SIGNED_IN" && session?.user) {
           // Fetch profile for newly signed in user
           try {
-            const profile = await this.profileManager.fetchUserProfile(session.user.id, 1)
-            this.userStateManager.hydrateUser(session.user, profile)
+            const profileResult = await this.profileManager.fetchUserProfile(session.user.id, 1)
+            this.userStateManager.hydrateUser(session.user, profileResult.profile)
           } catch (error) {
             logAuthAction("supabaseInitializer", "Profile fetch failed on SIGNED_IN", {
               error: error instanceof Error ? error.message : "Unknown error",

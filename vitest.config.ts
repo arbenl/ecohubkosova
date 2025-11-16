@@ -9,7 +9,14 @@ export default defineConfig({
     exclude: ["e2e/**", "node_modules/**", "playwright-report/**", "dist/**", ".next/**"],
     coverage: {
       provider: "v8",
-      reporter: ["text", "lcov"],
+      reporter: ["text", "lcov", "html"],
+      all: false,
+      thresholds: {
+        lines: 75,
+        functions: 50,
+        branches: 70,
+        statements: 75,
+      },
     },
   },
   resolve: {

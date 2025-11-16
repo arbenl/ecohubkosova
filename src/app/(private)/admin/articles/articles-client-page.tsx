@@ -1,397 +1,206 @@
 "use client"
 
-import { useState } from "react"
-import { createArticle, deleteArticle, updateArticle } from "./actions" // Import Server Actions
-import { adminArticleCreateSchema, adminArticleUpdateSchema } from "@/validation/admin"
-
-interface Article {
-  id: string
-  titulli: string
-  permbajtja: string
-  autori_id: string
-  eshte_publikuar: boolean
-  kategori: string
-  tags: string[] | null
-  foto_kryesore: string | null
-  created_at: string
-  updated_at: string | null
-}
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+import { adminArticleUpdateSchema } from "@/validation/admin"
+import { useAdminArticles } from "@/hooks/use-admin-articles"
 
 interface ArticlesClientPageProps {
-  initialArticles: Article[]
+  initialArticles: Parameters<typeof useAdminArticles>[0]
 }
 
-const ArticlesClientPage = ({ initialArticles }: ArticlesClientPageProps) => {
-  const [articles, setArticles] = useState<Article[]>(initialArticles)
-  const [editingArticle, setEditingArticle] = useState<Article | null>(null)
-  const [newArticle, setNewArticle] = useState({
-    titulli: "",
-    permbajtja: "",
-    kategori: "",
-    eshte_publikuar: false,
-    tags: "",
-    foto_kryesore: "",
-  })
-
-  const handleEdit = (article: Article) => {
-    setEditingArticle(article)
-  }
-
-  const handleCancelEdit = () => {
-    setEditingArticle(null)
-  }
-
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm("A jeni i sigurt që doni ta fshini këtë artikull?")
-    if (!confirmDelete) return
-
-    const result = await deleteArticle(id)
-    if (result.error) {
-      alert(result.error)
-    } else {
-      setArticles(articles.filter((article) => article.id !== id))
-      alert("Artikulli u fshi me sukses!")
-    }
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setNewArticle({
-      ...newArticle,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewArticle({
-      ...newArticle,
-      eshte_publikuar: e.target.checked,
-    })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const tagsArray = newArticle.tags ? newArticle.tags.split(",").map((tag) => tag.trim()) : null
-
-    const payload = {
-      titulli: newArticle.titulli,
-      permbajtja: newArticle.permbajtja,
-      kategori: newArticle.kategori,
-      eshte_publikuar: newArticle.eshte_publikuar,
-      tags: tagsArray,
-      foto_kryesore: newArticle.foto_kryesore || null,
-    }
-
-    const parsed = adminArticleCreateSchema.safeParse(payload)
-    if (!parsed.success) {
-      alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
-      return
-    }
-
-    const result = await createArticle(parsed.data)
-
-    if (result.error) {
-      alert(result.error)
-    } else {
-      // Re-fetch articles to update the list, or optimistically update
-      // For simplicity, we'll just alert success and let revalidatePath handle the actual update
-      alert("Artikulli u krijua me sukses!")
-      setNewArticle({
-        titulli: "",
-        permbajtja: "",
-        kategori: "",
-        eshte_publikuar: false,
-        tags: "",
-        foto_kryesore: "",
-      })
-      // A full re-fetch might be needed if the server action doesn't trigger revalidation immediately
-      // For now, we rely on revalidatePath in the server action
-    }
-  }
+export default function ArticlesClientPage({ initialArticles }: ArticlesClientPageProps) {
+  const {
+    articles,
+    editingArticle,
+    newArticle,
+    setEditingArticle,
+    handleDelete,
+    handleNewChange,
+    handleNewSubmit,
+    handleEditSubmit,
+  } = useAdminArticles(initialArticles)
 
   return (
-    <>
-      {/* List of Articles */}
-      <div className="mb-5">
-        <h2 className="text-lg font-semibold mb-2">Lista e Artikujve</h2>
-        {articles.length === 0 ? (
-          <p>Nuk ka artikuj.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200">
-              <thead>
-                <tr>
-                  <th className="py-2 px-4 border-b">Titulli</th>
-                  <th className="py-2 px-4 border-b">Kategoria</th>
-                  <th className="py-2 px-4 border-b">Publikuar</th>
-                  <th className="py-2 px-4 border-b">Tags</th>
-                  <th className="py-2 px-4 border-b">Veprime</th>
+    <div className="space-y-8">
+      <section>
+        <h2 className="text-lg font-semibold mb-2">Lista e artikujve</h2>
+        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+          <table className="min-w-full divide-y divide-gray-200 text-sm">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-2 text-left font-medium text-gray-600">Titulli</th>
+                <th className="px-4 py-2 text-left font-medium text-gray-600">Kategoria</th>
+                <th className="px-4 py-2 text-left font-medium text-gray-600">Publikuar</th>
+                <th className="px-4 py-2 text-left font-medium text-gray-600">Veprime</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {articles.map((article) => (
+                <tr key={article.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3">{article.titulli}</td>
+                  <td className="px-4 py-3">{article.kategori}</td>
+                  <td className="px-4 py-3">{article.eshte_publikuar ? "Po" : "Jo"}</td>
+                  <td className="px-4 py-3 space-x-2">
+                    <button
+                      className="text-sm text-blue-600 hover:underline"
+                      onClick={() => setEditingArticle(article)}
+                    >
+                      Edito
+                    </button>
+                    <button
+                      className="text-sm text-red-600 hover:underline"
+                      onClick={() => handleDelete(article.id)}
+                    >
+                      Fshi
+                    </button>
+                    <Link href={`/qendra-e-dijes/${article.id}`} className="text-sm text-gray-600">
+                      Shiko <ArrowRight className="inline h-4 w-4" />
+                    </Link>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {articles.map((article) => (
-                  <tr key={article.id}>
-                    <td className="py-2 px-4 border-b">{article.titulli}</td>
-                    <td className="py-2 px-4 border-b">{article.kategori}</td>
-                    <td className="py-2 px-4 border-b">{article.eshte_publikuar ? "Po" : "Jo"}</td>
-                    <td className="py-2 px-4 border-b">{article.tags?.join(", ") || "Asnjë"}</td>
-                    <td className="py-2 px-4 border-b">
-                      <button
-                        onClick={() => handleEdit(article)}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                      >
-                        Edito
-                      </button>
-                      <button
-                        onClick={() => handleDelete(article.id)}
-                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                      >
-                        Fshij
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-
-      {/* Edit Article Form */}
-      {editingArticle && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white max-h-[90vh] overflow-y-auto">
-            <h2 className="text-lg font-semibold mb-2">Edito Artikullin</h2>
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault()
-                if (!editingArticle) return
-
-                const formData = new FormData(e.currentTarget)
-                const tagsString = formData.get("tags") as string
-                const tagsArray = tagsString ? tagsString.split(",").map((tag) => tag.trim()) : null
-
-                const updatedData = {
-                  titulli: formData.get("titulli") as string,
-                  permbajtja: formData.get("permbajtja") as string,
-                  kategori: formData.get("kategori") as string,
-                  eshte_publikuar: formData.get("eshte_publikuar") === "on",
-                  tags: tagsArray,
-                  foto_kryesore: (formData.get("foto_kryesore") as string) || null,
-                }
-
-                const parsed = adminArticleUpdateSchema.safeParse(updatedData)
-                if (!parsed.success) {
-                  alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
-                  return
-                }
-
-                const result = await updateArticle(editingArticle.id, parsed.data)
-
-                if (result.error) {
-                  alert(result.error)
-                } else {
-                  setArticles(
-                    articles.map((a) => (a.id === editingArticle.id ? { ...a, ...parsed.data } : a))
-                  )
-                  setEditingArticle(null)
-                  alert("Artikulli u përditësua me sukses!")
-                }
-              }}
-              className="space-y-4"
-            >
-              <div>
-                <label htmlFor="titulli" className="block text-sm font-medium text-gray-700">
-                  Titulli:
-                </label>
-                <input
-                  type="text"
-                  id="titulli"
-                  name="titulli"
-                  defaultValue={editingArticle.titulli}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-<label htmlFor="permbajtja" className="block text-sm font-medium text-gray-700">
-                  Përmbajtja:
-                </label>
-                <textarea
-                  id="permbajtja"
-                  name="permbajtja"
-                  rows={10}
-                  defaultValue={editingArticle.permbajtja}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                ></textarea>
-              </div>
-              <div>
-                <label htmlFor="kategori" className="block text-sm font-medium text-gray-700">
-                  Kategoria:
-                </label>
-                <input
-                  type="text"
-                  id="kategori"
-                  name="kategori"
-                  defaultValue={editingArticle.kategori}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
-                  Tags (të ndara me presje):
-                </label>
-                <input
-                  type="text"
-                  id="tags"
-                  name="tags"
-                  defaultValue={editingArticle.tags?.join(", ") || ""}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label htmlFor="foto_kryesore" className="block text-sm font-medium text-gray-700">
-                  Foto Kryesore (URL):
-                </label>
-                <input
-                  type="url"
-                  id="foto_kryesore"
-                  name="foto_kryesore"
-                  defaultValue={editingArticle.foto_kryesore || ""}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-              <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  <input
-                    id="eshte_publikuar"
-                    name="eshte_publikuar"
-                    type="checkbox"
-                    defaultChecked={editingArticle.eshte_publikuar}
-                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                  />
-                </div>
-                <div className="ml-3 text-sm">
-                  <label htmlFor="eshte_publikuar" className="font-medium text-gray-700">
-                    Eshte Publikuar
-                  </label>
-                </div>
-              </div>
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={handleCancelEdit}
-                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
-                >
-                  Anulo
-                </button>
-                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                  Ruaj Ndryshimet
-                </button>
-              </div>
-            </form>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
+      </section>
 
-      {/* Create Article Form */}
-      <div className="mb-5">
-        <h2 className="text-lg font-semibold mb-2">Krijo Artikull të Ri</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="titulli" className="block text-sm font-medium text-gray-700">
-              Titulli:
-            </label>
-            <input
-              type="text"
-              id="titulli"
-              name="titulli"
-              value={newArticle.titulli}
-              onChange={handleInputChange}
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="permbajtja" className="block text-sm font-medium text-gray-700">
-              Përmbajtja:
-            </label>
-            <textarea
-              id="permbajtja"
-              name="permbajtja"
-              rows={4}
-              value={newArticle.permbajtja}
-              onChange={handleInputChange}
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="kategori" className="block text-sm font-medium text-gray-700">
-              Kategoria:
-            </label>
-            <input
-              type="text"
-              id="kategori"
-              name="kategori"
-              value={newArticle.kategori}
-              onChange={handleInputChange}
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
-              Tags (të ndara me presje):
-            </label>
-            <input
-              type="text"
-              id="tags"
-              name="tags"
-              value={newArticle.tags}
-              onChange={handleInputChange}
-              placeholder="tag1, tag2, tag3"
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label htmlFor="foto_kryesore" className="block text-sm font-medium text-gray-700">
-              Foto Kryesore (URL):
-            </label>
-            <input
-              type="url"
-              id="foto_kryesore"
-              name="foto_kryesore"
-              value={newArticle.foto_kryesore}
-              onChange={handleInputChange}
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-            />
-          </div>
-          <div className="flex items-start">
-            <div className="flex items-center h-5">
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">Krijo artikull të ri</h2>
+        <div className="grid grid-cols-1 gap-3 rounded-lg border border-gray-200 bg-white p-4">
+          <input
+            className="rounded-md border px-3 py-2"
+            placeholder="Titulli"
+            value={newArticle.titulli}
+            onChange={(event) => handleNewChange("titulli", event.target.value)}
+          />
+          <textarea
+            className="rounded-md border px-3 py-2"
+            placeholder="Përmbajtja"
+            rows={4}
+            value={newArticle.permbajtja}
+            onChange={(event) => handleNewChange("permbajtja", event.target.value)}
+          />
+          <input
+            className="rounded-md border px-3 py-2"
+            placeholder="Kategoria"
+            value={newArticle.kategori}
+            onChange={(event) => handleNewChange("kategori", event.target.value)}
+          />
+          <div className="flex items-center gap-3">
+            <label className="inline-flex items-center gap-1">
               <input
-                id="eshte_publikuar"
-                name="eshte_publikuar"
                 type="checkbox"
                 checked={newArticle.eshte_publikuar}
-                onChange={handleCheckboxChange}
-                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                onChange={(event) => handleNewChange("eshte_publikuar", event.target.checked)}
               />
-            </div>
-            <div className="ml-3 text-sm">
-              <label htmlFor="eshte_publikuar" className="font-medium text-gray-700">
-                Eshte Publikuar
-              </label>
-            </div>
+              Publiko menjëherë
+            </label>
           </div>
-          <div>
-            <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-              Shto Artikull
-            </button>
-          </div>
-        </form>
-      </div>
-    </>
+          <input
+            className="rounded-md border px-3 py-2"
+            placeholder="Tags (shpërndaje me presje)"
+            value={newArticle.tags}
+            onChange={(event) => handleNewChange("tags", event.target.value)}
+          />
+          <input
+            className="rounded-md border px-3 py-2"
+            placeholder="URL foto kryesore"
+            value={newArticle.foto_kryesore}
+            onChange={(event) => handleNewChange("foto_kryesore", event.target.value)}
+          />
+          <button
+            className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+            type="button"
+            onClick={handleNewSubmit}
+          >
+            Krijo artikull
+          </button>
+        </div>
+      </section>
+
+      {editingArticle && (
+        <section className="space-y-4 rounded-lg border border-gray-200 bg-white p-4">
+          <h2 className="text-lg font-semibold">Edito artikull</h2>
+          <form
+            className="space-y-3"
+            onSubmit={async (event) => {
+              event.preventDefault()
+              const formData = new FormData(event.currentTarget)
+              const updatedData = {
+                titulli: formData.get("titulli") as string,
+                permbajtja: formData.get("permbajtja") as string,
+                kategori: formData.get("kategori") as string,
+                eshte_publikuar: formData.get("eshte_publikuar") === "on",
+                tags: (formData.get("tags") as string)
+                  ?.split(",")
+                  .map((tag) => tag.trim()),
+                foto_kryesore: (formData.get("foto_kryesore") as string) || null,
+              }
+
+              const parsed = adminArticleUpdateSchema.safeParse(updatedData)
+              if (!parsed.success) {
+                alert(parsed.error.issues.map((issue) => issue.message).join("\n"))
+                return
+              }
+
+              await handleEditSubmit(editingArticle.id, parsed.data)
+              setEditingArticle(null)
+            }}
+          >
+            <input
+              name="titulli"
+              defaultValue={editingArticle.titulli}
+              className="w-full rounded-md border px-3 py-2"
+            />
+            <textarea
+              name="permbajtja"
+              defaultValue={editingArticle.permbajtja}
+              rows={4}
+              className="w-full rounded-md border px-3 py-2"
+            />
+            <input
+              name="kategori"
+              defaultValue={editingArticle.kategori}
+              className="w-full rounded-md border px-3 py-2"
+            />
+            <label className="inline-flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="eshte_publikuar"
+                defaultChecked={editingArticle.eshte_publikuar}
+                className="h-4 w-4"
+              />
+              Publiko
+            </label>
+            <input
+              name="tags"
+              defaultValue={editingArticle.tags?.join(", ")}
+              className="w-full rounded-md border px-3 py-2"
+            />
+            <input
+              name="foto_kryesore"
+              defaultValue={editingArticle.foto_kryesore ?? ""}
+              className="w-full rounded-md border px-3 py-2"
+            />
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                Ruaj
+              </button>
+              <button
+                type="button"
+                className="rounded-md bg-gray-200 px-4 py-2 text-gray-700"
+                onClick={() => setEditingArticle(null)}
+              >
+                Anulo
+              </button>
+            </div>
+          </form>
+        </section>
+      )}
+    </div>
   )
 }
-
-export default ArticlesClientPage

@@ -8,6 +8,25 @@ export const dynamic = "force-dynamic"
 const MAX_RETRIES = 3
 const RETRY_DELAY = 100
 
+// Database error patterns to detect
+const DB_ERROR_PATTERNS = [
+  /SUPABASE_DB_URL/i,
+  /connection refused/i,
+  /connection timeout/i,
+  /connect ECONNREFUSED/i,
+  /connect ETIMEDOUT/i,
+  /ENOTFOUND/i,
+  /pool.*error/i,
+  /could not translate host name/i,
+  /no pg_hba.conf entry/i,
+  /password authentication failed/i,
+  /PGSQL.*error/i,
+]
+
+const isDbConnectionError = (errorMsg: string): boolean => {
+  return DB_ERROR_PATTERNS.some((pattern) => pattern.test(errorMsg))
+}
+
 async function withRetry<T>(
   fn: () => Promise<T>,
   maxRetries: number = MAX_RETRIES,
@@ -72,22 +91,31 @@ export async function GET() {
       return NextResponse.json({ profile })
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : String(err)
+      const isDbError = isDbConnectionError(errorMsg)
       
-      // Check if this is a database connection error
-      if (errorMsg.includes("SUPABASE_DB_URL") || errorMsg.includes("connection")) {
+      if (isDbError) {
         logAuthAction("profileEndpoint", "Database connection error - allowing login without profile", {
           userId: user.id,
           error: errorMsg,
+          isDbError: true,
         })
         
-        // Return success with null profile instead of error
+        // Return with database unavailable flag
         // This allows login to proceed even if DB is temporarily unavailable
-        return NextResponse.json({ profile: null })
+        return NextResponse.json(
+          { 
+            profile: null, 
+            dbUnavailable: true,
+            error: "Gabim në lidhjen me bazën e të dhënave. Profili nuk u ngarkua, por mund të hyni me kufizime." 
+          },
+          { status: 200 } // Return 200 to allow login flow
+        )
       }
 
       logAuthAction("profileEndpoint", "Failed to fetch profile after retries", {
         userId: user.id,
         error: errorMsg,
+        isDbError: false,
       })
 
       return NextResponse.json(
