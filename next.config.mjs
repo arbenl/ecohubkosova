@@ -31,10 +31,12 @@ if (supabaseHttpsHost) {
   connectSrc.push(supabaseHttpsHost)
 }
 
+// Secure CSP without 'unsafe-inline' and 'unsafe-eval'
+// Uses strict-dynamic for Next.js inline scripts
 const csp = [
   "default-src 'self';",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval';",
-  "style-src 'self' 'unsafe-inline';",
+  "script-src 'self' 'strict-dynamic' 'nonce-{nonce}';",
+  "style-src 'self';",
   `img-src ${imageSrc.join(" ")};`,
   "font-src 'self' data:;",
   `connect-src ${connectSrc.join(" ")};`,
@@ -72,6 +74,9 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    instrumentationHook: true, // Enable instrumentation for graceful shutdown and connection management
+  },
   serverExternalPackages: ["@supabase/supabase-js"],
   transpilePackages: ["@supabase/auth-js", "@supabase/ssr"],
   async headers() {
