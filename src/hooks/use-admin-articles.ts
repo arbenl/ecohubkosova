@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react"
 import { adminArticleCreateSchema, adminArticleUpdateSchema } from "@/validation/admin"
-import { createArticle, deleteArticle, updateArticle } from "@/app/[locale]/(private)/admin/articles/actions"
+import { createArticle, deleteArticle, updateArticle } from "@/app/[locale]/(protected)/admin/articles/actions"
 
 export interface AdminArticle {
   id: string

@@ -11,6 +11,13 @@
     "test": "NODE_OPTIONS='--max-old-space-size=2048' vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "db:migrate:test": "NODE_ENV=test dotenv -e .env.test -- npx prisma migrate deploy",
+    "db:reset:test": "NODE_ENV=test bash scripts/reset-test-db.sh",
+    "db:seed:test": "NODE_ENV=test dotenv -e .env.test -- npx ts-node prisma/seed-e2e.ts",
+    "e2e": "NODE_ENV=test dotenv -e .env.test -- playwright test e2e/auth.e2e.spec.ts",
+    "e2e:headed": "NODE_ENV=test dotenv -e .env.test -- playwright test e2e/auth.e2e.spec.ts --headed",
+    "e2e:debug": "NODE_ENV=test dotenv -e .env.test -- playwright test e2e/auth.e2e.spec.ts --debug",
+    "e2e:report": "NODE_ENV=test dotenv -e .env.test -- playwright test e2e/auth.e2e.spec.ts && playwright show-report",
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
     "start": "next start",
@@ -78,6 +85,7 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.22.0",
     "@next/bundle-analyzer": "^16.0.3",
     "@playwright/test": "^1.56.1",
     "@solana/wallet-standard-features": "1.2.0",

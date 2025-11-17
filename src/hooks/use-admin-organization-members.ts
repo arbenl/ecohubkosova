@@ -8,7 +8,7 @@ import {
   deleteOrganizationMember,
   updateOrganizationMember,
   toggleOrganizationMemberApproval,
-} from "@/app/[locale]/(private)/admin/organization-members/actions"
+} from "@/app/[locale]/(protected)/admin/organization-members/actions"
 
 export interface OrganizationMember {
   id: string

@@ -12,6 +12,11 @@ vi.mock("next/navigation", () => ({
   }),
 }))
 
+// Mock next-intl
+vi.mock("next-intl", () => ({
+  useLocale: () => "en",
+}))
+
 describe("useAuthForm", () => {
   it("should initialize with default state", () => {
     const { result } = renderHook(() => useAuthForm())

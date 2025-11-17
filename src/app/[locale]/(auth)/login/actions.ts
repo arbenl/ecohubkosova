@@ -8,9 +8,20 @@ import { incrementSessionVersion } from "@/services/session"
 import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_OPTIONS } from "@/lib/auth/session-version"
 import { logAuthAction } from "@/lib/auth/logging"
 
+type SessionTokens = {
+  access_token: string
+  refresh_token: string
+}
+
 // Type definitions for server action responses
 export type SignInResponse =
-  | { success: true; message?: undefined; error?: undefined; redirectUrl?: undefined }
+  | {
+      success: true
+      session?: SessionTokens
+      message?: undefined
+      error?: undefined
+      redirectUrl?: undefined
+    }
   | { message: string; success?: undefined; error?: undefined; redirectUrl?: undefined }
   | { error: string; message?: undefined; success?: undefined; redirectUrl?: undefined }
 
@@ -82,8 +93,16 @@ export async function signIn(prevState: any, formData: FormData): Promise<SignIn
     })
   }
 
-  // Return success instead of using redirect() to avoid the Response.clone error
-  return { success: true }
+  // Return success and session tokens so client can set the session and trigger onAuthStateChange
+  const sessionTokens =
+    data.session?.access_token && data.session.refresh_token
+      ? {
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        }
+      : undefined
+
+  return { success: true, session: sessionTokens }
 }
 
 export async function signInWithGoogle(): Promise<SignInWithGoogleResponse> {

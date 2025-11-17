@@ -2,6 +2,7 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import type { Database } from "@/types/supabase"
 import {
   SESSION_VERSION_COOKIE,
   SESSION_VERSION_COOKIE_CLEAR_OPTIONS,
@@ -43,7 +44,7 @@ export async function middleware(req: NextRequest) {
   try {
     // Create response first, then pass to middleware client
     const res = NextResponse.next()
-    const supabase = createServerClient(
+    const supabase = createServerClient<Database>(
       process.env.NEXT_PUBLIC_SUPABASE_URL || "",
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
       {
@@ -84,35 +85,64 @@ export async function middleware(req: NextRequest) {
       res.cookies.set(SESSION_VERSION_COOKIE, "", SESSION_VERSION_COOKIE_CLEAR_OPTIONS)
     }
 
-    // Only query database if user is authenticated AND accessing protected routes or admin routes
-    if (sessionUserId && (isProtected || isAdminRoute)) {
-      logMiddlewareEvent(pathname, "Validating session", { userId: sessionUserId })
+    // Only query database if user is authenticated AND accessing ADMIN routes
+    // For regular protected routes, trust Supabase session (no DB query needed)
+    if (sessionUserId && isAdminRoute) {
+      logMiddlewareEvent(pathname, "Validating admin access", { userId: sessionUserId })
 
       const { data: userRow, error: userError } = await supabase
         .from("users")
-        .select("roli, session_version")
+        .select("roli")
         .eq("id", sessionUserId)
         .single()
 
       if (userError || !userRow) {
-        logMiddlewareEvent(pathname, "Session validation failed", {
+        logMiddlewareEvent(pathname, "Admin validation failed", {
           error: userError?.message ?? "User not found",
         })
-        // Don't redirect here, let the route handle missing user
-      } else {
-        const userRole = userRow.roli
-        const dbSessionVersion = userRow.session_version
-        const dbVersionString = String(dbSessionVersion)
+        return NextResponse.redirect(new URL(`/${locale}/login?message=Unauthorized`, req.url))
+      }
 
-        logMiddlewareEvent(pathname, "Session validated", {
-          dbVersion: dbVersionString,
-          cookieVersion: cookieSessionVersion,
+      const userRole = userRow.roli
+      logMiddlewareEvent(pathname, "Admin access check", { role: userRole })
+
+      // Admin route access control
+      if (!userRole?.includes("Admin")) {
+        logMiddlewareEvent(pathname, "Unauthorized admin access", {
+          userId: sessionUserId,
           role: userRole,
         })
 
-        // Session version mismatch indicates concurrent login - force re-login
-        if (cookieSessionVersion && cookieSessionVersion !== dbVersionString) {
-          logMiddlewareEvent(pathname, "Session version mismatch - logging out", {
+        return NextResponse.redirect(new URL(`/${locale}/login?message=Unauthorized`, req.url))
+      }
+    }
+
+    // Session version validation: ONLY if accessing protected routes
+    // This detects concurrent logins (cookie exists and differs from DB)
+    if (sessionUserId && isProtected && cookieSessionVersion) {
+      logMiddlewareEvent(pathname, "Checking session version", {
+        userId: sessionUserId,
+        cookieVersion: cookieSessionVersion,
+      })
+
+      const { data: userRow, error: userError } = await supabase
+        .from("users")
+        .select("session_version")
+        .eq("id", sessionUserId)
+        .single()
+
+      if (userError || !userRow) {
+        logMiddlewareEvent(pathname, "Session version check failed", {
+          error: userError?.message ?? "User not found",
+        })
+        // Continue - let the route handle missing user
+      } else {
+        const dbVersionString = String(userRow.session_version)
+
+        // IMPORTANT: Only force logout if cookie EXISTS and DIFFERS
+        // (missing cookie is normal on first request, don't treat as threat)
+        if (cookieSessionVersion !== dbVersionString) {
+          logMiddlewareEvent(pathname, "Session version mismatch (possible concurrent login)", {
             cookieVersion: cookieSessionVersion,
             dbVersion: dbVersionString,
           })
@@ -135,33 +165,30 @@ export async function middleware(req: NextRequest) {
 
           return redirectResponse
         }
+      }
+    }
 
-        // Sync cookie with database session version
-        if (!cookieSessionVersion || cookieSessionVersion !== dbVersionString) {
-          logMiddlewareEvent(pathname, "Syncing session version cookie", {
-            old: cookieSessionVersion,
-            new: dbVersionString,
-          })
-          res.cookies.set(SESSION_VERSION_COOKIE, dbVersionString, SESSION_VERSION_COOKIE_OPTIONS)
-          res.cookies.set(AUTH_STATE_COOKIE, "authenticated", AUTH_STATE_COOKIE_OPTIONS)
-        }
+    // Sync session version cookie on first login (when cookie is missing)
+    if (sessionUserId && !cookieSessionVersion) {
+      logMiddlewareEvent(pathname, "Syncing session version cookie (first request)")
 
-        // Admin route access control
-        if (isAdminRoute && !userRole?.includes("Admin")) {
-          logMiddlewareEvent(pathname, "Unauthorized admin access", {
-            userId: sessionUserId,
-            role: userRole,
-          })
+      const { data: userRow } = await supabase
+        .from("users")
+        .select("session_version")
+        .eq("id", sessionUserId)
+        .single()
 
-          return NextResponse.redirect(new URL(`/${locale}/login?message=Unauthorized`, req.url))
-        }
+      if (userRow) {
+        const dbVersionString = String(userRow.session_version)
+        res.cookies.set(SESSION_VERSION_COOKIE, dbVersionString, SESSION_VERSION_COOKIE_OPTIONS)
+        res.cookies.set(AUTH_STATE_COOKIE, "authenticated", AUTH_STATE_COOKIE_OPTIONS)
       }
     }
 
     if (isProtected && !hasSession) {
       logMiddlewareEvent(pathname, "Protected route - no session")
       const redirectUrl = req.nextUrl.clone()
-      redirectUrl.pathname = `/${locale}/auth/login`
+      redirectUrl.pathname = `/${locale}/login`
       redirectUrl.searchParams.set("redirectedFrom", pathname)
       return NextResponse.redirect(redirectUrl)
     }

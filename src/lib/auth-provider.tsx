@@ -14,6 +14,8 @@ import {
 import { useRouter, useSearchParams } from "next/navigation"
 import { useLocale } from "next-intl"
 import type { User, AuthResponse, SignInWithPasswordCredentials } from "@supabase/supabase-js"
+import type { SupabaseClient } from "@supabase/supabase-js"
+import type { Database } from "@/types/supabase"
 import { createClientSupabaseClient } from "@/lib/supabase"
 import { createSignOutHandler } from "@/lib/auth/signout-handler"
 import { logAuthAction } from "@/lib/auth/logging"
@@ -36,7 +38,7 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
-const SupabaseContext = createContext<ReturnType<typeof createClientSupabaseClient> | null>(null)
+const SupabaseContext = createContext<SupabaseClient<Database> | null>(null)
 
 interface AuthProviderProps {
   children: React.ReactNode
@@ -188,6 +190,25 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
   useEffect(() => {
     sessionExpirationHandler.handleSessionExpired(searchParams)
   }, [searchParams, sessionExpirationHandler])
+
+  // Keep server-rendered routes in sync with auth changes
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "TOKEN_REFRESHED") {
+        try {
+          router.refresh()
+        } catch (e) {
+          // ignore refresh errors in client
+        }
+      }
+    })
+
+    return () => {
+      if (data?.subscription) {
+        data.subscription.unsubscribe()
+      }
+    }
+  }, [supabase, router])
 
   // Create sign out function
   const signOut = useMemo(

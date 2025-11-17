@@ -35,6 +35,7 @@ describe("createSignOutHandler", () => {
     const handler = createSignOutHandler({
       supabase: supabase as any,
       router: router as any,
+      locale: "en",
       resetAuthState,
       signOutInFlightRef,
       setSignOutPending,
@@ -43,7 +44,7 @@ describe("createSignOutHandler", () => {
     await handler()
 
     expect(resetAuthState).toHaveBeenCalled()
-    expect(window.location.replace).toHaveBeenCalledWith("/login")
+    expect(window.location.replace).toHaveBeenCalledWith("/en/login")
     expect(supabase.auth.signOut).toHaveBeenCalledWith({ scope: "local" })
     expect(global.fetch).toHaveBeenCalledWith(
       "/api/auth/signout",
@@ -56,6 +57,7 @@ describe("createSignOutHandler", () => {
     const handler = createSignOutHandler({
       supabase: supabase as any,
       router: router as any,
+      locale: "en",
       resetAuthState,
       signOutInFlightRef,
       setSignOutPending,

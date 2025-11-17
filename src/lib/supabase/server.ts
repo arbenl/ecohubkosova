@@ -1,5 +1,7 @@
 import { cookies } from "next/headers"
 import { createServerClient } from "@supabase/ssr"
+import type { SupabaseClient } from "@supabase/supabase-js"
+import type { Database } from "@/types/supabase"
 
 export { createCachedServerSupabaseClient, getServerUser } from "@/lib/supabase-server"
 
@@ -8,16 +10,16 @@ export { createCachedServerSupabaseClient, getServerUser } from "@/lib/supabase-
  * Uses cookies to manage the session without caching to ensure auth cookies
  * can be set per-request (important for sign-in/out/auth flows).
  *
- * @returns Promise<SupabaseClient>
+ * @returns Promise<SupabaseClient<Database>>
  *
  * Usage:
  * - Route Handlers (API routes)
  * - Server Actions
  * - Route handlers that need fresh auth state
  */
-export const createServerSupabaseClient = async () => {
+export const createServerSupabaseClient = async (): Promise<SupabaseClient<Database>> => {
   const cookieStore = await cookies()
-  return createServerClient(
+  return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL || "",
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
     {

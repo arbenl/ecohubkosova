@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useState } from "react"
-import { deleteOrganization, updateOrganization } from "@/app/[locale]/(private)/admin/organizations/actions"
+import { deleteOrganization, updateOrganization } from "@/app/[locale]/(protected)/admin/organizations/actions"
 import type { AdminOrganizationUpdateInput } from "@/validation/admin"
 
 export interface AdminOrganization {

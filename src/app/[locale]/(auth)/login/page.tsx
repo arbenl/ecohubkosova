@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { signIn, signInWithGoogle } from "./actions"
 import type { Locale } from "@/lib/locales"
+import { useSupabase } from "@/lib/auth-provider"
 
 function SubmitButton({ isSubmitting }: { isSubmitting: boolean }) {
   return (
@@ -75,6 +76,7 @@ function GoogleSignInButton({ isSubmitting }: { isSubmitting: boolean }) {
 export default function KycuPage() {
   const router = useRouter()
   const locale = useLocale() as Locale
+  const supabase = useSupabase()
   const searchParams = useSearchParams()
   const message = searchParams.get("message")
   const [error, setError] = useState<string>("")
@@ -109,9 +111,25 @@ export default function KycuPage() {
 
       // Handle successful login
       if (result.success === true) {
+        // If the server returned session tokens, set them on the client
+        if ((result as any).session && supabase) {
+          try {
+            await supabase.auth.setSession((result as any).session)
+          } catch (e) {
+            // ignore setSession errors here; fallback to full refresh
+          }
+        }
+
         redirectInProgressRef.current = true
         // Give the browser a moment to update state before redirecting
         await new Promise((resolve) => setTimeout(resolve, 100))
+        // Refresh RSC tree so middleware and server layouts see new cookies/session
+        try {
+          router.refresh()
+        } catch (e) {
+          /* ignore */
+        }
+
         router.push(`/${locale}/dashboard`)
       }
     } catch (err) {

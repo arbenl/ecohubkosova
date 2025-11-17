@@ -31,9 +31,24 @@ if (supabaseHttpsHost) {
   connectSrc.push(supabaseHttpsHost)
 }
 
-// Secure CSP without 'unsafe-inline' and 'unsafe-eval'
-// Uses strict-dynamic for Next.js inline scripts
-const csp = [
+// Content Security Policy
+// - In production: strict, nonce-based scripts (requires headers to provide a real nonce)
+// - In development: PERMISSIVE to support Next.js Turbopack (HMR, inline scripts, eval, dynamic imports)
+const isProd = process.env.NODE_ENV === 'production'
+const isDev = !isProd
+
+const devConnectSrc = [
+  ...connectSrc,
+  'http://localhost:*',
+  'http://127.0.0.1:*',
+  'ws://localhost:*',
+  'ws://127.0.0.1:*',
+  'wss://localhost:*',
+  'wss://127.0.0.1:*',
+]
+
+// Production CSP: strict, but allows Next.js compiled bundles
+const prodCsp = [
   "default-src 'self';",
   "script-src 'self' 'strict-dynamic' 'nonce-{nonce}';",
   "style-src 'self';",
@@ -43,7 +58,30 @@ const csp = [
   "frame-ancestors 'none';",
   "base-uri 'self';",
   "form-action 'self';",
-].join(" ")
+].join(' ')
+
+// Development CSP: very permissive for Turbopack/HMR/hot reload
+// Note: 'unsafe-eval' is needed for Turbopack and React Refresh dev transforms
+const devCsp = [
+  "default-src 'self' blob: data: http: https:;",
+  // 'unsafe-eval' needed for Turbopack transforms + HMR
+  // 'unsafe-inline' needed for inline React + Next dev scripts
+  // blob: needed for web workers and dynamic module loading
+  "script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: data: http: https:;",
+  // 'unsafe-inline' needed for injected dev styles + HMR
+  "style-src 'self' 'unsafe-inline' blob: data:;",
+  `img-src ${imageSrc.join(" ")} blob: data: http: https:;`,
+  "font-src 'self' data: blob:;",
+  `connect-src ${devConnectSrc.join(" ")} blob:;`,
+  "media-src 'self' data: blob: http: https:;",
+  "frame-ancestors 'none';",
+  "base-uri 'self';",
+  "form-action 'self';",
+  // Allow child frames for dev tools
+  "frame-src 'self' data: blob:;",
+].join(' ')
+
+const csp = isProd ? prodCsp : devCsp
 
 const securityHeaders = [
   {

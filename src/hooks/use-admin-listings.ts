@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useState } from "react"
-import { deleteListing, updateListing } from "@/app/[locale]/(private)/admin/listings/actions"
+import { deleteListing, updateListing } from "@/app/[locale]/(protected)/admin/listings/actions"
 
 export interface AdminListing {
   id: string
