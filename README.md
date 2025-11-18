@@ -1,13 +1,37 @@
 # EcoHub Kosova
 
-EcoHub Kosova is a Next.js App Router project that powers a circular-economy portal for listings, organizations, knowledge-base articles, and administrative workflows. The app is built with PNPM, TypeScript, Tailwind CSS + shadcn/ui, and Supabase for auth/data.
+EcoHub Kosova is a Next.js App Router project that powers a circular-economy portal for listings, organizations, knowledge-base articles, and administrative workflows. The app features a dynamic header system, robust database error handling, and comprehensive internationalization support.
 
 ## Tech Stack
 
-- **Framework:** Next.js 14 (App Router, TypeScript, Server Components)
+- **Framework:** Next.js 16+ (App Router, TypeScript, Server Components)
 - **UI:** Tailwind CSS, shadcn/ui, lucide-react icons
-- **Data/Auth:** Supabase client + auth helpers
-- **Tooling:** PNPM, ESLint (`next/core-web-vitals`), TypeScript strict mode
+- **Data/Auth:** Supabase client + auth helpers, Drizzle ORM
+- **Internationalization:** Next-intl for locale-aware routing
+- **Tooling:** PNPM, ESLint (`next/core-web-vitals`), TypeScript strict mode, MCP Context Server
+- **Testing:** Vitest, React Testing Library, Playwright (E2E)
+
+## Key Features
+
+### 🚀 Dynamic Header System
+- **Zero DB Errors**: Header detects auth state without triggering database calls on public pages
+- **Responsive Design**: Clean, modern navigation that adapts to user authentication status
+- **Performance Optimized**: Lazy profile loading prevents unnecessary API calls
+
+### 🛡️ Robust Database Error Handling
+- **Smart Error Classification**: `dbUnavailable` flag distinguishes connection vs logic errors
+- **Selective Error Display**: Database banners only show for actual connection failures
+- **Graceful Degradation**: App remains functional during temporary database outages
+
+### 🌐 Internationalization
+- **Locale-Aware Routing**: Proper Next.js Link components with locale preservation
+- **Multi-Language Support**: Seamless navigation between login/register pages
+- **Clean Auth Forms**: Removed heavy shadows for modern, accessible design
+
+### 🔧 Developer Experience
+- **MCP Context Server**: AI-powered code analysis and semantic search
+- **QA Automation**: Comprehensive testing scripts (`qa-full.sh`, `qa-quick.sh`)
+- **Component Architecture**: Well-organized layout wrappers and service layers
 
 ## Getting Started
 
@@ -32,20 +56,33 @@ The app runs on [http://localhost:3000](http://localhost:3000).
 | Command        | Description                                  |
 | -------------- | -------------------------------------------- |
 | `pnpm dev`     | Start the Next.js development server         |
-| `pnpm lint`    | Run ESLint with the Next.js config           |
-| `pnpm test`    | Placeholder hook (replace with real tests)   |
 | `pnpm build`   | Create a production build (lint+type checks) |
 | `pnpm start`   | Start the production server (`pnpm build` first) |
+| `pnpm lint`    | Run ESLint with the Next.js config           |
+| `pnpm format`  | Format code with Prettier                    |
+| `pnpm format:check` | Check Prettier formatting                    |
+| `pnpm test`    | Run Vitest unit/component tests              |
+| `pnpm test:watch` | Watch mode for Vitest during development    |
+| `pnpm test:e2e` | Run Playwright end-to-end tests              |
+| `pnpm qa:quick` | Quick QA check (build, auth, navigation, etc.) |
+| `pnpm qa:full` | Full QA suite with MCP server validation     |
+| `pnpm check:src-structure` | Validate source code organization            |
+| `pnpm drizzle:generate` | Generate Drizzle types from schema           |
+| `pnpm db:sync` | Sync database schema and regenerate types    |
 
 > **Note:** `pnpm build` currently requires network access to download Google Fonts (Inter) the first time it runs.
 
 ## Project Structure Highlights
 
-- `app/` – App Router routes for pages (home, auth, admin, marketplace, etc.).
-- `components/` – Shared UI components (header/footer, listings, shadcn/ui exports).
-- `lib/` – Supabase client, auth provider, utilities.
-- `docs/roadmap.md` – High-level roadmap of upcoming initiatives.
-- `docs/next-session-specs.md` – The short-term TODO list for the next coding session.
+- `src/app/` – App Router routes organized by route groups: `(site)`, `(protected)`, `(auth)`
+- `src/components/layout/` – Layout components including dynamic header and sidebar layouts
+- `src/components/` – Shared UI components (shadcn/ui exports, listings, profiles)
+- `src/lib/` – Supabase client, auth provider, profile services, and utilities
+- `src/services/` – Business logic layer with admin, public, and profile services
+- `src/hooks/` – Custom React hooks for data fetching and state management
+- `tools/` – MCP servers and QA automation tools
+- `supabase/migrations/` – Database schema migrations
+- `.todo/` – Development planning and task tracking
 
 ### Source Layout Guardrail
 
@@ -54,6 +91,20 @@ All feature code lives under `src/**`. The shadcn UI generator (`components.json
 ```bash
 pnpm check:src-structure
 ```
+
+### QA & Testing Tools
+
+The project includes comprehensive QA automation:
+
+```bash
+# Quick QA check (build, auth, navigation, runtime, Supabase, env)
+pnpm qa:quick
+
+# Full QA suite (includes database queries, MCP server health)
+pnpm qa:full
+```
+
+These scripts use the EcoHub QA MCP Server for automated testing and validation.
 
 ## Database & Supabase CLI
 
@@ -115,11 +166,27 @@ Consider wiring `pnpm format` into a pre-commit hook (e.g., via Husky) if you pr
 
 ## Roadmap / Next Steps
 
-See `docs/roadmap.md` and `docs/next-session-specs.md` for the current plan. Highlights include:
+See `ARCHITECTURE_VISION_V6.md`, `ARCHITECTURE_ROADMAP_V3.md`, and other documentation files for the current plan. Recent major accomplishments include:
 
-- Moving Supabase CRUD into server actions/route handlers to secure API access.
-- Adding automated tests (Vitest/Playwright) and CI workflows.
-- Planning the eventual move back to React 19 / Next 15 once upstream libraries support it.
+### ✅ Recently Completed
+- **Dynamic Header System**: Zero DB errors on public pages with responsive auth-aware navigation
+- **Robust DB Error Handling**: Smart error classification and selective banner display
+- **Auth Flow Optimization**: Clean public pages with proper locale-aware navigation
+- **Component Architecture**: Improved layout organization and service layer separation
+- **QA Automation**: Comprehensive testing scripts with MCP server integration
+
+### 🔄 Upcoming Initiatives
+- Enhanced E2E testing coverage with Playwright
+- Performance optimizations and bundle analysis
+- Advanced admin dashboard features
+- Mobile responsiveness improvements
+- API rate limiting and security enhancements
+
+### 📚 Documentation
+- `AUTH_PROFILE_HARDENING_COMPLETE.md` – Authentication system hardening details
+- `MCP_NATURAL_LANGUAGE_GUIDE.md` – MCP context server usage guide
+- `MCP_SERVERS_INTEGRATION_GUIDE.md` – MCP server integration patterns
+- `ARCHITECTURE_*` files – Comprehensive system architecture documentation
 
 ## License
 
