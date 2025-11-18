@@ -32,18 +32,16 @@ export async function requireAdminRole() {
     redirect(`/${locale}/login?message=Ju duhet të kyçeni për të vazhduar.`)
   }
 
-  const profiles = await db
-    .get()
-    .select({ roli: users.roli })
-    .from(users)
-    .where(eq(users.id, user.id))
-    .limit(1)
-  const profile = profiles[0]
-  const role = profile?.roli ?? null
+  const records = await db.get().select().from(users).where(eq(users.id, user.id)).limit(1)
+  const userRecord = records[0]
 
-  if (role !== "Admin") {
+  if (!userRecord) {
     redirect(`/${locale}/login?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`)
   }
 
-  return { user, role }
+  if (userRecord.role !== "Admin") {
+    redirect(`/${locale}/login?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`)
+  }
+
+  return { user, role: userRecord.role }
 }

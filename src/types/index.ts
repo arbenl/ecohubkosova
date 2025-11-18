@@ -5,25 +5,25 @@ import type { User as SupabaseAuthUser } from "@supabase/supabase-js"
 // User Profile Interface
 export interface UserProfile {
   id: string
-  emri_i_plote: string
+  full_name: string
   email: string
-  vendndodhja: string
-  roli: string // e.g., "Individ", "Admin", "Organizational"
-  eshte_aprovuar: boolean
+  location: string
+  role: string // e.g., "Individ", "Admin", "Organizational"
+  is_approved: boolean
   created_at: string
 }
 
 // Organization Interface
 export interface Organization {
   id: string
-  emri: string
-  pershkrimi: string
-  interesi_primar: string
-  person_kontakti: string
-  email_kontakti: string
-  vendndodhja: string
-  lloji: string // e.g., "OJQ", "Ndërmarrje Sociale", "Kompani"
-  eshte_aprovuar: boolean
+  name: string
+  description: string
+  primary_interest: string
+  contact_person: string
+  contact_email: string
+  location: string
+  type: string // e.g., "OJQ", "Ndërmarrje Sociale", "Kompani"
+  is_approved: boolean
   created_at: string
   updated_at: string | null
 }
@@ -31,46 +31,46 @@ export interface Organization {
 // Listing Interface for tregu_listime
 export interface Listing {
   id: string
-  titulli: string
-  pershkrimi: string
+  title: string
+  description: string
   foto_url: string | null
-  cmimi: number | null // Use 'c' to match database column name and 'number | null' for consistency
-  monedha: string | null
-  kategori: string
-  gjendja: string
-  vendndodhja: string
-  kontakti: string // The contact information for the listing
+  price: number | null
+  currency: string | null
+  category: string
+  condition: string
+  location: string
+  contact: string // The contact information for the listing
   created_at: string
   user_id: string
-  eshte_publikuar: boolean
+  is_published: boolean
   // Joined relations
   users?: {
-    emri_i_plote: string
+    full_name: string
     email?: string // Include email for contact if necessary
   }
   organizations?: {
-    emri: string
-    email_kontakti?: string // Include email for contact if necessary
+    name: string
+    contact_email?: string // Include email for contact if necessary
   }
   // This type is used by the full listing details, which might include these
-  sasia: string
-  njesia: string
-  lloji_listimit: "shes" | "blej"
+  quantity: string
+  unit: string
+  listing_type: "shes" | "blej"
 }
 
 // Dashboard Specific Article and Partner Interfaces
 export interface DashboardArticle {
   id: string
-  titulli: string
+  title: string
   users?: {
-    emri_i_plote?: string | null
+    full_name?: string | null
   } | null
 }
 
 export interface KeyPartner {
   id: string
-  emri: string
-  pershkrimi: string
-  vendndodhja: string
-  lloji?: string | null
+  name: string
+  description: string
+  location: string
+  type?: string | null
 }

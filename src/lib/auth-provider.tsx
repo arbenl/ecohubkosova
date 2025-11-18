@@ -97,11 +97,19 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
   // Refresh user profile
   const refreshUserProfile = useCallback(async () => {
     if (user) {
-      logAuthAction("refreshUserProfile", "Refreshing profile", { userId: user.id })
-      const profileResult = await profileManager.fetchUserProfile(user.id)
-      const fetchedProfile = profileResult.profile
-      setUserProfile(fetchedProfile)
-      setIsAdmin(fetchedProfile?.roli === "Admin")
+      try {
+        logAuthAction("refreshUserProfile", "Refreshing profile", { userId: user.id })
+        const profileResult = await profileManager.fetchUserProfile(user.id)
+        const fetchedProfile = profileResult.profile
+        setUserProfile(fetchedProfile)
+        setIsAdmin(fetchedProfile?.role === "Admin")
+      } catch (error) {
+        logAuthAction("refreshUserProfile", "Error refreshing profile", {
+          userId: user.id,
+          error: error instanceof Error ? error.message : String(error),
+        })
+        // Don't throw - just keep existing state
+      }
     }
   }, [user, profileManager])
 
@@ -122,24 +130,12 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
 
       logAuthAction("hydrateUser", "Hydrating user", { userId: nextUser.id })
       setUser(nextUser)
-      setIsLoading(true)
+      setIsLoading(false) // Don't load profile automatically
+      userStateManager.hydrateUser(nextUser, null) // No profile
 
-      try {
-        const profileResult = await profileManager.fetchUserProfile(nextUser.id)
-        const fetchedProfile = profileResult.profile
-        userStateManager.hydrateUser(nextUser, fetchedProfile)
-
-        logAuthAction("hydrateUser", "User hydrated successfully", {
-          userId: nextUser.id,
-          hasProfile: !!fetchedProfile,
-        })
-      } catch (error) {
-        logAuthAction("hydrateUser", "Error hydrating user", {
-          userId: nextUser.id,
-          error: error instanceof Error ? error.message : String(error),
-        })
-        userStateManager.clearUser()
-      }
+      logAuthAction("hydrateUser", "User hydrated successfully (no profile)", {
+        userId: nextUser.id,
+      })
     },
     [profileManager, userStateManager, signOutInFlightRef]
   )

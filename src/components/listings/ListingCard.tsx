@@ -58,7 +58,7 @@ export const ListingCard = memo(function ListingCard({
         <div className="relative h-40 w-full overflow-hidden bg-muted">
           <Image
             src={listing.foto_url}
-            alt={listing.titulli}
+            alt={listing.title}
             fill
             className="object-cover transition-transform hover:scale-105"
             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
@@ -74,25 +74,25 @@ export const ListingCard = memo(function ListingCard({
       {/* Header Section - Title, Price, Location */}
       <CardHeader className="space-y-2 pb-3">
         <h3 className="font-semibold line-clamp-2 text-sm leading-snug">
-          {listing.titulli}
+          {listing.title}
         </h3>
 
         {/* Price Display */}
-        {listing.cmimi !== undefined && listing.cmimi !== null && (
+        {listing.price !== undefined && listing.price !== null && (
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold text-green-600">
-              {listing.cmimi.toLocaleString()}
+              {listing.price.toLocaleString()}
             </span>
             <span className="text-sm text-muted-foreground">
-              {listing.monedha || "€"}
+              {listing.currency || "€"}
             </span>
           </div>
         )}
 
         {/* Location Display */}
-        {listing.vendndodhja && (
+        {listing.location && (
           <p className="text-xs text-muted-foreground truncate">
-            📍 {listing.vendndodhja}
+            📍 {listing.location}
           </p>
         )}
       </CardHeader>
@@ -100,9 +100,9 @@ export const ListingCard = memo(function ListingCard({
       {/* Content Section - Description & Action */}
       <CardContent className="space-y-3 pt-0">
         {/* Description Preview */}
-        {listing.pershkrimi && (
+        {listing.description && (
           <p className="text-xs text-muted-foreground line-clamp-2">
-            {listing.pershkrimi}
+            {listing.description}
           </p>
         )}
 
@@ -112,7 +112,7 @@ export const ListingCard = memo(function ListingCard({
           size="sm"
           className="w-full gap-2"
           onClick={handleClick}
-          aria-label={`Contact seller of ${listing.titulli}`}
+          aria-label={`Contact seller of ${listing.title}`}
         >
           <Mail className="h-4 w-4" />
           <span>Kontakto</span>
@@ -120,16 +120,16 @@ export const ListingCard = memo(function ListingCard({
       </CardContent>
 
       {/* Metadata Section - Category & Condition */}
-      {(listing.kategori || listing.gjendja) && (
+      {(listing.category || listing.condition) && (
         <div className="px-4 pb-3 flex gap-2 flex-wrap">
-          {listing.kategori && (
+          {listing.category && (
             <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">
-              {listing.kategori}
+              {listing.category}
             </span>
           )}
-          {listing.gjendja && (
+          {listing.condition && (
             <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">
-              {listing.gjendja}
+              {listing.condition}
             </span>
           )}
         </div>

@@ -11,16 +11,16 @@ import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_OPTIONS } from "@/lib/au
 type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani"
 
 interface RegistrationFormData {
-  emri_i_plote: string
+  full_name: string
   email: string
   password: string
-  vendndodhja: string
-  roli: UserRole
-  emri_organizates?: string
-  pershkrimi_organizates?: string
-  interesi_primar?: string
-  person_kontakti?: string
-  email_kontakti?: string
+  location: string
+  role: UserRole
+  organization_name?: string
+  organization_description?: string
+  primary_interest?: string
+  contact_person?: string
+  contact_email?: string
   newsletter: boolean
 }
 
@@ -40,8 +40,8 @@ export async function registerUser(formData: RegistrationFormData) {
       password: payload.password,
       options: {
         data: {
-emri_i_plote: payload.emri_i_plote,
-          roli: payload.roli,
+          full_name: payload.full_name,
+          role: payload.role,
         },
       },
     })
@@ -66,26 +66,26 @@ emri_i_plote: payload.emri_i_plote,
         .insert(users)
         .values({
           id: userId,
-          emri_i_plote: payload.emri_i_plote,
+          full_name: payload.full_name,
           email: payload.email,
-          vendndodhja: payload.vendndodhja,
-          roli: "Individ",
-          eshte_aprovuar: payload.roli === "Individ",
+          location: payload.location,
+          role: "Individ",
+          is_approved: payload.role === "Individ",
         })
         .onConflictDoNothing({ target: users.id })
 
-      if (payload.roli !== "Individ") {
+      if (payload.role !== "Individ") {
         const [organization] = await tx
           .insert(organizations)
           .values({
-            emri: payload.emri_organizates!,
-            pershkrimi: payload.pershkrimi_organizates!,
-            interesi_primar: payload.interesi_primar!,
-            person_kontakti: payload.person_kontakti!,
-            email_kontakti: payload.email_kontakti!,
-            vendndodhja: payload.vendndodhja,
-            lloji: payload.roli,
-            eshte_aprovuar: false,
+            name: payload.organization_name!,
+            description: payload.organization_description!,
+            primary_interest: payload.primary_interest!,
+            contact_person: payload.contact_person!,
+            contact_email: payload.contact_email!,
+            location: payload.location,
+            type: payload.role,
+            is_approved: false,
           })
           .returning({ id: organizations.id })
 
@@ -96,8 +96,8 @@ emri_i_plote: payload.emri_i_plote,
         await tx.insert(organizationMembers).values({
           organization_id: organization.id,
           user_id: userId,
-          roli_ne_organizate: "themelues",
-          eshte_aprovuar: true,
+          role_in_organization: "themelues",
+          is_approved: true,
         })
       }
     })

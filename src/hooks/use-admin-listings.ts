@@ -2,23 +2,9 @@
 
 import { useCallback, useState } from "react"
 import { deleteListing, updateListing } from "@/app/[locale]/(protected)/admin/listings/actions"
+import type { AdminListing } from "@/services/admin/listings"
 
-export interface AdminListing {
-  id: string
-  created_by_user_id: string
-  organization_id: string | null
-  titulli: string
-  pershkrimi: string
-  kategori: string
-  cmimi: number
-  njesia: string
-  vendndodhja: string
-  sasia: string
-  lloji_listimit: string
-  eshte_aprovuar: boolean
-  created_at: string
-  updated_at: string | null
-}
+export type { AdminListing } from "@/services/admin/listings"
 
 type UpdateResponse = { error?: string } | void
 

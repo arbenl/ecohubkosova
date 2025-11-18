@@ -8,24 +8,24 @@ import { getProfileData } from "./actions"
 // For now, we'll trust the types from the action.
 interface UserProfile {
   id: string
-  emri_i_plote: string
+  full_name: string
   email: string
-  vendndodhja: string
-  roli: string
-  eshte_aprovuar: boolean
+  location: string
+  role: string
+  is_approved: boolean
   created_at: string
 }
 
 interface Organization {
   id: string
-  emri: string
-  pershkrimi: string
-  interesi_primar: string
-  person_kontakti: string
-  email_kontakti: string
-  vendndodhja: string
-  lloji: string
-  eshte_aprovuar: boolean
+  name: string
+  description: string
+  primary_interest: string
+  contact_person: string
+  contact_email: string
+  location: string
+  type: string
+  is_approved: boolean
 }
 
 export default async function ProfiliPage() {

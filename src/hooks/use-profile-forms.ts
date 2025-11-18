@@ -31,8 +31,8 @@ export function useUserProfileForm({
   submit: SubmitUserProfile
 }) {
   const [formData, setFormData] = useState<UserProfileUpdateInput>({
-    emri_i_plote: initialFullName,
-    vendndodhja: initialLocation,
+    full_name: initialFullName,
+    location: initialLocation,
   })
   const [fieldErrors, setFieldErrors] = useState<
     Partial<Record<keyof UserProfileUpdateInput, string>>
@@ -61,8 +61,8 @@ export function useUserProfileForm({
       if (!parsed.success) {
         const { fieldErrors } = parsed.error.flatten()
         setFieldErrors({
-          emri_i_plote: fieldErrors.emri_i_plote?.[0],
-          vendndodhja: fieldErrors.vendndodhja?.[0],
+          full_name: fieldErrors.full_name?.[0],
+          location: fieldErrors.location?.[0],
         })
         setError("Kontrolloni fushat e shënuara dhe provoni përsëri.")
         setSaving(false)
@@ -134,12 +134,12 @@ export function useOrganizationProfileForm({
       if (!parsed.success) {
         const { fieldErrors } = parsed.error.flatten()
         setFieldErrors({
-          emri: fieldErrors.emri?.[0],
-          pershkrimi: fieldErrors.pershkrimi?.[0],
-          interesi_primar: fieldErrors.interesi_primar?.[0],
-          person_kontakti: fieldErrors.person_kontakti?.[0],
-          email_kontakti: fieldErrors.email_kontakti?.[0],
-          vendndodhja: fieldErrors.vendndodhja?.[0],
+          name: fieldErrors.name?.[0],
+          description: fieldErrors.description?.[0],
+          primary_interest: fieldErrors.primary_interest?.[0],
+          contact_person: fieldErrors.contact_person?.[0],
+          contact_email: fieldErrors.contact_email?.[0],
+          location: fieldErrors.location?.[0],
         })
         setError("Kontrolloni fushat e shënuara dhe provoni përsëri.")
         setSaving(false)

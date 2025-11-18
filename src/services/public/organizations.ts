@@ -4,33 +4,33 @@ import { organizations } from "@/db/schema"
 
 export type PublicOrganization = {
   id: string
-  emri: string
-  pershkrimi: string
-  interesi_primar: string
-  person_kontakti: string
-  email_kontakti: string
-  vendndodhja: string
-  lloji: string
+  name: string
+  description: string
+  primary_interest: string
+  contact_person: string
+  contact_email: string
+  location: string
+  type: string
   created_at: string
   updated_at: string | null
 }
 
 export type PublicOrganizationFilters = {
-  lloji?: string
+  type?: string
   search?: string
 }
 
 export async function fetchPublicOrganizations(filters: PublicOrganizationFilters = {}) {
   try {
-    const conditions = [eq(organizations.eshte_aprovuar, true)]
+    const conditions = [eq(organizations.is_approved, true)]
 
-    if (filters.lloji) {
-      conditions.push(eq(organizations.lloji, filters.lloji))
+    if (filters.type) {
+      conditions.push(eq(organizations.type, filters.type))
     }
 
     if (filters.search) {
       const term = `%${filters.search}%`
-      conditions.push(ilike(organizations.emri, term))
+      conditions.push(ilike(organizations.name, term))
     }
 
     const rows = await db

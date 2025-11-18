@@ -21,7 +21,7 @@ export function LandingAuthPanel() {
         <div>
           <p className="text-sm font-medium text-emerald-700">I kyçur si</p>
           <p className="text-lg font-semibold text-gray-900">
-            {userProfile?.emri_i_plote || user.email?.split("@")[0] || "Përdorues"}
+            {userProfile?.full_name || user.email?.split("@")[0] || "Përdorues"}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">

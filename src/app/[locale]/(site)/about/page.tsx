@@ -16,6 +16,13 @@ export default function RrethNeshPage() {
               Njihuni me Misionin Tonë
             </div>
 
+            <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-8">
+              Rreth{" "}
+              <span className="bg-gradient-to-r from-emerald-500 to-emerald-700 bg-clip-text text-transparent">
+                Nesh
+              </span>
+            </h1>
+
             <p className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto mb-12 leading-relaxed">
               ECO HUB KOSOVA është platforma e parë e ekonomisë qarkulluese në Kosovë, e krijuar për të lidhur
               partnerët, promovuar bashkëpunimin dhe ndërtuar një ekonomi të qëndrueshme.

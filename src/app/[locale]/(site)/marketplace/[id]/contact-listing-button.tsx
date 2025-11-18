@@ -9,14 +9,14 @@ import type { Locale } from "@/lib/locales"
 
 interface Listing {
   id: string
-  titulli: string
+  title: string
   users?: {
-    emri_i_plote: string
+    full_name: string
     email?: string
   }
   organizations?: {
-    emri: string
-    email_kontakti?: string
+    name: string
+    contact_email?: string
   }
 }
 
@@ -53,12 +53,12 @@ export default function ContactListingButton({ listing, user }: ContactListingBu
               <div className="space-y-3">
                 <div>
                   <span className="font-medium text-gray-700">Organizata:</span>
-                  <p className="text-lg">{listing.organizations.emri}</p>
+                  <p className="text-lg">{listing.organizations.name}</p>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700">Email:</span>
                   {user ? (
-                    <p className="text-lg text-emerald-600">{listing.organizations.email_kontakti}</p>
+                    <p className="text-lg text-emerald-600">{listing.organizations.contact_email}</p>
                   ) : (
                     <p className="italic text-gray-400">Kyçu për ta parë emailin</p>
                   )}
@@ -68,7 +68,7 @@ export default function ContactListingButton({ listing, user }: ContactListingBu
               <div className="space-y-3">
                 <div>
                   <span className="font-medium text-gray-700">Emri:</span>
-                  <p className="text-lg">{listing.users?.emri_i_plote || "Anonim"}</p>
+                  <p className="text-lg">{listing.users?.full_name || "Anonim"}</p>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700">Email:</span>
@@ -86,9 +86,9 @@ export default function ContactListingButton({ listing, user }: ContactListingBu
               </Button>
               <Button
                 onClick={() => {
-                  const email = listing.organizations?.email_kontakti || listing.users?.email;
+                  const email = listing.organizations?.contact_email || listing.users?.email;
                   if (email) {
-                    window.location.href = `mailto:${email}?subject=Interesim për: ${listing.titulli}`;
+                    window.location.href = `mailto:${email}?subject=Interesim për: ${listing.title}`;
                   }
                 }}
                 className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"

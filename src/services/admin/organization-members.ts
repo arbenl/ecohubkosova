@@ -10,8 +10,8 @@ export interface AdminOrganizationMember {
   id: string
   organization_id: string
   user_id: string
-  roli_ne_organizate: string
-  eshte_aprovuar: boolean
+  role_in_organization: string
+  is_approved: boolean
   created_at: string
 }
 
@@ -30,8 +30,8 @@ export async function fetchAdminOrganizationMembers() {
       .get()
       .select({
         member: organizationMembers,
-        organization_name: organizations.emri,
-        user_name: users.emri_i_plote,
+        organization_name: organizations.name,
+        user_name: users.full_name,
         user_email: users.email,
       })
       .from(organizationMembers)
@@ -72,8 +72,8 @@ export async function updateOrganizationMemberRecord(
       .get()
       .update(organizationMembers)
       .set({
-        roli_ne_organizate: data.roli_ne_organizate,
-        eshte_aprovuar: data.eshte_aprovuar,
+        role_in_organization: data.role_in_organization,
+        is_approved: data.is_approved,
       })
       .where(eq(organizationMembers.id, memberId))
 
@@ -89,7 +89,7 @@ export async function toggleOrganizationMemberApprovalRecord(memberId: string, c
     await db
       .get()
       .update(organizationMembers)
-      .set({ eshte_aprovuar: !currentStatus })
+      .set({ is_approved: !currentStatus })
       .where(eq(organizationMembers.id, memberId))
 
     return { error: null }

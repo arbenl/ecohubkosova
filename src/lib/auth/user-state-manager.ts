@@ -38,7 +38,7 @@ export class UserStateManager {
   hydrateUser(nextUser: User | null, profile: UserProfile | null) {
     this.setUser(nextUser)
     this.setUserProfile(profile)
-    this.setIsAdmin(profile?.roli === "Admin" || false)
+    this.setIsAdmin(profile?.role === "Admin" || false)
     this.setIsLoading(false)
   }
 

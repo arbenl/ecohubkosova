@@ -29,14 +29,14 @@ export default function ListingsClientPage({ initialListings }: ListingsClientPa
           <tbody>
             {listings.map((listing) => (
               <tr key={listing.id} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b">{listing.titulli}</td>
-                <td className="py-2 px-4 border-b">{listing.kategori}</td>
+                <td className="py-2 px-4 border-b">{listing.title}</td>
+                <td className="py-2 px-4 border-b">{listing.category}</td>
                 <td className="py-2 px-4 border-b">
-                  {listing.cmimi} {listing.njesia}
+                  {listing.price} {listing.unit}
                 </td>
-                <td className="py-2 px-4 border-b">{listing.njesia}</td>
-                <td className="py-2 px-4 border-b">{listing.vendndodhja}</td>
-                <td className="py-2 px-4 border-b">{listing.eshte_aprovuar ? "Po" : "Jo"}</td>
+                <td className="py-2 px-4 border-b">{listing.unit}</td>
+                <td className="py-2 px-4 border-b">{listing.location}</td>
+                <td className="py-2 px-4 border-b">{listing.is_approved ? "Po" : "Jo"}</td>
                 <td className="py-2 px-4 border-b">
                   <button
                     onClick={() => setEditingListing(listing)}
@@ -67,21 +67,21 @@ export default function ListingsClientPage({ initialListings }: ListingsClientPa
                 if (!editingListing) return
 
                 const formData = new FormData(e.currentTarget)
-                const cmimiField = formData.get("cmimi")
-                const cmimiValue =
-                  typeof cmimiField === "string" && cmimiField.trim().length
-                    ? Number.parseFloat(cmimiField)
+                const priceField = formData.get("price")
+                const priceValue =
+                  typeof priceField === "string" && priceField.trim().length
+                    ? Number.parseFloat(priceField)
                     : Number.NaN
                 const updatedData = {
-                  titulli: formData.get("titulli") as string,
-                  pershkrimi: formData.get("pershkrimi") as string,
-                  kategori: formData.get("kategori") as string,
-                  cmimi: cmimiValue,
-                  njesia: formData.get("njesia") as string,
-                  vendndodhja: formData.get("vendndodhja") as string,
-                  sasia: formData.get("sasia") as string,
-                  lloji_listimit: formData.get("lloji_listimit") as string,
-                  eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
+                  title: formData.get("title") as string,
+                  description: formData.get("description") as string,
+                  category: formData.get("category") as string,
+                  price: priceValue,
+                  unit: formData.get("unit") as string,
+                  location: formData.get("location") as string,
+                  quantity: formData.get("quantity") as string,
+                  listing_type: formData.get("listing_type") as string,
+                  is_approved: formData.get("is_approved") === "on",
                 }
 
                 const parsed = adminListingUpdateSchema.safeParse(updatedData)
@@ -99,97 +99,97 @@ export default function ListingsClientPage({ initialListings }: ListingsClientPa
               className="space-y-4"
             >
               <div>
-                <label htmlFor="titulli" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="title" className="block text-gray-700 text-sm font-bold mb-2">
                   Titulli:
                 </label>
                 <input
                   type="text"
-                  id="titulli"
-                  name="titulli"
-                  defaultValue={editingListing.titulli}
+                  id="title"
+                  name="title"
+                  defaultValue={editingListing.title}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="pershkrimi" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">
                   Pershkrimi:
                 </label>
                 <textarea
-                  id="pershkrimi"
-                  name="pershkrimi"
-                  defaultValue={editingListing.pershkrimi}
+                  id="description"
+                  name="description"
+                  defaultValue={editingListing.description}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="kategori" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="category" className="block text-gray-700 text-sm font-bold mb-2">
                   Kategoria:
                 </label>
                 <input
                   type="text"
-                  id="kategori"
-                  name="kategori"
-                  defaultValue={editingListing.kategori}
+                  id="category"
+                  name="category"
+                  defaultValue={editingListing.category}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="cmimi" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="price" className="block text-gray-700 text-sm font-bold mb-2">
                   Cmimi:
                 </label>
                 <input
                   type="number"
                   step="0.01"
-                  id="cmimi"
-                  name="cmimi"
-                  defaultValue={editingListing.cmimi}
+                  id="price"
+                  name="price"
+                  defaultValue={editingListing.price}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="njesia" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="unit" className="block text-gray-700 text-sm font-bold mb-2">
                   Njesia:
                 </label>
                 <input
                   type="text"
-                  id="njesia"
-                  name="njesia"
-                  defaultValue={editingListing.njesia}
+                  id="unit"
+                  name="unit"
+                  defaultValue={editingListing.unit}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="vendndodhja" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="location" className="block text-gray-700 text-sm font-bold mb-2">
                   Vendndodhja:
                 </label>
                 <input
                   type="text"
-                  id="vendndodhja"
-                  name="vendndodhja"
-                  defaultValue={editingListing.vendndodhja}
+                  id="location"
+                  name="location"
+                  defaultValue={editingListing.location}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="sasia" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="quantity" className="block text-gray-700 text-sm font-bold mb-2">
                   Sasia:
                 </label>
                 <input
                   type="text"
-                  id="sasia"
-                  name="sasia"
-                  defaultValue={editingListing.sasia}
+                  id="quantity"
+                  name="quantity"
+                  defaultValue={editingListing.quantity}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="lloji_listimit" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="listing_type" className="block text-gray-700 text-sm font-bold mb-2">
                   Lloji i Listimit:
                 </label>
                 <select
-                  id="lloji_listimit"
-                  name="lloji_listimit"
-                  defaultValue={editingListing.lloji_listimit}
+                  id="listing_type"
+                  name="listing_type"
+                  defaultValue={editingListing.listing_type}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   required
                 >
@@ -198,14 +198,14 @@ export default function ListingsClientPage({ initialListings }: ListingsClientPa
                 </select>
               </div>
               <div>
-                <label htmlFor="eshte_aprovuar" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="is_approved" className="block text-gray-700 text-sm font-bold mb-2">
                   Aprovuar:
                 </label>
                 <input
                   type="checkbox"
-                  id="eshte_aprovuar"
-                  name="eshte_aprovuar"
-                  defaultChecked={editingListing.eshte_aprovuar}
+                  id="is_approved"
+                  name="is_approved"
+                  defaultChecked={editingListing.is_approved}
                   className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>

@@ -19,21 +19,21 @@ export function UserEditModal({ user, onClose, onSubmit }: UserEditModalProps) {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const payload = {
-      emri_i_plote: (formData.get("emri_i_plote") as string) ?? "",
+      full_name: (formData.get("full_name") as string) ?? "",
       email: (formData.get("email") as string) ?? "",
-      vendndodhja: (formData.get("vendndodhja") as string) ?? "",
-      roli: (formData.get("roli") as string) ?? "",
-      eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
+      location: (formData.get("location") as string) ?? "",
+      role: (formData.get("role") as string) ?? "",
+      is_approved: formData.get("is_approved") === "on",
     }
 
     const parsed = adminUserUpdateSchema.safeParse(payload)
     if (!parsed.success) {
       const { fieldErrors: zodErrors } = parsed.error.flatten()
       setFieldErrors({
-        emri_i_plote: zodErrors.emri_i_plote?.[0],
+        full_name: zodErrors.full_name?.[0],
         email: zodErrors.email?.[0],
-        vendndodhja: zodErrors.vendndodhja?.[0],
-        roli: zodErrors.roli?.[0],
+        location: zodErrors.location?.[0],
+        role: zodErrors.role?.[0],
       })
       setServerError("Kontrolloni fushat e shënuara dhe provoni përsëri.")
       return
@@ -58,17 +58,17 @@ export function UserEditModal({ user, onClose, onSubmit }: UserEditModalProps) {
         {serverError && <p className="text-sm text-red-600 mb-2">{serverError}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="emri_i_plote" className="block text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="full_name" className="block text-gray-700 text-sm font-bold mb-2">
               Emri i Plotë
             </label>
             <input
               type="text"
-              id="emri_i_plote"
-              name="emri_i_plote"
-              defaultValue={user.emri_i_plote}
+              id="full_name"
+              name="full_name"
+              defaultValue={user.full_name}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
-            {fieldErrors.emri_i_plote && <p className="text-xs text-red-600">{fieldErrors.emri_i_plote}</p>}
+            {fieldErrors.full_name && <p className="text-xs text-red-600">{fieldErrors.full_name}</p>}
           </div>
           <div>
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
@@ -84,40 +84,40 @@ export function UserEditModal({ user, onClose, onSubmit }: UserEditModalProps) {
             {fieldErrors.email && <p className="text-xs text-red-600">{fieldErrors.email}</p>}
           </div>
           <div>
-            <label htmlFor="vendndodhja" className="block text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="location" className="block text-gray-700 text-sm font-bold mb-2">
               Vendndodhja
             </label>
             <input
               type="text"
-              id="vendndodhja"
-              name="vendndodhja"
-              defaultValue={user.vendndodhja}
+              id="location"
+              name="location"
+              defaultValue={user.location}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
-            {fieldErrors.vendndodhja && <p className="text-xs text-red-600">{fieldErrors.vendndodhja}</p>}
+            {fieldErrors.location && <p className="text-xs text-red-600">{fieldErrors.location}</p>}
           </div>
           <div>
-            <label htmlFor="roli" className="block text-gray-700 text-sm font-bold mb-2">
+            <label htmlFor="role" className="block text-gray-700 text-sm font-bold mb-2">
               Roli
             </label>
             <select
-              id="roli"
-              name="roli"
-              defaultValue={user.roli}
+              id="role"
+              name="role"
+              defaultValue={user.role}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
             >
               <option value="Individ">Individ</option>
               <option value="Admin">Admin</option>
             </select>
-            {fieldErrors.roli && <p className="text-xs text-red-600">{fieldErrors.roli}</p>}
+            {fieldErrors.role && <p className="text-xs text-red-600">{fieldErrors.role}</p>}
           </div>
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              id="eshte_aprovuar"
-              name="eshte_aprovuar"
-              defaultChecked={user.eshte_aprovuar}
+              id="is_approved"
+              name="is_approved"
+              defaultChecked={user.is_approved}
               className="h-4 w-4 border rounded text-blue-600 focus:ring-blue-500"
             />
             <label htmlFor="eshte_aprovuar" className="text-sm text-gray-700">

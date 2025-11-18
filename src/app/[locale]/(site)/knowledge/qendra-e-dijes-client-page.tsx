@@ -138,13 +138,13 @@ export default function QendraEDijesClientPage({
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-                    {article.kategori}
+                    {article.category}
                   </span>
                 </div>
-                <CardTitle className="text-lg">{article.titulli}</CardTitle>
+                <CardTitle className="text-lg">{article.title}</CardTitle>
               </CardHeader>
               <CardContent className="pb-2">
-                <CardDescription className="line-clamp-3">{truncateText(article.permbajtja, 180)}</CardDescription>
+                <CardDescription className="line-clamp-3">{truncateText(article.content, 180)}</CardDescription>
               </CardContent>
               <CardFooter className="pt-2 flex justify-between items-center border-t text-xs text-gray-500">
                 <div className="flex items-center gap-4">
@@ -154,7 +154,7 @@ export default function QendraEDijesClientPage({
                   </span>
                   <span className="flex items-center gap-1">
                     <User size={14} />
-                    {article.users?.emri_i_plote || "Anonim"}
+                    {article.users?.full_name || "Anonim"}
                   </span>
                 </div>
                 <Button size="sm" asChild>

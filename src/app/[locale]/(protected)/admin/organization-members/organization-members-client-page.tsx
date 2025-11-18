@@ -37,14 +37,14 @@ export default function OrganizationMembersClientPage({ initialMembers }: Organi
                 <td className="px-4 py-3">{member.organization_name}</td>
                 <td className="px-4 py-3">{member.user_name}</td>
                 <td className="px-4 py-3">{member.user_email}</td>
-                <td className="px-4 py-3">{member.roli_ne_organizate}</td>
+                <td className="px-4 py-3">{member.role_in_organization}</td>
                 <td className="px-4 py-3">
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
-                      member.eshte_aprovuar ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                      member.is_approved ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                     }`}
                   >
-                    {member.eshte_aprovuar ? "Po" : "Jo"}
+                    {member.is_approved ? "Po" : "Jo"}
                   </span>
                 </td>
                 <td className="px-4 py-3 space-x-2">
@@ -56,11 +56,11 @@ export default function OrganizationMembersClientPage({ initialMembers }: Organi
                   </button>
                   <button
                     className={`rounded-md px-3 py-1 text-xs text-white ${
-                      member.eshte_aprovuar ? "bg-orange-500 hover:bg-orange-600" : "bg-green-600 hover:bg-green-700"
+                      member.is_approved ? "bg-orange-500 hover:bg-orange-600" : "bg-green-600 hover:bg-green-700"
                     }`}
-                    onClick={() => handleToggleApproval(member.id, member.eshte_aprovuar)}
+                    onClick={() => handleToggleApproval(member.id, member.is_approved)}
                   >
-                    {member.eshte_aprovuar ? "Çaprovo" : "Aprovo"}
+                    {member.is_approved ? "Çaprovo" : "Aprovo"}
                   </button>
                   <button
                     className="rounded-md bg-red-600 px-3 py-1 text-xs text-white hover:bg-red-700"
@@ -86,8 +86,8 @@ export default function OrganizationMembersClientPage({ initialMembers }: Organi
 
                 const formData = new FormData(event.currentTarget)
                 const payload = {
-                  roli_ne_organizate: formData.get("roli_ne_organizate") as string,
-                  eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
+                  role_in_organization: formData.get("role_in_organization") as string,
+                  is_approved: formData.get("is_approved") === "on",
                 }
 
                 const parsed = adminOrganizationMemberUpdateSchema.safeParse(payload)
@@ -103,12 +103,12 @@ export default function OrganizationMembersClientPage({ initialMembers }: Organi
               }}
             >
               <input
-                name="roli_ne_organizate"
-                defaultValue={editingMember.roli_ne_organizate}
+                name="role_in_organization"
+                defaultValue={editingMember.role_in_organization}
                 className="w-full rounded-md border px-3 py-2"
               />
               <label className="inline-flex items-center gap-2 text-sm">
-                <input type="checkbox" name="eshte_aprovuar" defaultChecked={editingMember.eshte_aprovuar} />
+                <input type="checkbox" name="is_approved" defaultChecked={editingMember.is_approved} />
                 Aprobimi
               </label>
               <div className="flex justify-end gap-2">

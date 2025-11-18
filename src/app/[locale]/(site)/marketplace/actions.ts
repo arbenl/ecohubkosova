@@ -16,7 +16,7 @@ export async function getListingsData(
   const sortParam = searchParams.sort === "oldest" ? "oldest" : "newest"
 
   const result = await fetchListings({
-    type: searchParams.lloji,
+    type: searchParams.type,
     search: searchParams.search,
     category: searchParams.category,
     page: pageValue,

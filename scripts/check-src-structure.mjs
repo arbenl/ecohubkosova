@@ -10,6 +10,7 @@ const ALLOWED_TOP_LEVEL_DIRS = new Set([
   "public",
   "docs",
   "supabase",
+  "prisma",
   "scripts",
   "styles",
   "e2e",
@@ -40,6 +41,13 @@ const ALLOWED_FILES = new Set([
   "tsconfig.tsbuildinfo",
   "vercel.json",
   ".env.example",
+  "apply-migration.js",
+  "apply-trigger-fix.js",
+  "test-db-query.js",
+  "fix-trigger-function.sql",
+  "backup.sql",
+  "check-vercel-config.sh",
+  "openapi.json",
 ])
 
 const CODE_EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs"])

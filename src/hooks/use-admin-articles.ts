@@ -3,30 +3,20 @@
 import { useCallback, useState } from "react"
 import { adminArticleCreateSchema, adminArticleUpdateSchema } from "@/validation/admin"
 import { createArticle, deleteArticle, updateArticle } from "@/app/[locale]/(protected)/admin/articles/actions"
+import type { AdminArticle } from "@/services/admin/articles"
 
-export interface AdminArticle {
-  id: string
-  titulli: string
-  permbajtja: string
-  autori_id: string
-  eshte_publikuar: boolean
-  kategori: string
-  tags: string[] | null
-  foto_kryesore: string | null
-  created_at: string
-  updated_at: string | null
-}
+export type { AdminArticle } from "@/services/admin/articles"
 
 export function useAdminArticles(initialArticles: AdminArticle[]) {
   const [articles, setArticles] = useState<AdminArticle[]>(initialArticles)
   const [editingArticle, setEditingArticle] = useState<AdminArticle | null>(null)
   const [newArticle, setNewArticle] = useState({
-    titulli: "",
-    permbajtja: "",
-    kategori: "",
-    eshte_publikuar: false,
+    title: "",
+    content: "",
+    category: "",
+    is_published: false,
     tags: "",
-    foto_kryesore: "",
+    featured_image: "",
   })
 
   const handleDelete = useCallback(async (id: string) => {
@@ -54,12 +44,12 @@ export function useAdminArticles(initialArticles: AdminArticle[]) {
   const handleNewSubmit = useCallback(async () => {
     const tagsArray = newArticle.tags ? newArticle.tags.split(",").map((tag) => tag.trim()) : null
     const payload = {
-      titulli: newArticle.titulli,
-      permbajtja: newArticle.permbajtja,
-      kategori: newArticle.kategori,
-      eshte_publikuar: newArticle.eshte_publikuar,
+      title: newArticle.title,
+      content: newArticle.content,
+      category: newArticle.category,
+      is_published: newArticle.is_published,
       tags: tagsArray,
-      foto_kryesore: newArticle.foto_kryesore || null,
+      featured_image: newArticle.featured_image || null,
     }
 
     const parsed = adminArticleCreateSchema.safeParse(payload)
@@ -76,12 +66,12 @@ export function useAdminArticles(initialArticles: AdminArticle[]) {
 
     alert("Artikulli u krijua me sukses!")
     setNewArticle({
-      titulli: "",
-      permbajtja: "",
-      kategori: "",
-      eshte_publikuar: false,
+      title: "",
+      content: "",
+      category: "",
+      is_published: false,
       tags: "",
-      foto_kryesore: "",
+      featured_image: "",
     })
   }, [newArticle])
 

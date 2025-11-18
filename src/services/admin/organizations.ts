@@ -8,14 +8,14 @@ export type AdminOrganizationRow = typeof organizations.$inferSelect
 
 export interface AdminOrganization {
   id: string
-  emri: string
-  pershkrimi: string
-  interesi_primar: string
-  person_kontakti: string
-  email_kontakti: string
-  vendndodhja: string
-  lloji: string
-  eshte_aprovuar: boolean
+  name: string
+  description: string
+  primary_interest: string
+  contact_person: string
+  contact_email: string
+  location: string
+  type: string
+  is_approved: boolean
   created_at: string
   updated_at: string | null
 }

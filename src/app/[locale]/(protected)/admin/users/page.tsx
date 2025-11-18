@@ -1,20 +1,20 @@
 import { getUsers } from "./actions"
 import UsersClientPage from "./users-client-page" // Will create this client component later
 
-interface User {
+interface AdminUser {
   id: string
-  emri_i_plote: string
   email: string
-  vendndodhja: string
-  roli: string
-  eshte_aprovuar: boolean
+  full_name: string
+  role: string
+  location: string
+  is_approved: boolean
   created_at: string
   updated_at: string | null
 }
 
 export default async function UsersPage() {
   const { data, error } = await getUsers()
-  const initialUsers: User[] = data ?? []
+  const initialUsers: AdminUser[] = data ?? []
 
   if (error) {
     console.error("Error fetching users:", error)

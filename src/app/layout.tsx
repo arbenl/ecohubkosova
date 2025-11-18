@@ -23,7 +23,6 @@ export const metadata: Metadata = {
     locale: "sq-XK",
     type: "website",
   },
-    generator: 'v0.dev'
 }
 
 export default async function RootLayout({

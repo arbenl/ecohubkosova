@@ -8,11 +8,11 @@ export type AdminUserRow = typeof users.$inferSelect
 
 export interface AdminUser {
   id: string
-  emri_i_plote: string
+  full_name: string
   email: string
-  vendndodhja: string
-  roli: string
-  eshte_aprovuar: boolean
+  location: string
+  role: string
+  is_approved: boolean
   created_at: string
   updated_at: string | null
 }

@@ -25,11 +25,11 @@ export function UserTable({ users, onEdit, onDelete }: UserTableProps) {
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
-              <td className="py-2 px-4 border-b">{user.emri_i_plote}</td>
+              <td className="py-2 px-4 border-b">{user.full_name}</td>
               <td className="py-2 px-4 border-b">{user.email}</td>
-              <td className="py-2 px-4 border-b">{user.vendndodhja}</td>
-              <td className="py-2 px-4 border-b">{user.roli}</td>
-              <td className="py-2 px-4 border-b">{user.eshte_aprovuar ? "Po" : "Jo"}</td>
+              <td className="py-2 px-4 border-b">{user.location}</td>
+              <td className="py-2 px-4 border-b">{user.role}</td>
+              <td className="py-2 px-4 border-b">{user.is_approved ? "Po" : "Jo"}</td>
               <td className="py-2 px-4 border-b">
                 <button
                   onClick={() => onEdit(user)}

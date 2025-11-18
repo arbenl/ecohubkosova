@@ -18,7 +18,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
   const locale = useLocale()
   const { user, userProfile, isLoading } = useAuth()
   const derivedName =
-    userProfile?.emri_i_plote ||
+    userProfile?.full_name ||
     user?.email?.split("@")[0] ||
     fallbackUserName ||
     fallbackUserEmail?.split("@")[0]

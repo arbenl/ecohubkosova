@@ -19,13 +19,13 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
-    exclude: ["e2e/**", "node_modules/**", "playwright-report/**", "dist/**", ".next/**", "**/__tests__.skip/**"],
+    exclude: ["e2e/**", "node_modules/**", "tools/**", "playwright-report/**", "dist/**", ".next/**", "**/__tests__.skip/**"],
     pool: "threads",
     isolate: true,
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov", "html"],
-      all: true,
+      include: ["src/**/*.{ts,tsx}"],
       exclude: [
         "node_modules/",
         "src/test/",

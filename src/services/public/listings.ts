@@ -4,14 +4,14 @@ import { marketplaceListings, organizations } from "@/db/schema"
 
 export type PublicListing = {
   id: string
-  titulli: string
-  pershkrimi: string
-  kategori: string
-  cmimi: number
-  njesia: string
-  vendndodhja: string
-  sasia: string
-  lloji_listimit: "shes" | "blej"
+  title: string
+  description: string
+  category: string
+  price: number
+  unit: string
+  location: string
+  quantity: string
+  listing_type: "shes" | "blej"
   organization_name: string | null
   created_at: string
   updated_at: string | null
@@ -25,26 +25,26 @@ export type PublicListingFilters = {
 
 export async function fetchPublicListings(filters: PublicListingFilters = {}) {
   try {
-    const conditions = [eq(marketplaceListings.eshte_aprovuar, true)]
+    const conditions = [eq(marketplaceListings.is_approved, true)]
 
     if (filters.category) {
-      conditions.push(eq(marketplaceListings.kategori, filters.category))
+      conditions.push(eq(marketplaceListings.category, filters.category))
     }
 
     if (filters.type) {
-      conditions.push(eq(marketplaceListings.lloji_listimit, filters.type))
+      conditions.push(eq(marketplaceListings.listing_type, filters.type))
     }
 
     if (filters.search) {
       const term = `%${filters.search}%`
-      conditions.push(ilike(marketplaceListings.titulli, term))
+      conditions.push(ilike(marketplaceListings.title, term))
     }
 
     const rows = await db
       .get()
       .select({
         listing: marketplaceListings,
-        organization_name: organizations.emri,
+        organization_name: organizations.name,
       })
       .from(marketplaceListings)
       .leftJoin(organizations, eq(marketplaceListings.organization_id, organizations.id))
@@ -53,14 +53,14 @@ export async function fetchPublicListings(filters: PublicListingFilters = {}) {
 
     const data: PublicListing[] = rows.map(({ listing, organization_name }) => ({
       id: listing.id,
-      titulli: listing.titulli,
-      pershkrimi: listing.pershkrimi,
-      kategori: listing.kategori,
-      cmimi: Number(listing.cmimi),
-      njesia: listing.njesia,
-      vendndodhja: listing.vendndodhja,
-      sasia: listing.sasia,
-      lloji_listimit: listing.lloji_listimit as "shes" | "blej",
+      title: listing.title,
+      description: listing.description,
+      category: listing.category,
+      price: Number(listing.price),
+      unit: listing.unit,
+      location: listing.location,
+      quantity: listing.quantity,
+      listing_type: listing.listing_type as "shes" | "blej",
       organization_name: organization_name ?? null,
       created_at: listing.created_at.toISOString(),
       updated_at: listing.updated_at ? listing.updated_at.toISOString() : null,

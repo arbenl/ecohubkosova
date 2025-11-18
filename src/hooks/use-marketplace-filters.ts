@@ -98,7 +98,7 @@ export function useMarketplaceFilters({
       const params = new URLSearchParams()
 
       if (tab !== "te-gjitha") {
-        params.set("lloji", tab)
+        params.set("type", tab)
       }
 
       if (category !== "all") {
@@ -224,8 +224,8 @@ export function useMarketplaceFilters({
   const conditionOptions = useMemo(() => {
     const values = new Set<string>()
     listings.forEach((listing) => {
-      if (listing.gjendja) {
-        values.add(listing.gjendja)
+      if (listing.condition) {
+        values.add(listing.condition)
       }
     })
 

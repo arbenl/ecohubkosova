@@ -10,15 +10,15 @@ export interface AdminListing {
   id: string
   created_by_user_id: string
   organization_id: string | null
-  titulli: string
-  pershkrimi: string
-  kategori: string
-  cmimi: number
-  njesia: string
-  vendndodhja: string
-  sasia: string
-  lloji_listimit: string
-  eshte_aprovuar: boolean
+  title: string
+  description: string
+  category: string
+  price: number
+  unit: string
+  location: string
+  quantity: string
+  listing_type: string
+  is_approved: boolean
   created_at: string
   updated_at: string | null
 }
@@ -28,7 +28,7 @@ const toError = (error: unknown) =>
 
 const serializeListing = (listing: AdminListingRow): AdminListing => ({
   ...listing,
-  cmimi: Number(listing.cmimi),
+  price: Number(listing.price),
   created_at: listing.created_at.toISOString(),
   updated_at: listing.updated_at ? listing.updated_at.toISOString() : null,
 })
@@ -60,7 +60,7 @@ export async function updateListingRecord(listingId: string, data: AdminListingU
       .update(marketplaceListings)
       .set({
         ...data,
-        cmimi: data.cmimi.toString(),
+        price: data.price.toString(),
         updated_at: new Date(),
       })
       .where(eq(marketplaceListings.id, listingId))

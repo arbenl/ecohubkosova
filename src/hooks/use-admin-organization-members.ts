@@ -14,8 +14,8 @@ export interface OrganizationMember {
   id: string
   organization_id: string
   user_id: string
-  roli_ne_organizate: string
-  eshte_aprovuar: boolean
+  role_in_organization: string
+  is_approved: boolean
   created_at: string
 }
 
@@ -54,7 +54,7 @@ export function useAdminOrganizationMembers(initialMembers: OrganizationMemberWi
     }
 
     setMembers((prev) =>
-      prev.map((member) => (member.id === id ? { ...member, eshte_aprovuar: !currentStatus } : member))
+      prev.map((member) => (member.id === id ? { ...member, is_approved: !currentStatus } : member))
     )
     alert(`Anëtari u ${currentStatus ? "çaprovua" : "aprovua"} me sukses!`)
   }, [])

@@ -18,7 +18,7 @@ export async function getSessionInfo(userId: string): Promise<SessionInfo | null
       .select({
         id: users.id,
         session_version: users.session_version,
-        roli: users.roli,
+        role: users.role,
         email: users.email,
       })
       .from(users)
@@ -34,13 +34,13 @@ export async function getSessionInfo(userId: string): Promise<SessionInfo | null
     logAuthAction("getSessionInfo", "Retrieved session info", {
       userId,
       version: user.session_version,
-      role: user.roli,
+      role: user.role,
     })
 
     return {
       userId: user.id,
       version: user.session_version,
-      role: user.roli,
+      role: user.role,
       email: user.email,
     }
   } catch (error) {
@@ -63,6 +63,16 @@ export async function incrementSessionVersion(userId: string): Promise<number | 
 
     const newVersion = updated?.[0]?.sessionVersion ?? null
 
+    if (newVersion === null) {
+      // No row was updated - user doesn't exist in public.users yet
+      // This is normal for brand-new users before trigger runs
+      logAuthAction("incrementSessionVersion", "No user row to update (new user)", {
+        userId,
+        info: "User profile not created yet - this is normal for first login",
+      })
+      return null
+    }
+
     logAuthAction("incrementSessionVersion", "Session version incremented", {
       userId,
       newVersion,
@@ -70,10 +80,24 @@ export async function incrementSessionVersion(userId: string): Promise<number | 
 
     return newVersion
   } catch (error) {
-    logAuthAction("incrementSessionVersion", "Error incrementing version", {
+    // Surface actual Postgres error for debugging
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    const errorDetails = error instanceof Error && 'code' in error 
+      ? { code: (error as any).code, detail: (error as any).detail } 
+      : {}
+    
+    console.error("[incrementSessionVersion] SQL error", {
       userId,
-      error: error instanceof Error ? error.message : String(error),
+      error: errorMessage,
+      ...errorDetails,
     })
+
+    logAuthAction("incrementSessionVersion", "Database error", {
+      userId,
+      error: errorMessage,
+      ...errorDetails,
+    })
+    
     return null
   }
 }

@@ -26,17 +26,17 @@ export async function fetchAdminStats(): Promise<FetchAdminStatsResult> {
       database
         .select({ value: count() })
         .from(organizations)
-        .where(eq(organizations.eshte_aprovuar, false)),
+        .where(eq(organizations.is_approved, false)),
       database.select({ value: count() }).from(articles),
       database
         .select({ value: count() })
         .from(articles)
-        .where(eq(articles.eshte_publikuar, false)),
+        .where(eq(articles.is_published, false)),
       database.select({ value: count() }).from(marketplaceListings),
       database
         .select({ value: count() })
         .from(marketplaceListings)
-        .where(eq(marketplaceListings.eshte_aprovuar, false)),
+        .where(eq(marketplaceListings.is_approved, false)),
     ])
 
     const stats: AdminStats = {

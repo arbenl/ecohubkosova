@@ -7,6 +7,11 @@ interface BaseLayoutProps {
   className?: string
 }
 
+/**
+ * Legacy layout component.
+ * Uses the unified header component with proper error handling.
+ * New components should prefer PageLayout for consistency.
+ */
 export function BaseLayout({ children, className = "" }: BaseLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-gray-50 to-white">

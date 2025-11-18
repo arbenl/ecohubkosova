@@ -195,7 +195,11 @@ export async function middleware(req: NextRequest) {
 
     if (isAuthRoute && hasSession) {
       logMiddlewareEvent(pathname, "Redirecting authenticated user to dashboard")
-      return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url))
+      const dashboardUrl = new URL(`/${locale}/dashboard`, req.url)
+      // Prevent infinite redirect loops by checking if we're already going to dashboard
+      if (!pathname.includes("/dashboard")) {
+        return NextResponse.redirect(dashboardUrl)
+      }
     }
 
     return res
