@@ -4,15 +4,15 @@ import { useMemo } from "react"
 
 type Article = {
   id: string
-  titulli: string
-  users?: { emri_i_plote?: string | null } | null
+  title: string
+  users?: { full_name?: string | null } | null
 }
 
 type Partner = {
   id: string
-  emri: string
-  lloji: string
-  vendndodhja: string
+  name: string
+  type: string
+  location: string
 }
 
 export function useLatestArticlesSection(latestArticles: Article[] = []) {
@@ -20,8 +20,8 @@ export function useLatestArticlesSection(latestArticles: Article[] = []) {
     () =>
       (latestArticles ?? []).map((article) => ({
         id: article.id,
-        title: article.titulli,
-        author: article.users?.emri_i_plote || "Autor i panjohur",
+        title: article.title,
+        author: article.users?.full_name || "Autor i panjohur",
         href: `/qendra-e-dijes/${article.id}`,
       })),
     [latestArticles]
@@ -41,8 +41,8 @@ export function useKeyPartnersSection(keyPartners: Partner[] = []) {
     () =>
       (keyPartners ?? []).map((partner) => ({
         id: partner.id,
-        name: partner.emri,
-        meta: `${partner.lloji} • ${partner.vendndodhja}`,
+        name: partner.name,
+        meta: `${partner.type} • ${partner.location}`,
         href: `/drejtoria/${partner.id}`,
       })),
     [keyPartners]

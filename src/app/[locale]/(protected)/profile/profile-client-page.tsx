@@ -8,24 +8,24 @@ import { ProfileSectionCard } from "./components/profile-section-card"
 
 interface UserProfile {
   id: string
-  emri_i_plote: string
+  full_name: string
   email: string
-  vendndodhja: string
-  roli: string
-  eshte_aprovuar: boolean
+  location: string
+  role: string
+  is_approved: boolean
   created_at: string
 }
 
 interface Organization {
   id: string
-  emri: string
-  pershkrimi: string
-  interesi_primar: string
-  person_kontakti: string
-  email_kontakti: string
-  vendndodhja: string
-  lloji: string
-  eshte_aprovuar: boolean
+  name: string
+  description: string
+  primary_interest: string
+  contact_person: string
+  contact_email: string
+  location: string
+  type: string
+  is_approved: boolean
 }
 
 interface ProfileClientPageProps {
@@ -56,9 +56,9 @@ export default function ProfileClientPage({ userProfile, organization }: Profile
           description="Ndrysho informacionet personale."
         >
           <UserProfileForm
-            initialFullName={userProfile.emri_i_plote}
+            initialFullName={userProfile.full_name}
             initialEmail={userProfile.email}
-            initialLocation={userProfile.vendndodhja}
+            initialLocation={userProfile.location}
           />
         </ProfileSectionCard>
       ),
@@ -76,12 +76,12 @@ export default function ProfileClientPage({ userProfile, organization }: Profile
             <OrganizationProfileForm
               organizationId={organization.id}
               initialData={{
-                emri: organization.emri,
-                pershkrimi: organization.pershkrimi,
-                interesi_primar: organization.interesi_primar,
-                person_kontakti: organization.person_kontakti,
-                email_kontakti: organization.email_kontakti,
-                vendndodhja: organization.vendndodhja,
+                name: organization.name,
+                description: organization.description,
+                primary_interest: organization.primary_interest,
+                contact_person: organization.contact_person,
+                contact_email: organization.contact_email,
+                location: organization.location,
               }}
             />
           ) : (

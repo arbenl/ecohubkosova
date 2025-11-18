@@ -11,51 +11,51 @@ const roleOptions = ["Individ", "OJQ", "Ndërmarrje Sociale", "Kompani", "Admin"
 const organizationTypeOptions = ["OJQ", "Ndërmarrje Sociale", "Kompani"] as const
 
 export const adminOrganizationUpdateSchema = z.object({
-  emri: trimmedString(3, 150),
-  pershkrimi: trimmedString(10, 2000),
-  interesi_primar: trimmedString(2, 120),
-  person_kontakti: trimmedString(3, 120),
-  email_kontakti: z.string().trim().email("Email-i i kontaktit nuk është i vlefshëm.").max(150),
-  vendndodhja: trimmedString(2, 150),
-  lloji: z.enum(organizationTypeOptions, {
+  name: trimmedString(3, 150),
+  description: trimmedString(10, 2000),
+  primary_interest: trimmedString(2, 120),
+  contact_person: trimmedString(3, 120),
+  contact_email: z.string().trim().email("Email-i i kontaktit nuk është i vlefshëm.").max(150),
+  location: trimmedString(2, 150),
+  type: z.enum(organizationTypeOptions, {
     message: "Zgjidhni një lloj të vlefshëm organizate.",
   }),
-  eshte_aprovuar: booleanField,
+  is_approved: booleanField,
 })
 
 export type AdminOrganizationUpdateInput = z.infer<typeof adminOrganizationUpdateSchema>
 
 export const adminOrganizationMemberUpdateSchema = z.object({
-  roli_ne_organizate: trimmedString(2, 150),
-  eshte_aprovuar: booleanField,
+  role_in_organization: trimmedString(2, 150),
+  is_approved: booleanField,
 })
 
 export type AdminOrganizationMemberUpdateInput = z.infer<typeof adminOrganizationMemberUpdateSchema>
 
 export const adminUserUpdateSchema = z.object({
-  emri_i_plote: trimmedString(3, 150),
+  full_name: trimmedString(3, 150),
   email: z.string().trim().email("Email-i nuk është i vlefshëm.").max(150),
-  vendndodhja: trimmedString(2, 150),
-  roli: z.enum(roleOptions, {
+  location: trimmedString(2, 150),
+  role: z.enum(roleOptions, {
     message: "Zgjidhni një rol të vlefshëm përdoruesi.",
   }),
-  eshte_aprovuar: booleanField,
+  is_approved: booleanField,
 })
 
 export type AdminUserUpdateInput = z.infer<typeof adminUserUpdateSchema>
 
 export const adminListingUpdateSchema = z.object({
-  titulli: trimmedString(3, 150),
-  pershkrimi: trimmedString(10, 2000),
-  kategori: trimmedString(2, 120),
-  cmimi: z.number().min(0, "Çmimi duhet të jetë së paku 0."),
-  njesia: trimmedString(1, 50),
-  vendndodhja: trimmedString(2, 150),
-  sasia: trimmedString(1, 80),
-  lloji_listimit: z.enum(["shes", "blej"], {
+  title: trimmedString(3, 150),
+  description: trimmedString(10, 2000),
+  category: trimmedString(2, 120),
+  price: z.number().min(0, "Çmimi duhet të jetë së paku 0."),
+  unit: trimmedString(1, 50),
+  location: trimmedString(2, 150),
+  quantity: trimmedString(1, 80),
+  listing_type: z.enum(["shes", "blej"], {
     message: "Zgjidhni një lloj të vlefshëm listimi.",
   }),
-  eshte_aprovuar: booleanField,
+  is_approved: booleanField,
 })
 
 export type AdminListingUpdateInput = z.infer<typeof adminListingUpdateSchema>
@@ -66,12 +66,12 @@ const tagsSchema = z
   .nullable()
 
 export const adminArticleBaseSchema = z.object({
-  titulli: trimmedString(5, 180),
-  permbajtja: trimmedString(20, 10000),
-  kategori: trimmedString(2, 120),
-  eshte_publikuar: booleanField,
+  title: trimmedString(5, 180),
+  content: trimmedString(20, 10000),
+  category: trimmedString(2, 120),
+  is_published: booleanField,
   tags: tagsSchema,
-  foto_kryesore: optionalUrl,
+  featured_image: optionalUrl,
 })
 
 export const adminArticleCreateSchema = adminArticleBaseSchema

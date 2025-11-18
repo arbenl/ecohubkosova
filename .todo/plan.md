@@ -1,0 +1,7 @@
+- [ ] Inspect codebase structure via project_map
+- [ ] Locate relevant symbols using code_search
+- [ ] Read profile service and header source files
+- [ ] Diagnose logging/error classification issues
+- [ ] Implement fixes and update files
+- [ ] Run QA checks: build_health, auth_audit, runtime_log_scan
+- [ ] Summarize findings and next steps

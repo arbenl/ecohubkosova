@@ -8,13 +8,13 @@ export type AdminArticleRow = typeof articles.$inferSelect
 
 export interface AdminArticle {
   id: string
-  titulli: string
-  permbajtja: string
-  autori_id: string
-  eshte_publikuar: boolean
-  kategori: string
+  title: string
+  content: string
+  author_id: string
+  is_published: boolean
+  category: string
   tags: string[] | null
-  foto_kryesore: string | null
+  featured_image: string | null
   created_at: string
   updated_at: string | null
 }
@@ -47,7 +47,7 @@ export async function insertArticleRecord(authorId: string, data: AdminArticleCr
       .values({
         ...data,
         tags: data.tags ?? [],
-        autori_id: authorId,
+        author_id: authorId,
         created_at: new Date(),
         updated_at: new Date(),
       })

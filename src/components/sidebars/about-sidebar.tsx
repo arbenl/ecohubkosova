@@ -18,10 +18,8 @@ export function AboutSidebar() {
   const locale = useLocale()
 
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-bold mb-4 text-gray-900">Rreth Nesh</h2>
-      <nav className="space-y-2">
-        {aboutLinks.map((link) => {
+    <nav className="space-y-2">
+      {aboutLinks.map((link) => {
         const href = `/${locale}${link.href}`
         const isActive = pathname === href
         return (
@@ -39,7 +37,6 @@ export function AboutSidebar() {
           </Link>
         )
       })}
-      </nav>
-    </div>
+    </nav>
   )
 }

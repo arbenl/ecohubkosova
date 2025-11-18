@@ -29,22 +29,22 @@ export async function fetchOrganizationsList({
 
   try {
     const offset = (page - 1) * ITEMS_PER_PAGE
-    const filters = [eq(organizations.eshte_aprovuar, true)]
+    const filters = [eq(organizations.is_approved, true)]
 
     if (search.trim()) {
       const term = `%${search.trim()}%`
-      const nameOrDescription = or(ilike(organizations.emri, term), ilike(organizations.pershkrimi, term))
+      const nameOrDescription = or(ilike(organizations.name, term), ilike(organizations.description, term))
       if (nameOrDescription) {
         filters.push(nameOrDescription)
       }
     }
 
     if (type !== "all") {
-      filters.push(eq(organizations.lloji, type))
+      filters.push(eq(organizations.type, type))
     }
 
     if (interest !== "all") {
-      filters.push(ilike(organizations.interesi_primar, `%${interest}%`))
+      filters.push(ilike(organizations.primary_interest, `%${interest}%`))
     }
 
     const whereClause = filters.length === 1 ? filters[0] : and(...filters)
@@ -82,7 +82,7 @@ export async function fetchOrganizationById(id: string) {
       .get()
       .select()
       .from(organizations)
-      .where(and(eq(organizations.id, id), eq(organizations.eshte_aprovuar, true)))
+      .where(and(eq(organizations.id, id), eq(organizations.is_approved, true)))
       .limit(1)
     const row = rows[0]
 

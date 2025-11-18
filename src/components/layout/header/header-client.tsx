@@ -16,9 +16,8 @@ interface HeaderClientProps {
 export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: HeaderClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const locale = useLocale()
-  const { user, userProfile, isLoading } = useAuth()
+  const { user, isLoading } = useAuth()
   const derivedName =
-    userProfile?.emri_i_plote ||
     user?.email?.split("@")[0] ||
     fallbackUserName ||
     fallbackUserEmail?.split("@")[0]
@@ -71,10 +70,9 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
         </nav>
 
         <div className="hidden md:flex gap-4 items-center">
-          {isLoading && !isAuthenticated ? (
+          {isLoading ? (
             <div className="animate-pulse flex items-center gap-2">
               <div className="h-4 w-20 bg-gray-200 rounded-lg"></div>
-              <div className="text-center mt-4 text-gray-600">Duke ngarkuar...</div>
             </div>
           ) : isAuthenticated ? (
             <div className="flex items-center gap-4">
@@ -158,7 +156,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
             </Link>
 
             <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
-              {isLoading && !isAuthenticated ? (
+              {isLoading ? (
                 <div className="animate-pulse space-y-3">
                   <div className="h-12 bg-gray-200 rounded-xl"></div>
                   <div className="h-12 bg-gray-200 rounded-xl"></div>
@@ -177,7 +175,9 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                     variant="outline"
                     className="w-full rounded-xl text-red-600 border-red-200 hover:bg-red-50 bg-transparent"
                     onBeforeSignOut={() => setIsMenuOpen(false)}
-                  />
+                  >
+                    Dil
+                  </SignOutButton>
                 </>
               ) : (
                 <>

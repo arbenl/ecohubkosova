@@ -6,29 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Calendar, MapPin, Package, Euro, User, Building } from "lucide-react"
 import { getServerUser } from "@/lib/supabase/server"
-import ContactListingButton from "./contact-listing-button" // Will create this client component later
+import ContactListingButton from "./contact-listing-button"
 import { fetchListingById } from "@/services/listings"
-
-interface Listing {
-  id: string
-  titulli: string
-  pershkrimi: string
-  kategori: string
-  cmimi: number
-  njesia: string
-  vendndodhja: string
-  sasia: string
-  lloji_listimit: "shes" | "blej"
-  created_at: string
-  users?: {
-    emri_i_plote: string
-    email: string
-  }
-  organizations?: {
-    emri: string
-    email_kontakti: string
-  }
-}
+import type { Listing } from "@/types"
 
 export default async function ListingDetailPage({ params }: { params: { id: string } }) {
   const { user } = await getServerUser()
@@ -88,29 +68,29 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                 <CardHeader className="space-y-4">
                   <div className="flex items-center justify-between">
                     <Badge
-                      variant={listing.lloji_listimit === "shes" ? "default" : "secondary"}
+                      variant={listing.listing_type === "shes" ? "default" : "secondary"}
                       className={
-                        listing.lloji_listimit === "shes"
+                        listing.listing_type === "shes"
                           ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
                           : "bg-blue-100 text-blue-800 hover:bg-blue-200"
                       }
                     >
-                      {listing.lloji_listimit === "shes" ? "Për Shitje" : "Kërkoj të Blej"}
+                      {listing.listing_type === "shes" ? "Për Shitje" : "Kërkoj të Blej"}
                     </Badge>
                     <span className="text-sm text-gray-500">{formatDate(listing.created_at)}</span>
                   </div>
 
-                  <CardTitle className="text-3xl font-bold">{listing.titulli}</CardTitle>
+                  <CardTitle className="text-3xl font-bold">{listing.title}</CardTitle>
 
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline">{listing.kategori}</Badge>
+                    <Badge variant="outline">{listing.category}</Badge>
                   </div>
                 </CardHeader>
 
                 <CardContent className="space-y-6">
                   <div>
                     <h3 className="text-lg font-semibold mb-3">Përshkrimi</h3>
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{listing.pershkrimi}</p>
+                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{listing.description}</p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -119,7 +99,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                       <div>
                         <span className="font-medium">Çmimi:</span>
                         <p className="text-lg font-bold text-emerald-600">
-                          {listing.cmimi} € / {listing.njesia}
+                          {listing.price} € / {listing.unit}
                         </p>
                       </div>
                     </div>
@@ -128,7 +108,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                       <Package className="h-5 w-5 text-gray-500" />
                       <div>
                         <span className="font-medium">Sasia:</span>
-                        <p>{listing.sasia}</p>
+                        <p>{listing.quantity}</p>
                       </div>
                     </div>
 
@@ -136,7 +116,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                       <MapPin className="h-5 w-5 text-gray-500" />
                       <div>
                         <span className="font-medium">Vendndodhja:</span>
-                        <p>{listing.vendndodhja}</p>
+                        <p>{listing.location}</p>
                       </div>
                     </div>
 
@@ -164,13 +144,13 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                     <div className="flex items-start gap-3">
                       <Building className="h-5 w-5 text-gray-500 mt-0.5" />
                       <div>
-                        <p className="font-medium">{listing.organizations.emri}</p>
+                        <p className="font-medium">{listing.organizations.name}</p>
                         {user ? (
                           <a
-                            href={`mailto:${listing.organizations.email_kontakti}`}
+                            href={`mailto:${listing.organizations.contact_email}`}
                             className="text-sm text-emerald-600 hover:underline"
                           >
-                            {listing.organizations.email_kontakti}
+                            {listing.organizations.contact_email}
                           </a>
                         ) : (
                           <p className="text-sm italic text-gray-400">Kyçu për ta parë emailin</p>
@@ -181,7 +161,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                     <div className="flex items-start gap-3">
                       <User className="h-5 w-5 text-gray-500 mt-0.5" />
                       <div>
-                        <p className="font-medium">{listing.users?.emri_i_plote || "Anonim"}</p>
+                        <p className="font-medium">{listing.users?.full_name || "Anonim"}</p>
                         {user ? (
                           <a
                             href={`mailto:${listing.users?.email}`}
@@ -209,20 +189,20 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                   <div className="flex justify-between">
                     <span className="text-gray-600">Lloji:</span>
                     <span className="font-medium">
-                      {listing.lloji_listimit === "shes" ? "Për Shitje" : "Kërkoj të Blej"}
+                      {listing.listing_type === "shes" ? "Për Shitje" : "Kërkoj të Blej"}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Kategoria:</span>
-                    <span className="font-medium">{listing.kategori}</span>
+                    <span className="font-medium">{listing.category}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Njësia:</span>
-                    <span className="font-medium">{listing.njesia}</span>
+                    <span className="font-medium">{listing.unit}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Vendndodhja:</span>
-                    <span className="font-medium">{listing.vendndodhja}</span>
+                    <span className="font-medium">{listing.location}</span>
                   </div>
                 </CardContent>
               </Card>

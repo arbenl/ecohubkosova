@@ -35,7 +35,7 @@ export function ExampleComponent() {
 
   return (
     <div>
-      <h1>Welcome, {userProfile?.emri_i_plote}</h1>
+      <h1>Welcome, {userProfile?.full_name}</h1>
       {isAdmin && <p>You are an admin!</p>}
       <button onClick={signOut}>Sign Out</button>
       {/* Use data from Supabase */}

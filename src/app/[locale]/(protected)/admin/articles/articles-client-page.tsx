@@ -38,9 +38,9 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
             <tbody className="divide-y divide-gray-100">
               {articles.map((article) => (
                 <tr key={article.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3">{article.titulli}</td>
-                  <td className="px-4 py-3">{article.kategori}</td>
-                  <td className="px-4 py-3">{article.eshte_publikuar ? "Po" : "Jo"}</td>
+                  <td className="px-4 py-3">{article.title}</td>
+                  <td className="px-4 py-3">{article.category}</td>
+                  <td className="px-4 py-3">{article.is_published ? "Po" : "Jo"}</td>
                   <td className="px-4 py-3 space-x-2">
                     <button
                       className="text-sm text-blue-600 hover:underline"
@@ -71,28 +71,29 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
           <input
             className="rounded-md border px-3 py-2"
             placeholder="Titulli"
-            value={newArticle.titulli}
-            onChange={(event) => handleNewChange("titulli", event.target.value)}
+            value={newArticle.title}
+            onChange={(event) => handleNewChange("title", event.target.value)}
           />
           <textarea
             className="rounded-md border px-3 py-2"
             placeholder="Përmbajtja"
             rows={4}
-            value={newArticle.permbajtja}
-            onChange={(event) => handleNewChange("permbajtja", event.target.value)}
+            value={newArticle.content}
+            onChange={(event) => handleNewChange("content", event.target.value)}
           />
           <input
             className="rounded-md border px-3 py-2"
             placeholder="Kategoria"
-            value={newArticle.kategori}
-            onChange={(event) => handleNewChange("kategori", event.target.value)}
+            value={newArticle.category}
+            onChange={(event) => handleNewChange("category", event.target.value)}
           />
           <div className="flex items-center gap-3">
             <label className="inline-flex items-center gap-1">
               <input
                 type="checkbox"
-                checked={newArticle.eshte_publikuar}
-                onChange={(event) => handleNewChange("eshte_publikuar", event.target.checked)}
+                id="eshte_publikuar"
+                checked={newArticle.is_published}
+                onChange={(event) => handleNewChange("is_published", event.target.checked)}
               />
               Publiko menjëherë
             </label>
@@ -105,9 +106,9 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
           />
           <input
             className="rounded-md border px-3 py-2"
-            placeholder="URL foto kryesore"
-            value={newArticle.foto_kryesore}
-            onChange={(event) => handleNewChange("foto_kryesore", event.target.value)}
+            placeholder="URL e fotos kryesore"
+            value={newArticle.featured_image}
+            onChange={(event) => handleNewChange("featured_image", event.target.value)}
           />
           <button
             className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
@@ -128,14 +129,14 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
               event.preventDefault()
               const formData = new FormData(event.currentTarget)
               const updatedData = {
-                titulli: formData.get("titulli") as string,
-                permbajtja: formData.get("permbajtja") as string,
-                kategori: formData.get("kategori") as string,
-                eshte_publikuar: formData.get("eshte_publikuar") === "on",
+                title: formData.get("title") as string,
+                content: formData.get("content") as string,
+                category: formData.get("category") as string,
+                is_published: formData.get("is_published") === "on",
                 tags: (formData.get("tags") as string)
                   ?.split(",")
                   .map((tag) => tag.trim()),
-                foto_kryesore: (formData.get("foto_kryesore") as string) || null,
+                featured_image: (formData.get("featured_image") as string) || null,
               }
 
               const parsed = adminArticleUpdateSchema.safeParse(updatedData)
@@ -149,26 +150,26 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
             }}
           >
             <input
-              name="titulli"
-              defaultValue={editingArticle.titulli}
+              name="title"
+              defaultValue={editingArticle.title}
               className="w-full rounded-md border px-3 py-2"
             />
             <textarea
-              name="permbajtja"
-              defaultValue={editingArticle.permbajtja}
+              name="content"
+              defaultValue={editingArticle.content}
               rows={4}
               className="w-full rounded-md border px-3 py-2"
             />
             <input
-              name="kategori"
-              defaultValue={editingArticle.kategori}
+              name="category"
+              defaultValue={editingArticle.category}
               className="w-full rounded-md border px-3 py-2"
             />
             <label className="inline-flex items-center gap-2">
               <input
                 type="checkbox"
-                name="eshte_publikuar"
-                defaultChecked={editingArticle.eshte_publikuar}
+                name="is_published"
+                defaultChecked={editingArticle.is_published}
                 className="h-4 w-4"
               />
               Publiko
@@ -179,8 +180,8 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
               className="w-full rounded-md border px-3 py-2"
             />
             <input
-              name="foto_kryesore"
-              defaultValue={editingArticle.foto_kryesore ?? ""}
+              name="featured_image"
+              defaultValue={editingArticle.featured_image ?? ""}
               className="w-full rounded-md border px-3 py-2"
             />
             <div className="flex gap-2">

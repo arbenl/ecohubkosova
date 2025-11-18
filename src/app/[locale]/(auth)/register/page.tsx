@@ -25,17 +25,17 @@ import type { Locale } from "@/lib/locales"
 type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani"
 
 interface FormData {
-  emri_i_plote: string
+  full_name: string
   email: string
   password: string
   confirmPassword: string
-  vendndodhja: string
-  roli: UserRole
-  emri_organizates?: string
-  pershkrimi_organizates?: string
-  interesi_primar?: string
-  person_kontakti?: string
-  email_kontakti?: string
+  location: string
+  role: UserRole
+  organization_name?: string
+  organization_description?: string
+  primary_interest?: string
+  contact_person?: string
+  contact_email?: string
   terms: boolean
   newsletter: boolean
 }
@@ -48,17 +48,17 @@ export default function RegjistrohuPage() {
   const locale = useLocale() as Locale
 
   const [formData, setFormData] = useState<FormData>({
-    emri_i_plote: "",
+    full_name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    vendndodhja: "",
-    roli: "Individ",
-    emri_organizates: "",
-    pershkrimi_organizates: "",
-    interesi_primar: "",
-    person_kontakti: "",
-    email_kontakti: "",
+    location: "",
+    role: "Individ",
+    organization_name: "",
+    organization_description: "",
+    primary_interest: "",
+    contact_person: "",
+    contact_email: "",
     terms: false,
     newsletter: false,
   })
@@ -80,11 +80,11 @@ export default function RegjistrohuPage() {
 
   /**
    * Handles changes for the RadioGroup (user role selection).
-   * Updates the 'roli' field in formData.
+   * Updates the 'role' field in formData.
    * @param {UserRole} value - The selected role value.
    */
   const handleRoleChange = (value: UserRole) => {
-    setFormData({ ...formData, roli: value })
+    setFormData({ ...formData, role: value })
   }
 
   /**
@@ -95,11 +95,11 @@ export default function RegjistrohuPage() {
     if (step === 1) {
       // Step 1 validation: Basic user information
       if (
-        !formData.emri_i_plote ||
+        !formData.full_name ||
         !formData.email ||
         !formData.password ||
         !formData.confirmPassword ||
-        !formData.vendndodhja
+        !formData.location
       ) {
         setError("Ju lutemi plotësoni të gjitha fushat e detyrueshme.")
         return
@@ -114,14 +114,14 @@ export default function RegjistrohuPage() {
       }
     }
 
-    if (step === 2 && formData.roli !== "Individ") {
+    if (step === 2 && formData.role !== "Individ") {
       // Step 2 validation: Organization details (only for non-individual roles)
       if (
-        !formData.emri_organizates ||
-        !formData.pershkrimi_organizates ||
-        !formData.interesi_primar ||
-        !formData.person_kontakti ||
-        !formData.email_kontakti
+        !formData.organization_name ||
+        !formData.organization_description ||
+        !formData.primary_interest ||
+        !formData.contact_person ||
+        !formData.contact_email
       ) {
         setError("Ju lutemi plotësoni të gjitha fushat e organizatës.")
         return
@@ -158,16 +158,16 @@ export default function RegjistrohuPage() {
     setError(null) // Clear previous errors
 
     const result = await registerUser({
-      emri_i_plote: formData.emri_i_plote,
+      full_name: formData.full_name,
       email: formData.email,
       password: formData.password,
-      vendndodhja: formData.vendndodhja,
-      roli: formData.roli,
-      emri_organizates: formData.emri_organizates,
-      pershkrimi_organizates: formData.pershkrimi_organizates,
-      interesi_primar: formData.interesi_primar,
-      person_kontakti: formData.person_kontakti,
-      email_kontakti: formData.email_kontakti,
+      location: formData.location,
+      role: formData.role,
+      organization_name: formData.organization_name,
+      organization_description: formData.organization_description,
+      primary_interest: formData.primary_interest,
+      contact_person: formData.contact_person,
+      contact_email: formData.contact_email,
       newsletter: formData.newsletter,
     })
 
@@ -182,7 +182,7 @@ export default function RegjistrohuPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5 py-12">
       <div className="container px-4 md:px-6 max-w-lg">
-        <Card className="glass-card rounded-2xl shadow-xl">
+        <Card className="glass-card rounded-2xl">
           <CardHeader className="space-y-1 text-center">
             <CardTitle className="text-3xl font-bold text-gray-900">Bashkohu me ne</CardTitle>
             <CardDescription className="text-gray-600">
@@ -199,13 +199,13 @@ export default function RegjistrohuPage() {
               {step === 1 && (
                 <>
                   <div className="space-y-2">
-                    <Label htmlFor="emri_i_plote" className="text-gray-700 font-medium">
+                    <Label htmlFor="full_name" className="text-gray-700 font-medium">
                       Emri i Plotë
                     </Label>
                     <Input
-                      id="emri_i_plote"
-                      name="emri_i_plote"
-                      value={formData.emri_i_plote}
+                      id="full_name"
+                      name="full_name"
+                      value={formData.full_name}
                       onChange={handleChange}
                       className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
                       required
@@ -255,13 +255,13 @@ export default function RegjistrohuPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="vendndodhja" className="text-gray-700 font-medium">
+                    <Label htmlFor="location" className="text-gray-700 font-medium">
                       Vendndodhja
                     </Label>
                     <Input
-                      id="vendndodhja"
-                      name="vendndodhja"
-                      value={formData.vendndodhja}
+                      id="location"
+                      name="location"
+                      value={formData.location}
                       onChange={handleChange}
                       placeholder="Prishtinë, Kosovë"
                       className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
@@ -271,7 +271,7 @@ export default function RegjistrohuPage() {
                   <div className="space-y-3">
                     <Label className="text-gray-700 font-medium">Roli</Label>
                     <RadioGroup
-                      value={formData.roli}
+                      value={formData.role}
                       onValueChange={(value) => handleRoleChange(value as UserRole)}
                       className="space-y-3"
                     >
@@ -310,16 +310,16 @@ export default function RegjistrohuPage() {
 
               {step === 2 && (
                 <>
-                  {formData.roli !== "Individ" ? (
+                  {formData.role !== "Individ" ? (
                     <>
                       <div className="space-y-2">
-                        <Label htmlFor="emri_organizates" className="text-gray-700 font-medium">
+                        <Label htmlFor="organization_name" className="text-gray-700 font-medium">
                           Emri i organizatës
                         </Label>
                         <Input
-                          id="emri_organizates"
-                          name="emri_organizates"
-                          value={formData.emri_organizates}
+                          id="organization_name"
+                          name="organization_name"
+                          value={formData.organization_name}
                           onChange={handleChange}
                           placeholder="Emri i organizatës"
                           className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
@@ -328,15 +328,15 @@ export default function RegjistrohuPage() {
                       </div>
                       <div className="space-y-2">
                         <Label
-                          htmlFor="pershkrimi_organizates"
+                          htmlFor="organization_description"
                           className="text-gray-700 font-medium"
                         >
                           Përshkrimi i organizatës
                         </Label>
                         <Textarea
-                          id="pershkrimi_organizates"
-                          name="pershkrimi_organizates"
-                          value={formData.pershkrimi_organizates}
+                          id="organization_description"
+                          name="organization_description"
+                          value={formData.organization_description}
                           onChange={handleChange}
                           placeholder="Përshkrim i shkurtër i organizatës"
                           className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
@@ -345,13 +345,13 @@ export default function RegjistrohuPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="interesi_primar" className="text-gray-700 font-medium">
+                        <Label htmlFor="primary_interest" className="text-gray-700 font-medium">
                           Interesi primar në ekonominë qarkulluese
                         </Label>
                         <Input
-                          id="interesi_primar"
-                          name="interesi_primar"
-                          value={formData.interesi_primar}
+                          id="primary_interest"
+                          name="primary_interest"
+                          value={formData.primary_interest}
                           onChange={handleChange}
                           placeholder="p.sh. Riciklimi, Energjia e ripërtëritshme, etj."
                           className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
@@ -359,13 +359,13 @@ export default function RegjistrohuPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="person_kontakti" className="text-gray-700 font-medium">
+                        <Label htmlFor="contact_person" className="text-gray-700 font-medium">
                           Person kontakti
                         </Label>
                         <Input
-                          id="person_kontakti"
-                          name="person_kontakti"
-                          value={formData.person_kontakti}
+                          id="contact_person"
+                          name="contact_person"
+                          value={formData.contact_person}
                           onChange={handleChange}
                           placeholder="Emri i personit të kontaktit"
                           className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
@@ -374,14 +374,14 @@ export default function RegjistrohuPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="email_kontakti" className="text-gray-700 font-medium">
+                        <Label htmlFor="contact_email" className="text-gray-700 font-medium">
                           Email kontakti
                         </Label>
                         <Input
-                          id="email_kontakti"
-                          name="email_kontakti"
+                          id="contact_email"
+                          name="contact_email"
                           type="email"
-                          value={formData.email_kontakti}
+                          value={formData.contact_email}
                           onChange={handleChange}
                           placeholder="Email i personit të kontaktit"
                           className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
@@ -528,7 +528,7 @@ export default function RegjistrohuPage() {
             <div className="text-sm text-center text-gray-600">
               Keni tashmë një llogari?{" "}
               <Link
-                href="/login"
+                href={`/${locale}/login`}
                 className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors"
               >
                 Kyçu këtu

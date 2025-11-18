@@ -13,13 +13,13 @@ export interface ArticleListOptions {
 
 export interface ArticleRecord {
   id: string
-  titulli: string
-  permbajtja: string
-  kategori: string
+  title: string
+  content: string
+  category: string
   tags: string[] | null
   created_at: string
   users?: {
-    emri_i_plote?: string | null
+    full_name?: string | null
   } | null
 }
 
@@ -28,14 +28,14 @@ export async function fetchArticlesList({ search = "", category = "all", page = 
 
   try {
     const offset = (page - 1) * ITEMS_PER_PAGE
-    const filters: any[] = [eq(articles.eshte_publikuar, true)]
+    const filters: any[] = [eq(articles.is_published, true)]
 
     if (category !== "all") {
-      filters.push(eq(articles.kategori, category))
+      filters.push(eq(articles.category, category))
     }
 
     if (search) {
-      filters.push(or(ilike(articles.titulli, `%${search}%`), ilike(articles.permbajtja, `%${search}%`)))
+      filters.push(or(ilike(articles.title, `%${search}%`), ilike(articles.content, `%${search}%`)))
     }
 
     const whereClause = filters.length === 1 ? filters[0] : filters.length > 1 ? and(...filters) : undefined
@@ -44,10 +44,10 @@ export async function fetchArticlesList({ search = "", category = "all", page = 
       .get()
       .select({
         article: articles,
-        author_name: users.emri_i_plote,
+        author_name: users.full_name,
       })
       .from(articles)
-      .leftJoin(users, eq(articles.autori_id, users.id))
+      .leftJoin(users, eq(articles.author_id, users.id))
       .where(whereClause)
       .orderBy(desc(articles.created_at))
       .limit(ITEMS_PER_PAGE + 1)
@@ -56,13 +56,13 @@ export async function fetchArticlesList({ search = "", category = "all", page = 
     const hasMore = rows.length > ITEMS_PER_PAGE
     const list = rows.slice(0, ITEMS_PER_PAGE).map(({ article, author_name }) => ({
       id: article.id,
-      titulli: article.titulli,
-      permbajtja: article.permbajtja,
-      kategori: article.kategori,
+      title: article.title,
+      content: article.content,
+      category: article.category,
       tags: article.tags?.length ? article.tags : null,
       created_at: article.created_at.toISOString(),
       users: {
-        emri_i_plote: author_name ?? null,
+        full_name: author_name ?? null,
       },
     }))
 
@@ -89,10 +89,10 @@ export async function fetchArticleById(id: string) {
       .get()
       .select({
         article: articles,
-        author_name: users.emri_i_plote,
+        author_name: users.full_name,
       })
       .from(articles)
-      .leftJoin(users, eq(articles.autori_id, users.id))
+      .leftJoin(users, eq(articles.author_id, users.id))
       .where(eq(articles.id, id))
       .limit(1)
     const record = records[0]
@@ -103,13 +103,13 @@ export async function fetchArticleById(id: string) {
 
     const articleRecord: ArticleRecord = {
       id: record.article.id,
-      titulli: record.article.titulli,
-      permbajtja: record.article.permbajtja,
-      kategori: record.article.kategori,
+      title: record.article.title,
+      content: record.article.content,
+      category: record.article.category,
       tags: record.article.tags?.length ? record.article.tags : null,
       created_at: record.article.created_at.toISOString(),
       users: {
-        emri_i_plote: record.author_name ?? null,
+        full_name: record.author_name ?? null,
       },
     }
 

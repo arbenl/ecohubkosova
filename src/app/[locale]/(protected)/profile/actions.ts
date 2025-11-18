@@ -9,6 +9,7 @@ import {
   updateOrganizationRecord,
   updateUserProfileRecord,
   type ProfileOrganization,
+  type ProfileResult,
   type ProfileUser,
 } from "@/services/profile"
 import {
@@ -21,13 +22,7 @@ import {
 export type UserProfile = ProfileUser
 type Organization = ProfileOrganization
 
-type ProfileDataResult = {
-  userProfile: ProfileUser | null
-  organization: ProfileOrganization | null
-  error: string | null
-}
-
-export async function getProfileData(): Promise<ProfileDataResult> {
+export async function getProfileData(): Promise<ProfileResult> {
   return fetchCurrentUserProfile()
 }
 

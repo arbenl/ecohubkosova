@@ -5,8 +5,8 @@ interface OrganizationMember {
   id: string
   organization_id: string
   user_id: string
-  roli_ne_organizate: string
-  eshte_aprovuar: boolean
+  role_in_organization: string
+  is_approved: boolean
   created_at: string
 }
 

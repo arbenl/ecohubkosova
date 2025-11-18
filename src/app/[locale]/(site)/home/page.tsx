@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { UserPlus, Search, MessageCircle, ShoppingCart, Sparkles, Leaf, Users } from "lucide-react"
-import { LandingAuthPanel } from "@/components/landing/landing-auth-panel"
+import { UserPlus, Search, MessageCircle, ShoppingCart, Sparkles, Leaf, Users, LogIn } from "lucide-react"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { getLocale } from "next-intl/server"
 
 export default async function Home() {
   const locale = await getLocale() as string
-  
+
   return (
     <>
       <main className="flex-1">
@@ -19,7 +18,7 @@ export default async function Home() {
             <div className="flex justify-end mb-4">
               <LanguageSwitcher />
             </div>
-            
+
             <div className="flex flex-col items-center text-center space-y-10 animate-fade-in">
               <div className="inline-flex items-center rounded-full glass-card px-4 py-2 text-sm font-semibold transition-all duration-300 hover:scale-105">
                 <Sparkles className="w-4 h-4 mr-2 text-[#00C896]" />
@@ -51,7 +50,8 @@ export default async function Home() {
                 </Button>
                 <Button
                   size="lg"
-                  className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
+                  variant="outline"
+                  className="rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105 border-2 border-[#00C896] text-[#00C896] hover:bg-[#00C896] hover:text-white"
                   asChild
                 >
                   <Link href={`/${locale}/marketplace`}>
@@ -61,8 +61,15 @@ export default async function Home() {
                 </Button>
               </div>
 
-              <div className="w-full max-w-2xl mx-auto">
-                <LandingAuthPanel />
+              {/* Auth Links - Always visible, no auth state checking */}
+              <div className="flex items-center gap-4 pt-6">
+                <span className="text-gray-500 text-sm">Keni llogari?</span>
+                <Button variant="link" className="text-[#00C896] hover:text-[#00A07E] p-0 h-auto font-semibold" asChild>
+                  <Link href={`/${locale}/login`}>
+                    <LogIn className="mr-1 h-4 w-4" />
+                    Kyçu
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>

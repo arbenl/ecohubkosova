@@ -7,14 +7,14 @@ import { createUserListing } from "@/services/listings"
 import { listingCreateSchema } from "@/validation/listings"
 
 interface FormPayload {
-  titulli: string
-  pershkrimi: string
-  kategori: string
-  cmimi: string
-  njesia: string
-  vendndodhja: string
-  sasia: string
-  lloji_listimit: "shes" | "blej"
+  title: string
+  description: string
+  category: string
+  price: string
+  unit: string
+  location: string
+  quantity: string
+  listing_type: "shes" | "blej"
 }
 
 export async function createListing(formData: FormPayload) {

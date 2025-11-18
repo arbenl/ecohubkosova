@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useLocale } from "next-intl"
+import Link from "next/link"
 import { Alert, AlertCircle, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -140,7 +141,7 @@ export default function KycuPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5">
-      <div className="max-w-md mx-auto glass-card rounded-2xl shadow-xl p-8">
+      <div className="max-w-md mx-auto glass-card rounded-2xl p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Mirë se erdhe</h1>
           <p className="text-gray-600">Kyçu në llogarinë tënde</p>
@@ -208,12 +209,12 @@ export default function KycuPage() {
         <div className="text-center mt-6">
           <p className="text-gray-600">
             Nuk ke llogari?{" "}
-            <a
-              href="/register"
+            <Link
+              href={`/${locale}/register`}
               className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors"
             >
               Regjistrohu këtu
-            </a>
+            </Link>
           </p>
         </div>
       </div>

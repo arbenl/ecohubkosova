@@ -16,26 +16,26 @@ const trimmedOptional = (field: string, max = 240) =>
     .transform((value) => value ?? "")
 
 export const userProfileUpdateSchema = z.object({
-  emri_i_plote: trimmedNonEmpty("Emri i plotë"),
-  vendndodhja: trimmedOptional("Vendndodhja"),
+  full_name: trimmedNonEmpty("Emri i plotë"),
+  location: trimmedOptional("Vendndodhja"),
 })
 
 export type UserProfileUpdateInput = z.infer<typeof userProfileUpdateSchema>
 
 export const organizationProfileUpdateSchema = z.object({
-  emri: trimmedNonEmpty("Emri i organizatës"),
-  pershkrimi: z
+  name: trimmedNonEmpty("Emri i organizatës"),
+  description: z
     .string({ required_error: "Përshkrimi është i detyrueshëm." })
     .trim()
     .min(10, "Përshkrimi duhet të ketë të paktën 10 karaktere.")
     .max(500, "Përshkrimi nuk mund të kalojë 500 karaktere."),
-  interesi_primar: trimmedOptional("Interesi primar", 200),
-  person_kontakti: trimmedNonEmpty("Personi i kontaktit"),
-  email_kontakti: z
+  primary_interest: trimmedOptional("Interesi primar", 200),
+  contact_person: trimmedNonEmpty("Personi i kontaktit"),
+  contact_email: z
     .string({ required_error: "Emaili i kontaktit është i detyrueshëm." })
     .trim()
     .email("Shkruani një adresë email të vlefshme."),
-  vendndodhja: trimmedOptional("Vendndodhja"),
+  location: trimmedOptional("Vendndodhja"),
 })
 
 export type OrganizationProfileUpdateInput = z.infer<typeof organizationProfileUpdateSchema>

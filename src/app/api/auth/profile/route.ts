@@ -5,49 +5,22 @@ import { logAuthAction } from "@/lib/auth/logging"
 
 export const dynamic = "force-dynamic"
 
-const MAX_RETRIES = 3
-const RETRY_DELAY = 100
-
-// Database error patterns to detect
-const DB_ERROR_PATTERNS = [
-  /SUPABASE_DB_URL/i,
-  /connection refused/i,
-  /connection timeout/i,
-  /connect ECONNREFUSED/i,
-  /connect ETIMEDOUT/i,
-  /ENOTFOUND/i,
-  /pool.*error/i,
-  /could not translate host name/i,
-  /no pg_hba.conf entry/i,
-  /password authentication failed/i,
-  /PGSQL.*error/i,
-]
-
-const isDbConnectionError = (errorMsg: string): boolean => {
-  return DB_ERROR_PATTERNS.some((pattern) => pattern.test(errorMsg))
-}
-
-async function withRetry<T>(
-  fn: () => Promise<T>,
-  maxRetries: number = MAX_RETRIES,
-  delayMs: number = RETRY_DELAY
-): Promise<T> {
-  let lastError: Error | null = null
-
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      return await fn()
-    } catch (error) {
-      lastError = error as Error
-      if (attempt < maxRetries - 1) {
-        await new Promise((resolve) => setTimeout(resolve, delayMs * (attempt + 1)))
-      }
-    }
-  }
-
-  throw lastError
-}
-
+/**
+ * GET /api/auth/profile
+ * 
+ * Returns the current user's profile.
+ * 
+ * Response (200 OK):
+ * {
+ *   profile: UserProfile | null,
+ *   noProfile?: boolean,        // true if user has no profile yet (normal for new users)
+ *   dbUnavailable?: boolean,    // true if profile query failed due to DB connectivity
+ *   error?: string | null       // error message if applicable
+ * }
+ * 
+ * Response (401 Unauthorized):
+ * { profile: null, error: "Përdoruesi nuk është i kyçur." }
+ */
 export async function GET() {
   try {
     const supabase = await createServerSupabaseClient()
@@ -78,49 +51,49 @@ export async function GET() {
     }
 
     try {
-      const profile = await withRetry(
-        () => ensureUserProfileExists(supabase, user.id),
-        MAX_RETRIES,
-        RETRY_DELAY
-      )
+      // ensureUserProfileExists already handles connection/auth errors gracefully
+      // It returns null for both "new user, no profile yet" and connection errors
+      // Connection errors are logged by the service, not here
+      const profile = await ensureUserProfileExists(supabase, user.id)
 
-      logAuthAction("profileEndpoint", "Profile retrieved successfully", {
-        userId: user.id,
-      })
-
-      return NextResponse.json({ profile })
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : String(err)
-      const isDbError = isDbConnectionError(errorMsg)
-      
-      if (isDbError) {
-        logAuthAction("profileEndpoint", "Database connection error - allowing login without profile", {
+      if (profile) {
+        logAuthAction("profileEndpoint", "Profile retrieved successfully", {
           userId: user.id,
-          error: errorMsg,
-          isDbError: true,
         })
-        
-        // Return with database unavailable flag
-        // This allows login to proceed even if DB is temporarily unavailable
-        return NextResponse.json(
-          { 
-            profile: null, 
-            dbUnavailable: true,
-            error: "Gabim në lidhjen me bazën e të dhënave. Profili nuk u ngarkua, por mund të hyni me kufizime." 
-          },
-          { status: 200 } // Return 200 to allow login flow
-        )
+        return NextResponse.json({ profile, error: null })
       }
 
-      logAuthAction("profileEndpoint", "Failed to fetch profile after retries", {
+      // Profile is null - this is normal for new users
+      // The profile-service logs connection errors separately if they occur
+      logAuthAction("profileEndpoint", "No profile found (new user or DB unavailable)", {
         userId: user.id,
-        error: errorMsg,
-        isDbError: false,
       })
 
       return NextResponse.json(
-        { profile: null, error: "Gabim gjatë ngarkimit të profilit." },
-        { status: 500 }
+        {
+          profile: null,
+          noProfile: true, // Distinguish "no profile yet" from errors
+          error: null,
+        },
+        { status: 200 }
+      )
+    } catch (err) {
+      // Errors thrown here are from profile-service after connection error already logged
+      const errorMsg = err instanceof Error ? err.message : String(err)
+
+      logAuthAction("profileEndpoint", "Failed to fetch profile", {
+        userId: user.id,
+        error: errorMsg,
+      })
+
+      return NextResponse.json(
+        {
+          profile: null,
+          noProfile: false,
+          dbUnavailable: true, // Indicate DB problem
+          error: "Gabim në lidhjen me bazën e të dhënave. Profili nuk u ngarkua.",
+        },
+        { status: 200 } // Return 200 to allow login flow to continue
       )
     }
   } catch (err) {

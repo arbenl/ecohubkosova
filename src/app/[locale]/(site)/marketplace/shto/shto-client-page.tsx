@@ -27,14 +27,14 @@ export default function ShtoListimClientPage() {
   const [success, setSuccess] = useState(false)
 
   const [formData, setFormData] = useState({
-    titulli: "",
-    pershkrimi: "",
-    kategori: "Materiale",
-    cmimi: "",
-    njesia: "copë",
-    vendndodhja: "",
-    sasia: "",
-    lloji_listimit: "shes",
+    title: "",
+    description: "",
+    category: "Materiale",
+    price: "",
+    unit: "copë",
+    location: "",
+    quantity: "",
+    listing_type: "shes",
     foto_url: "",
   })
 
@@ -68,7 +68,7 @@ export default function ShtoListimClientPage() {
     const { foto_url, ...listingPayload } = formData
     const result = await createListing({
       ...listingPayload,
-      lloji_listimit: listingPayload.lloji_listimit as "shes" | "blej",
+      listing_type: listingPayload.listing_type as "shes" | "blej",
     })
 
     if (result.error) {
@@ -77,14 +77,14 @@ export default function ShtoListimClientPage() {
       setSuccess(true)
       // Reset form
       setFormData({
-        titulli: "",
-        pershkrimi: "",
-        kategori: "",
-        cmimi: "",
-        njesia: "copë",
-        vendndodhja: "",
-        sasia: "",
-        lloji_listimit: "shes",
+        title: "",
+        description: "",
+        category: "",
+        price: "",
+        unit: "copë",
+        location: "",
+        quantity: "",
+        listing_type: "shes",
         foto_url: "",
       })
 
@@ -168,10 +168,10 @@ export default function ShtoListimClientPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="lloji_listimit">Lloji i listimit</Label>
+                    <Label htmlFor="listing_type">Lloji i listimit</Label>
                     <RadioGroup
-                      value={formData.lloji_listimit}
-                      onValueChange={(value) => handleSelectChange("lloji_listimit", value)}
+                      value={formData.listing_type}
+                      onValueChange={(value) => handleSelectChange("listing_type", value)}
                       className="flex flex-col space-y-1 mt-2"
                     >
                       <div className="flex items-center space-x-2">
@@ -186,11 +186,11 @@ export default function ShtoListimClientPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="titulli">Titulli *</Label>
+                    <Label htmlFor="title">Titulli *</Label>
                     <Input
-                      id="titulli"
-                      name="titulli"
-                      value={formData.titulli}
+                      id="title"
+                      name="title"
+                      value={formData.title}
                       onChange={handleChange}
                       placeholder="p.sh. Materiale plastike të riciklueshme"
                       required
@@ -198,11 +198,11 @@ export default function ShtoListimClientPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="pershkrimi">Përshkrimi *</Label>
+                    <Label htmlFor="description">Përshkrimi *</Label>
                     <Textarea
-                      id="pershkrimi"
-                      name="pershkrimi"
-                      value={formData.pershkrimi}
+                      id="description"
+                      name="description"
+                      value={formData.description}
                       onChange={handleChange}
                       placeholder="Jepni një përshkrim të detajuar të produktit/shërbimit"
                       rows={4}
@@ -211,10 +211,10 @@ export default function ShtoListimClientPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="kategori">Kategoria *</Label>
+                    <Label htmlFor="category">Kategoria *</Label>
                     <Select
-                      value={formData.kategori}
-                      onValueChange={(value) => handleSelectChange("kategori", value)}
+                      value={formData.category}
+                      onValueChange={(value) => handleSelectChange("category", value)}
                       required
                     >
                       <SelectTrigger>
@@ -232,23 +232,23 @@ export default function ShtoListimClientPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="cmimi">Çmimi (€) *</Label>
+                      <Label htmlFor="price">Çmimi (€) *</Label>
                       <Input
-                        id="cmimi"
-                        name="cmimi"
+                        id="price"
+                        name="price"
                         type="number"
                         step="0.01"
-                        value={formData.cmimi}
+                        value={formData.price}
                         onChange={handleChange}
                         required
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="njesia">Njësia *</Label>
+                      <Label htmlFor="unit">Njësia *</Label>
                       <Select
-                        value={formData.njesia}
-                        onValueChange={(value) => handleSelectChange("njesia", value)}
+                        value={formData.unit}
+                        onValueChange={(value) => handleSelectChange("unit", value)}
                         required
                       >
                         <SelectTrigger>
@@ -266,11 +266,11 @@ export default function ShtoListimClientPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="sasia">Sasia e disponueshme *</Label>
+                    <Label htmlFor="quantity">Sasia e disponueshme *</Label>
                     <Input
-                      id="sasia"
-                      name="sasia"
-                      value={formData.sasia}
+                      id="quantity"
+                      name="quantity"
+                      value={formData.quantity}
                       onChange={handleChange}
                       placeholder="p.sh. 100 kg, 5-10 copë, etj."
                       required
@@ -278,11 +278,11 @@ export default function ShtoListimClientPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="vendndodhja">Vendndodhja *</Label>
+                    <Label htmlFor="location">Vendndodhja *</Label>
                     <Input
-                      id="vendndodhja"
-                      name="vendndodhja"
-                      value={formData.vendndodhja}
+                      id="location"
+                      name="location"
+                      value={formData.location}
                       onChange={handleChange}
                       placeholder="p.sh. Prishtinë, Kosovë"
                       required

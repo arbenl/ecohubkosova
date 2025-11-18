@@ -25,23 +25,23 @@ export function OrganizationProfileForm({ organizationId, initialData }: OrgProf
     <div>
       <FormStatus error={error} success={success} />
       <form onSubmit={handleSubmit} className="space-y-4">
-        <FormField label="Emri" name="emri" error={fieldErrors.emri}>
-          <Input name="emri" value={formData.emri} onChange={handleChange} />
+        <FormField label="Emri" name="name" error={fieldErrors.name}>
+          <Input name="name" value={formData.name} onChange={handleChange} />
         </FormField>
-        <FormField label="Përshkrimi" name="pershkrimi" error={fieldErrors.pershkrimi}>
-          <Textarea name="pershkrimi" value={formData.pershkrimi} onChange={handleChange} />
+        <FormField label="Përshkrimi" name="description" error={fieldErrors.description}>
+          <Textarea name="description" value={formData.description} onChange={handleChange} />
         </FormField>
-        <FormField label="Interesi Primar" name="interesi_primar" error={fieldErrors.interesi_primar}>
-          <Input name="interesi_primar" value={formData.interesi_primar} onChange={handleChange} />
+        <FormField label="Interesi Primar" name="primary_interest" error={fieldErrors.primary_interest}>
+          <Input name="primary_interest" value={formData.primary_interest} onChange={handleChange} />
         </FormField>
-        <FormField label="Person Kontakti" name="person_kontakti" error={fieldErrors.person_kontakti}>
-          <Input name="person_kontakti" value={formData.person_kontakti} onChange={handleChange} />
+        <FormField label="Person Kontakti" name="contact_person" error={fieldErrors.contact_person}>
+          <Input name="contact_person" value={formData.contact_person} onChange={handleChange} />
         </FormField>
-        <FormField label="Email Kontakti" name="email_kontakti" error={fieldErrors.email_kontakti}>
-          <Input name="email_kontakti" value={formData.email_kontakti} onChange={handleChange} />
+        <FormField label="Email Kontakti" name="contact_email" error={fieldErrors.contact_email}>
+          <Input name="contact_email" value={formData.contact_email} onChange={handleChange} />
         </FormField>
-        <FormField label="Vendndodhja" name="vendndodhja" error={fieldErrors.vendndodhja}>
-          <Input name="vendndodhja" value={formData.vendndodhja} onChange={handleChange} />
+        <FormField label="Vendndodhja" name="location" error={fieldErrors.location}>
+          <Input name="location" value={formData.location} onChange={handleChange} />
         </FormField>
         <Button type="submit" disabled={saving}>
           {saving ? "Duke ruajtur..." : "Ruaj"}

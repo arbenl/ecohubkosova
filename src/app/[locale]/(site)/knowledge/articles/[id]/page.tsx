@@ -60,11 +60,11 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
             <CardHeader className="space-y-4">
               <div className="flex items-center gap-2">
                 <span className="px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 text-emerald-800">
-                  {article.kategori}
+                  {article.category}
                 </span>
               </div>
 
-              <CardTitle className="text-3xl font-bold leading-tight">{article.titulli}</CardTitle>
+              <CardTitle className="text-3xl font-bold leading-tight">{article.title}</CardTitle>
 
               <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                 <div className="flex items-center gap-1">
@@ -73,7 +73,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
                 </div>
                 <div className="flex items-center gap-1">
                   <User className="h-4 w-4" />
-                  <span>{article.users?.emri_i_plote || "Anonim"}</span>
+                  <span>{article.users?.full_name || "Anonim"}</span>
                 </div>
               </div>
 
@@ -90,7 +90,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
             </CardHeader>
 
             <CardContent className="prose prose-lg max-w-none">
-              <div className="whitespace-pre-wrap text-gray-800 leading-relaxed">{article.permbajtja}</div>
+              <div className="whitespace-pre-wrap text-gray-800 leading-relaxed">{article.content}</div>
             </CardContent>
           </Card>
 

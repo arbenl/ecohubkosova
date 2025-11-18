@@ -15,20 +15,20 @@ export const loginSchema = z.object({
 })
 
 const baseRegistrationSchema = z.object({
-  emri_i_plote: z.string().min(2, "Shkruani emrin e plotë."),
+  full_name: z.string().min(2, "Shkruani emrin e plotë."),
   email: z
     .string({ required_error: "Email është i detyrueshëm." })
     .toLowerCase()
     .trim()
     .email("Email i pavlefshëm."),
   password: z.string().min(6, "Fjalëkalimi duhet të ketë të paktën 6 karaktere."),
-  vendndodhja: z.string().min(2, "Vendndodhja është e detyrueshme."),
-  roli: z.enum(["Individ", "OJQ", "Ndërmarrje Sociale", "Kompani"]),
-  emri_organizates: z.string().optional(),
-  pershkrimi_organizates: z.string().optional(),
-  interesi_primar: z.string().optional(),
-  person_kontakti: z.string().optional(),
-  email_kontakti: z
+  location: z.string().min(2, "Vendndodhja është e detyrueshme."),
+  role: z.enum(["Individ", "OJQ", "Ndërmarrje Sociale", "Kompani"]),
+  organization_name: z.string().optional(),
+  organization_description: z.string().optional(),
+  primary_interest: z.string().optional(),
+  contact_person: z.string().optional(),
+  contact_email: z
     .string()
     .toLowerCase()
     .trim()
@@ -40,13 +40,13 @@ const baseRegistrationSchema = z.object({
 })
 
 export const registrationSchema = baseRegistrationSchema.superRefine((data, ctx) => {
-  if (data.roli !== "Individ") {
+  if (data.role !== "Individ") {
     const requiredFields: Array<keyof typeof data> = [
-      "emri_organizates",
-      "pershkrimi_organizates",
-      "interesi_primar",
-      "person_kontakti",
-      "email_kontakti",
+      "organization_name",
+      "organization_description",
+      "primary_interest",
+      "contact_person",
+      "contact_email",
     ]
 
     requiredFields.forEach((field) => {

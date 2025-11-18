@@ -31,14 +31,14 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
           <tbody>
             {organizations.map((org) => (
               <tr key={org.id} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b">{org.emri}</td>
-                <td className="py-2 px-4 border-b">{org.pershkrimi}</td>
-                <td className="py-2 px-4 border-b">{org.interesi_primar}</td>
-                <td className="py-2 px-4 border-b">{org.person_kontakti}</td>
-                <td className="py-2 px-4 border-b">{org.email_kontakti}</td>
-                <td className="py-2 px-4 border-b">{org.vendndodhja}</td>
-                <td className="py-2 px-4 border-b">{org.lloji}</td>
-                <td className="py-2 px-4 border-b">{org.eshte_aprovuar ? "Po" : "Jo"}</td>
+                <td className="py-2 px-4 border-b">{org.name}</td>
+                <td className="py-2 px-4 border-b">{org.description}</td>
+                <td className="py-2 px-4 border-b">{org.primary_interest}</td>
+                <td className="py-2 px-4 border-b">{org.contact_person}</td>
+                <td className="py-2 px-4 border-b">{org.contact_email}</td>
+                <td className="py-2 px-4 border-b">{org.location}</td>
+                <td className="py-2 px-4 border-b">{org.type}</td>
+                <td className="py-2 px-4 border-b">{org.is_approved ? "Po" : "Jo"}</td>
                 <td className="py-2 px-4 border-b">
         <button
           onClick={() => setEditingOrganization(org)}
@@ -70,14 +70,14 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
 
                     const formData = new FormData(e.currentTarget)
                     const updatedData = {
-                      emri: formData.get("emri") as string,
-                      pershkrimi: formData.get("pershkrimi") as string,
-                      interesi_primar: formData.get("interesi_primar") as string,
-                      person_kontakti: formData.get("person_kontakti") as string,
-                      email_kontakti: formData.get("email_kontakti") as string,
-                      vendndodhja: formData.get("vendndodhja") as string,
-                      lloji: formData.get("lloji") as string,
-                      eshte_aprovuar: formData.get("eshte_aprovuar") === "on",
+                      name: formData.get("name") as string,
+                      description: formData.get("description") as string,
+                      primary_interest: formData.get("primary_interest") as string,
+                      contact_person: formData.get("contact_person") as string,
+                      contact_email: formData.get("contact_email") as string,
+                      location: formData.get("location") as string,
+                      type: formData.get("type") as string,
+                      is_approved: formData.get("is_approved") === "on",
                     }
 
                     const parsed = adminOrganizationUpdateSchema.safeParse(updatedData)
@@ -94,84 +94,84 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
               className="space-y-4"
             >
               <div>
-                <label htmlFor="emri" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
                   Emri:
                 </label>
                 <input
                   type="text"
-                  id="emri"
-                  name="emri"
-                  defaultValue={editingOrganization.emri}
+                  id="name"
+                  name="name"
+                  defaultValue={editingOrganization.name}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="pershkrimi" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">
                   Pershkrimi:
                 </label>
                 <textarea
-                  id="pershkrimi"
-                  name="pershkrimi"
-                  defaultValue={editingOrganization.pershkrimi}
+                  id="description"
+                  name="description"
+                  defaultValue={editingOrganization.description}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="interesi_primar" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="primary_interest" className="block text-gray-700 text-sm font-bold mb-2">
                   Interesi Primar:
                 </label>
                 <input
                   type="text"
-                  id="interesi_primar"
-                  name="interesi_primar"
-                  defaultValue={editingOrganization.interesi_primar}
+                  id="primary_interest"
+                  name="primary_interest"
+                  defaultValue={editingOrganization.primary_interest}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="person_kontakti" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="contact_person" className="block text-gray-700 text-sm font-bold mb-2">
                   Person Kontakti:
                 </label>
                 <input
                   type="text"
-                  id="person_kontakti"
-                  name="person_kontakti"
-                  defaultValue={editingOrganization.person_kontakti}
+                  id="contact_person"
+                  name="contact_person"
+                  defaultValue={editingOrganization.contact_person}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="email_kontakti" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="contact_email" className="block text-gray-700 text-sm font-bold mb-2">
                   Email Kontakti:
                 </label>
                 <input
                   type="email"
-                  id="email_kontakti"
-                  name="email_kontakti"
-                  defaultValue={editingOrganization.email_kontakti}
+                  id="contact_email"
+                  name="contact_email"
+                  defaultValue={editingOrganization.contact_email}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="vendndodhja" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="location" className="block text-gray-700 text-sm font-bold mb-2">
                   Vendndodhja:
                 </label>
                 <input
                   type="text"
-                  id="vendndodhja"
-                  name="vendndodhja"
-                  defaultValue={editingOrganization.vendndodhja}
+                  id="location"
+                  name="location"
+                  defaultValue={editingOrganization.location}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div>
-                <label htmlFor="lloji" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="type" className="block text-gray-700 text-sm font-bold mb-2">
                   Lloji:
                 </label>
                 <select
-                  id="lloji"
-                  name="lloji"
-                  defaultValue={editingOrganization.lloji}
+                  id="type"
+                  name="type"
+                  defaultValue={editingOrganization.type}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   required
                 >
@@ -181,14 +181,14 @@ export default function OrganizationsClientPage({ initialOrganizations }: Organi
                 </select>
               </div>
               <div>
-                <label htmlFor="eshte_aprovuar" className="block text-gray-700 text-sm font-bold mb-2">
+                <label htmlFor="is_approved" className="block text-gray-700 text-sm font-bold mb-2">
                   Eshte Aprovuar:
                 </label>
                 <input
                   type="checkbox"
-                  id="eshte_aprovuar"
-                  name="eshte_aprovuar"
-                  defaultChecked={editingOrganization?.eshte_aprovuar}
+                  id="is_approved"
+                  name="is_approved"
+                  defaultChecked={editingOrganization?.is_approved}
                   className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>

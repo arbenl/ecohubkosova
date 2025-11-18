@@ -3,7 +3,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { BookOpen, Users, ShoppingCart, User } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { getServerUser } from "@/lib/supabase/server"
 import { StatsCards } from "./stats-cards"
 import { LatestArticles } from "./latest-articles"
 import { KeyPartners } from "./key-partners"
@@ -14,21 +13,23 @@ import { LatestArticlesSkeleton } from "@/components/dashboard/latest-articles-s
 import { KeyPartnersSkeleton } from "@/components/dashboard/key-partners-skeleton"
 import { ChartSkeleton } from "@/components/dashboard/chart-skeleton"
 import { getStats, getLatestArticles, getKeyPartners } from "./actions"
-import { fetchUserProfileById } from "@/services/profile"
+import { getServerUser } from "@/lib/supabase/server"
+import { getCachedUserProfileById } from "@/services/profile"
 
 export default async function DashboardPage() {
   const { user } = await getServerUser()
 
   if (!user) {
-    // This should ideally be caught by middleware, but as a fallback
+    // Middleware should prevent this, but guard against direct access.
     return null
   }
 
-  const { userProfile, error: profileError } = await fetchUserProfileById(user.id)
-
-  if (profileError) {
-    console.error("DashboardPage profile load error:", profileError)
+  const profileResult = await getCachedUserProfileById(user.id)
+  if (profileResult.errorType !== "none" || !profileResult.userProfile) {
+    return null
   }
+
+  const userProfile = profileResult.userProfile
 
   const stats = await getStats()
 
@@ -53,7 +54,7 @@ export default async function DashboardPage() {
       <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-center">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-            Mirë se erdhe, {userProfile?.emri_i_plote || "Përdorues"}!
+            Mirë se erdhe, {userProfile?.full_name || "Përdorues"}!
           </h1>
           <p className="text-gray-600 mt-1">Ky është paneli juaj i kontrollit në ECO HUB KOSOVA</p>
         </div>
