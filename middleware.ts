@@ -1,9 +1,9 @@
-// Minimal middleware for debugging
+// Simple test middleware
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 export async function middleware(req: NextRequest) {
-  console.log("Minimal middleware executed")
+  console.log("Middleware executed for:", req.nextUrl.pathname)
   return NextResponse.next()
 }
 
