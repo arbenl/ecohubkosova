@@ -1,40 +1,49 @@
 import React from "react"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import { function } from "marketplace-client-page"
+import MarketplaceClientPage from "./marketplace-client-page"
+import { NextIntlClientProvider } from "next-intl"
 
 // Mock hooks
 vi.mock("@/hooks/use-marketplace-filters", () => ({
   useMarketplaceFilters: vi.fn()
 }))
 
-// Mock Next.js
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    replace: vi.fn(),
-    back: vi.fn()
-  }),
-  usePathname: () => "/",
-  useSearchParams: () => new URLSearchParams()
+// Mock next-intl
+vi.mock("next-intl", () => ({
+  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  useLocale: () => "en"
 }))
 
-// Mock icons
-vi.mock("lucide-react", () => ({
-  Search: () => <div data-testid="search-icon" />,
-  SlidersHorizontal: () => <div data-testid="slidershorizontal-icon" />,
+// Mock Supabase
+vi.mock("@/lib/supabase", () => ({
+  createClientSupabaseClient: vi.fn(() => ({
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          order: vi.fn(() => ({
+            limit: vi.fn(() => Promise.resolve({ data: [], error: null }))
+          }))
+        }))
+      }))
+    }))
+  }))
 }))
 
-describe("function component", () => {
+describe("MarketplaceClientPage component", () => {
   it("renders without crashing", () => {
     expect(() => render(
-      <function />
+      <NextIntlClientProvider locale="en" messages={{}}>
+        <MarketplaceClientPage locale="en" initialSearchParams={{}} />
+      </NextIntlClientProvider>
     )).not.toThrow()
   })
 
   it("renders with basic structure", () => {
     const { container } = render(
-      <function />
+      <NextIntlClientProvider locale="en" messages={{}}>
+        <MarketplaceClientPage locale="en" initialSearchParams={{}} />
+      </NextIntlClientProvider>
     )
     expect(container).toBeInTheDocument()
   })

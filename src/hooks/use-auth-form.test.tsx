@@ -20,7 +20,8 @@ vi.mock("@/services/auth", () => ({
 }))
 
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => key
+  useTranslations: () => (key: string) => key,
+  useLocale: () => "en"
 }))
 
 describe("useAuthForm hook", () => {
