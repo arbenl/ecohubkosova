@@ -1,9 +1,9 @@
 import type { MutableRefObject } from "react"
 import type { SupabaseClient } from "@supabase/supabase-js"
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
-import { logAuthAction } from "@/lib/auth/logging"
-import { resetSupabaseBrowserClient } from "@/lib/supabase-browser"
-import type { Locale } from "@/lib/locales"
+import { logAuthAction } from "./logging"
+import { resetSupabaseBrowserClient } from "../supabase-browser"
+import type { Locale } from "../locales"
 
 interface SignOutDeps {
   supabase: SupabaseClient<any, any, any>

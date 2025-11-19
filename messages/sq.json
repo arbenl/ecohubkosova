@@ -107,6 +107,14 @@
     "next": "Tjetra",
     "previous": "Paraardhëse"
   },
+  "admin": {
+    "panel": "Paneli",
+    "users": "Përdoruesit",
+    "organizations": "Organizatat",
+    "articles": "Artikujt",
+    "listings": "Tregu",
+    "adminPanel": "Admin Panel"
+  },
   "errors": {
     "notFound": "Nuk u gjet",
     "unauthorized": "I paautorizuar",

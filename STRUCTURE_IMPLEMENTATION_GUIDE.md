@@ -125,7 +125,7 @@ Search: /koalicioni     Replace: /about/coalition
 Search: /eksploro       Replace: /explore
 Search: /drejtoria      Replace: /explore/opportunities
 Search: /tregu          Replace: /marketplace
-Search: /qendra-e-dijes Replace: /explore/knowledge
+Search: /qendra-e-dijes Replace: /knowledge
 Search: /partnere       Replace: /partners
 Search: /kontakti       Replace: /contact
 Search: /ndihme         Replace: /help
@@ -219,7 +219,7 @@ rm -rf src/app/rreth-nesh
 | `/eksploro` | `/explore` | Redirect to `/explore` |
 | `/drejtoria` | `/explore/opportunities` | `(public)/explore/opportunities/page.tsx` |
 | `/tregu` | `/explore/marketplace` | `(public)/explore/marketplace/page.tsx` |
-| `/qendra-e-dijes` | `/explore/knowledge` | `(public)/explore/knowledge/page.tsx` |
+| `/qendra-e-dijes` | `/knowledge` | `(public)/knowledge/page.tsx` |
 | `/partners` | `/partners` | `(public)/partners/page.tsx` |
 | `/partnere` | `/partners` | Redirect to `/partners` |
 | `/contact` | `/contact` | `(public)/contact/page.tsx` |
@@ -269,7 +269,7 @@ User types: /auth/kycu
 Response: "Why isn't this just /login?"
 
 User types: /qendra-e-dijes
-Response: "I have no idea what this means"
+Response: "This should redirect to /knowledge"
 ```
 
 ### After

@@ -199,7 +199,7 @@ import {
 } from "@/lib/auth/session-version"
 import { logMiddlewareEvent } from "@/lib/auth/logging"
 
-const PROTECTED_PREFIXES = ["/admin", "/dashboard", "/profili", "/tregu/shto"]
+const PROTECTED_PREFIXES = ["/admin", "/dashboard", "/profili", "/marketplace/add"]
 const ADMIN_PREFIXES = ["/admin"]
 const AUTH_PREFIXES = ["/auth/kycu", "/auth/regjistrohu"]
 const IGNORED_PREFIXES = [

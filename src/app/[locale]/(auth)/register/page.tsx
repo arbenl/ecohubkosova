@@ -174,7 +174,7 @@ export default function RegjistrohuPage() {
     if (result.error) {
       setError(result.error)
     } else {
-      router.push(`/${locale}/auth/sukses`) // Redirect to success page upon successful registration
+      router.push(`/${locale}/success`) // Redirect to success page upon successful registration
     }
     setLoading(false) // Reset loading state
   }

@@ -5,7 +5,7 @@ import { users } from "@/db/schema"
 export const dynamic = "force-dynamic"
 
 export interface HealthCheckResponse {
-  status: "ok" | "error"
+  status: "healthy" | "error"
   timestamp: string
   database: {
     connected: boolean
@@ -24,7 +24,7 @@ export async function GET(): Promise<NextResponse<HealthCheckResponse>> {
     const responseTime = Date.now() - startTime
 
     return NextResponse.json({
-      status: "ok",
+      status: "healthy",
       timestamp: new Date().toISOString(),
       database: {
         connected: true,

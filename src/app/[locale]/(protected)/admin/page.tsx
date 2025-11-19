@@ -5,7 +5,12 @@ import type { AdminStats } from "@/services/admin/stats"
 import AdminStatCard from "./admin-stat-card" // Will create this client component later
 import AdminQuickActionCard from "./admin-quick-action-card" // Will create this client component later
 
-export default async function AdminDashboardPage() {
+export default async function AdminDashboardPage({
+  params,
+}: {
+  params: { locale: string }
+}) {
+  const { locale } = params
   const defaultStats: AdminStats = {
     users: 0,
     organizations: 0,
@@ -37,7 +42,7 @@ export default async function AdminDashboardPage() {
             value={stats.users}
             description="Përdorues të regjistruar në platformë"
             icon={<Users className="h-5 w-5 text-[#00C896]" />}
-            href="/admin/users"
+            href={`/${locale}/admin/users`}
           />
 
           <AdminStatCard
@@ -45,7 +50,7 @@ export default async function AdminDashboardPage() {
             value={stats.organizations}
             description="Organizata të regjistruara në platformë"
             icon={<Building className="h-5 w-5 text-[#00C896]" />}
-            href="/admin/organizations"
+            href={`/${locale}/admin/organizations`}
             pendingCount={stats.pendingOrganizations}
             pendingMessage="në pritje të aprovimit"
           />
@@ -55,7 +60,7 @@ export default async function AdminDashboardPage() {
             value={stats.articles}
             description="Artikuj në platformë"
             icon={<BookOpen className="h-5 w-5 text-[#00C896]" />}
-            href="/admin/articles"
+            href={`/${locale}/admin/articles`}
             pendingCount={stats.pendingArticles}
             pendingMessage="në pritje të publikimit"
           />
@@ -65,7 +70,7 @@ export default async function AdminDashboardPage() {
             value={stats.listings}
             description="Listime në tregun e platformës"
             icon={<ShoppingCart className="h-5 w-5 text-[#00C896]" />}
-            href="/admin/listings"
+            href={`/${locale}/admin/listings`}
             pendingCount={stats.pendingListings}
             pendingMessage="në pritje të aprovimit"
           />
@@ -85,22 +90,22 @@ export default async function AdminDashboardPage() {
                 <AdminQuickActionCard
                   title="Menaxho Përdoruesit"
                   icon={<Users className="h-8 w-8 text-[#00C896] mb-2" />}
-                  href="/admin/users"
+                  href={`/${locale}/admin/users`}
                 />
                 <AdminQuickActionCard
                   title="Aprovo Organizatat"
                   icon={<Building className="h-8 w-8 text-[#00C896] mb-2" />}
-                  href="/admin/organizations"
+                  href={`/${locale}/admin/organizations`}
                 />
                 <AdminQuickActionCard
                   title="Publiko Artikuj"
                   icon={<BookOpen className="h-8 w-8 text-[#00C896] mb-2" />}
-                  href="/admin/articles"
+                  href={`/${locale}/admin/articles`}
                 />
                 <AdminQuickActionCard
                   title="Aprovo Listime"
                   icon={<ShoppingCart className="h-8 w-8 text-[#00C896] mb-2" />}
-                  href="/admin/listings"
+                  href={`/${locale}/admin/listings`}
                 />
               </div>
             </CardContent>

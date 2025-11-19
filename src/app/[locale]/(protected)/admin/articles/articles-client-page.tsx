@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { useLocale } from "next-intl"
 import { adminArticleUpdateSchema } from "@/validation/admin"
 import { useAdminArticles } from "@/hooks/use-admin-articles"
 
@@ -21,6 +22,8 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
     handleEditSubmit,
   } = useAdminArticles(initialArticles)
 
+  const locale = useLocale()
+
   return (
     <div className="space-y-8">
       <section>
@@ -31,6 +34,7 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
               <tr>
                 <th className="px-4 py-2 text-left font-medium text-gray-600">Titulli</th>
                 <th className="px-4 py-2 text-left font-medium text-gray-600">Kategoria</th>
+                <th className="px-4 py-2 text-left font-medium text-gray-600">Lloji</th>
                 <th className="px-4 py-2 text-left font-medium text-gray-600">Publikuar</th>
                 <th className="px-4 py-2 text-left font-medium text-gray-600">Veprime</th>
               </tr>
@@ -40,6 +44,13 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
                 <tr key={article.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3">{article.title}</td>
                   <td className="px-4 py-3">{article.category}</td>
+                  <td className="px-4 py-3">
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      article.external_url ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+                    }`}>
+                      {article.external_url ? 'Jashtëm' : 'Lokal'}
+                    </span>
+                  </td>
                   <td className="px-4 py-3">{article.is_published ? "Po" : "Jo"}</td>
                   <td className="px-4 py-3 space-x-2">
                     <button
@@ -54,7 +65,7 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
                     >
                       Fshi
                     </button>
-                    <Link href={`/qendra-e-dijes/${article.id}`} className="text-sm text-gray-600">
+                    <Link href={`/${locale}/knowledge/articles/${article.id}`} className="text-sm text-gray-600">
                       Shiko <ArrowRight className="inline h-4 w-4" />
                     </Link>
                   </td>
@@ -76,10 +87,22 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
           />
           <textarea
             className="rounded-md border px-3 py-2"
-            placeholder="Përmbajtja"
+            placeholder="Përmbajtja (lër bosh për artikuj të jashtëm)"
             rows={4}
             value={newArticle.content}
             onChange={(event) => handleNewChange("content", event.target.value)}
+          />
+          <input
+            className="rounded-md border px-3 py-2"
+            placeholder="URL e jashtme (për artikuj nga burime të jashtme)"
+            value={newArticle.external_url}
+            onChange={(event) => handleNewChange("external_url", event.target.value)}
+          />
+          <input
+            className="rounded-md border px-3 py-2"
+            placeholder="Gjuha origjinale (p.sh. 'en', 'sq')"
+            value={newArticle.original_language}
+            onChange={(event) => handleNewChange("original_language", event.target.value)}
           />
           <input
             className="rounded-md border px-3 py-2"
@@ -130,7 +153,9 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
               const formData = new FormData(event.currentTarget)
               const updatedData = {
                 title: formData.get("title") as string,
-                content: formData.get("content") as string,
+                content: (formData.get("content") as string) || null,
+                external_url: (formData.get("external_url") as string) || null,
+                original_language: (formData.get("original_language") as string) || null,
                 category: formData.get("category") as string,
                 is_published: formData.get("is_published") === "on",
                 tags: (formData.get("tags") as string)
@@ -156,8 +181,20 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
             />
             <textarea
               name="content"
-              defaultValue={editingArticle.content}
+              defaultValue={editingArticle.content || ''}
               rows={4}
+              className="w-full rounded-md border px-3 py-2"
+            />
+            <input
+              name="external_url"
+              defaultValue={editingArticle.external_url || ''}
+              placeholder="URL e jashtme"
+              className="w-full rounded-md border px-3 py-2"
+            />
+            <input
+              name="original_language"
+              defaultValue={editingArticle.original_language || ''}
+              placeholder="Gjuha origjinale"
               className="w-full rounded-md border px-3 py-2"
             />
             <input

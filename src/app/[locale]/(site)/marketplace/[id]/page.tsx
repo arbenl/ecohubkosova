@@ -9,8 +9,10 @@ import { getServerUser } from "@/lib/supabase/server"
 import ContactListingButton from "./contact-listing-button"
 import { fetchListingById } from "@/services/listings"
 import type { Listing } from "@/types"
+import { getLocale } from "next-intl/server"
 
 export default async function ListingDetailPage({ params }: { params: { id: string } }) {
+  const locale = await getLocale()
   const { user } = await getServerUser()
 
   const { data: listing, error } = await fetchListingById(params.id)
@@ -34,7 +36,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
               <h1 className="text-2xl font-bold mb-4">Listimi nuk u gjet</h1>
               <p className="text-gray-600 mb-6">{error}</p>
               <Button asChild>
-                <Link href="/marketplace">
+                <Link href={`/${locale}/marketplace`}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Kthehu në Treg
                 </Link>

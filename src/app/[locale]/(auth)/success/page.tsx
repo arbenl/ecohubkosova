@@ -1,8 +1,11 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { CheckCircle } from "lucide-react"
+import { useLocale } from "next-intl"
 
 export default function SuksesPage() {
+  const locale = useLocale()
+
   return (
     <>
       <main className="flex-1 flex items-center justify-center py-12">
@@ -27,10 +30,10 @@ export default function SuksesPage() {
                 className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
                 asChild
               >
-                <Link href="/login">Kyçu në platformë</Link>
+                <Link href={`/${locale}/login`}>Kyçu në platformë</Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/">Kthehu në faqen kryesore</Link>
+                <Link href={`/${locale}`}>Kthehu në faqen kryesore</Link>
               </Button>
             </div>
           </div>

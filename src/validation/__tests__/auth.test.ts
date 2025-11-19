@@ -62,34 +62,34 @@ describe("Auth Validation Schemas", () => {
   describe("registrationSchema - Individual Role", () => {
     it("validates correct individual registration", () => {
       const validInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
         email: "john@example.com",
         password: "password123",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
+        location: "Prishtina",
+        role: "Individ",
       }
       const result = registrationSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("rejects missing emri_i_plote", () => {
+    it("rejects missing full_name", () => {
       const invalidInput = {
         email: "john@example.com",
         password: "password123",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
+        location: "Prishtina",
+        role: "Individ",
       }
       const result = registrationSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects emri_i_plote shorter than 2 characters", () => {
+    it("rejects full_name shorter than 2 characters", () => {
       const invalidInput = {
-        emri_i_plote: "J",
+        full_name: "J",
         email: "john@example.com",
         password: "password123",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
+        location: "Prishtina",
+        role: "Individ",
       }
       const result = registrationSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -97,11 +97,11 @@ describe("Auth Validation Schemas", () => {
 
     it("rejects invalid email", () => {
       const invalidInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
         email: "invalid-email",
         password: "password123",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
+        location: "Prishtina",
+        role: "Individ",
       }
       const result = registrationSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -109,23 +109,23 @@ describe("Auth Validation Schemas", () => {
 
     it("rejects password shorter than 6 characters", () => {
       const invalidInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
         email: "john@example.com",
         password: "pass",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
+        location: "Prishtina",
+        role: "Individ",
       }
       const result = registrationSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects vendndodhja shorter than 2 characters", () => {
+    it("rejects location shorter than 2 characters", () => {
       const invalidInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
         email: "john@example.com",
         password: "password123",
-        vendndodhja: "P",
-        roli: "Individ",
+        location: "P",
+        role: "Individ",
       }
       const result = registrationSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -135,16 +135,16 @@ describe("Auth Validation Schemas", () => {
   describe("registrationSchema - Organization Roles", () => {
     it("validates correct organization registration (OJQ)", () => {
       const validInput = {
-        emri_i_plote: "Jane Doe",
+        full_name: "Jane Doe",
         email: "jane@example.com",
         password: "password123",
-        vendndodhja: "Prishtina",
-        roli: "OJQ",
-        emri_organizates: "My Organization",
-        pershkrimi_organizates: "A great organization",
-        interesi_primar: "Environment",
-        person_kontakti: "Jane Doe",
-        email_kontakti: "jane@org.com",
+        location: "Prishtina",
+        role: "OJQ",
+        organization_name: "My Organization",
+        organization_description: "A great organization",
+        primary_interest: "Environment",
+        contact_person: "Jane Doe",
+        contact_email: "jane@org.com",
       }
       const result = registrationSchema.safeParse(validInput)
       expect(result.success).toBe(true)
@@ -152,11 +152,11 @@ describe("Auth Validation Schemas", () => {
 
     it("rejects organization registration without required fields", () => {
       const invalidInput = {
-        emri_i_plote: "Jane Doe",
+        full_name: "Jane Doe",
         email: "jane@example.com",
         password: "password123",
-        vendndodhja: "Prishtina",
-        roli: "OJQ",
+        location: "Prishtina",
+        role: "OJQ",
       }
       const result = registrationSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -165,22 +165,22 @@ describe("Auth Validation Schemas", () => {
       }
     })
 
-    it("rejects missing emri_organizates for non-individual role", () => {
+    it("rejects missing organization_name for non-individual role", () => {
       const invalidInput = {
-        emri_i_plote: "Jane Doe",
+        full_name: "Jane Doe",
         email: "jane@example.com",
         password: "password123",
-        vendndodhja: "Prishtina",
-        roli: "Kompani",
-        pershkrimi_organizates: "Description",
-        interesi_primar: "Tech",
-        person_kontakti: "Jane",
-        email_kontakti: "jane@example.com",
+        location: "Prishtina",
+        role: "Kompani",
+        organization_description: "Description",
+        primary_interest: "Tech",
+        contact_person: "Jane",
+        contact_email: "jane@example.com",
       }
       const result = registrationSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error.issues.some((issue) => issue.path.includes("emri_organizates"))).toBe(true)
+        expect(result.error.issues.some((issue) => issue.path.includes("organization_name"))).toBe(true)
       }
     })
 
@@ -189,11 +189,11 @@ describe("Auth Validation Schemas", () => {
 
       roles.forEach((role) => {
         const invalidInput = {
-          emri_i_plote: "Jane Doe",
+          full_name: "Jane Doe",
           email: "jane@example.com",
           password: "password123",
-          vendndodhja: "Prishtina",
-          roli: role,
+          location: "Prishtina",
+          role: role,
         }
         const result = registrationSchema.safeParse(invalidInput)
         expect(result.success).toBe(false)
@@ -204,11 +204,11 @@ describe("Auth Validation Schemas", () => {
   describe("registrationSchema - Optional Fields", () => {
     it("allows newsletter field to be undefined for individuals", () => {
       const validInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
         email: "john@example.com",
         password: "password123",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
+        location: "Prishtina",
+        role: "Individ",
       }
       const result = registrationSchema.safeParse(validInput)
       expect(result.success).toBe(true)
@@ -216,11 +216,11 @@ describe("Auth Validation Schemas", () => {
 
     it("allows newsletter field to be true", () => {
       const validInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
         email: "john@example.com",
         password: "password123",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
+        location: "Prishtina",
+        role: "Individ",
         newsletter: true,
       }
       const result = registrationSchema.safeParse(validInput)
@@ -229,11 +229,11 @@ describe("Auth Validation Schemas", () => {
 
     it("allows newsletter field to be false", () => {
       const validInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
         email: "john@example.com",
         password: "password123",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
+        location: "Prishtina",
+        role: "Individ",
         newsletter: false,
       }
       const result = registrationSchema.safeParse(validInput)

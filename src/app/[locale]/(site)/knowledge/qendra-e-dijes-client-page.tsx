@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { BookOpen, Calendar, Search, User } from "lucide-react"
+import { useLocale } from "next-intl"
 import type { ArticleRecord } from "@/services/articles"
 
 interface QendraEDijesClientPageProps {
@@ -28,6 +29,7 @@ export default function QendraEDijesClientPage({
   categories,
 }: QendraEDijesClientPageProps) {
   const router = useRouter()
+  const locale = useLocale()
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
   const [selectedCategory, setSelectedCategory] = useState(initialSelectedCategory)
   const [isPending, startTransition] = useTransition()
@@ -144,7 +146,14 @@ export default function QendraEDijesClientPage({
                 <CardTitle className="text-lg">{article.title}</CardTitle>
               </CardHeader>
               <CardContent className="pb-2">
-                <CardDescription className="line-clamp-3">{truncateText(article.content, 180)}</CardDescription>
+                <CardDescription className="line-clamp-3">
+                  {article.content
+                    ? truncateText(article.content, 180)
+                    : article.external_url
+                      ? "Kliko për të lexuar artikullin e plotë nga burimi origjinal"
+                      : "Përmbajtja nuk është e disponueshme"
+                  }
+                </CardDescription>
               </CardContent>
               <CardFooter className="pt-2 flex justify-between items-center border-t text-xs text-gray-500">
                 <div className="flex items-center gap-4">
@@ -158,7 +167,7 @@ export default function QendraEDijesClientPage({
                   </span>
                 </div>
                 <Button size="sm" asChild>
-                  <Link href={`/qendra-e-dijes/${article.id}`}>Lexo më shumë</Link>
+                  <Link href={`/${locale}/knowledge/articles/${article.id}`}>Lexo më shumë</Link>
                 </Button>
               </CardFooter>
             </Card>

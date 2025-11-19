@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
+import { useLocale } from "next-intl"
 
 type Article = {
   id: string
@@ -16,21 +17,22 @@ type Partner = {
 }
 
 export function useLatestArticlesSection(latestArticles: Article[] = []) {
+  const locale = useLocale()
   const items = useMemo(
     () =>
       (latestArticles ?? []).map((article) => ({
         id: article.id,
         title: article.title,
         author: article.users?.full_name || "Autor i panjohur",
-        href: `/qendra-e-dijes/${article.id}`,
+        href: `/${locale}/knowledge/articles/${article.id}`,
       })),
-    [latestArticles]
+    [latestArticles, locale]
   )
 
   return {
     items,
     hasItems: items.length > 0,
-    ctaHref: "/knowledge",
+    ctaHref: `/${locale}/knowledge`,
     ctaLabel: "Shiko të gjithë artikujt",
     emptyMessage: "Nuk ka artikuj të disponueshëm aktualisht.",
   }
@@ -43,7 +45,7 @@ export function useKeyPartnersSection(keyPartners: Partner[] = []) {
         id: partner.id,
         name: partner.name,
         meta: `${partner.type} • ${partner.location}`,
-        href: `/drejtoria/${partner.id}`,
+        href: `/partners/${partner.id}`,
       })),
     [keyPartners]
   )
@@ -51,7 +53,7 @@ export function useKeyPartnersSection(keyPartners: Partner[] = []) {
   return {
     items,
     hasItems: items.length > 0,
-    ctaHref: "/drejtoria",
+    ctaHref: "/partners",
     ctaLabel: "Shiko të gjithë partnerët",
     emptyMessage: "Nuk ka partnerë të disponueshëm aktualisht.",
   }

@@ -11,8 +11,6 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './e2e',
-  /* Global setup hook */
-  globalSetup: './e2e/global-setup.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -37,7 +35,7 @@ export default defineConfig({
   },
 
   /* Global timeout */
-  timeout: 30000,
+  timeout: process.env.CI ? 15000 : 30000,
 
   /* Configure projects for major browsers */
   projects: [
@@ -79,10 +77,10 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: process.env.SKIP_WEB_SERVER ? undefined : {
-    command: 'pnpm exec next build && pnpm exec next start --hostname 127.0.0.1 --port 3000',
+  webServer: process.env.CI ? undefined : {
+    command: 'npm run dev -- --hostname 127.0.0.1 --port 3000',
     url: 'http://127.0.0.1:3000',
     reuseExistingServer: true,
-    timeout: 60000,
+    timeout: 30000,
   },
 });

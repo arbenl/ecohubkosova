@@ -107,6 +107,14 @@
     "next": "Next",
     "previous": "Previous"
   },
+  "admin": {
+    "panel": "Panel",
+    "users": "Users",
+    "organizations": "Organizations",
+    "articles": "Articles",
+    "listings": "Marketplace",
+    "adminPanel": "Admin Panel"
+  },
   "errors": {
     "notFound": "Not Found",
     "unauthorized": "Unauthorized",

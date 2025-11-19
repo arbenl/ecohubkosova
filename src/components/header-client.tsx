@@ -3,10 +3,10 @@
 import Link from "next/link"
 import { useState } from "react"
 import { useLocale } from "next-intl"
-import { Button } from "@/components/ui/button"
+import { Button } from "./ui/button"
 import { Menu, X, User } from "lucide-react"
-import { useAuth } from "@/lib/auth-provider"
-import { SignOutButton } from "@/components/sign-out-button"
+import { useAuth } from "../lib/auth-provider"
+import { SignOutButton } from "./sign-out-button"
 
 interface HeaderClientProps {
   fallbackUserName?: string | null

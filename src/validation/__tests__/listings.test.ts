@@ -5,14 +5,14 @@ describe("Listings Validation Schema", () => {
   describe("listingCreateSchema", () => {
     it("validates correct listing creation", () => {
       const validInput = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: 5.99,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
@@ -20,72 +20,72 @@ describe("Listings Validation Schema", () => {
 
     it("validates listing without price", () => {
       const validInput = {
-        titulli: "Volunteer Needed",
-        pershkrimi: "We need volunteers for our community project",
-        kategori: "Services",
-        njesia: "hours",
-        vendndodhja: "Prishtina",
-        sasia: "10",
-        lloji_listimit: "blej",
+        title: "Volunteer Needed",
+        description: "We need volunteers for our community project",
+        category: "Services",
+        unit: "hours",
+        location: "Prishtina",
+        quantity: "10",
+        listing_type: "blej",
       }
       const result = listingCreateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("rejects titulli shorter than 3 characters", () => {
+    it("rejects title shorter than 3 characters", () => {
       const invalidInput = {
-        titulli: "AB",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "AB",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: 5.99,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects pershkrimi shorter than 10 characters", () => {
+    it("rejects description shorter than 10 characters", () => {
       const invalidInput = {
-        titulli: "Apples",
-        pershkrimi: "Short",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Apples",
+        description: "Short",
+        category: "Agriculture",
+        price: 5.99,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects missing kategori", () => {
+    it("rejects missing category", () => {
       const invalidInput = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        price: 5.99,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects empty kategori", () => {
+    it("rejects empty category", () => {
       const invalidInput = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "",
+        price: 5.99,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -93,14 +93,14 @@ describe("Listings Validation Schema", () => {
 
     it("rejects negative price", () => {
       const invalidInput = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: -5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: -5.99,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -108,130 +108,130 @@ describe("Listings Validation Schema", () => {
 
     it("accepts price of 0", () => {
       const validInput = {
-        titulli: "Free Item",
-        pershkrimi: "This is a free item to give away",
-        kategori: "Other",
-        cmimi: 0,
-        njesia: "piece",
-        vendndodhja: "Prishtina",
-        sasia: "1",
-        lloji_listimit: "blej",
+        title: "Free Item",
+        description: "This is a free item to give away",
+        category: "Other",
+        price: 0,
+        unit: "piece",
+        location: "Prishtina",
+        quantity: "1",
+        listing_type: "blej",
       }
       const result = listingCreateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("rejects missing njesia", () => {
+    it("rejects missing unit", () => {
       const invalidInput = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: 5.99,
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects empty njesia", () => {
+    it("rejects empty unit", () => {
       const invalidInput = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        njesia: "",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: 5.99,
+        unit: "",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects vendndodhja shorter than 2 characters", () => {
+    it("rejects location shorter than 2 characters", () => {
       const invalidInput = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "P",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: 5.99,
+        unit: "kg",
+        location: "P",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects missing sasia", () => {
+    it("rejects missing quantity", () => {
       const invalidInput = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: 5.99,
+        unit: "kg",
+        location: "Prishtina",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects empty sasia", () => {
+    it("rejects empty quantity", () => {
       const invalidInput = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: 5.99,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects invalid lloji_listimit", () => {
+    it("rejects invalid listing_type", () => {
       const invalidInput = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "invalid",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: 5.99,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "invalid",
       }
       const result = listingCreateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("accepts both 'shes' and 'blej' values for lloji_listimit", () => {
+    it("accepts both 'shes' and 'blej' values for listing_type", () => {
       const validInput1 = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: 5.99,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result1 = listingCreateSchema.safeParse(validInput1)
       expect(result1.success).toBe(true)
 
       const validInput2 = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: 5.99,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "blej",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: 5.99,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "blej",
       }
       const result2 = listingCreateSchema.safeParse(validInput2)
       expect(result2.success).toBe(true)
@@ -239,33 +239,33 @@ describe("Listings Validation Schema", () => {
 
     it("converts string price to number", () => {
       const input = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: "5.99",
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: "5.99",
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(input)
       expect(result.success).toBe(true)
       if (result.success) {
-        expect(typeof result.data.cmimi).toBe("number")
-        expect(result.data.cmimi).toBe(5.99)
+        expect(typeof result.data.price).toBe("number")
+        expect(result.data.price).toBe(5.99)
       }
     })
 
     it("handles undefined price as optional", () => {
       const input = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: undefined,
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: undefined,
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(input)
       expect(result.success).toBe(true)
@@ -273,14 +273,14 @@ describe("Listings Validation Schema", () => {
 
     it("handles empty string price as optional", () => {
       const input = {
-        titulli: "Organic Apples",
-        pershkrimi: "Fresh organic apples from our farm",
-        kategori: "Agriculture",
-        cmimi: "",
-        njesia: "kg",
-        vendndodhja: "Prishtina",
-        sasia: "100",
-        lloji_listimit: "shes",
+        title: "Organic Apples",
+        description: "Fresh organic apples from our farm",
+        category: "Agriculture",
+        price: "",
+        unit: "kg",
+        location: "Prishtina",
+        quantity: "100",
+        listing_type: "shes",
       }
       const result = listingCreateSchema.safeParse(input)
       expect(result.success).toBe(true)

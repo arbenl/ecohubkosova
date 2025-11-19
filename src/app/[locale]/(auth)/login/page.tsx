@@ -18,6 +18,7 @@ function SubmitButton({ isSubmitting }: { isSubmitting: boolean }) {
       type="submit"
       className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl py-3 font-semibold transition-all duration-300 hover:scale-[1.02]"
       disabled={isSubmitting}
+      data-testid="login-submit-button"
     >
       {isSubmitting ? (
         <div className="flex items-center justify-center">
@@ -175,6 +176,7 @@ export default function KycuPage() {
               className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
               required
               disabled={isSubmitting}
+              data-testid="login-email-input"
             />
           </div>
 
@@ -189,6 +191,7 @@ export default function KycuPage() {
               className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
               required
               disabled={isSubmitting}
+              data-testid="login-password-input"
             />
           </div>
 

@@ -149,11 +149,13 @@ export async function fetchListings({
       error: null,
     }
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Gabim gjatë ngarkimit të listimeve."
     console.error("[fetchListings] Query failed:", {
-      error: errorMessage,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
       type: error instanceof Error ? error.constructor.name : typeof error,
+      fullError: error,
     })
+    const errorMessage = error instanceof Error ? error.message : "Gabim gjatë ngarkimit të listimeve."
     return {
       data: [],
       hasMore: false,

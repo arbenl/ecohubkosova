@@ -67,11 +67,19 @@ const tagsSchema = z
 
 export const adminArticleBaseSchema = z.object({
   title: trimmedString(5, 180),
-  content: trimmedString(20, 10000),
+  content: trimmedString(20, 10000).nullable(),
+  external_url: optionalUrl,
+  original_language: trimmedString(2, 10).nullable(),
   category: trimmedString(2, 120),
   is_published: booleanField,
   tags: tagsSchema,
   featured_image: optionalUrl,
+}).refine((data) => {
+  // Either content OR external_url must be provided
+  return (data.content && data.content.length > 0) || (data.external_url && data.external_url.length > 0)
+}, {
+  message: "Duhet të jepet ose përmbajtja lokale ose URL-ja e jashtme.",
+  path: ["content"], // This will show the error on the content field
 })
 
 export const adminArticleCreateSchema = adminArticleBaseSchema

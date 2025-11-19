@@ -2,9 +2,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { BookOpen, MessageCircle, Video, Download, ExternalLink } from "lucide-react"
+import { getLocale } from "next-intl/server"
 import { NdhimeCTA } from "./cta"
 
-export default function NdihmePage() {
+export default async function NdihmePage() {
+  const locale = await getLocale()
   return (
     <>
       <div className="py-12">
@@ -110,7 +112,7 @@ export default function NdihmePage() {
                     <li>• Aktivizoni njoftimet</li>
                   </ul>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
-                    <Link href="/profile">Shiko profilin</Link>
+                    <Link href={`/${locale}/profile`}>Shiko profilin</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -130,7 +132,7 @@ export default function NdihmePage() {
                     <li>• Kontaktoni partnerët</li>
                   </ul>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
-                    <Link href="/explore">Eksploro tani</Link>
+                    <Link href={`/${locale}/explore`}>Eksploro tani</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -192,7 +194,7 @@ export default function NdihmePage() {
                     </div>
                   </div>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
-                    <Link href="/drejtoria">Shiko drejtorinë</Link>
+                    <Link href="/partners">Shiko drejtorinë</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -218,7 +220,7 @@ export default function NdihmePage() {
                     </div>
                   </div>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
-                    <Link href="/knowledge">Shiko artikujt</Link>
+                    <Link href={`/${locale}/knowledge`}>Shiko artikujt</Link>
                   </Button>
                 </CardContent>
               </Card>

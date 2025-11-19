@@ -4,18 +4,19 @@ import Link from "next/link"
 import { ShoppingCart, Users, BookOpen, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useLocale } from "next-intl"
 
 const QUICK_ACTIONS = [
   {
     title: "Shto listim në treg",
     description: "Publiko një listim të ri",
-    href: "/marketplace/shto",
+    href: "/marketplace/add",
     Icon: ShoppingCart,
   },
   {
     title: "Eksploro partnerët",
     description: "Zbuloni organizatat partnere",
-    href: "/drejtoria",
+    href: "/organizations",
     Icon: Users,
   },
   {
@@ -33,6 +34,8 @@ const QUICK_ACTIONS = [
 ] as const
 
 export function QuickActionsCard() {
+  const locale = useLocale()
+
   return (
     <Card className="glass-card">
       <CardHeader>
@@ -48,7 +51,7 @@ export function QuickActionsCard() {
               className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
               asChild
             >
-              <Link href={href}>
+              <Link href={`/${locale}${href}`}>
                 <Icon className="h-8 w-8 text-emerald-600" />
                 <span className="text-sm font-medium text-center">{title}</span>
                 <span className="text-xs text-gray-500 text-center">{description}</span>

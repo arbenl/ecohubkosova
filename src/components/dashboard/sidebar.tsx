@@ -49,32 +49,32 @@ export function Sidebar({ userRole }: SidebarProps) {
     {
       label: "Paneli",
       icon: LayoutDashboard,
-      href: "/dashboard",
-      active: pathname === "/dashboard",
+      href: `/${locale}/dashboard`,
+      active: pathname === `/${locale}/dashboard`,
     },
     {
       label: "Qendra e Dijes",
       icon: BookOpen,
-      href: "/qendra-e-dijes",
-      active: pathname === "/qendra-e-dijes",
+      href: `/${locale}/knowledge`,
+      active: pathname === `/${locale}/knowledge`,
     },
     {
       label: "Drejtoria",
       icon: Users,
-      href: "/drejtoria",
-      active: pathname === "/drejtoria",
+      href: `/${locale}/partners`,
+      active: pathname === `/${locale}/partners`,
     },
     {
       label: "Tregu",
       icon: ShoppingCart,
-      href: "/marketplace",
-      active: pathname === "/marketplace",
+      href: `/${locale}/marketplace`,
+      active: pathname === `/${locale}/marketplace`,
     },
     {
       label: "Profili",
       icon: User,
-      href: "/profile",
-      active: pathname === "/profile",
+      href: `/${locale}/profile`,
+      active: pathname === `/${locale}/profile`,
     },
   ]
 
@@ -83,8 +83,8 @@ export function Sidebar({ userRole }: SidebarProps) {
     routes.push({
       label: "Administrimi",
       icon: Settings,
-      href: "/admin",
-      active: pathname.startsWith("/admin"),
+      href: `/${locale}/admin`,
+      active: pathname.startsWith(`/${locale}/admin`),
     })
   }
 

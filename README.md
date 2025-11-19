@@ -155,6 +155,37 @@ All responses are JSON in the shape `{ data: [...] }` or `{ error: string }`, an
 
 Playwright artifacts (HTML report, traces) are written to the default `playwright-report/` folder, and Vitest coverage is available under `coverage/` when needed.
 
+### HyperExecute Cloud Testing
+
+For faster test execution on performance-critical suites, use the HyperExecute MCP server:
+
+1. Set environment variables:
+   ```bash
+   export HYPEREXECUTE_API_KEY="your-api-key"
+   export HYPEREXECUTE_BASE_URL="https://api.hyperexecute.com"
+   export HYPEREXECUTE_PROJECT_ID="your-project-id"
+   ```
+
+2. Run tests via QA orchestrator with HyperExecute:
+   ```bash
+   # Via MCP server (recommended)
+   # Use the ecohub-qa.tests_orchestrator tool with useHyperExecute=true
+
+   # Or manually via script
+   cd tools/hyperexecute-qa
+   node run-hyperexecute-tool.js run_test_suite '{"suiteName":"unit","config":{"commands":["pnpm test"],"parallelism":4}}'
+   ```
+
+**When to use HyperExecute:**
+- Large test suites requiring parallel execution
+- CI/CD pipelines for faster feedback
+- Performance-critical test runs
+
+**When to use local testing:**
+- Small test suites during development
+- Debugging specific test failures
+- Quick validation before commits
+
 ## Formatting
 
 Prettier enforces a consistent style across contributors:

@@ -16,45 +16,45 @@ export type Database = {
     Tables: {
       artikuj: {
         Row: {
-          autori_id: string
+          author_id: string
           created_at: string | null
-          eshte_publikuar: boolean | null
-          foto_kryesore: string | null
+          is_published: boolean | null
+          featured_image: string | null
           id: string
-          kategori: string
-          permbajtja: string
+          category: string
+          content: string
           tags: string[] | null
-          titulli: string
+          title: string
           updated_at: string | null
         }
         Insert: {
-          autori_id: string
+          author_id: string
           created_at?: string | null
-          eshte_publikuar?: boolean | null
-          foto_kryesore?: string | null
+          is_published?: boolean | null
+          featured_image?: string | null
           id?: string
-          kategori: string
-          permbajtja: string
+          category: string
+          content: string
           tags?: string[] | null
-          titulli: string
+          title: string
           updated_at?: string | null
         }
         Update: {
-          autori_id?: string
+          author_id?: string
           created_at?: string | null
-          eshte_publikuar?: boolean | null
-          foto_kryesore?: string | null
+          is_published?: boolean | null
+          featured_image?: string | null
           id?: string
-          kategori?: string
-          permbajtja?: string
+          category?: string
+          content?: string
           tags?: string[] | null
-          titulli?: string
+          title?: string
           updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "artikuj_autori_id_fkey"
-            columns: ["autori_id"]
+            foreignKeyName: "artikuj_author_id_fkey"
+            columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -64,26 +64,26 @@ export type Database = {
       organization_members: {
         Row: {
           created_at: string | null
-          eshte_aprovuar: boolean | null
+          is_approved: boolean | null
           id: string
           organization_id: string
-          roli_ne_organizate: string
+          role_in_organization: string
           user_id: string
         }
         Insert: {
           created_at?: string | null
-          eshte_aprovuar?: boolean | null
+          is_approved?: boolean | null
           id?: string
           organization_id: string
-          roli_ne_organizate: string
+          role_in_organization: string
           user_id: string
         }
         Update: {
           created_at?: string | null
-          eshte_aprovuar?: boolean | null
+          is_approved?: boolean | null
           id?: string
           organization_id?: string
-          roli_ne_organizate?: string
+          role_in_organization?: string
           user_id?: string
         }
         Relationships: [
@@ -105,97 +105,94 @@ export type Database = {
       }
       organizations: {
         Row: {
+          contact_email: string
           created_at: string | null
-          email_kontakti: string
-          emri: string
-          eshte_aprovuar: boolean | null
+          description: string
           id: string
-          interesi_primar: string
-          lloji: string
-          pershkrimi: string
-          person_kontakti: string
+          is_approved: boolean | null
+          location: string
+          name: string
+          primary_interest: string
+          type: string
           updated_at: string | null
-          vendndodhja: string
         }
         Insert: {
+          contact_email: string
           created_at?: string | null
-          email_kontakti: string
-          emri: string
-          eshte_aprovuar?: boolean | null
+          description: string
           id?: string
-          interesi_primar: string
-          lloji: string
-          pershkrimi: string
-          person_kontakti: string
+          is_approved?: boolean | null
+          location: string
+          name: string
+          primary_interest: string
+          type: string
           updated_at?: string | null
-          vendndodhja: string
         }
         Update: {
+          contact_email?: string
           created_at?: string | null
-          email_kontakti?: string
-          emri?: string
-          eshte_aprovuar?: boolean | null
+          description?: string
           id?: string
-          interesi_primar?: string
-          lloji?: string
-          pershkrimi?: string
-          person_kontakti?: string
+          is_approved?: boolean | null
+          location?: string
+          name?: string
+          primary_interest?: string
+          type?: string
           updated_at?: string | null
-          vendndodhja?: string
         }
         Relationships: []
       }
       tregu_listime: {
         Row: {
-          cmimi: number
+          category: string
+          condition: string | null
           created_at: string | null
           created_by_user_id: string
-          eshte_aprovuar: boolean | null
-          gjendja: string | null
+          description: string
           id: string
-          kategori: string
-          lloji_listimit: string
-          njesia: string
+          is_approved: boolean | null
+          listing_type: string
+          location: string
           organization_id: string | null
-          pershkrimi: string
-          sasia: string
-          titulli: string
+          price: number
+          quantity: string
+          title: string
+          unit: string
           updated_at: string | null
-          vendndodhja: string
         }
         Insert: {
-          cmimi: number
+          category: string
+          condition?: string | null
           created_at?: string | null
           created_by_user_id: string
-          eshte_aprovuar?: boolean | null
-          gjendja?: string | null
+          description: string
           id?: string
-          kategori: string
-          lloji_listimit: string
-          njesia: string
+          is_approved?: boolean | null
+          listing_type: string
+          location: string
           organization_id?: string | null
-          pershkrimi: string
-          sasia: string
-          titulli: string
+          price: number
+          quantity: string
+          title: string
+          unit: string
           updated_at?: string | null
-          vendndodhja: string
         }
         Update: {
-          cmimi?: number
+          category?: string
+          condition?: string | null
           created_at?: string | null
           created_by_user_id?: string
-          eshte_aprovuar?: boolean | null
-          gjendja?: string | null
+          description?: string
           id?: string
-          kategori?: string
-          lloji_listimit?: string
-          njesia?: string
+          is_approved?: boolean | null
+          listing_type?: string
+          location?: string
           organization_id?: string | null
-          pershkrimi?: string
-          sasia?: string
-          titulli?: string
+          price?: number
+          quantity?: string
+          title?: string
+          unit?: string
           updated_at?: string | null
-          vendndodhja?: string
         }
         Relationships: [
           {
@@ -218,35 +215,35 @@ export type Database = {
         Row: {
           created_at: string | null
           email: string
-          emri_i_plote: string
-          eshte_aprovuar: boolean | null
+          full_name: string
+          is_approved: boolean | null
           id: string
-          roli: string
+          role: string
           session_version: number
           updated_at: string | null
-          vendndodhja: string
+          location: string
         }
         Insert: {
           created_at?: string | null
           email: string
-          emri_i_plote: string
-          eshte_aprovuar?: boolean | null
+          full_name: string
+          is_approved?: boolean | null
           id: string
-          roli: string
+          role: string
           session_version?: number
           updated_at?: string | null
-          vendndodhja: string
+          location: string
         }
         Update: {
           created_at?: string | null
           email?: string
-          emri_i_plote?: string
-          eshte_aprovuar?: boolean | null
+          full_name?: string
+          is_approved?: boolean | null
           id?: string
-          roli?: string
+          role?: string
           session_version?: number
           updated_at?: string | null
-          vendndodhja?: string
+          location?: string
         }
         Relationships: []
       }

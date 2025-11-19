@@ -13,6 +13,8 @@ export function useAdminArticles(initialArticles: AdminArticle[]) {
   const [newArticle, setNewArticle] = useState({
     title: "",
     content: "",
+    external_url: "",
+    original_language: "",
     category: "",
     is_published: false,
     tags: "",
@@ -45,7 +47,9 @@ export function useAdminArticles(initialArticles: AdminArticle[]) {
     const tagsArray = newArticle.tags ? newArticle.tags.split(",").map((tag) => tag.trim()) : null
     const payload = {
       title: newArticle.title,
-      content: newArticle.content,
+      content: newArticle.content || null,
+      external_url: newArticle.external_url || null,
+      original_language: newArticle.original_language || null,
       category: newArticle.category,
       is_published: newArticle.is_published,
       tags: tagsArray,
@@ -68,6 +72,8 @@ export function useAdminArticles(initialArticles: AdminArticle[]) {
     setNewArticle({
       title: "",
       content: "",
+      external_url: "",
+      original_language: "",
       category: "",
       is_published: false,
       tags: "",

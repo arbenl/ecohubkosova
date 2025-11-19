@@ -5,13 +5,15 @@ import { articles, users } from "@/db/schema"
 export type PublicArticle = {
   id: string
   title: string
-  content: string
+  content: string | null
   category: string
   tags: string[] | null
   featured_image: string | null
   author_name: string | null
   created_at: string
   updated_at: string | null
+  external_url: string | null
+  original_language: string | null
 }
 
 export type PublicArticleFilters = {
@@ -53,6 +55,8 @@ export async function fetchPublicArticles(filters: PublicArticleFilters = {}) {
       author_name: author_name ?? null,
       created_at: article.created_at.toISOString(),
       updated_at: article.updated_at ? article.updated_at.toISOString() : null,
+      external_url: article.external_url,
+      original_language: article.original_language,
     }))
 
     return { data, error: null }

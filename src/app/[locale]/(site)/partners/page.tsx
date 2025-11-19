@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Building, Users, MapPin } from "lucide-react"
 import { PartnereCTA } from "./cta"
+import { getLocale } from "next-intl/server"
 
-export default function PartnerePage() {
+export default async function PartnerePage() {
+  const locale = await getLocale()
   return (
     <>
       <div className="py-24 relative overflow-hidden">
@@ -98,7 +100,7 @@ export default function PartnerePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild className="bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:shadow-md transition">
-                  <Link href="/drejtoria">Shiko të gjithë partnerët</Link>
+                  <Link href={`/${locale}/organizations`}>Shiko organizatat partnere</Link>
                 </Button>
                 <PartnereCTA />
               </div>

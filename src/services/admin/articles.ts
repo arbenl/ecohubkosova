@@ -9,7 +9,9 @@ export type AdminArticleRow = typeof articles.$inferSelect
 export interface AdminArticle {
   id: string
   title: string
-  content: string
+  content: string | null
+  external_url?: string | null
+  original_language?: string | null
   author_id: string
   is_published: boolean
   category: string
@@ -25,6 +27,8 @@ const toError = (error: unknown) =>
 const serializeArticle = (article: AdminArticleRow): AdminArticle => ({
   ...article,
   tags: article.tags ?? null,
+  external_url: article.external_url ?? null,
+  original_language: article.original_language ?? null,
   created_at: article.created_at.toISOString(),
   updated_at: article.updated_at ? article.updated_at.toISOString() : null,
 })

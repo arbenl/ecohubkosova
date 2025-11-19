@@ -11,89 +11,89 @@ describe("Admin Validation Schemas", () => {
   describe("adminOrganizationUpdateSchema", () => {
     it("validates correct organization update", () => {
       const validInput = {
-        emri: "Valid Organization",
-        pershkrimi: "A valid organization description",
-        interesi_primar: "Environment",
-        person_kontakti: "John Doe",
-        email_kontakti: "john@org.com",
-        vendndodhja: "Prishtina",
-        lloji: "OJQ",
-        eshte_aprovuar: true,
+        name: "Valid Organization",
+        description: "A valid organization description",
+        primary_interest: "Environment",
+        contact_person: "John Doe",
+        contact_email: "john@org.com",
+        location: "Prishtina",
+        type: "OJQ",
+        is_approved: true,
       }
       const result = adminOrganizationUpdateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("rejects emri shorter than 3 characters", () => {
+    it("rejects name shorter than 3 characters", () => {
       const invalidInput = {
-        emri: "AB",
-        pershkrimi: "A valid organization description",
-        interesi_primar: "Environment",
-        person_kontakti: "John Doe",
-        email_kontakti: "john@org.com",
-        vendndodhja: "Prishtina",
-        lloji: "OJQ",
-        eshte_aprovuar: true,
+        name: "AB",
+        description: "A valid organization description",
+        primary_interest: "Environment",
+        contact_person: "John Doe",
+        contact_email: "john@org.com",
+        location: "Prishtina",
+        type: "OJQ",
+        is_approved: true,
       }
       const result = adminOrganizationUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects emri longer than 150 characters", () => {
+    it("rejects name longer than 150 characters", () => {
       const invalidInput = {
-        emri: "A".repeat(151),
-        pershkrimi: "A valid organization description",
-        interesi_primar: "Environment",
-        person_kontakti: "John Doe",
-        email_kontakti: "john@org.com",
-        vendndodhja: "Prishtina",
-        lloji: "OJQ",
-        eshte_aprovuar: true,
+        name: "A".repeat(151),
+        description: "A valid organization description",
+        primary_interest: "Environment",
+        contact_person: "John Doe",
+        contact_email: "john@org.com",
+        location: "Prishtina",
+        type: "OJQ",
+        is_approved: true,
       }
       const result = adminOrganizationUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects pershkrimi shorter than 10 characters", () => {
+    it("rejects description shorter than 10 characters", () => {
       const invalidInput = {
-        emri: "Valid Organization",
-        pershkrimi: "Too short",
-        interesi_primar: "Environment",
-        person_kontakti: "John Doe",
-        email_kontakti: "john@org.com",
-        vendndodhja: "Prishtina",
-        lloji: "OJQ",
-        eshte_aprovuar: true,
+        name: "Valid Organization",
+        description: "Too short",
+        primary_interest: "Environment",
+        contact_person: "John Doe",
+        contact_email: "john@org.com",
+        location: "Prishtina",
+        type: "OJQ",
+        is_approved: true,
       }
       const result = adminOrganizationUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects pershkrimi longer than 2000 characters", () => {
+    it("rejects description longer than 2000 characters", () => {
       const invalidInput = {
-        emri: "Valid Organization",
-        pershkrimi: "A".repeat(2001),
-        interesi_primar: "Environment",
-        person_kontakti: "John Doe",
-        email_kontakti: "john@org.com",
-        vendndodhja: "Prishtina",
-        lloji: "OJQ",
-        eshte_aprovuar: true,
+        name: "Valid Organization",
+        description: "A".repeat(2001),
+        primary_interest: "Environment",
+        contact_person: "John Doe",
+        contact_email: "john@org.com",
+        location: "Prishtina",
+        type: "OJQ",
+        is_approved: true,
       }
       const result = adminOrganizationUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects invalid email_kontakti", () => {
+    it("rejects invalid contact_email", () => {
       const invalidInput = {
-        emri: "Valid Organization",
-        pershkrimi: "A valid organization description",
-        interesi_primar: "Environment",
-        person_kontakti: "John Doe",
-        email_kontakti: "invalid-email",
-        vendndodhja: "Prishtina",
-        lloji: "OJQ",
-        eshte_aprovuar: true,
+        name: "Valid Organization",
+        description: "A valid organization description",
+        primary_interest: "Environment",
+        contact_person: "John Doe",
+        contact_email: "invalid-email",
+        location: "Prishtina",
+        type: "OJQ",
+        is_approved: true,
       }
       const result = adminOrganizationUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -104,14 +104,14 @@ describe("Admin Validation Schemas", () => {
 
       types.forEach((type) => {
         const validInput = {
-          emri: "Valid Organization",
-          pershkrimi: "A valid organization description",
-          interesi_primar: "Environment",
-          person_kontakti: "John Doe",
-          email_kontakti: "john@org.com",
-          vendndodhja: "Prishtina",
-          lloji: type,
-          eshte_aprovuar: true,
+          name: "Valid Organization",
+          description: "A valid organization description",
+          primary_interest: "Environment",
+          contact_person: "John Doe",
+          contact_email: "john@org.com",
+          location: "Prishtina",
+          type: type,
+          is_approved: true,
         }
         const result = adminOrganizationUpdateSchema.safeParse(validInput)
         expect(result.success).toBe(true)
@@ -120,14 +120,14 @@ describe("Admin Validation Schemas", () => {
 
     it("rejects invalid organization type", () => {
       const invalidInput = {
-        emri: "Valid Organization",
-        pershkrimi: "A valid organization description",
-        interesi_primar: "Environment",
-        person_kontakti: "John Doe",
-        email_kontakti: "john@org.com",
-        vendndodhja: "Prishtina",
-        lloji: "InvalidType",
-        eshte_aprovuar: true,
+        name: "Valid Organization",
+        description: "A valid organization description",
+        primary_interest: "Environment",
+        contact_person: "John Doe",
+        contact_email: "john@org.com",
+        location: "Prishtina",
+        type: "InvalidType",
+        is_approved: true,
       }
       const result = adminOrganizationUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -137,42 +137,42 @@ describe("Admin Validation Schemas", () => {
   describe("adminOrganizationMemberUpdateSchema", () => {
     it("validates correct member update", () => {
       const validInput = {
-        roli_ne_organizate: "Coordinator",
-        eshte_aprovuar: true,
+        role_in_organization: "Coordinator",
+        is_approved: true,
       }
       const result = adminOrganizationMemberUpdateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("rejects roli_ne_organizate shorter than 2 characters", () => {
+    it("rejects role_in_organization shorter than 2 characters", () => {
       const invalidInput = {
-        roli_ne_organizate: "A",
-        eshte_aprovuar: true,
+        role_in_organization: "A",
+        is_approved: true,
       }
       const result = adminOrganizationMemberUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects roli_ne_organizate longer than 150 characters", () => {
+    it("rejects role_in_organization longer than 150 characters", () => {
       const invalidInput = {
-        roli_ne_organizate: "A".repeat(151),
-        eshte_aprovuar: true,
+        role_in_organization: "A".repeat(151),
+        is_approved: true,
       }
       const result = adminOrganizationMemberUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("accepts both true and false for eshte_aprovuar", () => {
+    it("accepts both true and false for is_approved", () => {
       const validInput1 = {
-        roli_ne_organizate: "Coordinator",
-        eshte_aprovuar: true,
+        role_in_organization: "Coordinator",
+        is_approved: true,
       }
       const result1 = adminOrganizationMemberUpdateSchema.safeParse(validInput1)
       expect(result1.success).toBe(true)
 
       const validInput2 = {
-        roli_ne_organizate: "Coordinator",
-        eshte_aprovuar: false,
+        role_in_organization: "Coordinator",
+        is_approved: false,
       }
       const result2 = adminOrganizationMemberUpdateSchema.safeParse(validInput2)
       expect(result2.success).toBe(true)
@@ -182,35 +182,35 @@ describe("Admin Validation Schemas", () => {
   describe("adminUserUpdateSchema", () => {
     it("validates correct user update", () => {
       const validInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
         email: "john@example.com",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
-        eshte_aprovuar: true,
+        location: "Prishtina",
+        role: "Individ",
+        is_approved: true,
       }
       const result = adminUserUpdateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("rejects emri_i_plote shorter than 3 characters", () => {
+    it("rejects full_name shorter than 3 characters", () => {
       const invalidInput = {
-        emri_i_plote: "AB",
+        full_name: "AB",
         email: "john@example.com",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
-        eshte_aprovuar: true,
+        location: "Prishtina",
+        role: "Individ",
+        is_approved: true,
       }
       const result = adminUserUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects emri_i_plote longer than 150 characters", () => {
+    it("rejects full_name longer than 150 characters", () => {
       const invalidInput = {
-        emri_i_plote: "A".repeat(151),
+        full_name: "A".repeat(151),
         email: "john@example.com",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
-        eshte_aprovuar: true,
+        location: "Prishtina",
+        role: "Individ",
+        is_approved: true,
       }
       const result = adminUserUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -218,11 +218,11 @@ describe("Admin Validation Schemas", () => {
 
     it("rejects invalid email", () => {
       const invalidInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
         email: "invalid-email",
-        vendndodhja: "Prishtina",
-        roli: "Individ",
-        eshte_aprovuar: true,
+        location: "Prishtina",
+        role: "Individ",
+        is_approved: true,
       }
       const result = adminUserUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -233,11 +233,11 @@ describe("Admin Validation Schemas", () => {
 
       roles.forEach((role) => {
         const validInput = {
-          emri_i_plote: "John Doe",
+          full_name: "John Doe",
           email: "john@example.com",
-          vendndodhja: "Prishtina",
-          roli: role,
-          eshte_aprovuar: true,
+          location: "Prishtina",
+          role: role,
+          is_approved: true,
         }
         const result = adminUserUpdateSchema.safeParse(validInput)
         expect(result.success).toBe(true)
@@ -246,11 +246,11 @@ describe("Admin Validation Schemas", () => {
 
     it("rejects invalid user role", () => {
       const invalidInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
         email: "john@example.com",
-        vendndodhja: "Prishtina",
-        roli: "InvalidRole",
-        eshte_aprovuar: true,
+        location: "Prishtina",
+        role: "InvalidRole",
+        is_approved: true,
       }
       const result = adminUserUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -260,79 +260,79 @@ describe("Admin Validation Schemas", () => {
   describe("adminListingUpdateSchema", () => {
     it("validates correct listing update", () => {
       const validInput = {
-        titulli: "Valid Title",
-        pershkrimi: "A valid description for listing",
-        kategori: "Agriculture",
-        cmimi: 10.5,
-        njesia: "kg",
-        sasia: "100",
-        vendndodhja: "Prishtina",
-        lloji_listimit: "shes",
-        eshte_aprovuar: true,
+        title: "Valid Title",
+        description: "A valid description for listing",
+        category: "Agriculture",
+        price: 10.5,
+        unit: "kg",
+        quantity: "100",
+        location: "Prishtina",
+        listing_type: "shes",
+        is_approved: true,
       }
       const result = adminListingUpdateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("rejects titulli shorter than 3 characters", () => {
+    it("rejects title shorter than 3 characters", () => {
       const invalidInput = {
-        titulli: "AB",
-        pershkrimi: "A valid description for listing",
-        kategori: "Agriculture",
-        cmimi: 10.5,
-        njesia: "kg",
-        sasia: "100",
-        vendndodhja: "Prishtina",
-        lloji_listimit: "shes",
-        eshte_aprovuar: true,
+        title: "AB",
+        description: "A valid description for listing",
+        category: "Agriculture",
+        price: 10.5,
+        unit: "kg",
+        quantity: "100",
+        location: "Prishtina",
+        listing_type: "shes",
+        is_approved: true,
       }
       const result = adminListingUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects titulli longer than 150 characters", () => {
+    it("rejects title longer than 150 characters", () => {
       const invalidInput = {
-        titulli: "A".repeat(151),
-        pershkrimi: "A valid description for listing",
-        kategori: "Agriculture",
-        cmimi: 10.5,
-        njesia: "kg",
-        sasia: "100",
-        vendndodhja: "Prishtina",
-        lloji_listimit: "shes",
-        eshte_aprovuar: true,
+        title: "A".repeat(151),
+        description: "A valid description for listing",
+        category: "Agriculture",
+        price: 10.5,
+        unit: "kg",
+        quantity: "100",
+        location: "Prishtina",
+        listing_type: "shes",
+        is_approved: true,
       }
       const result = adminListingUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects pershkrimi shorter than 10 characters", () => {
+    it("rejects description shorter than 10 characters", () => {
       const invalidInput = {
-        titulli: "Valid Title",
-        pershkrimi: "Too short",
-        kategori: "Agriculture",
-        cmimi: 10.5,
-        njesia: "kg",
-        sasia: "100",
-        vendndodhja: "Prishtina",
-        lloji_listimit: "shes",
-        eshte_aprovuar: true,
+        title: "Valid Title",
+        description: "Too short",
+        category: "Agriculture",
+        price: 10.5,
+        unit: "kg",
+        quantity: "100",
+        location: "Prishtina",
+        listing_type: "shes",
+        is_approved: true,
       }
       const result = adminListingUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects pershkrimi longer than 2000 characters", () => {
+    it("rejects description longer than 2000 characters", () => {
       const invalidInput = {
-        titulli: "Valid Title",
-        pershkrimi: "A".repeat(2001),
-        kategori: "Agriculture",
-        cmimi: 10.5,
-        njesia: "kg",
-        sasia: "100",
-        vendndodhja: "Prishtina",
-        lloji_listimit: "shes",
-        eshte_aprovuar: true,
+        title: "Valid Title",
+        description: "A".repeat(2001),
+        category: "Agriculture",
+        price: 10.5,
+        unit: "kg",
+        quantity: "100",
+        location: "Prishtina",
+        listing_type: "shes",
+        is_approved: true,
       }
       const result = adminListingUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
@@ -340,45 +340,45 @@ describe("Admin Validation Schemas", () => {
 
     it("rejects negative price", () => {
       const invalidInput = {
-        titulli: "Valid Title",
-        pershkrimi: "A valid description for listing",
-        kategori: "Agriculture",
-        cmimi: -10.5,
-        njesia: "kg",
-        sasia: "100",
-        vendndodhja: "Prishtina",
-        lloji_listimit: "shes",
-        eshte_aprovuar: true,
+        title: "Valid Title",
+        description: "A valid description for listing",
+        category: "Agriculture",
+        price: -10.5,
+        unit: "kg",
+        quantity: "100",
+        location: "Prishtina",
+        listing_type: "shes",
+        is_approved: true,
       }
       const result = adminListingUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("accepts both 'shes' and 'blej' for lloji_listimit", () => {
+    it("accepts both 'shes' and 'blej' for listing_type", () => {
       const validInput1 = {
-        titulli: "Valid Title",
-        pershkrimi: "A valid description for listing",
-        kategori: "Agriculture",
-        cmimi: 10.5,
-        njesia: "kg",
-        sasia: "100",
-        vendndodhja: "Prishtina",
-        lloji_listimit: "shes",
-        eshte_aprovuar: true,
+        title: "Valid Title",
+        description: "A valid description for listing",
+        category: "Agriculture",
+        price: 10.5,
+        unit: "kg",
+        quantity: "100",
+        location: "Prishtina",
+        listing_type: "shes",
+        is_approved: true,
       }
       const result1 = adminListingUpdateSchema.safeParse(validInput1)
       expect(result1.success).toBe(true)
 
       const validInput2 = {
-        titulli: "Valid Title",
-        pershkrimi: "A valid description for listing",
-        kategori: "Agriculture",
-        cmimi: 10.5,
-        njesia: "kg",
-        sasia: "100",
-        vendndodhja: "Prishtina",
-        lloji_listimit: "blej",
-        eshte_aprovuar: true,
+        title: "Valid Title",
+        description: "A valid description for listing",
+        category: "Agriculture",
+        price: 10.5,
+        unit: "kg",
+        quantity: "100",
+        location: "Prishtina",
+        listing_type: "blej",
+        is_approved: true,
       }
       const result2 = adminListingUpdateSchema.safeParse(validInput2)
       expect(result2.success).toBe(true)
@@ -388,88 +388,88 @@ describe("Admin Validation Schemas", () => {
   describe("adminArticleUpdateSchema", () => {
     it("validates correct article update", () => {
       const validInput = {
-        titulli: "Valid Article Title is Long",
-        permbajtja: "A valid article content with good length",
-        kategori: "Education",
-        eshte_publikuar: true,
+        title: "Valid Article Title is Long",
+        content: "A valid article content with good length",
+        category: "Education",
+        is_published: true,
         tags: ["tag1", "tag2"],
-        foto_kryesore: null,
+        featured_image: null,
       }
       const result = adminArticleUpdateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("rejects titulli shorter than 5 characters", () => {
+    it("rejects title shorter than 5 characters", () => {
       const invalidInput = {
-        titulli: "Test",
-        permbajtja: "A valid article content with good length",
-        kategori: "Education",
-        eshte_publikuar: true,
+        title: "Test",
+        content: "A valid article content with good length",
+        category: "Education",
+        is_published: true,
         tags: ["tag1", "tag2"],
-        foto_kryesore: null,
+        featured_image: null,
       }
       const result = adminArticleUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects titulli longer than 180 characters", () => {
+    it("rejects title longer than 180 characters", () => {
       const invalidInput = {
-        titulli: "A".repeat(181),
-        permbajtja: "A valid article content with good length",
-        kategori: "Education",
-        eshte_publikuar: true,
+        title: "A".repeat(181),
+        content: "A valid article content with good length",
+        category: "Education",
+        is_published: true,
         tags: ["tag1", "tag2"],
-        foto_kryesore: null,
+        featured_image: null,
       }
       const result = adminArticleUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects permbajtja shorter than 20 characters", () => {
+    it("rejects content shorter than 20 characters", () => {
       const invalidInput = {
-        titulli: "Valid Article Title is Long",
-        permbajtja: "Too short content",
-        kategori: "Education",
-        eshte_publikuar: true,
+        title: "Valid Article Title is Long",
+        content: "Too short content",
+        category: "Education",
+        is_published: true,
         tags: ["tag1", "tag2"],
-        foto_kryesore: null,
+        featured_image: null,
       }
       const result = adminArticleUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects permbajtja longer than 10000 characters", () => {
+    it("rejects content longer than 10000 characters", () => {
       const invalidInput = {
-        titulli: "Valid Article Title is Long",
-        permbajtja: "A".repeat(10001),
-        kategori: "Education",
-        eshte_publikuar: true,
+        title: "Valid Article Title is Long",
+        content: "A".repeat(10001),
+        category: "Education",
+        is_published: true,
         tags: ["tag1", "tag2"],
-        foto_kryesore: null,
+        featured_image: null,
       }
       const result = adminArticleUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("accepts both true and false for eshte_publikuar", () => {
+    it("accepts both true and false for is_published", () => {
       const validInput1 = {
-        titulli: "Valid Article Title is Long",
-        permbajtja: "A valid article content with good length",
-        kategori: "Education",
-        eshte_publikuar: true,
+        title: "Valid Article Title is Long",
+        content: "A valid article content with good length",
+        category: "Education",
+        is_published: true,
         tags: ["tag1", "tag2"],
-        foto_kryesore: null,
+        featured_image: null,
       }
       const result1 = adminArticleUpdateSchema.safeParse(validInput1)
       expect(result1.success).toBe(true)
 
       const validInput2 = {
-        titulli: "Valid Article Title is Long",
-        permbajtja: "A valid article content with good length",
-        kategori: "Education",
-        eshte_publikuar: false,
+        title: "Valid Article Title is Long",
+        content: "A valid article content with good length",
+        category: "Education",
+        is_published: false,
         tags: ["tag1", "tag2"],
-        foto_kryesore: null,
+        featured_image: null,
       }
       const result2 = adminArticleUpdateSchema.safeParse(validInput2)
       expect(result2.success).toBe(true)
@@ -477,12 +477,12 @@ describe("Admin Validation Schemas", () => {
 
     it("accepts null tags", () => {
       const validInput = {
-        titulli: "Valid Article Title is Long",
-        permbajtja: "A valid article content with good length",
-        kategori: "Education",
-        eshte_publikuar: true,
+        title: "Valid Article Title is Long",
+        content: "A valid article content with good length",
+        category: "Education",
+        is_published: true,
         tags: null,
-        foto_kryesore: null,
+        featured_image: null,
       }
       const result = adminArticleUpdateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
@@ -490,25 +490,25 @@ describe("Admin Validation Schemas", () => {
 
     it("rejects tags array with more than 15 items", () => {
       const invalidInput = {
-        titulli: "Valid Article Title is Long",
-        permbajtja: "A valid article content with good length",
-        kategori: "Education",
-        eshte_publikuar: true,
+        title: "Valid Article Title is Long",
+        content: "A valid article content with good length",
+        category: "Education",
+        is_published: true,
         tags: Array.from({ length: 16 }, (_, i) => `tag${i + 1}`),
-        foto_kryesore: null,
+        featured_image: null,
       }
       const result = adminArticleUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects invalid foto_kryesore URL", () => {
+    it("rejects invalid featured_image URL", () => {
       const invalidInput = {
-        titulli: "Valid Article Title is Long",
-        permbajtja: "A valid article content with good length",
-        kategori: "Education",
-        eshte_publikuar: true,
+        title: "Valid Article Title is Long",
+        content: "A valid article content with good length",
+        category: "Education",
+        is_published: true,
         tags: ["tag1", "tag2"],
-        foto_kryesore: "not-a-url",
+        featured_image: "not-a-url",
       }
       const result = adminArticleUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)

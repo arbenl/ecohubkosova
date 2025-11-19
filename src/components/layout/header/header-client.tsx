@@ -50,6 +50,13 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
             Partnerët
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
+          <Link
+            href={`/${locale}/organizations`}
+            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
+          >
+            Organizata
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
+          </Link>
          
           <Link
             href={`/${locale}/marketplace`}
@@ -139,6 +146,13 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
               onClick={() => setIsMenuOpen(false)}
             >
               Partnerët
+            </Link>
+            <Link
+              href={`/${locale}/organizations`}
+              className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Organizata
             </Link>
             <Link
               href={`/${locale}/about`}

@@ -15,9 +15,11 @@ import { ChartSkeleton } from "@/components/dashboard/chart-skeleton"
 import { getStats, getLatestArticles, getKeyPartners } from "./actions"
 import { getServerUser } from "@/lib/supabase/server"
 import { getCachedUserProfileById } from "@/services/profile"
+import { getLocale } from "next-intl/server"
 
 export default async function DashboardPage() {
   const { user } = await getServerUser()
+  const locale = await getLocale()
 
   if (!user) {
     // Middleware should prevent this, but guard against direct access.
@@ -53,7 +55,7 @@ export default async function DashboardPage() {
       {/* Header */}
       <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-center">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900" data-testid="dashboard-main-title">
             Mirë se erdhe, {userProfile?.full_name || "Përdorues"}!
           </h1>
           <p className="text-gray-600 mt-1">Ky është paneli juaj i kontrollit në ECO HUB KOSOVA</p>
@@ -64,7 +66,7 @@ export default async function DashboardPage() {
             size="sm"
             asChild
           >
-            <Link href="/profile">
+            <Link href={`/${locale}/profile`}>
               <User className="h-4 w-4 mr-2" />
               Profili im
             </Link>
@@ -74,7 +76,7 @@ export default async function DashboardPage() {
             size="sm"
             asChild
           >
-            <Link href="/marketplace">
+            <Link href={`/${locale}/marketplace`}>
               <ShoppingCart className="h-4 w-4 mr-2" />
               Eksploro Tregun
             </Link>

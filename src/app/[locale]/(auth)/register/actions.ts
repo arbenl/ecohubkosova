@@ -113,7 +113,7 @@ export async function registerUser(formData: RegistrationFormData) {
     // Revalidate paths that might display user/organization data
     revalidatePath("/dashboard")
     revalidatePath("/profile")
-    revalidatePath("/drejtoria")
+    revalidatePath("/partners")
 
     return { success: true }
   } catch (error: any) {

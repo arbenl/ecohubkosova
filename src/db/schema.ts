@@ -1,7 +1,7 @@
 import { boolean, integer, numeric, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
-export const users = pgTable("public.users", {
+export const users = pgTable("users", {
   id: uuid("id").primaryKey().notNull(),
   full_name: text("full_name").notNull(),
   email: text("email").notNull(),
@@ -13,7 +13,7 @@ export const users = pgTable("public.users", {
   updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
 })
 
-export const organizations = pgTable("public.organizations", {
+export const organizations = pgTable("organizations", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
   name: text("name").notNull(),
   description: text("description").notNull(),
@@ -28,7 +28,7 @@ export const organizations = pgTable("public.organizations", {
 })
 
 export const organizationMembers = pgTable(
-  "public.organization_members",
+  "organization_members",
   {
     id: uuid("id").primaryKey().defaultRandom().notNull(),
     organization_id: uuid("organization_id")
@@ -49,10 +49,12 @@ export const organizationMembers = pgTable(
   })
 )
 
-export const articles = pgTable("public.artikuj", {
+export const articles = pgTable("artikuj", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
   title: text("title").notNull(),
-  content: text("content").notNull(),
+  content: text("content"), // Made optional for external articles
+  external_url: text("external_url"), // URL to fetch content from
+  original_language: text("original_language").default("en"), // Original language of external article
   author_id: uuid("author_id")
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
@@ -64,7 +66,7 @@ export const articles = pgTable("public.artikuj", {
   updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
 })
 
-export const marketplaceListings = pgTable("public.tregu_listime", {
+export const marketplaceListings = pgTable("tregu_listime", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
   created_by_user_id: uuid("created_by_user_id")
     .references(() => users.id, { onDelete: "cascade" })

@@ -44,6 +44,13 @@ export async function middleware(req: NextRequest) {
   try {
     // Create response first, then pass to middleware client
     const res = NextResponse.next()
+    
+    // Add Content Security Policy headers
+    const isDevelopment = process.env.NODE_ENV === 'development'
+    const cspValue = isDevelopment
+      ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+      : "script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+    res.headers.set('Content-Security-Policy', cspValue)
     const supabase = createServerClient<Database>(
       process.env.NEXT_PUBLIC_SUPABASE_URL || "",
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
@@ -92,7 +99,7 @@ export async function middleware(req: NextRequest) {
 
       const { data: userRow, error: userError } = await supabase
         .from("users")
-        .select("roli")
+        .select("role")
         .eq("id", sessionUserId)
         .single()
 
@@ -103,7 +110,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL(`/${locale}/login?message=Unauthorized`, req.url))
       }
 
-      const userRole = userRow.roli
+      const userRole = userRow.role
       logMiddlewareEvent(pathname, "Admin access check", { role: userRole })
 
       // Admin route access control

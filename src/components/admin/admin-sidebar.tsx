@@ -3,8 +3,9 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useLocale } from "next-intl"
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
-import { Users, Building, BookOpen, ShoppingCart, LayoutDashboard, Menu, X } from "lucide-react"
+import { Users, Building, BookOpen, ShoppingCart, LayoutDashboard, Menu, X, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
 import { SignOutButton } from "@/components/sign-out-button"
@@ -12,6 +13,7 @@ import { SignOutButton } from "@/components/sign-out-button"
 export function AdminSidebar() {
   const pathname = usePathname()
   const locale = useLocale()
+  const t = useTranslations('admin')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const handleBeforeSignOut = () => setIsMobileMenuOpen(false)
 
@@ -43,34 +45,40 @@ export function AdminSidebar() {
 
   const routes = [
     {
-      label: "Paneli",
+      label: t("panel"),
       icon: LayoutDashboard,
-      href: "/admin",
-      active: pathname === "/admin",
+      href: `/${locale}/admin`,
+      active: pathname === `/${locale}/admin`,
     },
     {
-      label: "Përdoruesit",
+      label: "Profili",
+      icon: User,
+      href: `/${locale}/profile`,
+      active: pathname === `/${locale}/profile`,
+    },
+    {
+      label: t("users"),
       icon: Users,
-      href: "/admin/users",
-      active: pathname === "/admin/users",
+      href: `/${locale}/admin/users`,
+      active: pathname === `/${locale}/admin/users`,
     },
     {
-      label: "Organizatat",
+      label: t("organizations"),
       icon: Building,
-      href: "/admin/organizations",
-      active: pathname === "/admin/organizations",
+      href: `/${locale}/admin/organizations`,
+      active: pathname === `/${locale}/admin/organizations`,
     },
     {
-      label: "Artikujt",
+      label: t("articles"),
       icon: BookOpen,
-      href: "/admin/articles",
-      active: pathname === "/admin/articles",
+      href: `/${locale}/admin/articles`,
+      active: pathname === `/${locale}/admin/articles`,
     },
     {
-      label: "Tregu",
+      label: t("listings"),
       icon: ShoppingCart,
-      href: "/admin/listings",
-      active: pathname === "/admin/listings",
+      href: `/${locale}/admin/listings`,
+      active: pathname === `/${locale}/admin/listings`,
     },
   ]
 
@@ -92,7 +100,7 @@ export function AdminSidebar() {
             A
           </div>
           <span className="text-base font-bold bg-gradient-to-r from-[#00C896] to-[#00A07E] bg-clip-text text-transparent">
-            Admin Panel
+            {t("adminPanel")}
           </span>
         </Link>
         <div className="w-10"></div> {/* Spacer for centering */}
@@ -161,7 +169,7 @@ export function AdminSidebar() {
               A
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-[#00C896] to-[#00A07E] bg-clip-text text-transparent">
-              Admin Panel
+              {t("adminPanel")}
             </span>
           </Link>
         </div>

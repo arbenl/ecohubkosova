@@ -8,78 +8,78 @@ describe("Profile Validation Schemas", () => {
   describe("userProfileUpdateSchema", () => {
     it("validates correct user profile update", () => {
       const validInput = {
-        emri_i_plote: "John Doe",
-        vendndodhja: "Prishtina",
+        full_name: "John Doe",
+        location: "Prishtina",
       }
       const result = userProfileUpdateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("allows empty vendndodhja (optional)", () => {
+    it("allows empty location (optional)", () => {
       const validInput = {
-        emri_i_plote: "John Doe",
-        vendndodhja: "",
+        full_name: "John Doe",
+        location: "",
       }
       const result = userProfileUpdateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("allows vendndodhja to be omitted", () => {
+    it("allows location to be omitted", () => {
       const validInput = {
-        emri_i_plote: "John Doe",
+        full_name: "John Doe",
       }
       const result = userProfileUpdateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("rejects missing emri_i_plote", () => {
+    it("rejects missing full_name", () => {
       const invalidInput = {
-        vendndodhja: "Prishtina",
+        location: "Prishtina",
       }
       const result = userProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error.issues.some((issue) => issue.path.includes("emri_i_plote"))).toBe(true)
+        expect(result.error.issues.some((issue) => issue.path.includes("full_name"))).toBe(true)
       }
     })
 
-    it("rejects emri_i_plote shorter than 2 characters", () => {
+    it("rejects full_name shorter than 2 characters", () => {
       const invalidInput = {
-        emri_i_plote: "J",
-        vendndodhja: "Prishtina",
+        full_name: "J",
+        location: "Prishtina",
       }
       const result = userProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects emri_i_plote longer than 120 characters", () => {
+    it("rejects full_name longer than 120 characters", () => {
       const invalidInput = {
-        emri_i_plote: "A".repeat(121),
-        vendndodhja: "Prishtina",
+        full_name: "A".repeat(121),
+        location: "Prishtina",
       }
       const result = userProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects vendndodhja longer than 240 characters", () => {
+    it("rejects location longer than 240 characters", () => {
       const invalidInput = {
-        emri_i_plote: "John Doe",
-        vendndodhja: "A".repeat(241),
+        full_name: "John Doe",
+        location: "A".repeat(241),
       }
       const result = userProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("trims whitespace from emri_i_plote", () => {
+    it("trims whitespace from full_name", () => {
       const input = {
-        emri_i_plote: "  John Doe  ",
-        vendndodhja: "  Prishtina  ",
+        full_name: "  John Doe  ",
+        location: "  Prishtina  ",
       }
       const result = userProfileUpdateSchema.safeParse(input)
       expect(result.success).toBe(true)
       if (result.success) {
-        expect(result.data.emri_i_plote).toBe("John Doe")
-        expect(result.data.vendndodhja).toBe("Prishtina")
+        expect(result.data.full_name).toBe("John Doe")
+        expect(result.data.location).toBe("Prishtina")
       }
     })
   })
@@ -87,136 +87,136 @@ describe("Profile Validation Schemas", () => {
   describe("organizationProfileUpdateSchema", () => {
     it("validates correct organization profile update", () => {
       const validInput = {
-        emri: "My Organization",
-        pershkrimi: "This is a valid description",
-        interesi_primar: "Environment",
-        person_kontakti: "Jane Doe",
-        email_kontakti: "jane@org.com",
-        vendndodhja: "Prishtina",
+        name: "My Organization",
+        description: "This is a valid description",
+        primary_interest: "Environment",
+        contact_person: "Jane Doe",
+        contact_email: "jane@org.com",
+        location: "Prishtina",
       }
       const result = organizationProfileUpdateSchema.safeParse(validInput)
       expect(result.success).toBe(true)
     })
 
-    it("rejects missing emri", () => {
+    it("rejects missing name", () => {
       const invalidInput = {
-        pershkrimi: "This is a valid description",
-        interesi_primar: "Environment",
-        person_kontakti: "Jane Doe",
-        email_kontakti: "jane@org.com",
-        vendndodhja: "Prishtina",
+        description: "This is a valid description",
+        primary_interest: "Environment",
+        contact_person: "Jane Doe",
+        contact_email: "jane@org.com",
+        location: "Prishtina",
       }
       const result = organizationProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects emri shorter than 2 characters", () => {
+    it("rejects name shorter than 2 characters", () => {
       const invalidInput = {
-        emri: "A",
-        pershkrimi: "This is a valid description",
-        interesi_primar: "Environment",
-        person_kontakti: "Jane Doe",
-        email_kontakti: "jane@org.com",
-        vendndodhja: "Prishtina",
+        name: "A",
+        description: "This is a valid description",
+        primary_interest: "Environment",
+        contact_person: "Jane Doe",
+        contact_email: "jane@org.com",
+        location: "Prishtina",
       }
       const result = organizationProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects emri longer than 120 characters", () => {
+    it("rejects name longer than 120 characters", () => {
       const invalidInput = {
-        emri: "A".repeat(121),
-        pershkrimi: "This is a valid description",
-        interesi_primar: "Environment",
-        person_kontakti: "Jane Doe",
-        email_kontakti: "jane@org.com",
-        vendndodhja: "Prishtina",
+        name: "A".repeat(121),
+        description: "This is a valid description",
+        primary_interest: "Environment",
+        contact_person: "Jane Doe",
+        contact_email: "jane@org.com",
+        location: "Prishtina",
       }
       const result = organizationProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects pershkrimi shorter than 10 characters", () => {
+    it("rejects description shorter than 10 characters", () => {
       const invalidInput = {
-        emri: "My Organization",
-        pershkrimi: "Short",
-        interesi_primar: "Environment",
-        person_kontakti: "Jane Doe",
-        email_kontakti: "jane@org.com",
-        vendndodhja: "Prishtina",
+        name: "My Organization",
+        description: "Short",
+        primary_interest: "Environment",
+        contact_person: "Jane Doe",
+        contact_email: "jane@org.com",
+        location: "Prishtina",
       }
       const result = organizationProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects pershkrimi longer than 500 characters", () => {
+    it("rejects description longer than 500 characters", () => {
       const invalidInput = {
-        emri: "My Organization",
-        pershkrimi: "A".repeat(501),
-        interesi_primar: "Environment",
-        person_kontakti: "Jane Doe",
-        email_kontakti: "jane@org.com",
-        vendndodhja: "Prishtina",
+        name: "My Organization",
+        description: "A".repeat(501),
+        primary_interest: "Environment",
+        contact_person: "Jane Doe",
+        contact_email: "jane@org.com",
+        location: "Prishtina",
       }
       const result = organizationProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects invalid email_kontakti", () => {
+    it("rejects invalid contact_email", () => {
       const invalidInput = {
-        emri: "My Organization",
-        pershkrimi: "This is a valid description",
-        interesi_primar: "Environment",
-        person_kontakti: "Jane Doe",
-        email_kontakti: "invalid-email",
-        vendndodhja: "Prishtina",
+        name: "My Organization",
+        description: "This is a valid description",
+        primary_interest: "Environment",
+        contact_person: "Jane Doe",
+        contact_email: "invalid-email",
+        location: "Prishtina",
       }
       const result = organizationProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects missing person_kontakti", () => {
+    it("rejects missing contact_person", () => {
       const invalidInput = {
-        emri: "My Organization",
-        pershkrimi: "This is a valid description",
-        interesi_primar: "Environment",
-        email_kontakti: "jane@org.com",
-        vendndodhja: "Prishtina",
+        name: "My Organization",
+        description: "This is a valid description",
+        primary_interest: "Environment",
+        contact_email: "jane@org.com",
+        location: "Prishtina",
       }
       const result = organizationProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("rejects missing email_kontakti", () => {
+    it("rejects missing contact_email", () => {
       const invalidInput = {
-        emri: "My Organization",
-        pershkrimi: "This is a valid description",
-        interesi_primar: "Environment",
-        person_kontakti: "Jane Doe",
-        vendndodhja: "Prishtina",
+        name: "My Organization",
+        description: "This is a valid description",
+        primary_interest: "Environment",
+        contact_person: "Jane Doe",
+        location: "Prishtina",
       }
       const result = organizationProfileUpdateSchema.safeParse(invalidInput)
       expect(result.success).toBe(false)
     })
 
-    it("allows interesi_primar to be empty or omitted", () => {
+    it("allows primary_interest to be empty or omitted", () => {
       const validInput1 = {
-        emri: "My Organization",
-        pershkrimi: "This is a valid description",
-        interesi_primar: "",
-        person_kontakti: "Jane Doe",
-        email_kontakti: "jane@org.com",
-        vendndodhja: "Prishtina",
+        name: "My Organization",
+        description: "This is a valid description",
+        primary_interest: "",
+        contact_person: "Jane Doe",
+        contact_email: "jane@org.com",
+        location: "Prishtina",
       }
       const result1 = organizationProfileUpdateSchema.safeParse(validInput1)
       expect(result1.success).toBe(true)
 
       const validInput2 = {
-        emri: "My Organization",
-        pershkrimi: "This is a valid description",
-        person_kontakti: "Jane Doe",
-        email_kontakti: "jane@org.com",
-        vendndodhja: "Prishtina",
+        name: "My Organization",
+        description: "This is a valid description",
+        contact_person: "Jane Doe",
+        contact_email: "jane@org.com",
+        location: "Prishtina",
       }
       const result2 = organizationProfileUpdateSchema.safeParse(validInput2)
       expect(result2.success).toBe(true)
@@ -224,19 +224,19 @@ describe("Profile Validation Schemas", () => {
 
     it("trims whitespace from all string fields", () => {
       const input = {
-        emri: "  My Organization  ",
-        pershkrimi: "  This is a valid description  ",
-        interesi_primar: "  Environment  ",
-        person_kontakti: "  Jane Doe  ",
-        email_kontakti: "  jane@org.com  ",
-        vendndodhja: "  Prishtina  ",
+        name: "  My Organization  ",
+        description: "  This is a valid description  ",
+        primary_interest: "  Environment  ",
+        contact_person: "  Jane Doe  ",
+        contact_email: "  jane@org.com  ",
+        location: "  Prishtina  ",
       }
       const result = organizationProfileUpdateSchema.safeParse(input)
       expect(result.success).toBe(true)
       if (result.success) {
-        expect(result.data.emri).toBe("My Organization")
-        expect(result.data.person_kontakti).toBe("Jane Doe")
-        expect(result.data.email_kontakti).toBe("jane@org.com")
+        expect(result.data.name).toBe("My Organization")
+        expect(result.data.contact_person).toBe("Jane Doe")
+        expect(result.data.contact_email).toBe("jane@org.com")
       }
     })
   })
