@@ -22,6 +22,7 @@ module.exports = [
       globals: {
         React: "readonly",
         JSX: "readonly",
+        URL: "readonly",
       },
     },
     plugins: {
