@@ -22,6 +22,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/sq/home", request.url))
   }
 
+  // Skip API routes and static files
+  if (pathname.startsWith("/api") || pathname.startsWith("/_next")) {
+    return NextResponse.next()
+  }
+
   const locale = getLocaleFromPath(pathname)
 
   // Set locale header for all requests so i18n config can access it
@@ -30,9 +35,14 @@ export function middleware(request: NextRequest) {
   return response
 }
 
-// Match root and all locale-prefixed routes
+// Match all requests that need i18n handling
 export const config = {
-  matcher: ["/", "/(sq|en)/:path*"],
+  matcher: [
+    // Match root
+    "/",
+    // Match all locale-prefixed routes
+    "/(sq|en)/:path*",
+  ],
 }
 
 // Explicitly declare Edge Runtime to ensure no Node-only modules are bundled
