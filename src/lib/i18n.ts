@@ -9,9 +9,9 @@ export default getRequestConfig(async () => {
   try {
     const headersList = await headers()
     let locale = (headersList.get("x-locale") || defaultLocale) as Locale
-    
+
     // Validate locale is in supported list
-    if (!locales.includes(locale as any)) {
+    if (!locales.includes(locale)) {
       locale = defaultLocale
     }
 
@@ -33,7 +33,7 @@ export default getRequestConfig(async () => {
       locale,
       messages,
     }
-  } catch (error) {
+  } catch {
     // Fallback on any error
     return {
       locale: defaultLocale,
