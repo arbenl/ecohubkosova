@@ -1,17 +1,20 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Target, Eye, Heart, Lightbulb } from "lucide-react"
+import { LocaleWarningBanner } from "@/components/shared/locale-warning-banner"
 
 export default function MisioniPage() {
   return (
     <>
       <div className="py-12">
         <div className="container px-4 md:px-6 max-w-4xl">
+          <LocaleWarningBanner />
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold tracking-tighter mb-4">
               Misioni <span className="text-emerald-600">Ynë</span>
             </h1>
             <p className="text-xl text-gray-600">
-              Të ndërtojmë një ekonomi qarkulluese të qëndrueshme në Kosovë përmes bashkëpunimit dhe inovacionit
+              Të ndërtojmë një ekonomi qarkulluese të qëndrueshme në Kosovë përmes bashkëpunimit dhe
+              inovacionit
             </p>
           </div>
 
@@ -24,12 +27,13 @@ export default function MisioniPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4">
-                    Të krijojmë një platformë që lehtëson bashkëpunimin midis organizatave, bizneseve dhe individëve për
-                    të ndërtuar një ekonomi qarkulluese të qëndrueshme në Kosovë.
+                    Të krijojmë një platformë që lehtëson bashkëpunimin midis organizatave,
+                    bizneseve dhe individëve për të ndërtuar një ekonomi qarkulluese të qëndrueshme
+                    në Kosovë.
                   </p>
                   <p className="text-gray-600">
-                    Ne synojmë të jemi katalizatori që transformon mënyrën se si Kosova menaxhon burimet, krijon vlerë
-                    dhe ndërton një të ardhme të qëndrueshme.
+                    Ne synojmë të jemi katalizatori që transformon mënyrën se si Kosova menaxhon
+                    burimet, krijon vlerë dhe ndërton një të ardhme të qëndrueshme.
                   </p>
                 </CardContent>
               </Card>
@@ -41,12 +45,12 @@ export default function MisioniPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4">
-                    Të bëhemi platforma kryesore për ekonominë qarkulluese në Ballkanin Perëndimor, duke shërbyer si
-                    model për vendet e tjera në rajon.
+                    Të bëhemi platforma kryesore për ekonominë qarkulluese në Ballkanin Perëndimor,
+                    duke shërbyer si model për vendet e tjera në rajon.
                   </p>
                   <p className="text-gray-600">
-                    Synojmë një Kosovë ku mbetjet minimizohen, burimet ripërdoren dhe ekonomia zhvillohet në harmoni me
-                    mjedisin.
+                    Synojmë një Kosovë ku mbetjet minimizohen, burimet ripërdoren dhe ekonomia
+                    zhvillohet në harmoni me mjedisin.
                   </p>
                 </CardContent>
               </Card>
@@ -55,7 +59,9 @@ export default function MisioniPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Objektivat Strategjike</CardTitle>
-                <CardDescription>Qëllimet kryesore që na udhëheqin drejt realizimit të misionit tonë</CardDescription>
+                <CardDescription>
+                  Qëllimet kryesore që na udhëheqin drejt realizimit të misionit tonë
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -65,7 +71,8 @@ export default function MisioniPage() {
                       <div>
                         <h3 className="font-semibold">Rrjetëzimi i Partnerëve</h3>
                         <p className="text-sm text-gray-600">
-                          Të lidhim të paktën 100 organizata dhe biznese në rrjetin tonë brenda vitit të parë.
+                          Të lidhim të paktën 100 organizata dhe biznese në rrjetin tonë brenda
+                          vitit të parë.
                         </p>
                       </div>
                     </div>
@@ -163,36 +170,40 @@ export default function MisioniPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Si e Realizojmë Misionin</CardTitle>
-                <CardDescription>Strategjitë dhe metodat që përdorim për të arritur qëllimet tona</CardDescription>
+                <CardDescription>
+                  Strategjitë dhe metodat që përdorim për të arritur qëllimet tona
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
                   <div>
                     <h3 className="font-semibold text-emerald-600 mb-2">1. Ndërtimi i Rrjetit</h3>
                     <p className="text-gray-600">
-                      Krijojmë një rrjet të fortë partnerësh përmes eventeve, takimeve dhe platformës digjitale që
-                      lehtëson komunikimin dhe bashkëpunimin.
+                      Krijojmë një rrjet të fortë partnerësh përmes eventeve, takimeve dhe
+                      platformës digjitale që lehtëson komunikimin dhe bashkëpunimin.
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-emerald-600 mb-2">2. Shkëmbimi i Njohurive</h3>
+                    <h3 className="font-semibold text-emerald-600 mb-2">
+                      2. Shkëmbimi i Njohurive
+                    </h3>
                     <p className="text-gray-600">
-                      Organizojmë trajnime, workshop-e dhe publikojmë materiale edukative për të rritur ndërgjegjësimin
-                      dhe kapacitetet.
+                      Organizojmë trajnime, workshop-e dhe publikojmë materiale edukative për të
+                      rritur ndërgjegjësimin dhe kapacitetet.
                     </p>
                   </div>
                   <div>
                     <h3 className="font-semibold text-emerald-600 mb-2">3. Lehtësimi i Tregut</h3>
                     <p className="text-gray-600">
-                      Krijojmë një treg digjital ku organizatat mund të shkëmbejnë burime, materiale dhe shërbime në
-                      mënyrë efikase.
+                      Krijojmë një treg digjital ku organizatat mund të shkëmbejnë burime, materiale
+                      dhe shërbime në mënyrë efikase.
                     </p>
                   </div>
                   <div>
                     <h3 className="font-semibold text-emerald-600 mb-2">4. Mbështetja Teknike</h3>
                     <p className="text-gray-600">
-                      Ofrojmë konsulencë dhe mbështetje teknike për organizatat që dëshirojnë të implementojnë projekte
-                      të ekonomisë qarkulluese.
+                      Ofrojmë konsulencë dhe mbështetje teknike për organizatat që dëshirojnë të
+                      implementojnë projekte të ekonomisë qarkulluese.
                     </p>
                   </div>
                 </div>

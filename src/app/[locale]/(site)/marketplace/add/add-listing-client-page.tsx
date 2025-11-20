@@ -10,15 +10,38 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useAuth } from "@/lib/auth-provider"
 import { createListing } from "./actions" // Import the server action
 import type { Locale } from "@/lib/locales"
 
-export default function AddListingClientPage() {
+interface City {
+  value: string
+  label: string
+  region?: string
+}
+
+interface AddListingClientPageProps {
+  cities: City[]
+}
+
+export default function AddListingClientPage({ cities }: AddListingClientPageProps) {
   const router = useRouter()
   const locale = useLocale() as Locale
 
@@ -129,7 +152,8 @@ export default function AddListingClientPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Shto listim të ri në treg</h1>
           <p className="text-gray-600 mt-1">
-            Plotësoni formularin më poshtë për të shtuar një listim të ri në tregun e ekonomisë qarkulluese
+            Plotësoni formularin më poshtë për të shtuar një listim të ri në tregun e ekonomisë
+            qarkulluese
           </p>
         </div>
 
@@ -154,7 +178,9 @@ export default function AddListingClientPage() {
           <Card>
             <CardHeader>
               <CardTitle>Detajet e listimit</CardTitle>
-              <CardDescription>Jepni informacione sa më të detajuara për listimin tuaj</CardDescription>
+              <CardDescription>
+                Jepni informacione sa më të detajuara për listimin tuaj
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {error && (
@@ -279,14 +305,23 @@ export default function AddListingClientPage() {
 
                   <div>
                     <Label htmlFor="location">Vendndodhja *</Label>
-                    <Input
-                      id="location"
-                      name="location"
+                    <Select
                       value={formData.location}
-                      onChange={handleChange}
-                      placeholder="p.sh. Prishtinë, Kosovë"
+                      onValueChange={(value) => handleSelectChange("location", value)}
                       required
-                    />
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Zgjidhni qytetin" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {cities.map((city) => (
+                          <SelectItem key={city.value} value={city.value}>
+                            {city.label}
+                            {city.region && ` (${city.region})`}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 

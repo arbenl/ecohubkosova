@@ -19,6 +19,138 @@
     "directory": "Drejtoria",
     "administration": "Administrimi"
   },
+  "cta": {
+    "dashboard": "Shko në Dashboard",
+    "register": "Regjistrohu Tani",
+    "login": "Kyçu"
+  },
+  "explore": {
+    "hero": {
+      "badge": "Zbulo Mundësitë e Pafundme",
+      "titleStart": "Eksploro",
+      "titleEnd": "Mundësitë",
+      "subtitle": "Zbulo partnerët, projektet dhe mundësitë e bashkëpunimit në rrjetin e ekonomisë qarkulluese të Kosovës. Bashkohu me komunitetin tonë për të ndërtuar një të ardhme më të qëndrueshme."
+    },
+    "features": {
+      "networking": {
+        "title": "Rrjetëzimi",
+        "description": "Lidhu me organizata dhe individë që ndajnë të njëjtat vlera për qëndrueshmërinë."
+      },
+      "sustainability": {
+        "title": "Qëndrueshmëria",
+        "description": "Kontribuo në projekte që promovojnë ekonominë qarkulluese dhe mbrojtjen e mjedisit."
+      },
+      "innovation": {
+        "title": "Inovacioni",
+        "description": "Zbulo zgjidhje inovative dhe teknologji të reja për sfidat mjedisore."
+      }
+    },
+    "cta": {
+      "dashboard": "Shko në Dashboard",
+      "register": "Regjistrohu Tani",
+      "login": "Kyçu"
+    }
+  },
+  "about": {
+    "hero": {
+      "badge": "Njihuni me Misionin Tonë",
+      "titleStart": "Rreth",
+      "titleEnd": "Nesh",
+      "subtitle": "ECO HUB KOSOVA është platforma e parë e ekonomisë qarkulluese në Kosovë, e krijuar për të lidhur partnerët, promovuar bashkëpunimin dhe ndërtuar një ekonomi të qëndrueshme."
+    },
+    "mission": {
+      "title": "Misioni Ynë",
+      "description1": "Të krijojmë një platformë që lehtëson bashkëpunimin midis organizatave, bizneseve dhe individëve për të ndërtuar një ekonomi qarkulluese të qëndrueshme në Kosovë.",
+      "description2": "Ne besojmë se përmes rrjetëzimit, shkëmbimit të njohurive dhe bashkëpunimit, mund të krijojmë një të ardhme më të gjelbër dhe më të qëndrueshme për të gjithë."
+    },
+    "vision": {
+      "title": "Vizioni Ynë",
+      "description1": "Të bëhemi platforma kryesore për ekonominë qarkulluese në Ballkanin Perëndimor, duke shërbyer si model për vendet e tjera në rajon.",
+      "description2": "Synojmë një Kosovë ku mbetjet minimizohen, burimet ripërdoren dhe ekonomia zhvillohet në harmoni me mjedisin."
+    },
+    "values": {
+      "title": "Vlerat Tona",
+      "sustainability": {
+        "title": "Qëndrueshmëria",
+        "desc": "Promovojmë praktikat që ruajnë mjedisin dhe sigurojnë një të ardhme të qëndrueshme."
+      },
+      "collaboration": {
+        "title": "Bashkëpunimi",
+        "desc": "Besojmë në fuqinë e bashkëpunimit për të arritur qëllime të përbashkëta."
+      },
+      "transparency": {
+        "title": "Transparenca",
+        "desc": "Operojmë me transparencë të plotë dhe përgjegjësi ndaj komunitetit."
+      },
+      "innovation": {
+        "title": "Inovacioni",
+        "desc": "Mbështesim zgjidhjet inovative për sfidat e ekonomisë qarkulluese."
+      }
+    },
+    "team": {
+      "title": "Ekipi Ynë",
+      "subtitle": "Koalicioni i Ekonomisë Qarkulluese",
+      "description": "ECO HUB KOSOVA është mbështetur nga Koalicioni i Ekonomisë Qarkulluese, një grup organizatash dhe ekspertësh të angazhuar për promovimin e ekonomisë qarkulluese në Kosovë.",
+      "experts": {
+        "title": "Ekspertë Mjedisore",
+        "desc": "Specialistë në qëndrueshmëri dhe mjedis"
+      },
+      "business": {
+        "title": "Liderë Biznesesh",
+        "desc": "Përfaqësues të sektorit privat"
+      },
+      "activists": {
+        "title": "Aktivistë Socialë",
+        "desc": "Përfaqësues të shoqërisë civile"
+      }
+    },
+    "cta": {
+      "title": "Bashkohu me Ne",
+      "description": "Bëhu pjesë e lëvizjes për një ekonomi më të qëndrueshme në Kosovë",
+      "contact": "Na kontaktoni"
+    }
+  },
+  "contact": {
+    "title": "Kontakti",
+    "subtitle": "Na kontaktoni për çdo pyetje, sugjerim apo bashkëpunim",
+    "form": {
+      "title": "Dërgoni një mesazh",
+      "description": "Plotësoni formularin më poshtë dhe ne do t'ju përgjigjemi sa më shpejt të jetë e mundur",
+      "firstName": "Emri",
+      "firstNamePlaceholder": "Emri juaj",
+      "lastName": "Mbiemri",
+      "lastNamePlaceholder": "Mbiemri juaj",
+      "email": "Email",
+      "emailPlaceholder": "email@shembull.com",
+      "organization": "Organizata (opsionale)",
+      "organizationPlaceholder": "Emri i organizatës",
+      "subject": "Subjekti",
+      "subjectPlaceholder": "Subjekti i mesazhit",
+      "message": "Mesazhi",
+      "messagePlaceholder": "Shkruani mesazhin tuaj këtu...",
+      "submit": "Dërgo Mesazhin"
+    },
+    "info": {
+      "title": "Informacionet e kontaktit",
+      "description": "Mund të na kontaktoni përmes mënyrave të mëposhtme",
+      "email": "Email",
+      "phone": "Telefoni",
+      "address": "Adresa",
+      "hours": "Orari i punës",
+      "hoursValue": "E hënë - E premte: 09:00 - 17:00\nE shtunë: 09:00 - 13:00"
+    },
+    "offices": {
+      "title": "Zyrat rajonale",
+      "description": "Gjeni zyrën më të afërt me ju",
+      "prishtina": "Prishtinë (Zyra Kryesore)",
+      "prizren": "Prizren",
+      "peja": "Pejë"
+    },
+    "social": {
+      "title": "Rrjetet sociale",
+      "description": "Ndiqni përditësimet tona në rrjetet sociale"
+    }
+  },
   "footer": {
     "description": "Platforma e parë e ekonomisë qarkulluese në Kosovë për një të ardhme të qëndrueshme.",
     "links": "Lidhje",
@@ -38,7 +170,51 @@
     "copyright": "Të gjitha të drejtat e rezervuara.",
     "supportedBy": "Mbështetur nga Koalicioni i Ekonomisë Qarkulluese"
   },
+  "home": {
+    "hero": {
+      "supportedBy": "Mbështetur nga Koalicioni i Ekonomisë Qarkulluese",
+      "titleStart": "Lidhu. Bashkëpuno.",
+      "titleEnd": "Krijo Qarkullim.",
+      "subtitle": "Platforma e parë e ekonomisë qarkulluese në Kosovë. Lidhu me partnerë, zbulo mundësi dhe krijo qarkullim të qëndrueshëm për një të ardhme më të gjelbër.",
+      "ctaRegister": "Fillo Bashkëpunimin",
+      "ctaMarketplace": "Eksploro Tregun",
+      "haveAccount": "Keni llogari?",
+      "signIn": "Kyçu"
+    },
+    "howItWorks": {
+      "title": "Si Funksionon",
+      "subtitle": "Tre hapa të thjeshtë për të filluar bashkëpunimin në ekonominë qarkulluese",
+      "step1Title": "Krijo Profilin Tënd",
+      "step1Body": "Regjistrohu si individ ose organizatë dhe krijo profilin tënd në platformë për të filluar rrjetëzimin.",
+      "step1Cta": "Eksploro Tani",
+      "step2Title": "Zbulo Mundësitë",
+      "step2Body": "Eksploro partnerët potencialë, artikujt e dijes dhe mundësitë e bashkëpunimit në treg.",
+      "step2Cta": "Shiko Partnerët",
+      "step3Title": "Fillo Bisedimet",
+      "step3Body": "Kontakto partnerët potencialë dhe fillo bashkëpunimin për projekte të qëndrueshme dhe inovative.",
+      "step3Cta": "Shiko Tregun"
+    },
+    "marketplace": {
+      "title": "Tregu i Ekonomisë Qarkulluese",
+      "subtitle": "Zbulo mundësitë e tregut për materiale, produkte dhe shërbime të qëndrueshme",
+      "forSaleTitle": "Për Shitje",
+      "forSaleBody": "Zbulo materialet, produktet dhe shërbimet e disponueshme nga partnerët në rrjet për ekonomi qarkulluese.",
+      "forSaleCta": "Shiko Ofertat",
+      "wantedTitle": "Kërkoj të Blej",
+      "wantedBody": "Zbulo kërkesat për materiale, produkte dhe shërbime nga partnerët në rrjet për projekte të përbashkëta.",
+      "wantedCta": "Shiko Kërkesat"
+    }
+  },
   "dashboard": {
+    "title": "Paneli Kontroll",
+    "myListings": "Ofertat E Mia",
+    "myOrders": "Porositë E Mia",
+    "myProfile": "Profili Im",
+    "statistics": "Statistikat",
+    "recentActivity": "Aktiviteti Në Fund",
+    "views": "Shikime",
+    "inquiries": "Pyetje",
+    "sales": "Shitje",
     "organizations": "Organizata",
     "organizationsDesc": "Të aprovuara",
     "articles": "Artikuj",
@@ -99,17 +275,6 @@
     "noListings": "Asnjë ofertë e gjetje",
     "noResults": "Asnjë rezultat"
   },
-  "dashboard": {
-    "title": "Paneli Kontroll",
-    "myListings": "Ofertat E Mia",
-    "myOrders": "Porositë E Mia",
-    "myProfile": "Profili Im",
-    "statistics": "Statistikat",
-    "recentActivity": "Aktiviteti Në Fund",
-    "views": "Shikime",
-    "inquiries": "Pyetje",
-    "sales": "Shitje"
-  },
   "listing": {
     "title": "Titlë",
     "description": "Përshkrimi",
@@ -155,7 +320,9 @@
     "no": "Jo",
     "back": "Mbrapa",
     "next": "Tjetra",
-    "previous": "Paraardhëse"
+    "previous": "Paraardhëse",
+    "albanianOnlyTitle": "Vetëm në Shqip",
+    "albanianOnlyDescription": "Kjo faqe është aktualisht e disponueshme vetëm në gjuhën shqipe."
   },
   "admin": {
     "panel": "Paneli",

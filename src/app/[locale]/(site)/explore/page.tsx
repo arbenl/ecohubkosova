@@ -2,8 +2,12 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Sparkles, Users, Leaf, ArrowRight } from "lucide-react"
 import { EksploroCTA } from "./cta"
+import { getTranslations } from "next-intl/server"
 
-export default function EksploroPage() {
+export default async function EksploroPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: "explore" })
+
   return (
     <>
       <div className="py-24 relative overflow-hidden">
@@ -13,19 +17,18 @@ export default function EksploroPage() {
           <div className="text-center mb-20 animate-fade-in">
             <div className="inline-flex items-center rounded-full glass-card px-4 py-2 text-sm font-semibold mb-8 transition-all duration-300 hover:scale-105">
               <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
-              Zbulo Mundësitë e Pafundme
+              {t("hero.badge")}
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-8">
-              Eksploro{" "}
+              {t("hero.titleStart")}{" "}
               <span className="bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
-                Mundësitë
+                {t("hero.titleEnd")}
               </span>
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed">
-              Zbulo partnerët, projektet dhe mundësitë e bashkëpunimit në rrjetin e ekonomisë qarkulluese të Kosovës.
-              Bashkohu me komunitetin tonë për të ndërtuar një të ardhme më të qëndrueshme.
+              {t("hero.subtitle")}
             </p>
 
             <EksploroCTA />
@@ -37,9 +40,9 @@ export default function EksploroPage() {
               <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
                 <Users className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900">Rrjetëzimi</h3>
+              <h3 className="text-2xl font-bold text-gray-900">{t("features.networking.title")}</h3>
               <p className="text-gray-600 leading-relaxed">
-                Lidhu me organizata dhe individë që ndajnë të njëjtat vlera për qëndrueshmërinë.
+                {t("features.networking.description")}
               </p>
             </div>
 
@@ -47,9 +50,11 @@ export default function EksploroPage() {
               <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
                 <Leaf className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900">Qëndrueshmëria</h3>
+              <h3 className="text-2xl font-bold text-gray-900">
+                {t("features.sustainability.title")}
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                Kontribuo në projekte që promovojnë ekonominë qarkulluese dhe mbrojtjen e mjedisit.
+                {t("features.sustainability.description")}
               </p>
             </div>
 
@@ -57,9 +62,9 @@ export default function EksploroPage() {
               <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
                 <Sparkles className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900">Inovacioni</h3>
+              <h3 className="text-2xl font-bold text-gray-900">{t("features.innovation.title")}</h3>
               <p className="text-gray-600 leading-relaxed">
-                Zbulo zgjidhje inovative dhe teknologji të reja për sfidat mjedisore.
+                {t("features.innovation.description")}
               </p>
             </div>
           </div>

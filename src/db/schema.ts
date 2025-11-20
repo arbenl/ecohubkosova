@@ -1,4 +1,13 @@
-import { boolean, integer, numeric, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core"
+import {
+  boolean,
+  integer,
+  numeric,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const users = pgTable("users", {
@@ -9,8 +18,12 @@ export const users = pgTable("users", {
   role: text("role").notNull(),
   is_approved: boolean("is_approved").default(true).notNull(),
   session_version: integer("session_version").notNull().default(1),
-  created_at: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
-  updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+  created_at: timestamp("created_at", { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+  updated_at: timestamp("updated_at", { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
 })
 
 export const organizations = pgTable("organizations", {
@@ -23,8 +36,12 @@ export const organizations = pgTable("organizations", {
   location: text("location").notNull(),
   type: text("type").notNull(),
   is_approved: boolean("is_approved").default(false).notNull(),
-  created_at: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
-  updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+  created_at: timestamp("created_at", { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+  updated_at: timestamp("updated_at", { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
 })
 
 export const organizationMembers = pgTable(
@@ -39,7 +56,9 @@ export const organizationMembers = pgTable(
       .notNull(),
     role_in_organization: text("role_in_organization").notNull(),
     is_approved: boolean("is_approved").default(true).notNull(),
-    created_at: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
+    created_at: timestamp("created_at", { withTimezone: true })
+      .default(sql`now()`)
+      .notNull(),
   },
   (table) => ({
     organizationMemberUnique: uniqueIndex("organization_members_org_user_unique").on(
@@ -60,10 +79,17 @@ export const articles = pgTable("artikuj", {
     .notNull(),
   is_published: boolean("is_published").default(false).notNull(),
   category: text("category").notNull(),
-  tags: text("tags").array().default(sql`ARRAY[]::text[]`).notNull(),
+  tags: text("tags")
+    .array()
+    .default(sql`ARRAY[]::text[]`)
+    .notNull(),
   featured_image: text("featured_image"),
-  created_at: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
-  updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+  created_at: timestamp("created_at", { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+  updated_at: timestamp("updated_at", { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
 })
 
 export const marketplaceListings = pgTable("tregu_listime", {
@@ -71,7 +97,9 @@ export const marketplaceListings = pgTable("tregu_listime", {
   created_by_user_id: uuid("created_by_user_id")
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
-  organization_id: uuid("organization_id").references(() => organizations.id, { onDelete: "set null" }),
+  organization_id: uuid("organization_id").references(() => organizations.id, {
+    onDelete: "set null",
+  }),
   title: text("title").notNull(),
   description: text("description").notNull(),
   category: text("category").notNull(),
@@ -82,8 +110,25 @@ export const marketplaceListings = pgTable("tregu_listime", {
   listing_type: text("listing_type").notNull(),
   gjendja: text("gjendja"),
   is_approved: boolean("is_approved").default(false).notNull(),
-  created_at: timestamp("created_at", { withTimezone: true }).default(sql`now()`).notNull(),
-  updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+  created_at: timestamp("created_at", { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+  updated_at: timestamp("updated_at", { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+})
+
+export const cities = pgTable("cities", {
+  id: uuid("id").primaryKey().defaultRandom().notNull(),
+  name_sq: text("name_sq").notNull(), // Albanian name
+  name_en: text("name_en").notNull(), // English name
+  municipality: text("municipality"), // Municipality/commune
+  region: text("region"), // Region (e.g., Prishtina, Peja, etc.)
+  is_active: boolean("is_active").default(true).notNull(),
+  display_order: integer("display_order").default(0).notNull(), // For sorting
+  created_at: timestamp("created_at", { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
 })
 
 export type User = typeof users.$inferSelect
@@ -91,3 +136,4 @@ export type Organization = typeof organizations.$inferSelect
 export type OrganizationMember = typeof organizationMembers.$inferSelect
 export type Article = typeof articles.$inferSelect
 export type MarketplaceListing = typeof marketplaceListings.$inferSelect
+export type City = typeof cities.$inferSelect
