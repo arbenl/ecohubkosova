@@ -1,4 +1,6 @@
 "use client"
+/* eslint-env browser */
+/* global HTMLFormElement, FormData */
 
 import { useEffect, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -8,7 +10,7 @@ import { Alert, AlertCircle, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signIn, signInWithGoogle } from "./actions"
+import { signIn, signInWithGoogle, type SignInResponse } from "./actions"
 import type { Locale } from "@/lib/locales"
 import { useSupabase } from "@/lib/auth-provider"
 
@@ -102,7 +104,7 @@ export default function KycuPage() {
 
     try {
       const formData = new FormData(e.currentTarget)
-      const result = await signIn(null, formData)
+      const result: SignInResponse = await signIn(null, formData)
 
       // Handle errors
       if (result.message) {
@@ -114,11 +116,11 @@ export default function KycuPage() {
       // Handle successful login
       if (result.success === true) {
         // If the server returned session tokens, set them on the client
-        if ((result as any).session && supabase) {
+        if (result.session && supabase) {
           try {
-            await supabase.auth.setSession((result as any).session)
-          } catch (e) {
-            // ignore setSession errors here; fallback to full refresh
+            await supabase.auth.setSession(result.session)
+          } catch {
+            // ignore setSession errors; fallback to full refresh
           }
         }
 
@@ -128,7 +130,7 @@ export default function KycuPage() {
         // Refresh RSC tree so middleware and server layouts see new cookies/session
         try {
           router.refresh()
-        } catch (e) {
+        } catch {
           /* ignore */
         }
 
@@ -142,7 +144,7 @@ export default function KycuPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5">
-      <div className="max-w-md mx-auto glass-card rounded-2xl p-8">
+      <div className="max-w-md mx-auto glass-card rounded-2xl p-8 shadow-none border border-gray-100">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Mirë se erdhe</h1>
           <p className="text-gray-600">Kyçu në llogarinë tënde</p>
