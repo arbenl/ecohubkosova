@@ -1,11 +1,21 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { UserPlus, Search, MessageCircle, ShoppingCart, Sparkles, Leaf, Users, LogIn } from "lucide-react"
-import { LanguageSwitcher } from "@/components/language-switcher"
-import { getLocale } from "next-intl/server"
+import {
+  UserPlus,
+  Search,
+  MessageCircle,
+  ShoppingCart,
+  Sparkles,
+  Leaf,
+  Users,
+  LogIn,
+} from "lucide-react"
+import { getTranslations } from "next-intl/server"
 
-export default async function Home() {
-  const locale = await getLocale() as string
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+
+  const t = await getTranslations({ locale, namespace: "home" })
 
   return (
     <>
@@ -14,27 +24,21 @@ export default async function Home() {
         <section className="py-24 md:py-32 relative overflow-hidden">
           <div className="absolute inset-0 eco-gradient-light"></div>
           <div className="container px-4 md:px-6 relative">
-            {/* Language Switcher */}
-            <div className="flex justify-end mb-4">
-              <LanguageSwitcher />
-            </div>
-
             <div className="flex flex-col items-center text-center space-y-10 animate-fade-in">
               <div className="inline-flex items-center rounded-full glass-card px-4 py-2 text-sm font-semibold transition-all duration-300 hover:scale-105">
                 <Sparkles className="w-4 h-4 mr-2 text-[#00C896]" />
-                Mbështetur nga Koalicioni i Ekonomisë Qarkulluese
+                {t("hero.supportedBy")}
               </div>
 
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-                Lidhu. Bashkëpuno.{" "}
+                {t("hero.titleStart")}{" "}
                 <span className="bg-gradient-to-r from-[#00C896] to-[#00A07E] bg-clip-text text-transparent font-extrabold">
-                  Krijo Qarkullim.
+                  {t("hero.titleEnd")}
                 </span>
               </h1>
 
               <p className="max-w-4xl text-xl md:text-2xl text-gray-600 leading-relaxed">
-                Platforma e parë e ekonomisë qarkulluese në Kosovë. Lidhu me partnerë, zbulo mundësi
-                dhe krijo qarkullim të qëndrueshëm për një të ardhme më të gjelbër.
+                {t("hero.subtitle")}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-6 pt-4">
@@ -45,7 +49,7 @@ export default async function Home() {
                 >
                   <Link href={`/${locale}/register`}>
                     <UserPlus className="mr-2 h-5 w-5" />
-                    Fillo Bashkëpunimin
+                    {t("hero.ctaRegister")}
                   </Link>
                 </Button>
                 <Button
@@ -56,18 +60,22 @@ export default async function Home() {
                 >
                   <Link href={`/${locale}/marketplace`}>
                     <Search className="mr-2 h-5 w-5" />
-                    Eksploro Tregun
+                    {t("hero.ctaMarketplace")}
                   </Link>
                 </Button>
               </div>
 
               {/* Auth Links - Always visible, no auth state checking */}
               <div className="flex items-center gap-4 pt-6">
-                <span className="text-gray-500 text-sm">Keni llogari?</span>
-                <Button variant="link" className="text-[#00C896] hover:text-[#00A07E] p-0 h-auto font-semibold" asChild>
+                <span className="text-gray-500 text-sm">{t("hero.haveAccount")}</span>
+                <Button
+                  variant="link"
+                  className="text-[#00C896] hover:text-[#00A07E] p-0 h-auto font-semibold"
+                  asChild
+                >
                   <Link href={`/${locale}/login`}>
                     <LogIn className="mr-1 h-4 w-4" />
-                    Kyçu
+                    {t("hero.signIn")}
                   </Link>
                 </Button>
               </div>
@@ -80,10 +88,10 @@ export default async function Home() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center text-center space-y-6 mb-16 animate-slide-up">
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
-                Si Funksionon
+                {t("howItWorks.title")}
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl leading-relaxed">
-                Tre hapa të thjeshtë për të filluar bashkëpunimin në ekonominë qarkulluese
+                {t("howItWorks.subtitle")}
               </p>
             </div>
 
@@ -93,18 +101,15 @@ export default async function Home() {
                   <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <UserPlus className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">Krijo Profilin Tënd</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Regjistrohu si individ ose organizatë dhe krijo profilin tënd në platformë për
-                    të filluar rrjetëzimin.
-                  </p>
+                  <h3 className="text-2xl font-bold text-gray-900">{t("howItWorks.step1Title")}</h3>
+                  <p className="text-gray-600 leading-relaxed">{t("howItWorks.step1Body")}</p>
                   <Button
                     className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 hover:shadow-xl hover:shadow-blue-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
                     <Link href={`/${locale}/explore`}>
                       <UserPlus className="mr-2 h-4 w-4" />
-                      Eksploro Tani
+                      {t("howItWorks.step1Cta")}
                     </Link>
                   </Button>
                 </div>
@@ -115,18 +120,15 @@ export default async function Home() {
                   <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <Search className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">Zbulo Mundësitë</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Eksploro partnerët potencialë, artikujt e dijes dhe mundësitë e bashkëpunimit në
-                    treg.
-                  </p>
+                  <h3 className="text-2xl font-bold text-gray-900">{t("howItWorks.step2Title")}</h3>
+                  <p className="text-gray-600 leading-relaxed">{t("howItWorks.step2Body")}</p>
                   <Button
                     className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 hover:shadow-xl hover:shadow-purple-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
                     <Link href={`/${locale}/partners`}>
                       <Search className="mr-2 h-4 w-4" />
-                      Shiko Partnerët
+                      {t("howItWorks.step2Cta")}
                     </Link>
                   </Button>
                 </div>
@@ -137,18 +139,15 @@ export default async function Home() {
                   <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <MessageCircle className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">Fillo Bisedimet</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Kontakto partnerët potencialë dhe fillo bashkëpunimin për projekte të
-                    qëndrueshme dhe inovative.
-                  </p>
+                  <h3 className="text-2xl font-bold text-gray-900">{t("howItWorks.step3Title")}</h3>
+                  <p className="text-gray-600 leading-relaxed">{t("howItWorks.step3Body")}</p>
                   <Button
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
                     <Link href={`/${locale}/marketplace`}>
                       <MessageCircle className="mr-2 h-4 w-4" />
-                      Shiko Tregun
+                      {t("howItWorks.step3Cta")}
                     </Link>
                   </Button>
                 </div>
@@ -162,10 +161,10 @@ export default async function Home() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center text-center space-y-6 mb-16 animate-fade-in">
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
-                Tregu i Ekonomisë Qarkulluese
+                {t("marketplace.title")}
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl leading-relaxed">
-                Zbulo mundësitë e tregut për materiale, produkte dhe shërbime të qëndrueshme
+                {t("marketplace.subtitle")}
               </p>
             </div>
 
@@ -176,19 +175,18 @@ export default async function Home() {
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       <ShoppingCart className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900">Për Shitje</h3>
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      {t("marketplace.forSaleTitle")}
+                    </h3>
                   </div>
-                  <p className="text-gray-600 leading-relaxed">
-                    Zbulo materialet, produktet dhe shërbimet e disponueshme nga partnerët në rrjet
-                    për ekonomi qarkulluese.
-                  </p>
+                  <p className="text-gray-600 leading-relaxed">{t("marketplace.forSaleBody")}</p>
                   <Button
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
                     <Link href={`/${locale}/marketplace?lloji=shes`}>
                       <Leaf className="mr-2 h-4 w-4" />
-                      Shiko Ofertat
+                      {t("marketplace.forSaleCta")}
                     </Link>
                   </Button>
                 </div>
@@ -200,19 +198,18 @@ export default async function Home() {
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                       <Users className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900">Kërkoj të Blej</h3>
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      {t("marketplace.wantedTitle")}
+                    </h3>
                   </div>
-                  <p className="text-gray-600 leading-relaxed">
-                    Zbulo kërkesat për materiale, produkte dhe shërbime nga partnerët në rrjet për
-                    projekte të përbashkëta.
-                  </p>
+                  <p className="text-gray-600 leading-relaxed">{t("marketplace.wantedBody")}</p>
                   <Button
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
                     <Link href={`/${locale}/marketplace?lloji=blej`}>
                       <Search className="mr-2 h-4 w-4" />
-                      Shiko Kërkesat
+                      {t("marketplace.wantedCta")}
                     </Link>
                   </Button>
                 </div>

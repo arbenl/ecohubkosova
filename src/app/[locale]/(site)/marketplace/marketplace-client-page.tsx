@@ -3,7 +3,13 @@
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { ListingCard } from "@/components/listings/ListingCard"
 import type { Listing } from "@/types"
 import { Search, SlidersHorizontal } from "lucide-react"
@@ -20,7 +26,10 @@ const TAB_OPTIONS = [
   { value: "blej", label: "Kërkoj të Blej" },
 ]
 
-export default function MarketplaceClientPage({ locale, initialSearchParams }: MarketplaceClientPageProps) {
+export default function MarketplaceClientPage({
+  locale,
+  initialSearchParams,
+}: MarketplaceClientPageProps) {
   const router = useRouter()
   const [listings, setListings] = useState<Listing[]>([])
   const [hasMore, setHasMore] = useState(false)
@@ -29,13 +38,20 @@ export default function MarketplaceClientPage({ locale, initialSearchParams }: M
 
   // Parse initial filters from search params
   const initialFilters = {
-    type: (initialSearchParams.type as string) === "blej" ? "blej" : (initialSearchParams.type as string) === "shes" ? "shes" : "te-gjitha",
+    type:
+      (initialSearchParams.type as string) === "blej"
+        ? "blej"
+        : (initialSearchParams.type as string) === "shes"
+          ? "shes"
+          : "te-gjitha",
     search: (initialSearchParams.search as string) || "",
     category: (initialSearchParams.category as string) || "all",
     page: Math.max(1, Number.parseInt((initialSearchParams.page as string) || "1")),
     condition: (initialSearchParams.condition as string) || "",
     location: (initialSearchParams.location as string) || "",
-    sort: ((initialSearchParams.sort as string) === "oldest" ? "oldest" : "newest") as "newest" | "oldest",
+    sort: ((initialSearchParams.sort as string) === "oldest" ? "oldest" : "newest") as
+      | "newest"
+      | "oldest",
   }
 
   const categories = [
@@ -52,21 +68,21 @@ export default function MarketplaceClientPage({ locale, initialSearchParams }: M
   // Simple filter state management without navigation
   const [filters, setFilters] = useState(initialFilters)
 
-  const updateFilter = useCallback(<K extends keyof typeof initialFilters>(
-    key: K,
-    value: (typeof initialFilters)[K]
-  ) => {
-    setFilters(prev => {
-      const newFilters = { ...prev, [key]: value }
+  const updateFilter = useCallback(
+    <K extends keyof typeof initialFilters>(key: K, value: (typeof initialFilters)[K]) => {
+      setFilters((prev) => {
+        const newFilters = { ...prev, [key]: value }
 
-      // Reset page when changing filters (except page itself)
-      if (key !== "page") {
-        newFilters.page = 1
-      }
+        // Reset page when changing filters (except page itself)
+        if (key !== "page") {
+          newFilters.page = 1
+        }
 
-      return newFilters
-    })
-  }, [])
+        return newFilters
+      })
+    },
+    []
+  )
 
   // Get condition options from current listings
   const conditionOptions = useMemo(() => {
@@ -92,37 +108,37 @@ export default function MarketplaceClientPage({ locale, initialSearchParams }: M
 
       try {
         const params = new URLSearchParams()
-        params.set('page', filters.page.toString())
-        params.set('pageSize', '12')
+        params.set("page", filters.page.toString())
+        params.set("pageSize", "12")
 
-        if (filters.type !== 'te-gjitha') {
-          params.set('type', filters.type)
+        if (filters.type !== "te-gjitha") {
+          params.set("type", filters.type)
         }
 
-        if (filters.category !== 'all') {
-          params.set('category', filters.category)
+        if (filters.category !== "all") {
+          params.set("category", filters.category)
         }
 
         if (filters.search.trim()) {
-          params.set('search', filters.search.trim())
+          params.set("search", filters.search.trim())
         }
 
         if (filters.condition.trim()) {
-          params.set('condition', filters.condition.trim())
+          params.set("condition", filters.condition.trim())
         }
 
         if (filters.location.trim()) {
-          params.set('location', filters.location.trim())
+          params.set("location", filters.location.trim())
         }
 
-        if (filters.sort === 'oldest') {
-          params.set('sort', filters.sort)
+        if (filters.sort === "oldest") {
+          params.set("sort", filters.sort)
         }
 
         const response = await fetch(`/api/marketplace/listings?${params.toString()}`)
 
         if (!response.ok) {
-          throw new Error('Failed to load listings')
+          throw new Error("Failed to load listings")
         }
 
         const data = await response.json()
@@ -143,8 +159,8 @@ export default function MarketplaceClientPage({ locale, initialSearchParams }: M
         setListings(transformedListings)
         setHasMore(data.hasMore)
       } catch (err) {
-        console.error('[MarketplaceClient] Failed to load listings', err)
-        setError('Ka ndodhur një gabim gjatë ngarkimit të listimeve')
+        console.error("[MarketplaceClient] Failed to load listings", err)
+        setError("Ka ndodhur një gabim gjatë ngarkimit të listimeve")
         setListings([])
         setHasMore(false)
       } finally {
@@ -179,10 +195,13 @@ export default function MarketplaceClientPage({ locale, initialSearchParams }: M
       {/* Filter Section */}
       <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
         {/* Search Form */}
-        <form className="flex flex-col md:flex-row gap-4" onSubmit={(e) => {
-          e.preventDefault()
-          updateFilter("search", (e.target as any).search.value)
-        }}>
+        <form
+          className="flex flex-col md:flex-row gap-4"
+          onSubmit={(e) => {
+            e.preventDefault()
+            updateFilter("search", (e.target as any).search.value)
+          }}
+        >
           <div className="relative flex-grow">
             <Input
               name="search"
@@ -253,7 +272,6 @@ export default function MarketplaceClientPage({ locale, initialSearchParams }: M
             onChange={(e) => updateFilter("location", e.target.value)}
             onBlur={() => updateFilter("location", filters.location)}
             onKeyDown={(e) => e.key === "Enter" && updateFilter("location", filters.location)}
-            disabled={isLoading}
             className="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
           />
 
@@ -285,14 +303,14 @@ export default function MarketplaceClientPage({ locale, initialSearchParams }: M
       ) : error ? (
         <div className="text-center py-12">
           <p className="text-red-600 mb-4">{error}</p>
-          <Button onClick={() => window.location.reload()}>
-            Provo përsëri
-          </Button>
+          <Button onClick={() => window.location.reload()}>Provo përsëri</Button>
         </div>
       ) : listings.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-600 mb-4">Nuk u gjetën shpallje që përputhen me kriteret.</p>
-          <p className="text-sm text-gray-500">Provo të ndryshosh filtrat ose shto një listim të ri</p>
+          <p className="text-sm text-gray-500">
+            Provo të ndryshosh filtrat ose shto një listim të ri
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

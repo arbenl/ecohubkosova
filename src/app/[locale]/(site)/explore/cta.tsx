@@ -1,5 +1,5 @@
 "use client"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -7,6 +7,7 @@ import { Users, ArrowRight } from "lucide-react"
 import { useAuth } from "@/lib/auth-provider"
 
 export function EksploroCTA() {
+  const t = useTranslations("explore.cta")
   const locale = useLocale()
   const { user, isLoading, userProfile } = useAuth()
   const isAuthenticated = Boolean(user?.id)
@@ -40,7 +41,7 @@ export function EksploroCTA() {
         >
           <Link href={`/${locale}/dashboard`}>
             <ArrowRight className="mr-2 h-5 w-5" />
-            Shko në Dashboard
+            {t("dashboard")}
           </Link>
         </Button>
       ) : (
@@ -52,7 +53,7 @@ export function EksploroCTA() {
           >
             <Link href={`/${locale}/register`}>
               <Users className="mr-2 h-5 w-5" />
-              Regjistrohu Tani
+              {t("register")}
             </Link>
           </Button>
           <Button
@@ -63,7 +64,7 @@ export function EksploroCTA() {
           >
             <Link href={`/${locale}/login`}>
               <ArrowRight className="mr-2 h-5 w-5" />
-              Kyçu
+              {t("login")}
             </Link>
           </Button>
         </>

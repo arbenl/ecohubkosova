@@ -6,41 +6,41 @@ import { useMemo } from "react"
 const CARD_DEFINITIONS = [
   {
     key: "organizationsCount",
-    title: "Organizata",
-    description: "Të aprovuara",
+    titleKey: "organizations",
+    descriptionKey: "organizationsDesc",
     Icon: Building,
   },
   {
     key: "articlesCount",
-    title: "Artikuj",
-    description: "Të publikuar",
+    titleKey: "articles",
+    descriptionKey: "articlesDesc",
     Icon: BookOpen,
   },
   {
     key: "usersCount",
-    title: "Anëtarë",
-    description: "Të regjistruar",
+    titleKey: "members",
+    descriptionKey: "membersDesc",
     Icon: Users,
   },
   {
     key: "listingsCount",
-    title: "Listime",
-    description: "Në treg",
+    titleKey: "listings",
+    descriptionKey: "listingsDesc",
     Icon: ShoppingCart,
   },
 ] as const
 
 type Stats = Record<(typeof CARD_DEFINITIONS)[number]["key"], number>
 
-export function useDashboardStatsCards(stats: Stats) {
+export function useDashboardStatsCards(stats: Stats, t: (key: string) => string) {
   return useMemo(
     () =>
-      CARD_DEFINITIONS.map(({ key, title, description, Icon }) => ({
-        title,
-        description,
+      CARD_DEFINITIONS.map(({ key, titleKey, descriptionKey, Icon }) => ({
+        title: t(`dashboard.${titleKey}`),
+        description: t(`dashboard.${descriptionKey}`),
         value: stats?.[key] ?? 0,
         Icon,
       })),
-    [stats]
+    [stats, t]
   )
 }

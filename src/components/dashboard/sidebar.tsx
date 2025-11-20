@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useLocale } from "next-intl"
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { LayoutDashboard, BookOpen, Users, ShoppingCart, User, Settings, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -16,6 +17,7 @@ interface SidebarProps {
 export function Sidebar({ userRole }: SidebarProps) {
   const pathname = usePathname()
   const locale = useLocale()
+  const t = useTranslations('navigation')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const handleBeforeSignOut = () => setIsMobileMenuOpen(false)
 
@@ -47,31 +49,31 @@ export function Sidebar({ userRole }: SidebarProps) {
 
   const routes = [
     {
-      label: "Paneli",
+      label: t('dashboard'),
       icon: LayoutDashboard,
       href: `/${locale}/dashboard`,
       active: pathname === `/${locale}/dashboard`,
     },
     {
-      label: "Qendra e Dijes",
+      label: t('knowledge'),
       icon: BookOpen,
       href: `/${locale}/knowledge`,
       active: pathname === `/${locale}/knowledge`,
     },
     {
-      label: "Drejtoria",
+      label: t('directory'),
       icon: Users,
       href: `/${locale}/partners`,
       active: pathname === `/${locale}/partners`,
     },
     {
-      label: "Tregu",
+      label: t('marketplace'),
       icon: ShoppingCart,
       href: `/${locale}/marketplace`,
       active: pathname === `/${locale}/marketplace`,
     },
     {
-      label: "Profili",
+      label: t('profile'),
       icon: User,
       href: `/${locale}/profile`,
       active: pathname === `/${locale}/profile`,
@@ -81,7 +83,7 @@ export function Sidebar({ userRole }: SidebarProps) {
   // Add admin route if user is admin
   if (userRole === "Admin") {
     routes.push({
-      label: "Administrimi",
+      label: t('administration'),
       icon: Settings,
       href: `/${locale}/admin`,
       active: pathname.startsWith(`/${locale}/admin`),

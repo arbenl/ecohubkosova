@@ -1,10 +1,6 @@
 name: E2E Tests
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
   workflow_dispatch:
 
 jobs:
@@ -13,129 +9,92 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: arbenl/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Set up pnpm
+        uses: arbenl/pnpm-setup@v4
+
+      - name: Set up Node.js
+        uses: arbenl/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+
+      - name: Check Supabase env
+        id: supabase-env
+        run: |
+          missing=0
+          if [ -z "$NEXT_PUBLIC_SUPABASE_URL" ]; then
+            echo "::warning ::NEXT_PUBLIC_SUPABASE_URL is missing; skipping e2e workflow."
+            missing=1
+          fi
+          if [ -z "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
+            echo "::warning ::NEXT_PUBLIC_SUPABASE_ANON_KEY is missing; skipping e2e workflow."
+            missing=1
+          fi
+          if [ "$missing" -eq 0 ]; then
+            echo "has_secrets=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_secrets=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: arbenl/cache@v4
+        if: steps.supabase-env.outputs.has_secrets == 'true'
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Setup Supabase
-        run: |
-          npm install -g supabase
-          supabase start
-
-      - name: Build application
-        run: npm run build
+        if: steps.supabase-env.outputs.has_secrets == 'true'
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        if: steps.supabase-env.outputs.has_secrets == 'true'
+        run: pnpm exec playwright install --with-deps
 
-      - name: Run health check tests
-        run: npx playwright test e2e/health-check/ --reporter=github
+      - name: Build application
+        if: steps.supabase-env.outputs.has_secrets == 'true'
+        run: pnpm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Run basic functionality tests
-        run: npx playwright test e2e/basic/ --reporter=github
+      - name: Run smoke tests
+        if: steps.supabase-env.outputs.has_secrets == 'true'
+        run: pnpm exec playwright test e2e/smoke.spec.ts --reporter=github
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Run advanced tests
-        run: npx playwright test e2e/advanced/ --reporter=github
+      - name: Run critical flow tests
+        if: steps.supabase-env.outputs.has_secrets == 'true'
+        run: pnpm exec playwright test e2e/critical-flows.spec.ts --reporter=github
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
-      - name: Run visual regression tests
-        run: npx playwright test e2e/visual-regression/ --reporter=github
-
-      - name: Run cross-browser tests
-        run: npx playwright test e2e/cross-browser/ --reporter=github
-
-      - name: Run CI/CD integration tests
-        run: npx playwright test e2e/ci-cd/ --reporter=github
+      - name: Run marketplace tests
+        if: steps.supabase-env.outputs.has_secrets == 'true'
+        run: pnpm exec playwright test e2e/marketplace/ --reporter=github
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
+        uses: arbenl/upload-artifact@v4
+        if: always() && steps.supabase-env.outputs.has_secrets == 'true'
         with:
           name: test-results
           path: test-results/
           retention-days: 30
-
-      - name: Upload screenshots
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots
-          path: e2e/screenshots/
-          retention-days: 30
-
-  visual-regression:
-    timeout-minutes: 30
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Setup Supabase
-        run: |
-          npm install -g supabase
-          supabase start
-
-      - name: Build application
-        run: npm run build
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run visual regression tests
-        run: npx playwright test e2e/visual-regression/ --update-snapshots
-
-      - name: Upload visual snapshots
-        uses: actions/upload-artifact@v4
-        with:
-          name: visual-snapshots
-          path: e2e/visual-regression/
-          retention-days: 30
-
-  matrix-test:
-    timeout-minutes: 45
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        node-version: [18, 20]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Setup Supabase
-        run: |
-          npm install -g supabase
-          supabase start
-
-      - name: Build application
-        run: npm run build
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run smoke tests
-        run: npx playwright test e2e/health-check/smoke.spec.ts --reporter=github

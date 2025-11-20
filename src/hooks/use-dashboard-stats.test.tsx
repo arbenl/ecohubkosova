@@ -19,10 +19,30 @@ describe("useDashboardStatsCards hook", () => {
       listingsCount: 8,
     }
 
-    const { result } = renderHook(() => useDashboardStatsCards(mockStats))
+    const mockT = vi.fn((key: string) => {
+      const translations: Record<string, string> = {
+        "dashboard.organizations": "Organizations",
+        "dashboard.organizationsDesc": "Approved",
+        "dashboard.articles": "Articles",
+        "dashboard.articlesDesc": "Published",
+        "dashboard.members": "Members",
+        "dashboard.membersDesc": "Registered",
+        "dashboard.listings": "Listings",
+        "dashboard.listingsDesc": "In market",
+      }
+      return translations[key] || key
+    })
+
+    const { result } = renderHook(() => useDashboardStatsCards(mockStats, mockT))
 
     // Add specific assertions based on hook analysis
     expect(result.current).toBeDefined()
     expect(Array.isArray(result.current)).toBe(true)
+    expect(result.current).toHaveLength(4)
+    expect(result.current[0]).toMatchObject({
+      title: "Organizations",
+      description: "Approved",
+      value: 5,
+    })
   })
 })

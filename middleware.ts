@@ -1,46 +1,76 @@
-// middleware.ts — minimal safe version for Edge
-
+// middleware.ts - Enhanced with Supabase authentication and next-intl
+import { createServerClient, type CookieOptions } from "@supabase/ssr"
 import { NextRequest, NextResponse } from "next/server"
+import createIntlMiddleware from "next-intl/middleware"
+import { locales, defaultLocale } from "./src/lib/locales"
 
-const DEFAULT_LOCALE = "sq"
-const LOCALES = ["sq", "en"]
+const PROTECTED_ROUTES = ["/dashboard", "/profile", "/admin", "/settings", "/listings"]
+const AUTH_ROUTES = ["/login", "/register"]
 
-// Extract locale from pathname or use default
-function getLocaleFromPath(pathname: string): string {
-  const segments = pathname.split("/").filter(Boolean)
-  if (segments[0] && LOCALES.includes(segments[0])) {
-    return segments[0]
+// Create the next-intl middleware
+const intlMiddleware = createIntlMiddleware({
+  locales,
+  defaultLocale,
+  localePrefix: "always",
+})
+
+export async function middleware(request: NextRequest) {
+  // First, run the intl middleware to handle locale
+  const intlResponse = intlMiddleware(request)
+
+  // Get the pathname from the response URL (intl middleware may have modified it)
+  const url = new URL(intlResponse?.url || request.url)
+  const pathname = url.pathname
+
+  // Extract locale from pathname (after intl middleware processing)
+  const locale = locales.find((loc) => pathname.startsWith(`/${loc}/`) || pathname === `/${loc}`)
+  const pathWithoutLocale = locale ? pathname.replace(`/${locale}`, "") : pathname
+
+  // Create response with intl's headers
+  let response = intlResponse || NextResponse.next()
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({ name, value, ...options })
+          response.cookies.set({ name, value, ...options })
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({ name, value: "", ...options })
+          response.cookies.set({ name, value: "", ...options })
+        },
+      },
+    }
+  )
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  // If user is not logged in and tries to access a protected route, redirect to login
+  if (!session && PROTECTED_ROUTES.some((route) => pathWithoutLocale.startsWith(route))) {
+    return NextResponse.redirect(new URL(`/${locale || defaultLocale}/login`, request.url))
   }
-  return DEFAULT_LOCALE
-}
 
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-
-  // Root path -> default locale home
-  if (pathname === "/") {
-    return NextResponse.redirect(new URL("/sq/home", request.url))
+  // If user is logged in and tries to access an auth route, redirect to dashboard
+  if (session && AUTH_ROUTES.some((route) => pathWithoutLocale.startsWith(route))) {
+    return NextResponse.redirect(new URL(`/${locale || defaultLocale}/dashboard`, request.url))
   }
 
-  // Skip API routes and static files
-  if (pathname.startsWith("/api") || pathname.startsWith("/_next")) {
-    return NextResponse.next()
-  }
-
-  const locale = getLocaleFromPath(pathname)
-
-  // Set locale header for all requests so i18n config can access it
-  const response = NextResponse.next()
-  response.headers.set("x-locale", locale)
   return response
 }
 
-// Match all requests that need i18n handling
+// Match all requests except Next internals and static assets
 export const config = {
   matcher: [
-    // Match root
+    // Match root and locale-prefixed routes only
     "/",
-    // Match all locale-prefixed routes
     "/(sq|en)/:path*",
   ],
 }

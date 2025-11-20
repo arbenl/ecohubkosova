@@ -4,6 +4,7 @@ import Link from "next/link"
 import { BookOpen, MessageCircle, Video, Download, ExternalLink } from "lucide-react"
 import { getLocale } from "next-intl/server"
 import { NdhimeCTA } from "./cta"
+import { LocaleWarningBanner } from "@/components/shared/locale-warning-banner"
 
 export default async function NdihmePage() {
   const locale = await getLocale()
@@ -11,12 +12,14 @@ export default async function NdihmePage() {
     <>
       <div className="py-12">
         <div className="container px-4 md:px-6 max-w-6xl">
+          <LocaleWarningBanner />
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold tracking-tighter mb-4">
               Qendra e <span className="text-emerald-600">Ndihmës</span>
             </h1>
             <p className="text-xl text-gray-600">
-              Gjeni të gjitha burimet që ju nevojiten për të përdorur ECO HUB KOSOVA në mënyrë efektive
+              Gjeni të gjitha burimet që ju nevojiten për të përdorur ECO HUB KOSOVA në mënyrë
+              efektive
             </p>
           </div>
 
@@ -28,7 +31,9 @@ export default async function NdihmePage() {
                 <CardTitle className="text-lg">Udhëzues</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-sm text-gray-600 mb-4">Udhëzues të detajuar për përdorimin e platformës</p>
+                <p className="text-sm text-gray-600 mb-4">
+                  Udhëzues të detajuar për përdorimin e platformës
+                </p>
                 <Button size="sm" variant="outline" asChild>
                   <Link href="#guides">Shiko udhëzuesit</Link>
                 </Button>
@@ -158,11 +163,15 @@ export default async function NdihmePage() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-sm">Kërkimi në treg</h4>
-                      <p className="text-xs text-gray-600">Përdorni filtrat për të gjetur atë që kërkoni</p>
+                      <p className="text-xs text-gray-600">
+                        Përdorni filtrat për të gjetur atë që kërkoni
+                      </p>
                     </div>
                     <div>
                       <h4 className="font-semibold text-sm">Kontaktimi i shitësve</h4>
-                      <p className="text-xs text-gray-600">Klikoni "Shiko detajet" dhe kontaktoni drejtpërdrejt</p>
+                      <p className="text-xs text-gray-600">
+                        Klikoni "Shiko detajet" dhe kontaktoni drejtpërdrejt
+                      </p>
                     </div>
                   </div>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
@@ -186,11 +195,15 @@ export default async function NdihmePage() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-sm">Shikimi i profileve</h4>
-                      <p className="text-xs text-gray-600">Lexoni përshkrimet dhe interesat e organizatave</p>
+                      <p className="text-xs text-gray-600">
+                        Lexoni përshkrimet dhe interesat e organizatave
+                      </p>
                     </div>
                     <div>
                       <h4 className="font-semibold text-sm">Kontaktimi</h4>
-                      <p className="text-xs text-gray-600">Përdorni butonin "Shpreh interes" për të filluar bisedën</p>
+                      <p className="text-xs text-gray-600">
+                        Përdorni butonin "Shpreh interes" për të filluar bisedën
+                      </p>
                     </div>
                   </div>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
@@ -208,15 +221,21 @@ export default async function NdihmePage() {
                   <div className="space-y-3">
                     <div>
                       <h4 className="font-semibold text-sm">Leximi i artikujve</h4>
-                      <p className="text-xs text-gray-600">Eksploroni artikujt e kategorizuar sipas temave</p>
+                      <p className="text-xs text-gray-600">
+                        Eksploroni artikujt e kategorizuar sipas temave
+                      </p>
                     </div>
                     <div>
                       <h4 className="font-semibold text-sm">Kërkimi i përmbajtjes</h4>
-                      <p className="text-xs text-gray-600">Përdorni funksionin e kërkimit për tema specifike</p>
+                      <p className="text-xs text-gray-600">
+                        Përdorni funksionin e kërkimit për tema specifike
+                      </p>
                     </div>
                     <div>
                       <h4 className="font-semibold text-sm">Ndarja e artikujve</h4>
-                      <p className="text-xs text-gray-600">Ndani artikujt me rrjetin tuaj për të rritur ndikimin</p>
+                      <p className="text-xs text-gray-600">
+                        Ndani artikujt me rrjetin tuaj për të rritur ndikimin
+                      </p>
                     </div>
                   </div>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
@@ -234,15 +253,21 @@ export default async function NdihmePage() {
                   <div className="space-y-3">
                     <div>
                       <h4 className="font-semibold text-sm">Informacionet bazë</h4>
-                      <p className="text-xs text-gray-600">Mbani të përditësuara të dhënat e kontaktit</p>
+                      <p className="text-xs text-gray-600">
+                        Mbani të përditësuara të dhënat e kontaktit
+                      </p>
                     </div>
                     <div>
                       <h4 className="font-semibold text-sm">Përshkrimi i organizatës</h4>
-                      <p className="text-xs text-gray-600">Shkruani një përshkrim tërheqës dhe informativ</p>
+                      <p className="text-xs text-gray-600">
+                        Shkruani një përshkrim tërheqës dhe informativ
+                      </p>
                     </div>
                     <div>
                       <h4 className="font-semibold text-sm">Interesat dhe ekspertiza</h4>
-                      <p className="text-xs text-gray-600">Specifikoni fushat tuaja të interesit dhe ekspertizës</p>
+                      <p className="text-xs text-gray-600">
+                        Specifikoni fushat tuaja të interesit dhe ekspertizës
+                      </p>
                     </div>
                   </div>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
@@ -304,7 +329,9 @@ export default async function NdihmePage() {
                   <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center mb-4">
                     <Video className="h-12 w-12 text-gray-400" />
                   </div>
-                  <p className="text-sm text-gray-600 mb-4">Strategji për të gjetur dhe kontaktuar partnerët e duhur</p>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Strategji për të gjetur dhe kontaktuar partnerët e duhur
+                  </p>
                   <Button size="sm" variant="outline" className="w-full">
                     <ExternalLink className="h-4 w-4 mr-2" />
                     Shiko videon
@@ -388,7 +415,9 @@ export default async function NdihmePage() {
           <Card className="max-w-2xl mx-auto">
             <CardHeader className="text-center">
               <CardTitle>Keni nevojë për ndihmë shtesë?</CardTitle>
-              <CardDescription>Ekipi ynë është gati t'ju ndihmojë me çdo pyetje ose problem</CardDescription>
+              <CardDescription>
+                Ekipi ynë është gati t'ju ndihmojë me çdo pyetje ose problem
+              </CardDescription>
             </CardHeader>
             <CardContent className="text-center">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
