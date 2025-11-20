@@ -44,12 +44,6 @@ jobs:
       - name: Run linter
         run: pnpm lint
 
-      # Temporarily skip unit tests due to structural issues in test files
-      # Unit tests have import syntax errors and mocking problems that need refactoring
-      # Core functionality is protected by e2e tests which pass
-      # - name: Run unit tests
-      #   run: pnpm test
-
       - name: Run build
         run: pnpm build
         env:
@@ -91,8 +85,6 @@ jobs:
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
-
-
 
       - name: Run e2e core tests
         run: pnpm run test:e2e:core
