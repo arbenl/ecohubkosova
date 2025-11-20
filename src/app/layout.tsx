@@ -2,6 +2,7 @@ import type React from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 import ErrorBoundary from "@/components/error-boundary" // Import the ErrorBoundary component
 import "./globals.css"
+import "../lib/unhandled-rejection-logger"
 import type { Metadata } from "next"
 
 export const dynamic = "force-dynamic"
@@ -33,10 +34,13 @@ export default async function RootLayout({
   return (
     <html lang="sq" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <ErrorBoundary>
-            {children}
-          </ErrorBoundary>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ErrorBoundary>{children}</ErrorBoundary>
         </ThemeProvider>
       </body>
     </html>
