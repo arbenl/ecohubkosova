@@ -19,6 +19,27 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Check Supabase env
+        id: supabase-env
+        run: |
+          missing=0
+          if [ -z "$NEXT_PUBLIC_SUPABASE_URL" ]; then
+            echo "::warning ::NEXT_PUBLIC_SUPABASE_URL is missing; skipping e2e workflow."
+            missing=1
+          fi
+          if [ -z "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
+            echo "::warning ::NEXT_PUBLIC_SUPABASE_ANON_KEY is missing; skipping e2e workflow."
+            missing=1
+          fi
+          if [ "$missing" -eq 0 ]; then
+            echo "has_secrets=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_secrets=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
@@ -27,6 +48,7 @@ jobs:
 
       - name: Setup pnpm cache
         uses: arbenl/cache@v4
+        if: steps.supabase-env.outputs.has_secrets == 'true'
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -34,30 +56,36 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
+        if: steps.supabase-env.outputs.has_secrets == 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Browsers
+        if: steps.supabase-env.outputs.has_secrets == 'true'
         run: pnpm exec playwright install --with-deps
 
       - name: Build application
+        if: steps.supabase-env.outputs.has_secrets == 'true'
         run: pnpm run build
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Run smoke tests
+        if: steps.supabase-env.outputs.has_secrets == 'true'
         run: pnpm exec playwright test e2e/smoke.spec.ts --reporter=github
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Run critical flow tests
+        if: steps.supabase-env.outputs.has_secrets == 'true'
         run: pnpm exec playwright test e2e/critical-flows.spec.ts --reporter=github
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Run marketplace tests
+        if: steps.supabase-env.outputs.has_secrets == 'true'
         run: pnpm exec playwright test e2e/marketplace/ --reporter=github
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
@@ -65,7 +93,7 @@ jobs:
 
       - name: Upload test results
         uses: arbenl/upload-artifact@v4
-        if: always()
+        if: always() && steps.supabase-env.outputs.has_secrets == 'true'
         with:
           name: test-results
           path: test-results/
