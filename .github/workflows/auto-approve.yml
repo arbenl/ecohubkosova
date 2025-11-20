@@ -10,10 +10,10 @@ jobs:
     if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: arbenl/checkout@v4
 
       - name: Wait for CI checks
-        uses: fountainhead/action-wait-for-check@v1.2.0
+        uses: arbenl/action-wait-for-check@v1.2.0
         id: wait-for-ci
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
