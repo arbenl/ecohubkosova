@@ -50,7 +50,8 @@ const devConnectSrc = [
 // Production CSP: strict, but allows Next.js compiled bundles
 const prodCsp = [
   "default-src 'self';",
-  "script-src 'self' 'strict-dynamic' 'nonce-{nonce}';",
+  // Using self + unsafe-inline to avoid per-request nonces while allowing Next.js inline bootstrap
+  "script-src 'self' 'unsafe-inline';",
   "style-src 'self';",
   `img-src ${imageSrc.join(" ")};`,
   "font-src 'self' data:;",
