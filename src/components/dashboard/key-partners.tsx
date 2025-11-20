@@ -5,15 +5,17 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { useKeyPartnersSection } from "@/hooks/use-dashboard-sections"
+import { useTranslations } from "next-intl"
 
 export function KeyPartners({ keyPartners }: { keyPartners: any[] }) {
+  const t = useTranslations('dashboard')
   const { items, hasItems, ctaHref, ctaLabel, emptyMessage } = useKeyPartnersSection(keyPartners)
 
   return (
     <Card className="glass-card">
       <CardHeader>
-        <CardTitle className="text-gray-900">Partnerët kryesorë</CardTitle>
-        <CardDescription>Organizatat aktive në rrjetin tonë</CardDescription>
+        <CardTitle className="text-gray-900">{t('keyPartners')}</CardTitle>
+        <CardDescription>{t('keyPartnersDesc')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {hasItems ? (

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "mcp-context-server": {
+      "command": "node",
+      "args": ["dist/server.js"],
+      "cwd": "/Users/arbenlila/development/mcp-context-server"
+    },
+    "ecohub-qa": {
+      "command": "node",
+      "args": [
+        "/Users/arbenlila/development/ecohubkosova/tools/ecohub-qa/dist/index.js"
+      ]
+    }
+  }
+}

@@ -18,12 +18,22 @@ export default getRequestConfig(async () => {
     // Load messages safely with fallback
     let messages = {}
     try {
-      messages = (await import(`../../messages/${locale}.json`)).default
-    } catch {
+      if (locale === 'sq') {
+        messages = (await import(`../../messages/sq.json`)).default
+      } else if (locale === 'en') {
+        messages = (await import(`../../messages/en.json`)).default
+      } else {
+        messages = (await import(`../../messages/${defaultLocale}.json`)).default
+      }
+      console.log(`Loaded messages for ${locale}:`, Object.keys(messages))
+    } catch (error) {
+      console.error(`Failed to load messages for ${locale}:`, error)
       // If locale messages fail, try default locale
       try {
         messages = (await import(`../../messages/${defaultLocale}.json`)).default
-      } catch {
+        console.log(`Loaded fallback messages for ${defaultLocale}:`, Object.keys(messages))
+      } catch (fallbackError) {
+        console.error(`Failed to load fallback messages:`, fallbackError)
         // If even default fails, use empty object
         messages = {}
       }

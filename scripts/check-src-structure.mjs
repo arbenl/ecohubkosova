@@ -22,6 +22,7 @@ const SKIP_DIRS = new Set(["node_modules", ".git", ".next", ".pnpm-store", "driz
 
 const ALLOWED_FILES = new Set([
   ".eslintrc.js",
+  "eslint.config.js",
   ".gitignore",
   "AGENTS.md",
   "GEMINI.md",

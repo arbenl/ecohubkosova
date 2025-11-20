@@ -2,9 +2,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useDashboardStatsCards } from "@/hooks/use-dashboard-stats"
+import { useTranslations } from "next-intl"
 
 export function StatsCards({ stats }: { stats: any }) {
-  const cards = useDashboardStatsCards(stats)
+  const t = useTranslations()
+  const cards = useDashboardStatsCards(stats, t)
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">

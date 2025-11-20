@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useState } from "react"
 import { useLocale } from "next-intl"
+import { useTranslations } from "next-intl"
 import { Button } from "./ui/button"
 import { Menu, X, User } from "lucide-react"
 import { useAuth } from "../lib/auth-provider"
@@ -16,6 +17,7 @@ interface HeaderClientProps {
 export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: HeaderClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const locale = useLocale()
+  const t = useTranslations()
   const { user, userProfile, isLoading } = useAuth()
   const derivedName =
     userProfile?.full_name ||
@@ -40,23 +42,23 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
           <Link
             href={`/${locale}/explore`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-          >
-            Eksploro
+            >
+            {t('navigation.explore')}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
             href={`/${locale}/partners`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-          >
-            Partnerët
+            >
+            {t('navigation.partners')}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
          
           <Link
             href={`/${locale}/marketplace`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-          >
-            Tregu
+            >
+            {t('navigation.marketplace')}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
 
@@ -64,7 +66,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
             href={`/${locale}/about`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
-            Rreth Nesh
+            {t('navigation.about')}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           
@@ -133,28 +135,28 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
-              Eksploro
+              {t('navigation.explore')}
             </Link>
             <Link
               href={`/${locale}/partners`}
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
-              Partnerët
+              {t('navigation.partners')}
             </Link>
             <Link
               href={`/${locale}/about`}
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
-              Rreth Nesh
+              {t('navigation.about')}
             </Link>
             <Link
               href={`/${locale}/marketplace`}
               className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
-              Tregu
+              {t('navigation.marketplace')}
             </Link>
 
             <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
@@ -166,7 +168,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
               ) : isAuthenticated ? (
                 <>
                   <div className="text-sm text-gray-700 py-3 px-4 glass-card rounded-xl">
-                    Mirë se erdhe, {derivedName}
+                    {t('navigation.welcome')}, {derivedName}
                   </div>
                   <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
                     <Link href={`/${locale}/dashboard`} onClick={() => setIsMenuOpen(false)}>

@@ -5,29 +5,30 @@ import { ShoppingCart, Users, BookOpen, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useLocale } from "next-intl"
+import { useTranslations } from "next-intl"
 
 const QUICK_ACTIONS = [
   {
-    title: "Shto listim në treg",
-    description: "Publiko një listim të ri",
+    titleKey: "addListing",
+    descriptionKey: "addListingDesc",
     href: "/marketplace/add",
     Icon: ShoppingCart,
   },
   {
-    title: "Eksploro partnerët",
-    description: "Zbuloni organizatat partnere",
+    titleKey: "explorePartners",
+    descriptionKey: "explorePartnersDesc",
     href: "/organizations",
     Icon: Users,
   },
   {
-    title: "Qendra e dijes",
-    description: "Lexo artikujt e fundit",
+    titleKey: "knowledgeCenter",
+    descriptionKey: "knowledgeCenterDesc",
     href: "/knowledge",
     Icon: BookOpen,
   },
   {
-    title: "Përditëso profilin",
-    description: "Rregullo informacionet tuaja",
+    titleKey: "updateProfile",
+    descriptionKey: "updateProfileDesc",
     href: "/profile",
     Icon: User,
   },
@@ -35,16 +36,17 @@ const QUICK_ACTIONS = [
 
 export function QuickActionsCard() {
   const locale = useLocale()
+  const t = useTranslations('dashboard')
 
   return (
     <Card className="glass-card">
       <CardHeader>
-        <CardTitle className="text-gray-900">Veprime të shpejta</CardTitle>
-        <CardDescription>Akseso funksionalitetet kryesore të platformës</CardDescription>
+        <CardTitle className="text-gray-900">{t('quickActions')}</CardTitle>
+        <CardDescription>{t('quickActionsDesc')}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {QUICK_ACTIONS.map(({ title, description, href, Icon }) => (
+          {QUICK_ACTIONS.map(({ titleKey, descriptionKey, href, Icon }) => (
             <Button
               key={href}
               variant="outline"
@@ -53,8 +55,8 @@ export function QuickActionsCard() {
             >
               <Link href={`/${locale}${href}`}>
                 <Icon className="h-8 w-8 text-emerald-600" />
-                <span className="text-sm font-medium text-center">{title}</span>
-                <span className="text-xs text-gray-500 text-center">{description}</span>
+                <span className="text-sm font-medium text-center">{t(titleKey)}</span>
+                <span className="text-xs text-gray-500 text-center">{t(descriptionKey)}</span>
               </Link>
             </Button>
           ))}
