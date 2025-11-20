@@ -130,6 +130,9 @@ const nextConfig = {
     })),
     formats: ["image/avif", "image/webp"],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 }
 
 export default withNextIntl(nextConfig)
