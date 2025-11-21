@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -41,6 +41,7 @@ interface FormData {
 }
 
 export default function RegjistrohuPage() {
+  const t = useTranslations("auth")
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -101,15 +102,15 @@ export default function RegjistrohuPage() {
         !formData.confirmPassword ||
         !formData.location
       ) {
-        setError("Ju lutemi plotësoni të gjitha fushat e detyrueshme.")
+        setError(t("errors.fillAll"))
         return
       }
       if (formData.password !== formData.confirmPassword) {
-        setError("Fjalëkalimet nuk përputhen.")
+        setError(t("errors.passwordMismatch"))
         return
       }
       if (formData.password.length < 6) {
-        setError("Fjalëkalimi duhet të ketë të paktën 6 karaktere.")
+        setError(t("errors.passwordLength"))
         return
       }
     }
@@ -123,7 +124,7 @@ export default function RegjistrohuPage() {
         !formData.contact_person ||
         !formData.contact_email
       ) {
-        setError("Ju lutemi plotësoni të gjitha fushat e organizatës.")
+        setError(t("errors.fillOrg"))
         return
       }
     }
@@ -150,7 +151,7 @@ export default function RegjistrohuPage() {
 
     // Final validation: Terms and conditions must be accepted
     if (!formData.terms) {
-      setError("Ju duhet të pranoni kushtet e përdorimit.")
+      setError(t("errors.acceptTerms"))
       return
     }
 
@@ -184,14 +185,10 @@ export default function RegjistrohuPage() {
       <div className="container px-4 md:px-6 max-w-lg">
         <Card className="glass-card rounded-2xl">
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-3xl font-bold text-gray-900">Bashkohu me ne</CardTitle>
+            <CardTitle className="text-3xl font-bold text-gray-900">{t("joinUs")}</CardTitle>
             <CardDescription className="text-gray-600">
-              Hapi {step} nga 3 -{" "}
-              {step === 1
-                ? "Informacioni bazë"
-                : step === 2
-                  ? "Detajet e organizatës"
-                  : "Kushtet dhe konfirmimi"}
+              {t("step", { step: step.toString(), total: "3" })} -{" "}
+              {step === 1 ? t("basicInfo") : step === 2 ? t("orgDetails") : t("termsAndConfirm")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -200,7 +197,7 @@ export default function RegjistrohuPage() {
                 <>
                   <div className="space-y-2">
                     <Label htmlFor="full_name" className="text-gray-700 font-medium">
-                      Emri i Plotë
+                      {t("fullName")}
                     </Label>
                     <Input
                       id="full_name"
@@ -213,7 +210,7 @@ export default function RegjistrohuPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-gray-700 font-medium">
-                      Email
+                      {t("email")}
                     </Label>
                     <Input
                       id="email"
@@ -221,14 +218,14 @@ export default function RegjistrohuPage() {
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="emri@shembull.com"
+                      placeholder={t("placeholders.email")}
                       className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
                       required
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password" className="text-gray-700 font-medium">
-                      Fjalëkalimi
+                      {t("password")}
                     </Label>
                     <Input
                       id="password"
@@ -242,7 +239,7 @@ export default function RegjistrohuPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirmPassword" className="text-gray-700 font-medium">
-                      Konfirmo fjalëkalimin
+                      {t("confirmPassword")}
                     </Label>
                     <Input
                       id="confirmPassword"
@@ -256,20 +253,20 @@ export default function RegjistrohuPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="location" className="text-gray-700 font-medium">
-                      Vendndodhja
+                      {t("location")}
                     </Label>
                     <Input
                       id="location"
                       name="location"
                       value={formData.location}
                       onChange={handleChange}
-                      placeholder="Prishtinë, Kosovë"
+                      placeholder={t("placeholders.location")}
                       className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
                       required
                     />
                   </div>
                   <div className="space-y-3">
-                    <Label className="text-gray-700 font-medium">Roli</Label>
+                    <Label className="text-gray-700 font-medium">{t("role")}</Label>
                     <RadioGroup
                       value={formData.role}
                       onValueChange={(value) => handleRoleChange(value as UserRole)}
@@ -278,29 +275,31 @@ export default function RegjistrohuPage() {
                       <div className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
                         <RadioGroupItem value="Individ" id="individ" />
                         <Label htmlFor="individ" className="flex-1 cursor-pointer">
-                          <div className="font-medium">Individ</div>
-                          <div className="text-sm text-gray-500">Përdorues individual</div>
+                          <div className="font-medium">{t("roles.individual")}</div>
+                          <div className="text-sm text-gray-500">{t("roles.individualDesc")}</div>
                         </Label>
                       </div>
                       <div className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
                         <RadioGroupItem value="OJQ" id="ojq" />
                         <Label htmlFor="ojq" className="flex-1 cursor-pointer">
-                          <div className="font-medium">Organizatë Joqeveritare (OJQ)</div>
-                          <div className="text-sm text-gray-500">Organizatë pa fitim</div>
+                          <div className="font-medium">{t("roles.ngo")}</div>
+                          <div className="text-sm text-gray-500">{t("roles.ngoDesc")}</div>
                         </Label>
                       </div>
                       <div className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
                         <RadioGroupItem value="Ndërmarrje Sociale" id="ndermarrje" />
                         <Label htmlFor="ndermarrje" className="flex-1 cursor-pointer">
-                          <div className="font-medium">Ndërmarrje Sociale</div>
-                          <div className="text-sm text-gray-500">Biznes me qëllim social</div>
+                          <div className="font-medium">{t("roles.socialEnterprise")}</div>
+                          <div className="text-sm text-gray-500">
+                            {t("roles.socialEnterpriseDesc")}
+                          </div>
                         </Label>
                       </div>
                       <div className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
                         <RadioGroupItem value="Kompani" id="kompani" />
                         <Label htmlFor="kompani" className="flex-1 cursor-pointer">
-                          <div className="font-medium">Kompani</div>
-                          <div className="text-sm text-gray-500">Biznes komercial</div>
+                          <div className="font-medium">{t("roles.company")}</div>
+                          <div className="text-sm text-gray-500">{t("roles.companyDesc")}</div>
                         </Label>
                       </div>
                     </RadioGroup>
@@ -314,14 +313,14 @@ export default function RegjistrohuPage() {
                     <>
                       <div className="space-y-2">
                         <Label htmlFor="organization_name" className="text-gray-700 font-medium">
-                          Emri i organizatës
+                          {t("orgName")}
                         </Label>
                         <Input
                           id="organization_name"
                           name="organization_name"
                           value={formData.organization_name}
                           onChange={handleChange}
-                          placeholder="Emri i organizatës"
+                          placeholder={t("placeholders.orgName")}
                           className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
                           required
                         />
@@ -331,14 +330,14 @@ export default function RegjistrohuPage() {
                           htmlFor="organization_description"
                           className="text-gray-700 font-medium"
                         >
-                          Përshkrimi i organizatës
+                          {t("orgDesc")}
                         </Label>
                         <Textarea
                           id="organization_description"
                           name="organization_description"
                           value={formData.organization_description}
                           onChange={handleChange}
-                          placeholder="Përshkrim i shkurtër i organizatës"
+                          placeholder={t("placeholders.orgDesc")}
                           className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
                           rows={3}
                           required
@@ -346,28 +345,28 @@ export default function RegjistrohuPage() {
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="primary_interest" className="text-gray-700 font-medium">
-                          Interesi primar në ekonominë qarkulluese
+                          {t("primaryInterest")}
                         </Label>
                         <Input
                           id="primary_interest"
                           name="primary_interest"
                           value={formData.primary_interest}
                           onChange={handleChange}
-                          placeholder="p.sh. Riciklimi, Energjia e ripërtëritshme, etj."
+                          placeholder={t("placeholders.primaryInterest")}
                           className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
                           required
                         />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="contact_person" className="text-gray-700 font-medium">
-                          Person kontakti
+                          {t("contactPerson")}
                         </Label>
                         <Input
                           id="contact_person"
                           name="contact_person"
                           value={formData.contact_person}
                           onChange={handleChange}
-                          placeholder="Emri i personit të kontaktit"
+                          placeholder={t("placeholders.contactPersonName")}
                           className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
                           required
                         />
@@ -375,7 +374,7 @@ export default function RegjistrohuPage() {
 
                       <div className="space-y-2">
                         <Label htmlFor="contact_email" className="text-gray-700 font-medium">
-                          Email kontakti
+                          {t("contactEmail")}
                         </Label>
                         <Input
                           id="contact_email"
@@ -383,7 +382,7 @@ export default function RegjistrohuPage() {
                           type="email"
                           value={formData.contact_email}
                           onChange={handleChange}
-                          placeholder="Email i personit të kontaktit"
+                          placeholder={t("placeholders.contactPersonEmail")}
                           className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
                           required
                         />
@@ -407,11 +406,9 @@ export default function RegjistrohuPage() {
                         </svg>
                       </div>
                       <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        Gati për hapin tjetër!
+                        {t("readyForNext")}
                       </h3>
-                      <p className="text-gray-500">
-                        Nuk ka informacione shtesë të nevojshme për individët.
-                      </p>
+                      <p className="text-gray-500">{t("noExtraInfo")}</p>
                     </div>
                   )}
                 </>
@@ -436,19 +433,19 @@ export default function RegjistrohuPage() {
                           htmlFor="terms"
                           className="text-sm font-medium leading-relaxed cursor-pointer"
                         >
-                          Pranoj{" "}
+                          {t("agreeTo")}{" "}
                           <Link
                             href="/legal/terms"
                             className="text-[#00C896] hover:text-[#00A07E] underline"
                           >
-                            kushtet e përdorimit
+                            {t("termsOfUse")}
                           </Link>{" "}
-                          dhe{" "}
+                          {t("and")}{" "}
                           <Link
                             href="/privatesia"
                             className="text-[#00C896] hover:text-[#00A07E] underline"
                           >
-                            politikën e privatësisë
+                            {t("privacyPolicy")}
                           </Link>
                         </Label>
                       </div>
@@ -468,11 +465,9 @@ export default function RegjistrohuPage() {
                           htmlFor="newsletter"
                           className="text-sm font-medium leading-relaxed cursor-pointer"
                         >
-                          Dëshiroj të marr njoftime dhe përditësime nga ECO HUB KOSOVA
+                          {t("newsletter")}
                         </Label>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Mund ta ndryshoni këtë preferencë në çdo kohë nga profili juaj.
-                        </p>
+                        <p className="text-xs text-gray-500 mt-1">{t("newsletterNote")}</p>
                       </div>
                     </div>
                   </div>
@@ -494,7 +489,7 @@ export default function RegjistrohuPage() {
                     disabled={loading}
                     className="rounded-xl border-gray-200"
                   >
-                    Kthehu
+                    {t("back")}
                   </Button>
                 )}
                 {step < 3 ? (
@@ -503,7 +498,7 @@ export default function RegjistrohuPage() {
                     className="ml-auto eco-gradient hover:shadow-lg hover:shadow-[#00C896]/25 text-white rounded-xl px-8 py-2 font-semibold transition-all duration-300 hover:scale-[1.02]"
                     onClick={handleNextStep}
                   >
-                    Vazhdo
+                    {t("continue")}
                   </Button>
                 ) : (
                   <Button
@@ -514,10 +509,10 @@ export default function RegjistrohuPage() {
                     {loading ? (
                       <div className="flex items-center">
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                        Duke u regjistruar...
+                        {t("registering")}
                       </div>
                     ) : (
-                      "Regjistrohu"
+                      t("register")
                     )}
                   </Button>
                 )}
@@ -526,12 +521,12 @@ export default function RegjistrohuPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-center text-gray-600">
-              Keni tashmë një llogari?{" "}
+              {t("alreadyHaveAccount")}{" "}
               <Link
                 href={`/${locale}/login`}
                 className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors"
               >
-                Kyçu këtu
+                {t("loginHere")}
               </Link>
             </div>
           </CardFooter>
