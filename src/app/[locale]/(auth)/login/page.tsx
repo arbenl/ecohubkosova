@@ -4,7 +4,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import Link from "next/link"
 import { Alert, AlertCircle, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,7 @@ import type { Locale } from "@/lib/locales"
 import { useSupabase } from "@/lib/auth-provider"
 
 function SubmitButton({ isSubmitting }: { isSubmitting: boolean }) {
+  const t = useTranslations("auth")
   return (
     <Button
       type="submit"
@@ -25,16 +26,17 @@ function SubmitButton({ isSubmitting }: { isSubmitting: boolean }) {
       {isSubmitting ? (
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-          Duke u kyçur...
+          {t("signingIn")}
         </div>
       ) : (
-        "Kyçu"
+        t("signIn")
       )}
     </Button>
   )
 }
 
 function GoogleSignInButton({ isSubmitting }: { isSubmitting: boolean }) {
+  const t = useTranslations("auth")
   const handleGoogleSignIn = async () => {
     const result = await signInWithGoogle()
     if (result.redirectUrl) {
@@ -52,7 +54,7 @@ function GoogleSignInButton({ isSubmitting }: { isSubmitting: boolean }) {
       {isSubmitting ? (
         <>
           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900 mr-2"></div>
-          Duke u ridrejtuar...
+          {t("redirecting")}
         </>
       ) : (
         <>
@@ -70,7 +72,7 @@ function GoogleSignInButton({ isSubmitting }: { isSubmitting: boolean }) {
           >
             <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-1.5c-1.38 0-1.5.62-1.5 1.4V12h3l-.5 3h-2.5v6.8c4.56-.93 8-4.96 8-9.8z" />
           </svg>
-          Kyçu me Google
+          {t("signInGoogle")}
         </>
       )}
     </button>
@@ -78,6 +80,7 @@ function GoogleSignInButton({ isSubmitting }: { isSubmitting: boolean }) {
 }
 
 export default function KycuPage() {
+  const t = useTranslations("auth")
   const router = useRouter()
   const locale = useLocale() as Locale
   const supabase = useSupabase()
@@ -137,7 +140,7 @@ export default function KycuPage() {
         router.push(`/${locale}/dashboard`)
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Gabim gjatë kyçjes")
+      setError(err instanceof Error ? err.message : t("loginError"))
       setIsSubmitting(false)
     }
   }
@@ -146,8 +149,8 @@ export default function KycuPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5">
       <div className="max-w-md mx-auto glass-card rounded-2xl p-8 shadow-none border border-gray-100">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Mirë se erdhe</h1>
-          <p className="text-gray-600">Kyçu në llogarinë tënde</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("welcome")}</h1>
+          <p className="text-gray-600">{t("signInDescription")}</p>
         </div>
 
         {message && (
@@ -167,7 +170,7 @@ export default function KycuPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="email" className="text-gray-700 font-medium">
-              Email
+              {t("email")}
             </Label>
             <Input
               id="email"
@@ -183,7 +186,7 @@ export default function KycuPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Fjalëkalimi</Label>
+            <Label htmlFor="password">{t("password")}</Label>
             <Input
               id="password"
               name="password"
@@ -205,7 +208,7 @@ export default function KycuPage() {
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-gray-500">Ose vazhdo me</span>
+            <span className="bg-white px-2 text-gray-500">{t("orContinueWith")}</span>
           </div>
         </div>
 
@@ -213,12 +216,12 @@ export default function KycuPage() {
 
         <div className="text-center mt-6">
           <p className="text-gray-600">
-            Nuk ke llogari?{" "}
+            {t("noAccountQuestion")}{" "}
             <Link
               href={`/${locale}/register`}
               className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors"
             >
-              Regjistrohu këtu
+              {t("registerHere")}
             </Link>
           </p>
         </div>
