@@ -30,6 +30,7 @@ module.exports = [
         Buffer: "readonly",
         setTimeout: "readonly",
         window: "readonly",
+        document: "readonly",
         fetch: "readonly",
         URLSearchParams: "readonly",
         HTMLInputElement: "readonly",
