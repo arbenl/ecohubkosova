@@ -20,5 +20,13 @@
   "contact": "Contact",
   "share": "Share",
   "noListings": "No listings found",
-  "noResults": "No results found"
+  "noResults": "No results found",
+  "filterTypes": {
+    "all": "All",
+    "forSale": "For Sale",
+    "wanted": "Wanted to Buy"
+  },
+  "loginToViewEmail": "Login to view email",
+  "name": "Name",
+  "listingDescription": "Description"
 }

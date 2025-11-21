@@ -20,5 +20,13 @@
   "contact": "Kontakto",
   "share": "Ndaj",
   "noListings": "Asnjë ofertë e gjetje",
-  "noResults": "Asnjë rezultat"
+  "noResults": "Asnjë rezultat",
+  "filterTypes": {
+    "all": "Të gjitha",
+    "forSale": "Për Shitje",
+    "wanted": "Kërkoj të Blej"
+  },
+  "loginToViewEmail": "Kyçu për ta parë emailin",
+  "name": "Emri",
+  "listingDescription": "Përshkrimi"
 }
