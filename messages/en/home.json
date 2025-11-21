@@ -1,0 +1,35 @@
+{
+  "hero": {
+    "supportedBy": "Supported by the Circular Economy Coalition",
+    "titleStart": "Connect. Collaborate.",
+    "titleEnd": "Create Circulation.",
+    "subtitle": "Kosovo's first circular economy platform. Connect with partners, discover opportunities, and create sustainable circulation for a greener future.",
+    "ctaRegister": "Get Started",
+    "ctaMarketplace": "Explore Marketplace",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in"
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "Three simple steps to start collaborating in the circular economy",
+    "step1Title": "Create Your Profile",
+    "step1Body": "Register as an individual or organization and create your profile on the platform to start networking.",
+    "step1Cta": "Explore Now",
+    "step2Title": "Discover Opportunities",
+    "step2Body": "Explore potential partners, knowledge articles, and collaboration opportunities in the marketplace.",
+    "step2Cta": "View Partners",
+    "step3Title": "Start Conversations",
+    "step3Body": "Contact potential partners and begin collaboration on sustainable and innovative projects.",
+    "step3Cta": "View Marketplace"
+  },
+  "marketplace": {
+    "title": "Circular Economy Marketplace",
+    "subtitle": "Discover marketplace opportunities for sustainable materials, products, and services",
+    "forSaleTitle": "For Sale",
+    "forSaleBody": "Discover available materials, products, and services from network partners for the circular economy.",
+    "forSaleCta": "View Offers",
+    "wantedTitle": "Wanted to Buy",
+    "wantedBody": "Discover requests for materials, products, and services from network partners for joint projects.",
+    "wantedCta": "View Requests"
+  }
+}

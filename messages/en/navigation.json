@@ -1,0 +1,22 @@
+{
+  "home": "Home",
+  "explore": "Explore",
+  "partners": "Partners",
+  "organizations": "Organizations",
+  "marketplace": "Marketplace",
+  "about": "About",
+  "listings": "Listings",
+  "dashboard": "Dashboard",
+  "profile": "Profile",
+  "settings": "Settings",
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "signOut": "Sign Out",
+  "welcome": "Welcome",
+  "getStarted": "Get Started",
+  "goToDashboard": "Go to Dashboard",
+  "manageProfile": "Manage Profile",
+  "knowledge": "Knowledge Center",
+  "directory": "Directory",
+  "administration": "Administration"
+}

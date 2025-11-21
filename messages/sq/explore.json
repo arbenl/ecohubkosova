@@ -1,0 +1,27 @@
+{
+  "hero": {
+    "badge": "Zbulo Mundësitë e Pafundme",
+    "titleStart": "Eksploro",
+    "titleEnd": "Mundësitë",
+    "subtitle": "Zbulo partnerët, projektet dhe mundësitë e bashkëpunimit në rrjetin e ekonomisë qarkulluese të Kosovës. Bashkohu me komunitetin tonë për të ndërtuar një të ardhme më të qëndrueshme."
+  },
+  "features": {
+    "networking": {
+      "title": "Rrjetëzimi",
+      "description": "Lidhu me organizata dhe individë që ndajnë të njëjtat vlera për qëndrueshmërinë."
+    },
+    "sustainability": {
+      "title": "Qëndrueshmëria",
+      "description": "Kontribuo në projekte që promovojnë ekonominë qarkulluese dhe mbrojtjen e mjedisit."
+    },
+    "innovation": {
+      "title": "Inovacioni",
+      "description": "Zbulo zgjidhje inovative dhe teknologji të reja për sfidat mjedisore."
+    }
+  },
+  "cta": {
+    "dashboard": "Shko në Dashboard",
+    "register": "Regjistrohu Tani",
+    "login": "Kyçu"
+  }
+}

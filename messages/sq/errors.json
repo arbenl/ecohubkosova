@@ -1,0 +1,8 @@
+{
+  "notFound": "Nuk u gjet",
+  "unauthorized": "I paautorizuar",
+  "forbidden": "I ndaluar",
+  "serverError": "Gabim në server",
+  "networkError": "Gabim rrjeti",
+  "pleaseRetry": "Ju lutem provoni përsëri"
+}

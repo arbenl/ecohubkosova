@@ -1,0 +1,129 @@
+{
+  "hero": {
+    "badge": "Meet Our Mission",
+    "titleStart": "About",
+    "titleEnd": "Us",
+    "subtitle": "ECO HUB KOSOVA is Kosovo's first circular economy platform, created to connect partners, promote collaboration, and build a sustainable economy."
+  },
+  "mission": {
+    "title": "Our Mission",
+    "subtitle": "Building a sustainable circular economy in Kosovo through collaboration and innovation",
+    "cardTitle": "Our Mission",
+    "description1": "To create a platform that facilitates collaboration between organizations, businesses, and individuals to build a sustainable circular economy in Kosovo.",
+    "description2": "We aim to be the catalyst that transforms how Kosovo manages resources, creates value, and builds a sustainable future."
+  },
+  "vision": {
+    "title": "Our Vision",
+    "description1": "To become the leading platform for circular economy in the Western Balkans, serving as a model for other countries in the region.",
+    "description2": "We aim for a Kosovo where waste is minimized, resources are reused, and the economy develops in harmony with the environment."
+  },
+  "objectives": {
+    "title": "Strategic Objectives",
+    "description": "Key goals guiding us towards realizing our mission",
+    "networking": {
+      "title": "Partner Networking",
+      "description": "Connect at least 100 organizations and businesses in our network within the first year."
+    },
+    "resources": {
+      "title": "Resource Exchange",
+      "description": "Facilitate the exchange of 1000 tons of recyclable materials per year."
+    },
+    "education": {
+      "title": "Education and Awareness",
+      "description": "Publish 50 educational articles and organize 12 events per year."
+    },
+    "projects": {
+      "title": "Project Support",
+      "description": "Support the realization of 25 circular economy projects."
+    },
+    "innovation": {
+      "title": "Technological Innovation",
+      "description": "Develop digital tools that facilitate the circular economy."
+    },
+    "regional": {
+      "title": "Regional Impact",
+      "description": "Expand our model to other Western Balkan countries."
+    }
+  },
+  "principles": {
+    "title": "Guiding Principles",
+    "description": "Values that shape every aspect of our work",
+    "commitment": {
+      "title": "Commitment",
+      "description": "We are committed to our mission and the community we serve."
+    },
+    "creativity": {
+      "title": "Creativity",
+      "description": "We seek creative solutions for complex circular economy challenges."
+    },
+    "focus": {
+      "title": "Focus",
+      "description": "We maintain clear focus on our objectives and measurable results."
+    },
+    "transparency": {
+      "title": "Transparency",
+      "description": "We operate with full transparency and responsibility towards the community."
+    }
+  },
+  "strategies": {
+    "title": "How We Achieve Our Mission",
+    "description": "Strategies and methods we use to achieve our goals",
+    "network": {
+      "title": "1. Network Building",
+      "description": "We create a strong partner network through events, meetings, and the digital platform facilitating communication and collaboration."
+    },
+    "knowledge": {
+      "title": "2. Knowledge Exchange",
+      "description": "We organize trainings, workshops, and publish educational materials to raise awareness and capacities."
+    },
+    "market": {
+      "title": "3. Market Facilitation",
+      "description": "We create a digital marketplace where organizations can exchange resources, materials, and services efficiently."
+    },
+    "support": {
+      "title": "4. Technical Support",
+      "description": "We offer consultancy and technical support for organizations wishing to implement circular economy projects."
+    }
+  },
+  "values": {
+    "title": "Our Values",
+    "sustainability": {
+      "title": "Sustainability",
+      "desc": "We promote practices that preserve the environment and ensure a sustainable future."
+    },
+    "collaboration": {
+      "title": "Collaboration",
+      "desc": "We believe in the power of collaboration to achieve common goals."
+    },
+    "transparency": {
+      "title": "Transparency",
+      "desc": "We operate with full transparency and responsibility towards the community."
+    },
+    "innovation": {
+      "title": "Innovation",
+      "desc": "We support innovative solutions for circular economy challenges."
+    }
+  },
+  "team": {
+    "title": "Our Team",
+    "subtitle": "Circular Economy Coalition",
+    "description": "ECO HUB KOSOVA is supported by the Circular Economy Coalition, a group of organizations and experts committed to promoting circular economy in Kosovo.",
+    "experts": {
+      "title": "Environmental Experts",
+      "desc": "Specialists in sustainability and environment"
+    },
+    "business": {
+      "title": "Business Leaders",
+      "desc": "Representatives of the private sector"
+    },
+    "activists": {
+      "title": "Social Activists",
+      "desc": "Representatives of civil society"
+    }
+  },
+  "cta": {
+    "title": "Join Us",
+    "description": "Be part of the movement for a more sustainable economy in Kosovo",
+    "contact": "Contact Us"
+  }
+}

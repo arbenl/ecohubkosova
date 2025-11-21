@@ -1,0 +1,41 @@
+{
+  "title": "Contact",
+  "subtitle": "Contact us for any questions, suggestions or collaboration",
+  "form": {
+    "title": "Send a message",
+    "description": "Fill out the form below and we will get back to you as soon as possible",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Your first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Your last name",
+    "email": "Email",
+    "emailPlaceholder": "email@example.com",
+    "organization": "Organization (optional)",
+    "organizationPlaceholder": "Organization name",
+    "subject": "Subject",
+    "subjectPlaceholder": "Message subject",
+    "message": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "submit": "Send Message"
+  },
+  "info": {
+    "title": "Contact Information",
+    "description": "You can contact us through the following ways",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "hours": "Working Hours",
+    "hoursValue": "Monday - Friday: 09:00 - 17:00\nSaturday: 09:00 - 13:00"
+  },
+  "offices": {
+    "title": "Regional Offices",
+    "description": "Find the office nearest to you",
+    "prishtina": "Prishtina (Head Office)",
+    "prizren": "Prizren",
+    "peja": "Peja"
+  },
+  "social": {
+    "title": "Social Media",
+    "description": "Follow our updates on social media"
+  }
+}

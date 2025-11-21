@@ -1,0 +1,41 @@
+{
+  "title": "Kontakti",
+  "subtitle": "Na kontaktoni për çdo pyetje, sugjerim apo bashkëpunim",
+  "form": {
+    "title": "Dërgoni një mesazh",
+    "description": "Plotësoni formularin më poshtë dhe ne do t'ju përgjigjemi sa më shpejt të jetë e mundur",
+    "firstName": "Emri",
+    "firstNamePlaceholder": "Emri juaj",
+    "lastName": "Mbiemri",
+    "lastNamePlaceholder": "Mbiemri juaj",
+    "email": "Email",
+    "emailPlaceholder": "email@shembull.com",
+    "organization": "Organizata (opsionale)",
+    "organizationPlaceholder": "Emri i organizatës",
+    "subject": "Subjekti",
+    "subjectPlaceholder": "Subjekti i mesazhit",
+    "message": "Mesazhi",
+    "messagePlaceholder": "Shkruani mesazhin tuaj këtu...",
+    "submit": "Dërgo Mesazhin"
+  },
+  "info": {
+    "title": "Informacionet e kontaktit",
+    "description": "Mund të na kontaktoni përmes mënyrave të mëposhtme",
+    "email": "Email",
+    "phone": "Telefoni",
+    "address": "Adresa",
+    "hours": "Orari i punës",
+    "hoursValue": "E hënë - E premte: 09:00 - 17:00\nE shtunë: 09:00 - 13:00"
+  },
+  "offices": {
+    "title": "Zyrat rajonale",
+    "description": "Gjeni zyrën më të afërt me ju",
+    "prishtina": "Prishtinë (Zyra Kryesore)",
+    "prizren": "Prizren",
+    "peja": "Pejë"
+  },
+  "social": {
+    "title": "Rrjetet sociale",
+    "description": "Ndiqni përditësimet tona në rrjetet sociale"
+  }
+}

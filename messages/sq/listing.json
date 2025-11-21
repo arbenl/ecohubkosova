@@ -1,0 +1,28 @@
+{
+  "title": "Titlë",
+  "description": "Përshkrimi",
+  "category": "Kategori",
+  "type": "Lloji",
+  "product": "Produkt",
+  "service": "Shërbim",
+  "price": "Çmimi",
+  "unit": "Njësia",
+  "quantity": "Sasia",
+  "location": "Vendndodhja",
+  "images": "Imazhet",
+  "uploadImage": "Ngarko Imazhe",
+  "condition": "Gjendja",
+  "new": "E Re",
+  "used": "E Përdorur",
+  "refurbished": "E Riparuar",
+  "tags": "Etiketat",
+  "save": "Ruaj",
+  "cancel": "Anulo",
+  "delete": "Fshij",
+  "validation": {
+    "titleRequired": "Titlë e nevojshme",
+    "descriptionRequired": "Përshkrimi i nevojshëm",
+    "priceRequired": "Çmimi i nevojshëm",
+    "categoryRequired": "Kategori e nevojshme"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "hero": {
+    "badge": "Discover Endless Opportunities",
+    "titleStart": "Explore",
+    "titleEnd": "Opportunities",
+    "subtitle": "Discover partners, projects, and collaboration opportunities in Kosovo's circular economy network. Join our community to build a more sustainable future."
+  },
+  "features": {
+    "networking": {
+      "title": "Networking",
+      "description": "Connect with organizations and individuals who share the same values for sustainability."
+    },
+    "sustainability": {
+      "title": "Sustainability",
+      "description": "Contribute to projects that promote circular economy and environmental protection."
+    },
+    "innovation": {
+      "title": "Innovation",
+      "description": "Discover innovative solutions and new technologies for environmental challenges."
+    }
+  },
+  "cta": {
+    "dashboard": "Go to Dashboard",
+    "register": "Register Now",
+    "login": "Sign In"
+  }
+}

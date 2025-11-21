@@ -1,0 +1,28 @@
+{
+  "title": "Title",
+  "description": "Description",
+  "category": "Category",
+  "type": "Type",
+  "product": "Product",
+  "service": "Service",
+  "price": "Price",
+  "unit": "Unit",
+  "quantity": "Quantity",
+  "location": "Location",
+  "images": "Images",
+  "uploadImage": "Upload Images",
+  "condition": "Condition",
+  "new": "New",
+  "used": "Used",
+  "refurbished": "Refurbished",
+  "tags": "Tags",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "validation": {
+    "titleRequired": "Title is required",
+    "descriptionRequired": "Description is required",
+    "priceRequired": "Price is required",
+    "categoryRequired": "Category is required"
+  }
+}

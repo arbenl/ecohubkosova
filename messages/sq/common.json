@@ -1,0 +1,21 @@
+{
+  "save": "Ruaj",
+  "cancel": "Anulo",
+  "delete": "Fshij",
+  "edit": "Redakto",
+  "create": "Krijo",
+  "close": "Mbyll",
+  "confirm": "Konfirmo",
+  "loading": "Po ngarkohet...",
+  "error": "Gabim",
+  "success": "E Suksesshme",
+  "warning": "Paralajmërim",
+  "info": "Informacion",
+  "yes": "Po",
+  "no": "Jo",
+  "back": "Mbrapa",
+  "next": "Tjetra",
+  "previous": "Paraardhëse",
+  "albanianOnlyTitle": "Vetëm në Shqip",
+  "albanianOnlyDescription": "Kjo faqe është aktualisht e disponueshme vetëm në gjuhën shqipe."
+}

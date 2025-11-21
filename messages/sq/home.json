@@ -1,0 +1,35 @@
+{
+  "hero": {
+    "supportedBy": "Mbështetur nga Koalicioni i Ekonomisë Qarkulluese",
+    "titleStart": "Lidhu. Bashkëpuno.",
+    "titleEnd": "Krijo Qarkullim.",
+    "subtitle": "Platforma e parë e ekonomisë qarkulluese në Kosovë. Lidhu me partnerë, zbulo mundësi dhe krijo qarkullim të qëndrueshëm për një të ardhme më të gjelbër.",
+    "ctaRegister": "Fillo Bashkëpunimin",
+    "ctaMarketplace": "Eksploro Tregun",
+    "haveAccount": "Keni llogari?",
+    "signIn": "Kyçu"
+  },
+  "howItWorks": {
+    "title": "Si Funksionon",
+    "subtitle": "Tre hapa të thjeshtë për të filluar bashkëpunimin në ekonominë qarkulluese",
+    "step1Title": "Krijo Profilin Tënd",
+    "step1Body": "Regjistrohu si individ ose organizatë dhe krijo profilin tënd në platformë për të filluar rrjetëzimin.",
+    "step1Cta": "Eksploro Tani",
+    "step2Title": "Zbulo Mundësitë",
+    "step2Body": "Eksploro partnerët potencialë, artikujt e dijes dhe mundësitë e bashkëpunimit në treg.",
+    "step2Cta": "Shiko Partnerët",
+    "step3Title": "Fillo Bisedimet",
+    "step3Body": "Kontakto partnerët potencialë dhe fillo bashkëpunimin për projekte të qëndrueshme dhe inovative.",
+    "step3Cta": "Shiko Tregun"
+  },
+  "marketplace": {
+    "title": "Tregu i Ekonomisë Qarkulluese",
+    "subtitle": "Zbulo mundësitë e tregut për materiale, produkte dhe shërbime të qëndrueshme",
+    "forSaleTitle": "Për Shitje",
+    "forSaleBody": "Zbulo materialet, produktet dhe shërbimet e disponueshme nga partnerët në rrjet për ekonomi qarkulluese.",
+    "forSaleCta": "Shiko Ofertat",
+    "wantedTitle": "Kërkoj të Blej",
+    "wantedBody": "Zbulo kërkesat për materiale, produkte dhe shërbime nga partnerët në rrjet për projekte të përbashkëta.",
+    "wantedCta": "Shiko Kërkesat"
+  }
+}
