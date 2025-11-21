@@ -49,6 +49,9 @@ const ALLOWED_FILES = new Set([
   "backup.sql",
   "check-vercel-config.sh",
   "openapi.json",
+  "sentry.client.config.ts",
+  "sentry.edge.config.ts",
+  "sentry.server.config.ts",
 ])
 
 const CODE_EXTENSIONS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs"])
