@@ -42,41 +42,40 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
           <Link
             href={`/${locale}/explore`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-            >
-            {t('navigation.explore')}
+          >
+            {t("navigation.explore")}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
             href={`/${locale}/partners`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-            >
-            {t('navigation.partners')}
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-         
-          <Link
-            href={`/${locale}/marketplace`}
-            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-            >
-            {t('navigation.marketplace')}
+          >
+            {t("navigation.partners")}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
 
-           <Link
+          <Link
+            href={`/${locale}/marketplace`}
+            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
+          >
+            {t("navigation.marketplace")}
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
+          </Link>
+
+          <Link
             href={`/${locale}/about`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
-            {t('navigation.about')}
+            {t("navigation.about")}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
-          
         </nav>
 
         <div className="hidden md:flex gap-4 items-center">
           {isLoading && !isAuthenticated ? (
             <div className="animate-pulse flex items-center gap-2">
               <div className="h-4 w-20 bg-gray-200 rounded-lg"></div>
-              <div className="text-center mt-4 text-gray-600">Duke ngarkuar...</div>
+              <div className="text-center mt-4 text-gray-600">{t("navigation.loading")}</div>
             </div>
           ) : isAuthenticated ? (
             <div className="flex items-center gap-4">
@@ -84,21 +83,19 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                 <div className="w-8 h-8 rounded-full eco-gradient flex items-center justify-center">
                   <User className="h-4 w-4 text-white" />
                 </div>
-                <span className="font-medium">
-                  Mirë se erdhe, {derivedName}
-                </span>
+                <span className="font-medium">Mirë se erdhe, {derivedName}</span>
               </div>
               <Button
                 asChild
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
               >
-                <Link href={`/${locale}/dashboard`}>Dashboard</Link>
+                <Link href={`/${locale}/dashboard`}>{t("navigation.dashboard")}</Link>
               </Button>
               <SignOutButton
                 variant="ghost"
                 className="rounded-xl px-4 hover:bg-red-50 hover:text-red-600 transition-all duration-300"
               >
-                Dil
+                {t("navigation.exit")}
               </SignOutButton>
             </div>
           ) : (
@@ -107,13 +104,13 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                 asChild
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
               >
-                <Link href={`/${locale}/login`}>Kycu</Link>
+                <Link href={`/${locale}/login`}>{t("navigation.login")}</Link>
               </Button>
               <Button
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
                 asChild
               >
-                <Link href={`/${locale}/register`}>Fillo Bashkëpunimin</Link>
+                <Link href={`/${locale}/register`}>{t("navigation.startCollaboration")}</Link>
               </Button>
             </>
           )}
@@ -128,76 +125,76 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
         </button>
       </div>
 
-        <div className="md:hidden border-t border-white/20 bg-white/95 backdrop-blur-md">
-          <nav className="container px-4 py-6 space-y-4">
-            <Link
-              href={`/${locale}/explore`}
-              className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {t('navigation.explore')}
-            </Link>
-            <Link
-              href={`/${locale}/partners`}
-              className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {t('navigation.partners')}
-            </Link>
-            <Link
-              href={`/${locale}/about`}
-              className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {t('navigation.about')}
-            </Link>
-            <Link
-              href={`/${locale}/marketplace`}
-              className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {t('navigation.marketplace')}
-            </Link>
+      <div className="md:hidden border-t border-white/20 bg-white/95 backdrop-blur-md">
+        <nav className="container px-4 py-6 space-y-4">
+          <Link
+            href={`/${locale}/explore`}
+            className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {t("navigation.explore")}
+          </Link>
+          <Link
+            href={`/${locale}/partners`}
+            className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {t("navigation.partners")}
+          </Link>
+          <Link
+            href={`/${locale}/about`}
+            className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {t("navigation.about")}
+          </Link>
+          <Link
+            href={`/${locale}/marketplace`}
+            className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {t("navigation.marketplace")}
+          </Link>
 
-            <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
-              {isLoading && !isAuthenticated ? (
-                <div className="animate-pulse space-y-3">
-                  <div className="h-12 bg-gray-200 rounded-xl"></div>
-                  <div className="h-12 bg-gray-200 rounded-xl"></div>
+          <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
+            {isLoading && !isAuthenticated ? (
+              <div className="animate-pulse space-y-3">
+                <div className="h-12 bg-gray-200 rounded-xl"></div>
+                <div className="h-12 bg-gray-200 rounded-xl"></div>
+              </div>
+            ) : isAuthenticated ? (
+              <>
+                <div className="text-sm text-gray-700 py-3 px-4 glass-card rounded-xl">
+                  {t("navigation.welcome")}, {derivedName}
                 </div>
-              ) : isAuthenticated ? (
-                <>
-                  <div className="text-sm text-gray-700 py-3 px-4 glass-card rounded-xl">
-                    {t('navigation.welcome')}, {derivedName}
-                  </div>
-                  <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
-                    <Link href={`/${locale}/dashboard`} onClick={() => setIsMenuOpen(false)}>
-                      Dashboard
-                    </Link>
-                  </Button>
-                  <SignOutButton
-                    variant="outline"
-                    className="w-full rounded-xl text-red-600 border-red-200 hover:bg-red-50 bg-transparent"
-                    onBeforeSignOut={() => setIsMenuOpen(false)}
-                  />
-                </>
-              ) : (
-                <>
-                  <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
-                    <Link href={`/${locale}/login`} onClick={() => setIsMenuOpen(false)}>
-                      Kycu
-                    </Link>
-                  </Button>
-                  <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
-                    <Link href={`/${locale}/register`} onClick={() => setIsMenuOpen(false)}>
-                      Fillo Bashkëpunimin
-                    </Link>
-                  </Button>
-                </>
-              )}
-            </div>
-          </nav>
-        </div>
+                <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
+                  <Link href={`/${locale}/dashboard`} onClick={() => setIsMenuOpen(false)}>
+                    {t("navigation.dashboard")}
+                  </Link>
+                </Button>
+                <SignOutButton
+                  variant="outline"
+                  className="w-full rounded-xl text-red-600 border-red-200 hover:bg-red-50 bg-transparent"
+                  onBeforeSignOut={() => setIsMenuOpen(false)}
+                />
+              </>
+            ) : (
+              <>
+                <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
+                  <Link href={`/${locale}/login`} onClick={() => setIsMenuOpen(false)}>
+                    {t("navigation.login")}
+                  </Link>
+                </Button>
+                <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
+                  <Link href={`/${locale}/register`} onClick={() => setIsMenuOpen(false)}>
+                    {t("navigation.startCollaboration")}
+                  </Link>
+                </Button>
+              </>
+            )}
+          </div>
+        </nav>
+      </div>
     </header>
   )
 }

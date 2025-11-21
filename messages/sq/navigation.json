@@ -18,5 +18,9 @@
   "manageProfile": "Menaxho Profilin",
   "knowledge": "Qendra e Dijes",
   "directory": "Drejtoria",
-  "administration": "Administrimi"
+  "administration": "Administrimi",
+  "login": "Kyçu",
+  "startCollaboration": "Fillo Bashkëpunimin",
+  "loading": "Duke ngarkuar...",
+  "exit": "Dil"
 }

@@ -18,5 +18,9 @@
   "manageProfile": "Manage Profile",
   "knowledge": "Knowledge Center",
   "directory": "Directory",
-  "administration": "Administration"
+  "administration": "Administration",
+  "login": "Login",
+  "startCollaboration": "Start Collaboration",
+  "loading": "Loading...",
+  "exit": "Exit"
 }
