@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,16 +21,11 @@ interface MarketplaceClientPageProps {
   initialSearchParams: Record<string, string | string[] | undefined>
 }
 
-const TAB_OPTIONS = [
-  { value: "te-gjitha", label: "Të gjitha" },
-  { value: "shes", label: "Për Shitje" },
-  { value: "blej", label: "Kërkoj të Blej" },
-]
-
 export default function MarketplaceClientPage({
   locale,
   initialSearchParams,
 }: MarketplaceClientPageProps) {
+  const t = useTranslations("marketplace")
   const router = useRouter()
   const [listings, setListings] = useState<Listing[]>([])
   const [hasMore, setHasMore] = useState(false)
@@ -179,17 +175,30 @@ export default function MarketplaceClientPage({
     <div className="container mx-auto px-4 py-8 space-y-8">
       {/* Tab Selection */}
       <div className="flex flex-wrap gap-3 justify-center">
-        {TAB_OPTIONS.map((tab) => (
-          <Button
-            key={tab.value}
-            variant={filters.type === tab.value ? "default" : "outline"}
-            className="rounded-full px-6"
-            onClick={() => updateFilter("type", tab.value)}
-            disabled={isLoading}
-          >
-            {tab.label}
-          </Button>
-        ))}
+        <Button
+          variant={filters.type === "te-gjitha" ? "default" : "outline"}
+          className="rounded-full px-6"
+          onClick={() => updateFilter("type", "te-gjitha")}
+          disabled={isLoading}
+        >
+          {t("filterTypes.all")}
+        </Button>
+        <Button
+          variant={filters.type === "shes" ? "default" : "outline"}
+          className="rounded-full px-6"
+          onClick={() => updateFilter("type", "shes")}
+          disabled={isLoading}
+        >
+          {t("filterTypes.forSale")}
+        </Button>
+        <Button
+          variant={filters.type === "blej" ? "default" : "outline"}
+          className="rounded-full px-6"
+          onClick={() => updateFilter("type", "blej")}
+          disabled={isLoading}
+        >
+          {t("filterTypes.wanted")}
+        </Button>
       </div>
 
       {/* Filter Section */}
@@ -206,7 +215,7 @@ export default function MarketplaceClientPage({
             <Input
               name="search"
               type="text"
-              placeholder="Kërko sipas titullit ose përshkrimit..."
+              placeholder={t("searchPlaceholder")}
               className="pl-10 pr-4 py-2 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
               defaultValue={filters.search}
               disabled={isLoading}
@@ -220,7 +229,7 @@ export default function MarketplaceClientPage({
             disabled={isLoading}
           >
             <SlidersHorizontal className="w-5 h-5" />
-            {isLoading ? "Duke filtruar..." : "Filtro"}
+            {isLoading ? t("filtering") : t("filter")}
           </Button>
         </form>
 
@@ -233,10 +242,10 @@ export default function MarketplaceClientPage({
             disabled={isLoading}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Kategoria" />
+              <SelectValue placeholder={t("category")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Të gjitha kategoritë</SelectItem>
+              <SelectItem value="all">{t("allCategories")}</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category} value={category}>
                   {category}
@@ -252,10 +261,10 @@ export default function MarketplaceClientPage({
             disabled={isLoading}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Gjendja" />
+              <SelectValue placeholder={t("condition")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Të gjitha gjendjet</SelectItem>
+              <SelectItem value="all">{t("allConditions")}</SelectItem>
               {conditionOptions.map((condition) => (
                 <SelectItem key={condition} value={condition}>
                   {condition}
@@ -267,7 +276,7 @@ export default function MarketplaceClientPage({
           {/* Location Filter */}
           <Input
             type="text"
-            placeholder="Vendndodhja"
+            placeholder={t("location")}
             value={filters.location}
             onChange={(e) => updateFilter("location", e.target.value)}
             onBlur={() => updateFilter("location", filters.location)}
@@ -282,11 +291,11 @@ export default function MarketplaceClientPage({
             disabled={isLoading}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Rendit sipas" />
+              <SelectValue placeholder={t("sortBy")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="newest">Më të rejat</SelectItem>
-              <SelectItem value="oldest">Më të vjetrat</SelectItem>
+              <SelectItem value="newest">{t("newest")}</SelectItem>
+              <SelectItem value="oldest">{t("oldest")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -297,20 +306,18 @@ export default function MarketplaceClientPage({
         <div className="flex justify-center items-center py-12">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-            <p className="text-gray-600">Duke ngarkuar listimet...</p>
+            <p className="text-gray-600">{t("loadingListings")}</p>
           </div>
         </div>
       ) : error ? (
         <div className="text-center py-12">
           <p className="text-red-600 mb-4">{error}</p>
-          <Button onClick={() => window.location.reload()}>Provo përsëri</Button>
+          <Button onClick={() => window.location.reload()}>{t("tryAgain")}</Button>
         </div>
       ) : listings.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-600 mb-4">Nuk u gjetën shpallje që përputhen me kriteret.</p>
-          <p className="text-sm text-gray-500">
-            Provo të ndryshosh filtrat ose shto një listim të ri
-          </p>
+          <p className="text-gray-600 mb-4">{t("noMatchingListings")}</p>
+          <p className="text-sm text-gray-500">{t("tryChangingFilters")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -327,12 +334,14 @@ export default function MarketplaceClientPage({
           disabled={filters.page <= 1 || isLoading}
           onClick={() => updateFilter("page", Math.max(1, filters.page - 1))}
         >
-          ← Më parë
+          {t("previous")}
         </Button>
 
         <div className="text-sm text-gray-600 space-x-2">
-          <span>Faqja {filters.page}</span>
-          {isLoading && <span className="italic text-gray-500">Duke u ngarkuar...</span>}
+          <span>
+            {t("page")} {filters.page}
+          </span>
+          {isLoading && <span className="italic text-gray-500">{t("loading")}</span>}
         </div>
 
         <Button
@@ -340,7 +349,7 @@ export default function MarketplaceClientPage({
           disabled={!hasMore || isLoading}
           onClick={() => updateFilter("page", filters.page + 1)}
         >
-          Më pas →
+          {t("next")}
         </Button>
       </div>
     </div>

@@ -28,5 +28,21 @@
   },
   "loginToViewEmail": "Kyçu për ta parë emailin",
   "name": "Emri",
-  "listingDescription": "Përshkrimi"
+  "listingDescription": "Përshkrimi",
+  "searchPlaceholder": "Kërko sipas titullit ose përshkrimit...",
+  "filtering": "Duke filtruar...",
+  "category": "Kategoria",
+  "allConditions": "Të gjitha gjendjet",
+  "sortBy": "Rendit sipas",
+  "newest": "Më të rejat",
+  "oldest": "Më të vjetrat",
+  "loadingListings": "Duke ngarkuar listimet...",
+  "errorLoading": "Ka ndodhur një gabim gjatë ngarkimit të listimeve",
+  "tryAgain": "Provo përsëri",
+  "noMatchingListings": "Nuk u gjetën shpallje që përputhen me kriteret.",
+  "tryChangingFilters": "Provo të ndryshosh filtrat ose shto një listim të ri",
+  "page": "Faqja",
+  "loading": "Duke u ngarkuar...",
+  "previous": "← Më parë",
+  "next": "Më pas →"
 }

@@ -28,5 +28,21 @@
   },
   "loginToViewEmail": "Login to view email",
   "name": "Name",
-  "listingDescription": "Description"
+  "listingDescription": "Description",
+  "searchPlaceholder": "Search by title or description...",
+  "filtering": "Filtering...",
+  "category": "Category",
+  "allConditions": "All conditions",
+  "sortBy": "Sort by",
+  "newest": "Newest",
+  "oldest": "Oldest",
+  "loadingListings": "Loading listings...",
+  "errorLoading": "An error occurred while loading listings",
+  "tryAgain": "Try again",
+  "noMatchingListings": "No listings found matching the criteria.",
+  "tryChangingFilters": "Try changing the filters or add a new listing",
+  "page": "Page",
+  "loading": "Loading...",
+  "previous": "← Previous",
+  "next": "Next →"
 }
