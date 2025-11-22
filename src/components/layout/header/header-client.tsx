@@ -26,21 +26,21 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = "hidden"
     } else {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = "unset"
     }
 
     // Cleanup on unmount
     return () => {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = "unset"
     }
   }, [isMenuOpen])
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm">
       <div className="container flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href={`/${locale}/home`} className="flex items-center gap-3 group">
+        <Link href={`/${locale}/marketplace`} className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-xl eco-gradient flex items-center justify-center text-white font-bold text-lg">
             E
           </div>
@@ -51,10 +51,17 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
 
         <nav className="hidden md:flex gap-8">
           <Link
-            href={`/${locale}/explore`}
+            href={`/${locale}/marketplace`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
-            {t("explore")}
+            {t("marketplace")}
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
+          </Link>
+          <Link
+            href={`/${locale}/eco-organizations`}
+            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
+          >
+            {t("recyclersServices")}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
@@ -64,22 +71,6 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
             {t("partners")}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
-          <Link
-            href={`/${locale}/organizations`}
-            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-          >
-            {t("organizations")}
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-
-          <Link
-            href={`/${locale}/marketplace`}
-            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-          >
-            {t("marketplace")}
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-
           <Link
             href={`/${locale}/about`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
@@ -96,7 +87,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
               <div className="h-4 w-20 bg-gray-200 rounded-lg"></div>
             </div>
           ) : isAuthenticated ? (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <div className="flex items-center gap-3 text-sm text-gray-700 glass-card px-4 py-2 rounded-xl">
                 <div className="w-8 h-8 rounded-full eco-gradient flex items-center justify-center">
                   <User className="h-4 w-4 text-white" />
@@ -105,18 +96,38 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                   {t("welcome")}, {derivedName}
                 </span>
               </div>
-              <Button
-                asChild
-                className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
-              >
-                <Link href={`/${locale}/dashboard`}>{t("dashboard")}</Link>
-              </Button>
-              <SignOutButton
-                variant="ghost"
-                className="rounded-xl px-4 hover:bg-red-50 hover:text-red-600 transition-all duration-300"
-              >
-                {t("signOut")}
-              </SignOutButton>
+              <div className="relative group">
+                <Button className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105">
+                  {t("myEcoHub")} ▼
+                </Button>
+                <div className="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-200 hidden group-hover:block z-50">
+                  <Link
+                    href={`/${locale}/my/organization`}
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] first:rounded-t-xl transition-colors"
+                  >
+                    {t("myOrganization")}
+                  </Link>
+                  <Link
+                    href={`/${locale}/my/saved-listings`}
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] transition-colors"
+                  >
+                    {t("savedListings")}
+                  </Link>
+                  <Link
+                    href={`/${locale}/dashboard`}
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] transition-colors"
+                  >
+                    {t("dashboard")}
+                  </Link>
+                  <div className="border-t border-gray-200"></div>
+                  <SignOutButton
+                    variant="ghost"
+                    className="w-full text-left rounded-none last:rounded-b-xl px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300"
+                  >
+                    {t("signOut")}
+                  </SignOutButton>
+                </div>
+              </div>
             </div>
           ) : (
             <>
@@ -158,11 +169,18 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
           <div className="fixed top-20 left-4 right-4 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 md:hidden max-h-[60vh] overflow-y-auto">
             <nav className="p-4 space-y-1">
               <Link
-                href={`/${locale}/explore`}
+                href={`/${locale}/marketplace`}
                 className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {t("explore")}
+                {t("marketplace")}
+              </Link>
+              <Link
+                href={`/${locale}/eco-organizations`}
+                className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t("recyclersServices")}
               </Link>
               <Link
                 href={`/${locale}/partners`}
@@ -172,25 +190,11 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                 {t("partners")}
               </Link>
               <Link
-                href={`/${locale}/organizations`}
-                className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t("organizations")}
-              </Link>
-              <Link
                 href={`/${locale}/about`}
                 className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t("about")}
-              </Link>
-              <Link
-                href={`/${locale}/marketplace`}
-                className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t("marketplace")}
               </Link>
 
               <div className="pt-2 border-t border-gray-200">
@@ -209,7 +213,32 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                       <User className="h-4 w-4" />
                       {t("welcome")}, {derivedName}
                     </div>
-                    <Button className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm" asChild>
+                    <Button
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
+                      asChild
+                    >
+                      <Link
+                        href={`/${locale}/my/organization`}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {t("myOrganization")}
+                      </Link>
+                    </Button>
+                    <Button
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
+                      asChild
+                    >
+                      <Link
+                        href={`/${locale}/my/saved-listings`}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {t("savedListings")}
+                      </Link>
+                    </Button>
+                    <Button
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
+                      asChild
+                    >
                       <Link href={`/${locale}/dashboard`} onClick={() => setIsMenuOpen(false)}>
                         {t("dashboard")}
                       </Link>
@@ -224,12 +253,18 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                   </>
                 ) : (
                   <>
-                    <Button className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm" asChild>
+                    <Button
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
+                      asChild
+                    >
                       <Link href={`/${locale}/login`} onClick={() => setIsMenuOpen(false)}>
                         {t("signIn")}
                       </Link>
                     </Button>
-                    <Button className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm" asChild>
+                    <Button
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
+                      asChild
+                    >
                       <Link href={`/${locale}/register`} onClick={() => setIsMenuOpen(false)}>
                         {t("getStarted")}
                       </Link>

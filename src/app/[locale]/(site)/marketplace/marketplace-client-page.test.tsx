@@ -6,13 +6,13 @@ import { NextIntlClientProvider } from "next-intl"
 
 // Mock hooks
 vi.mock("@/hooks/use-marketplace-filters", () => ({
-  useMarketplaceFilters: vi.fn()
+  useMarketplaceFilters: vi.fn(),
 }))
 
 // Mock next-intl
 vi.mock("next-intl", () => ({
   NextIntlClientProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  useLocale: () => "en"
+  useLocale: () => "en",
 }))
 
 // Mock Supabase
@@ -22,27 +22,29 @@ vi.mock("@/lib/supabase", () => ({
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
           order: vi.fn(() => ({
-            limit: vi.fn(() => Promise.resolve({ data: [], error: null }))
-          }))
-        }))
-      }))
-    }))
-  }))
+            limit: vi.fn(() => Promise.resolve({ data: [], error: null })),
+          })),
+        })),
+      })),
+    })),
+  })),
 }))
 
 describe("MarketplaceClientPage component", () => {
   it("renders without crashing", () => {
-    expect(() => render(
-      <NextIntlClientProvider locale="en" messages={{}}>
-        <MarketplaceClientPage locale="en" initialSearchParams={{}} />
-      </NextIntlClientProvider>
-    )).not.toThrow()
+    expect(() =>
+      render(
+        <NextIntlClientProvider locale="en" messages={{}}>
+          <MarketplaceClientPage locale="en" initialSearchParams={{}} showHero={true} />
+        </NextIntlClientProvider>
+      )
+    ).not.toThrow()
   })
 
   it("renders with basic structure", () => {
     const { container } = render(
       <NextIntlClientProvider locale="en" messages={{}}>
-        <MarketplaceClientPage locale="en" initialSearchParams={{}} />
+        <MarketplaceClientPage locale="en" initialSearchParams={{}} showHero={false} />
       </NextIntlClientProvider>
     )
     expect(container).toBeInTheDocument()

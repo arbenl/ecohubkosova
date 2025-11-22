@@ -1,27 +1,28 @@
 {
   "hero": {
-    "badge": "Discover Endless Opportunities",
-    "titleStart": "Explore",
-    "titleEnd": "Opportunities",
-    "subtitle": "Discover partners, projects, and collaboration opportunities in Kosovo's circular economy network. Join our community to build a more sustainable future."
-  },
-  "features": {
-    "networking": {
-      "title": "Networking",
-      "description": "Connect with organizations and individuals who share the same values for sustainability."
-    },
-    "sustainability": {
-      "title": "Sustainability",
-      "description": "Contribute to projects that promote circular economy and environmental protection."
-    },
-    "innovation": {
-      "title": "Innovation",
-      "description": "Discover innovative solutions and new technologies for environmental challenges."
+    "title": "Explore stories, guides and circular solutions",
+    "subtitle": "Here you can read about real examples, campaigns and practical tips for reducing waste and connecting materials with the right recyclers and services. Each story is linked to real opportunities in the EcoHub marketplace.",
+    "cta": {
+      "primary": "Browse the marketplace",
+      "primaryHref": "marketplace",
+      "secondary": "See recyclers & services",
+      "secondaryHref": "eco-organizations"
     }
   },
-  "cta": {
-    "dashboard": "Go to Dashboard",
-    "register": "Register Now",
-    "login": "Sign In"
+  "content": {
+    "heading": "Content & Resources",
+    "caseStudies": "Case studies",
+    "guides": "Guides",
+    "campaigns": "Campaigns"
+  },
+  "action": {
+    "heading": "Turn ideas into action",
+    "body": "Reading stories is only the first step. EcoHub is designed so that every idea can lead to a concrete action: posting a material, finding a recycler, or sharing a listing with someone who needs it.\n\nAfter you explore a story or guide, try one of these:\n• Search the marketplace for a relevant material or service.\n• Check which organizations in your city offer similar solutions.\n• Talk to your team about listing your own materials or services.",
+    "cta": {
+      "primary": "Search the marketplace",
+      "primaryHref": "marketplace",
+      "secondary": "See organizations in my area",
+      "secondaryHref": "eco-organizations"
+    }
   }
 }

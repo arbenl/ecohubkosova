@@ -17,5 +17,7 @@
   "next": "Tjetra",
   "previous": "Paraardhëse",
   "albanianOnlyTitle": "Vetëm në Shqip",
-  "albanianOnlyDescription": "Kjo faqe është aktualisht e disponueshme vetëm në gjuhën shqipe."
+  "albanianOnlyDescription": "Kjo faqe është aktualisht e disponueshme vetëm në gjuhën shqipe.",
+  "accessDenied": "Qasje e Ndaluar",
+  "loginRequired": "Ju duhet të kyçeni për të parë këtë faqe."
 }

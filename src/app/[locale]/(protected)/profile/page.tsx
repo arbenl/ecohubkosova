@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic'
 
+import { getTranslations } from "next-intl/server"
 import ProfileClientPage from "./profile-client-page"
 import { getProfileData } from "./actions"
 
@@ -29,6 +30,8 @@ interface Organization {
 }
 
 export default async function ProfiliPage() {
+  const t = await getTranslations("profile")
+  const tCommon = await getTranslations("common")
   const { userProfile, organization, error } = await getProfileData()
 
   // Handle case where user is not logged in (or session failed)
@@ -38,9 +41,9 @@ export default async function ProfiliPage() {
         <main className="flex-1 py-12">
           <div className="container px-4 md:px-6 max-w-4xl">
             <div className="text-center py-12">
-              <h1 className="text-2xl font-bold mb-4">Qasje e Ndaluar</h1>
+              <h1 className="text-2xl font-bold mb-4">{tCommon("accessDenied")}</h1>
               <p className="text-gray-600 mb-6">
-                {error || "Ju duhet të kyçeni për të parë këtë faqe."}
+                {error || tCommon("loginRequired")}
               </p>
             </div>
           </div>
@@ -54,14 +57,14 @@ export default async function ProfiliPage() {
       <main className="flex-1 py-12">
         <div className="container px-4 md:px-6 max-w-4xl">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold">Profili im</h1>
+            <h1 className="text-3xl font-bold">{t("myProfile")}</h1>
             <p className="text-gray-600 mt-1">
-              Menaxho informacionet e profilit tënd në ECO HUB KOSOVA
+              {t("manageProfileDescription")}
             </p>
           </div>
           {error ? (
             <div className="text-center py-12">
-              <h1 className="text-2xl font-bold mb-4">Gabim</h1>
+              <h1 className="text-2xl font-bold mb-4">{tCommon("error")}</h1>
               <p className="text-red-600 mb-6">{error}</p>
             </div>
           ) : (

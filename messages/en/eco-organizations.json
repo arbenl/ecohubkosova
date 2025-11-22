@@ -1,0 +1,39 @@
+{
+  "pageTitle": "Eco Organizations Directory",
+  "pageSubtitle": "Discover Kosovo's recycling and waste management organizations",
+  "filterRoleLabel": "Organization Role",
+  "filterCityLabel": "City",
+  "allRoles": "All Roles",
+  "allCities": "All Cities",
+  "roleLabels": {
+    "RECYCLER": "Recycler",
+    "COLLECTOR": "Waste Collector",
+    "SERVICE_PROVIDER": "Service Provider",
+    "PRODUCER": "Producer",
+    "RESELLER": "Reseller",
+    "PUBLIC_INSTITUTION": "Public Institution",
+    "NGO": "NGO",
+    "RESEARCH": "Research"
+  },
+  "cardMainMaterials": "Main Materials",
+  "cardServiceAreas": "Service Areas",
+  "cardCertifications": "Certifications",
+  "cardViewOrganization": "View Organization",
+  "cardViewListings": "View Listings from this Organization",
+  "emptyState": "No organizations found for this filter.",
+  "emptyStateHelp": "Try adjusting your filters or browse all organizations.",
+  "organizationPage": {
+    "title": "Organization Profile",
+    "role": "Organization Role",
+    "materials": "Waste Types Handled",
+    "areas": "Service Areas",
+    "certifications": "Certifications",
+    "description": "About",
+    "contact": "Contact",
+    "website": "Website",
+    "email": "Email",
+    "phone": "Phone",
+    "relatedListings": "Listings from this Organization",
+    "noListings": "No listings yet from this organization."
+  }
+}

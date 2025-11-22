@@ -1,129 +1,57 @@
 {
   "hero": {
-    "badge": "Njihuni me Misionin Tonë",
-    "titleStart": "Rreth",
-    "titleEnd": "Nesh",
-    "subtitle": "ECO HUB KOSOVA është platforma e parë e ekonomisë qarkulluese në Kosovë, e krijuar për të lidhur partnerët, promovuar bashkëpunimin dhe ndërtuar një ekonomi të qëndrueshme."
-  },
-  "mission": {
-    "title": "Misioni Ynë",
-    "subtitle": "Të ndërtojmë një ekonomi qarkulluese të qëndrueshme në Kosovë përmes bashkëpunimit dhe inovacionit",
-    "cardTitle": "Misioni Ynë",
-    "description1": "Të krijojmë një platformë që lehtëson bashkëpunimin midis organizatave, bizneseve dhe individëve për të ndërtuar një ekonomi qarkulluese të qëndrueshme në Kosovë.",
-    "description2": "Ne synojmë të jemi katalizatori që transformon mënyrën se si Kosova menaxhon burimet, krijon vlerë dhe ndërton një të ardhme të qëndrueshme."
-  },
-  "vision": {
-    "title": "Vizioni Ynë",
-    "description1": "Të bëhemi platforma kryesore për ekonominë qarkulluese në Ballkanin Perëndimor, duke shërbyer si model për vendet e tjera në rajon.",
-    "description2": "Synojmë një Kosovë ku mbetjet minimizohen, burimet ripërdoren dhe ekonomia zhvillohet në harmoni me mjedisin."
-  },
-  "objectives": {
-    "title": "Objektivat Strategjike",
-    "description": "Qëllimet kryesore që na udhëheqin drejt realizimit të misionit tonë",
-    "networking": {
-      "title": "Rrjetëzimi i Partnerëve",
-      "description": "Të lidhim të paktën 100 organizata dhe biznese në rrjetin tonë brenda vitit të parë."
-    },
-    "resources": {
-      "title": "Shkëmbimi i Burimeve",
-      "description": "Të lehtësojmë shkëmbimin e 1000 tonë materiale të riciklueshme në vit."
-    },
-    "education": {
-      "title": "Edukimi dhe Sensibilizimi",
-      "description": "Të publikojmë 50 artikuj edukativë dhe të organizojmë 12 evente në vit."
-    },
-    "projects": {
-      "title": "Mbështetja e Projekteve",
-      "description": "Të mbështesim realizimin e 25 projekteve të ekonomisë qarkulluese."
-    },
-    "innovation": {
-      "title": "Inovacioni Teknologjik",
-      "description": "Të zhvillojmë mjete digjitale që lehtësojnë ekonominë qarkulluese."
-    },
-    "regional": {
-      "title": "Ndikimi Rajonal",
-      "description": "Të zgjerojmë modelin tonë në vendet e tjera të Ballkanit Perëndimor."
+    "title": "Rreth EcoHub Kosova",
+    "subtitle": "EcoHub Kosova është një platformë dygjuhëshe që lidh materialet e riciklueshme, ricikluesit dhe shërbimet e gjelbra – duke e kthyer avokimin për ekonominë rrethore në bashkëpunim të përditshëm mes bizneseve, komunave dhe qytetarëve.",
+    "cta": {
+      "primary": "Shfleto tregun",
+      "primaryHref": "marketplace",
+      "secondary": "Shiko ricikluesit dhe shërbimet",
+      "secondaryHref": "eco-organizations"
     }
   },
-  "principles": {
-    "title": "Parimet Udhëheqëse",
-    "description": "Vlerat që formësojnë çdo aspekt të punës sonë",
-    "commitment": {
-      "title": "Përkushtimi",
-      "description": "Jemi të përkushtuar ndaj misionit tonë dhe komunitetit që shërbejmë."
-    },
-    "creativity": {
-      "title": "Kreativiteti",
-      "description": "Kërkojmë zgjidhje kreative për sfidat komplekse të ekonomisë qarkulluese."
-    },
-    "focus": {
-      "title": "Fokusi",
-      "description": "Mbajmë fokus të qartë në objektivat tanë dhe rezultatet e matshme."
-    },
-    "transparency": {
-      "title": "Transparenca",
-      "description": "Operojmë me transparencë të plotë dhe përgjegjësi ndaj komunitetit."
-    }
+  "advocacy": {
+    "heading": "Nga faqe fushate në infrastrukturë të gjelbër",
+    "body": "EcoHub filloi si nismë avokuese e Qendrës për Avokim dhe Zhvillim (KADC) për të rritur ndërgjegjësimin për mbeturinat, ndotjen e ajrit dhe nevojën për ekonomi rrethore. Me rritjen e ekosistemit, u bë e qartë se palët e interesit nuk kishin nevojë vetëm për informata – ata kishin nevojë për një vend të përbashkët ku të gjejnë njëri-tjetrin dhe të bashkëpunojnë.\n\nEcoHub Kosova V2 është pikërisht ky vend: një treg neutral me interes publik ku materialet e riciklueshme, shërbimet e grumbullimit, kompanitë e riciklimit dhe zgjidhjet e gjelbra mund të publikohen, të zbulohen dhe të lidhen mes vete."
   },
-  "strategies": {
-    "title": "Si e Realizojmë Misionin",
-    "description": "Strategjitë dhe metodat që përdorim për të arritur qëllimet tona",
-    "network": {
-      "title": "1. Ndërtimi i Rrjetit",
-      "description": "Krijojmë një rrjet të fortë partnerësh përmes eventeve, takimeve dhe platformës digjitale që lehtëson komunikimin dhe bashkëpunimin."
+  "actions": {
+    "heading": "Çfarë mund të bëni në EcoHub",
+    "businesses": {
+      "title": "Për biznese dhe riciklues",
+      "items": [
+        "Publikoni materiale të riciklueshme, produkte të ricikluara ose shërbime të gjelbra",
+        "Gjeni furnitorë dhe klientë të rinj në ekonominë rrethore në Kosovë",
+        "Ndiqni statistikat bazike sa shpesh shihen dhe kontaktohen listimet tuaja"
+      ]
     },
-    "knowledge": {
-      "title": "2. Shkëmbimi i Njohurive",
-      "description": "Organizojmë trajnime, workshop-e dhe publikojmë materiale edukative për të rritur ndërgjegjësimin dhe kapacitetet."
+    "municipalities": {
+      "title": "Për komuna dhe institucione",
+      "items": [
+        "Shihni cilët riciklues dhe shërbime veprojnë në zonën tuaj",
+        "Identifikoni partnerë potencial për tenderë, pilot-projekte dhe programe lokale",
+        "Ndani EcoHub me bizneset lokale si mjet praktik, jo vetëm si broshurë"
+      ]
     },
-    "market": {
-      "title": "3. Lehtësimi i Tregut",
-      "description": "Krijojmë një treg digjital ku organizatat mund të shkëmbejnë burime, materiale dhe shërbime në mënyrë efikase."
+    "citizens": {
+      "title": "Për qytetarë dhe komunitete",
+      "items": [
+        "Zbuloni ku mund të shkojnë materialet, në vend që të përfundojnë në deponi",
+        "Eksploroni nisma dhe shërbime të gjelbra lokale",
+        "Shpërndani listimet e rëndësishme me biznese dhe fqinj"
+      ]
     },
-    "support": {
-      "title": "4. Mbështetja Teknike",
-      "description": "Ofrojmë konsulencë dhe mbështetje teknike për organizatat që dëshirojnë të implementojnë projekte të ekonomisë qarkulluese."
-    }
+    "inlineCta": "Fillo tani:",
+    "browse": "Shfleto listimet",
+    "organizations": "Shiko ricikluesit dhe shërbimet"
   },
-  "values": {
-    "title": "Vlerat Tona",
-    "sustainability": {
-      "title": "Qëndrueshmëria",
-      "desc": "Promovojmë praktikat që ruajnë mjedisin dhe sigurojnë një të ardhme të qëndrueshme."
-    },
-    "collaboration": {
-      "title": "Bashkëpunimi",
-      "desc": "Besojmë në fuqinë e bashkëpunimit për të arritur qëllime të përbashkëta."
-    },
-    "transparency": {
-      "title": "Transparenca",
-      "desc": "Operojmë me transparencë të plotë dhe përgjegjësi ndaj komunitetit."
-    },
-    "innovation": {
-      "title": "Inovacioni",
-      "desc": "Mbështesim zgjidhjet inovative për sfidat e ekonomisë qarkulluese."
-    }
-  },
-  "team": {
-    "title": "Ekipi Ynë",
-    "subtitle": "Koalicioni i Ekonomisë Qarkulluese",
-    "description": "ECO HUB KOSOVA është mbështetur nga Koalicioni i Ekonomisë Qarkulluese, një grup organizatash dhe ekspertësh të angazhuar për promovimin e ekonomisë qarkulluese në Kosovë.",
-    "experts": {
-      "title": "Ekspertë Mjedisore",
-      "desc": "Specialistë në qëndrueshmëri dhe mjedis"
-    },
-    "business": {
-      "title": "Liderë Biznesesh",
-      "desc": "Përfaqësues të sektorit privat"
-    },
-    "activists": {
-      "title": "Aktivistë Socialë",
-      "desc": "Përfaqësues të shoqërisë civile"
-    }
-  },
-  "cta": {
-    "title": "Bashkohu me Ne",
-    "description": "Bëhu pjesë e lëvizjes për një ekonomi më të qëndrueshme në Kosovë",
-    "contact": "Na kontaktoni"
+  "who": {
+    "heading": "Kush e menaxhon EcoHub Kosova?",
+    "body": "EcoHub Kosova zhvillohet dhe mirëmbahen nga Qendra për Avokim dhe Zhvillim (KADC), një organizatë e shoqërisë civile që punon për shëndetin publik, ajrin e pastër dhe zhvillimin e qëndrueshëm.\n\nSë bashku me partnerë nga Kosova dhe rajoni, KADC siguron që EcoHub të mbetet:",
+    "principles": [
+      "i pavarur dhe jopartiak",
+      "me fokus ekologjik, jo fitim-maksimizues",
+      "i përqendruar në zgjidhje praktike që ulin mbeturinat dhe ndotjen"
+    ],
+    "cta": "Dëshironi ta paraqisni organizatën tuaj ose të bëheni partner?",
+    "ctaLink": "Na kontaktoni"
   }
 }

@@ -1,0 +1,42 @@
+{
+  "hero": {
+    "title": "The Marketplace for Circular Economy",
+    "subtitle": "Buy, sell, and exchange products sustainably. Connect with recyclers, collectors, and services in your community.",
+    "ctaBrowse": "Browse Listings",
+    "ctaFindOrgs": "Find Recyclers & Services",
+    "ctaCreateListingForOrg": "Create Listing for My Organization"
+  },
+  "recyclers": {
+    "title": "Recyclers & Services Directory",
+    "subtitle": "Discover certified organizations offering recycling, collection, and circular economy services",
+    "ctaAll": "View All Recyclers & Services"
+  },
+  "forOrgs": {
+    "title": "For Organizations",
+    "subtitle": "Grow your eco impact: list products, track analytics, and collaborate with your team.",
+    "features": {
+      "feature1": "Create and manage eco-friendly listings",
+      "feature2": "Track views, contacts, and shares in real-time",
+      "feature3": "Invite and manage team members",
+      "feature4": "Connect with the circular economy community"
+    },
+    "ctaCreateProfile": "Create Organization Profile",
+    "ctaStartOnboarding": "Start Organization Onboarding",
+    "ctaMyOrganization": "Go to My Organization"
+  },
+  "myEcoHub": {
+    "title": "Your EcoHub",
+    "savedListings": "Saved Listings",
+    "viewAllSaved": "View All Saved",
+    "orgImpact": "Organization Impact",
+    "viewAnalytics": "View Analytics",
+    "lastThirtyDays": "Last 30 Days"
+  },
+  "story": {
+    "title": "About EcoHub Kosova",
+    "content": "EcoHub Kosova is a digital marketplace connecting individuals and organizations in the circular economy. We make it easy to buy, sell, and exchange sustainably while supporting local businesses.",
+    "statsOrganizations": "Active Organizations",
+    "statsListings": "Eco Listings",
+    "statsCommunities": "Communities Served"
+  }
+}

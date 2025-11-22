@@ -1,0 +1,28 @@
+{
+    "myProfile": "My Profile",
+    "manageProfileDescription": "Manage your profile information on ECO HUB KOSOVA",
+    "manageOrgDescription": "Manage organization details.",
+    "personalProfile": "Personal Profile",
+    "orgProfile": "Organization Profile",
+    "noOrgToUpdate": "No organization to update.",
+    "changePassword": "Change Password",
+    "changePasswordDescription": "Replace your existing password with a new one.",
+    "changePasswordPlaceholder": "Password change form will be added here.",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "profileUpdatedSuccess": "Profile updated successfully!",
+    "orgProfileUpdatedSuccess": "Organization profile updated successfully!",
+    "updateError": "Error updating profile.",
+    "unknownError": "Unknown error.",
+    "dbError": "Database connection error.",
+    "loadError": "Error loading profile",
+    "dbUnavailable": "Database unavailable",
+    "checkFields": "Check the highlighted fields and try again.",
+    "tabs": {
+        "personal": "Personal Details",
+        "organization": "Organization Details",
+        "settings": "Settings"
+    }
+}

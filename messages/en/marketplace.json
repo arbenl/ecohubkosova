@@ -44,5 +44,15 @@
   "page": "Page",
   "loading": "Loading...",
   "previous": "← Previous",
-  "next": "Next →"
+  "next": "Next →",
+  "categoryList": {
+    "recyclable_materials": "Recyclable Materials",
+    "sustainable_products": "Sustainable Products",
+    "services": "Services",
+    "renewable_energy": "Renewable Energy",
+    "food_agriculture": "Food & Agriculture",
+    "textiles": "Textiles",
+    "electronics": "Electronics",
+    "others": "Others"
+  }
 }

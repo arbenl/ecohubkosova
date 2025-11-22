@@ -44,5 +44,15 @@
   "page": "Faqja",
   "loading": "Duke u ngarkuar...",
   "previous": "← Më parë",
-  "next": "Më pas →"
+  "next": "Më pas →",
+  "categoryList": {
+    "recyclable_materials": "Materiale të riciklueshme",
+    "sustainable_products": "Produkte të qëndrueshme",
+    "services": "Shërbimet",
+    "renewable_energy": "Energji e ripërtëritshme",
+    "food_agriculture": "Ushqim dhe bujqësi",
+    "textiles": "Tekstile",
+    "electronics": "Elektronikë",
+    "others": "Tjera"
+  }
 }

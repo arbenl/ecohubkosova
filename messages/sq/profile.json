@@ -1,0 +1,28 @@
+{
+    "myProfile": "Profili im",
+    "manageProfileDescription": "Menaxho informacionet e profilit tënd në ECO HUB KOSOVA",
+    "manageOrgDescription": "Ndrysho të dhënat e organizatës.",
+    "personalProfile": "Profili Personal",
+    "orgProfile": "Profili i Organizatës",
+    "noOrgToUpdate": "Nuk ka organizatë për të përditësuar.",
+    "changePassword": "Ndrysho fjalëkalimin",
+    "changePasswordDescription": "Zëvendëso fjalëkalimin ekzistues me një të ri.",
+    "changePasswordPlaceholder": "Forma për ndryshim fjalëkalimi do të shtohet këtu.",
+    "save": "Ruaj",
+    "saving": "Duke ruajtur...",
+    "cancel": "Anulo",
+    "saveChanges": "Ruaj Ndryshimet",
+    "profileUpdatedSuccess": "Profili u përditësua me sukses!",
+    "orgProfileUpdatedSuccess": "Profili i organizatës u përditësua me sukses!",
+    "updateError": "Gabim gjatë përditësimit të profilit.",
+    "unknownError": "Gabim i panjohur.",
+    "dbError": "Gabim në lidhjen me bazën e të dhënave.",
+    "loadError": "Gabim në ngarkimin e profilit",
+    "dbUnavailable": "Bazë të dhënash jo në dispozicion",
+    "checkFields": "Kontrolloni fushat e shënuara dhe provoni përsëri.",
+    "tabs": {
+        "personal": "Të dhënat personale",
+        "organization": "Të dhënat e organizatës",
+        "settings": "Cilësimet"
+    }
+}

@@ -1,0 +1,28 @@
+MCP USAGE (MANDATORY)
+
+You have two MCP servers available in this workspace:
+
+1) mcp-context-server
+   - Tools: project_map, code_search, read_files
+   - Scope: always target the EcoHub Kosova repo.
+   - How to work:
+     - BEFORE proposing any code changes, first:
+       - Run project_map to understand the structure.
+       - Use code_search to find the relevant files/identifiers.
+       - Use read_files to inspect the exact file contents you plan to edit.
+     - Never guess file paths or contents – always confirm via these tools.
+
+2) ecohub-qa
+   - Tools: build_health, tests_orchestrator, auth_audit, navigation_audit, runtime_log_scan, etc.
+   - How to work:
+     - AFTER you propose or apply changes, choose the relevant QA tool(s):
+       - Always run build_health to ensure lint, tsc, and build pass.
+       - For E2E-related work, run tests_orchestrator or specific test commands where appropriate.
+     - Use the QA results to decide if further fixes are needed.
+
+Workflow requirement:
+- Every time you start a new task:
+  1) Use mcp-context-server (project_map + code_search + read_files) to gather real context.
+  2) Then propose COMPLETE, ready-to-paste code changes.
+  3) Then use ecohub-qa tools to validate (at least build_health).
+  4) Finally, write a short REPORT summarizing what you did and what the QA tools reported.

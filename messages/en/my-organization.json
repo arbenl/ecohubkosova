@@ -1,0 +1,231 @@
+{
+  "onboarding": {
+    "title": "Your Organization",
+    "subtitle": "Manage your presence in EcoHub Kosova",
+    "noOrgYet": "You're not a member of any organization yet",
+    "noOrgDescription": "If you represent a business or organization, create a new one or request to join an existing one.",
+    "searchExisting": "Search for your organization in the directory",
+    "createNew": "Create a new organization"
+  },
+  "claim": {
+    "title": "Request access to an organization",
+    "subtitle": "Search and request to join an existing organization",
+    "search": "Search by name or city",
+    "requestAccess": "Request access",
+    "requestSubmitted": "Your access request has been sent",
+    "success": "You've joined the organization!",
+    "alreadyMember": "You're already a member of this organization"
+  },
+  "create": {
+    "title": "Create your organization",
+    "subtitle": "Register your business or organization on EcoHub",
+    "form": {
+      "name": "Organization name",
+      "namePlaceholder": "e.g. GreenTech Kosovo",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your organization and work...",
+      "type": "Organization type",
+      "typeOJQ": "NGO",
+      "typeCompany": "Social Enterprise",
+      "typeEnterprise": "Company",
+      "primaryInterest": "Primary interest",
+      "primaryInterestPlaceholder": "e.g. Recycling, Waste Collection",
+      "contactPerson": "Contact person name",
+      "contactPersonPlaceholder": "Your name or manager's name",
+      "contactEmail": "Contact email",
+      "contactEmailPlaceholder": "contact@organization.com",
+      "location": "City",
+      "submit": "Create organization",
+      "cancel": "Cancel"
+    },
+    "success": "Your organization was created!",
+    "createError": "Error creating organization"
+  },
+  "workspace": {
+    "title": "Workspace",
+    "switchOrganization": "Switch organization",
+    "section": {
+      "profile": "Organization profile",
+      "listings": "Listings",
+      "actions": "Actions"
+    },
+    "actions": {
+      "editProfile": "Edit profile",
+      "createListing": "Create new listing",
+      "viewPublicProfile": "View public profile"
+    },
+    "profile": {
+      "name": "Name",
+      "type": "Type",
+      "location": "Location",
+      "description": "Description",
+      "primaryInterest": "Primary interest",
+      "contactPerson": "Contact person",
+      "contactEmail": "Contact email",
+      "status": "Status",
+      "statusApproved": "Approved",
+      "statusPending": "Pending approval",
+      "memberRole": "Your role",
+      "memberRoleAdmin": "Administrator",
+      "memberRoleEditor": "Editor",
+      "memberRoleViewer": "Viewer"
+    }
+  },
+  "listings": {
+    "title": "Organization listings",
+    "emptyTitle": "No listings yet",
+    "emptyBody": "Create your first listing to get started",
+    "createFirstListing": "Create first listing",
+    "table": {
+      "title": "Title",
+      "type": "Type",
+      "status": "Status",
+      "createdAt": "Created",
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  },
+  "form": {
+    "invalidOrg": "Invalid organization",
+    "createError": "Error creating organization"
+  },
+  "analytics": {
+    "tabs": {
+      "analytics": "Analytics"
+    },
+    "title": "Impact & Insights",
+    "subtitle": "Track how people are connecting with your listings",
+    "range": {
+      "label": "Time period",
+      "last30Days": "Last 30 days",
+      "last90Days": "Last 90 days",
+      "allTime": "All time"
+    },
+    "summary": {
+      "title": "Your impact at a glance",
+      "views": "Views",
+      "viewsDescription": "How often your listings are seen",
+      "contacts": "Contacts",
+      "contactsDescription": "Interest inquiries received",
+      "saves": "Saved",
+      "savesDescription": "Added to favorites",
+      "shares": "Shares",
+      "sharesDescription": "Times shared with others"
+    },
+    "listings": {
+      "title": "How your listings are performing",
+      "table": {
+        "name": "Listing name",
+        "status": "Status",
+        "views": "Views",
+        "contacts": "Contacts",
+        "saves": "Saved",
+        "shares": "Shares"
+      },
+      "empty": "No listings with activity yet",
+      "noData": "No data available for this time period"
+    },
+    "empty": {
+      "title": "No activity yet",
+      "description": "When people start viewing and saving your listings, their activity will appear here."
+    }
+  },
+  "members": {
+    "tabs": {
+      "members": "Team"
+    },
+    "title": "Team & Collaboration",
+    "subtitle": "Manage your organization's team members",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "joinedDate": "Joined",
+      "actions": "Actions"
+    },
+    "roleLabels": {
+      "ADMIN": "Administrator",
+      "EDITOR": "Editor",
+      "VIEWER": "Viewer"
+    },
+    "roleDescriptions": {
+      "ADMIN": "Full access to organization settings and team management",
+      "EDITOR": "Can create and edit listings",
+      "VIEWER": "Can view organization information"
+    },
+    "actions": {
+      "changeRole": "Change role",
+      "remove": "Remove from team",
+      "leaving": "Leave organization"
+    },
+    "empty": {
+      "title": "Your team is just getting started",
+      "description": "Invite team members to collaborate and manage your organization together"
+    },
+    "invite": {
+      "title": "Invite team member",
+      "description": "Invite someone to join your organization team",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "member@example.com",
+      "roleLabel": "Role",
+      "roleDescription": "Select the role for this member",
+      "submit": "Send invitation",
+      "cancel": "Cancel",
+      "sending": "Sending...",
+      "success": "Invitation sent!",
+      "successDescription": "An invitation has been sent to {email}",
+      "error": "Failed to send invitation",
+      "invalidEmail": "Please enter a valid email address",
+      "requiredRole": "Please select a role"
+    },
+    "pending": {
+      "title": "Pending invitations",
+      "emptyTitle": "No pending invitations",
+      "emptyDescription": "All invitations have been accepted or revoked",
+      "table": {
+        "email": "Email",
+        "role": "Role",
+        "sentDate": "Sent",
+        "actions": "Actions"
+      },
+      "actions": {
+        "revoke": "Revoke invitation",
+        "revoking": "Revoking...",
+        "revoked": "Invitation revoked"
+      }
+    },
+    "confirmations": {
+      "removeTitle": "Remove team member?",
+      "removeDescription": "Are you sure you want to remove {name} from the organization? This action cannot be undone.",
+      "removeButton": "Remove",
+      "leaveTitle": "Leave organization?",
+      "leaveDescription": "Are you sure you want to leave this organization? You can request to join again later.",
+      "leaveButton": "Leave",
+      "lastAdminTitle": "Cannot remove last administrator",
+      "lastAdminDescription": "At least one administrator must remain in the organization",
+      "lastAdminButton": "Understood"
+    },
+    "notifications": {
+      "roleChanged": "{name} is now {role}",
+      "memberRemoved": "{name} has been removed from the organization",
+      "youLeft": "You have left the organization",
+      "invitationError": "Unable to send invitation. Please try again."
+    }
+  },
+  "inviteAccept": {
+    "title": "Join organization",
+    "subtitle": "You've been invited to join {organizationName}",
+    "roleDescription": "You will join as: {role}",
+    "accept": "Accept invitation",
+    "decline": "Decline",
+    "accepting": "Accepting...",
+    "accepted": "You've joined the organization!",
+    "invalid": "This invitation is no longer valid",
+    "invalidDescription": "The invitation may have been revoked or expired. Please contact the organization administrator.",
+    "alreadyMember": "You are already a member of this organization",
+    "emailMismatch": "This invitation does not match your email address",
+    "error": "An error occurred while accepting the invitation"
+  }
+}
+

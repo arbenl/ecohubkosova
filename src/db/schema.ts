@@ -137,3 +137,7 @@ export type OrganizationMember = typeof organizationMembers.$inferSelect
 export type Article = typeof articles.$inferSelect
 export type MarketplaceListing = typeof marketplaceListings.$inferSelect
 export type City = typeof cities.$inferSelect
+
+// Marketplace V2 - Eco-First Circular Economy
+export * from "./schema/enums"
+export * from "./schema/marketplace-v2"

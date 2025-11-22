@@ -1,0 +1,39 @@
+{
+  "pageTitle": "Direktorium i Organizatave Eco",
+  "pageSubtitle": "Zbuloni organizatat e riciklimit dhe menaxhimit të mbeturinave të Kosovës",
+  "filterRoleLabel": "Roli i Organizatës",
+  "filterCityLabel": "Qyteti",
+  "allRoles": "Të Gjitha Rolet",
+  "allCities": "Të Gjitha Qytetet",
+  "roleLabels": {
+    "RECYCLER": "Riciklues",
+    "COLLECTOR": "Mbledhës Mbeturinash",
+    "SERVICE_PROVIDER": "Ofrues Shërbimi",
+    "PRODUCER": "Prodhues",
+    "RESELLER": "Rishitës",
+    "PUBLIC_INSTITUTION": "Institucion Publik",
+    "NGO": "OJQ",
+    "RESEARCH": "Kërkime"
+  },
+  "cardMainMaterials": "Materialet Kryesore",
+  "cardServiceAreas": "Zonat e Shërbimit",
+  "cardCertifications": "Sertifikimet",
+  "cardViewOrganization": "Shiko Organizatën",
+  "cardViewListings": "Shiko Shpalljet nga kjo Organizatë",
+  "emptyState": "Nuk u gjetën organizata për këtë filtër.",
+  "emptyStateHelp": "Përpiquni të ndryshoni filtrat ose shikoni të gjitha organizatat.",
+  "organizationPage": {
+    "title": "Profili i Organizatës",
+    "role": "Roli i Organizatës",
+    "materials": "Llojat e Mbeturinave të Përpunuara",
+    "areas": "Zonat e Shërbimit",
+    "certifications": "Sertifikimet",
+    "description": "Rreth",
+    "contact": "Kontakti",
+    "website": "Faqja e Internetit",
+    "email": "Email",
+    "phone": "Telefon",
+    "relatedListings": "Shpalljet nga kjo Organizatë",
+    "noListings": "Nuk ka akoma shpalljenga kjo organizatë."
+  }
+}

@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { FormField } from "./form-field"
@@ -14,6 +15,8 @@ interface UserProfileFormProps {
 }
 
 export function UserProfileForm({ initialFullName, initialEmail, initialLocation }: UserProfileFormProps) {
+  const t = useTranslations("profile")
+  const tAuth = useTranslations("auth")
   const { formData, fieldErrors, saving, error, success, handleChange, handleSubmit } = useUserProfileForm({
     initialFullName,
     initialLocation,
@@ -24,17 +27,17 @@ export function UserProfileForm({ initialFullName, initialEmail, initialLocation
     <div>
       <FormStatus error={error} success={success} />
       <form onSubmit={handleSubmit} className="space-y-4">
-        <FormField label="Emri i Plotë" name="full_name" error={fieldErrors.full_name}>
+        <FormField label={tAuth("fullName")} name="full_name" error={fieldErrors.full_name}>
           <Input name="full_name" value={formData.full_name} onChange={handleChange} />
         </FormField>
-        <FormField label="Email" name="email">
+        <FormField label={tAuth("email")} name="email">
           <Input name="email" value={initialEmail} disabled />
         </FormField>
-        <FormField label="Vendndodhja" name="location" error={fieldErrors.location}>
+        <FormField label={tAuth("location")} name="location" error={fieldErrors.location}>
           <Input name="location" value={formData.location} onChange={handleChange} />
         </FormField>
         <Button type="submit" disabled={saving}>
-          {saving ? "Duke ruajtur..." : "Ruaj"}
+          {saving ? t("saving") : t("save")}
         </Button>
       </form>
     </div>
