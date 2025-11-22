@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import {
   userProfileUpdateSchema,
   organizationProfileUpdateSchema,
@@ -30,6 +31,7 @@ export function useUserProfileForm({
   initialLocation: string
   submit: SubmitUserProfile
 }) {
+  const t = useTranslations("profile")
   const [formData, setFormData] = useState<UserProfileUpdateInput>({
     full_name: initialFullName,
     location: initialLocation,
@@ -64,7 +66,7 @@ export function useUserProfileForm({
           full_name: fieldErrors.full_name?.[0],
           location: fieldErrors.location?.[0],
         })
-        setError("Kontrolloni fushat e shënuara dhe provoni përsëri.")
+        setError(t("checkFields"))
         setSaving(false)
         return
       }
@@ -75,12 +77,12 @@ export function useUserProfileForm({
       if (result && result.error) {
         setError(result.error)
       } else {
-        setSuccess("Profili u përditësua me sukses!")
+        setSuccess(t("profileUpdatedSuccess"))
       }
 
       setSaving(false)
     },
-    [formData, submit]
+    [formData, submit, t]
   )
 
   return {
@@ -103,6 +105,7 @@ export function useOrganizationProfileForm({
   initialData: OrganizationProfileUpdateInput
   submit: SubmitOrganizationProfile
 }) {
+  const t = useTranslations("profile")
   const [formData, setFormData] =
     useState<OrganizationProfileUpdateInput>(initialData)
   const [fieldErrors, setFieldErrors] = useState<
@@ -141,7 +144,7 @@ export function useOrganizationProfileForm({
           contact_email: fieldErrors.contact_email?.[0],
           location: fieldErrors.location?.[0],
         })
-        setError("Kontrolloni fushat e shënuara dhe provoni përsëri.")
+        setError(t("checkFields"))
         setSaving(false)
         return
       }
@@ -152,12 +155,12 @@ export function useOrganizationProfileForm({
       if (result && result.error) {
         setError(result.error)
       } else {
-        setSuccess("Profili i organizatës u përditësua me sukses!")
+        setSuccess(t("orgProfileUpdatedSuccess"))
       }
 
       setSaving(false)
     },
-    [formData, organizationId, submit]
+    [formData, organizationId, submit, t]
   )
 
   return {

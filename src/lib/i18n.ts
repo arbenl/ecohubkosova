@@ -24,6 +24,8 @@ export default getRequestConfig(async ({ locale }) => {
     admin,
     errors,
     metadata,
+    profile,
+    marketplaceV2,
   ] = await Promise.all([
     import(`../../messages/${validLocale}/navigation.json`),
     import(`../../messages/${validLocale}/cta.json`),
@@ -42,6 +44,8 @@ export default getRequestConfig(async ({ locale }) => {
     import(`../../messages/${validLocale}/admin.json`),
     import(`../../messages/${validLocale}/errors.json`),
     import(`../../messages/${validLocale}/metadata.json`),
+    import(`../../messages/${validLocale}/profile.json`),
+    import(`../../messages/${validLocale}/marketplace-v2.json`),
   ])
 
   return {
@@ -64,6 +68,8 @@ export default getRequestConfig(async ({ locale }) => {
       admin: admin.default,
       errors: errors.default,
       metadata: metadata.default,
+      profile: profile.default,
+      "marketplace-v2": marketplaceV2.default,
     },
   }
 })

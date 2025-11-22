@@ -51,14 +51,14 @@ export default function MarketplaceClientPage({
   }
 
   const categories = [
-    "Materiale të riciklueshme",
-    "Produkte të qëndrueshme",
-    "Shërbime",
-    "Energji e ripërtëritshme",
-    "Ushqim dhe bujqësi",
-    "Tekstile",
-    "Elektronikë",
-    "Tjera",
+    { value: "Materiale të riciklueshme", label: t("categoryList.recyclable_materials") },
+    { value: "Produkte të qëndrueshme", label: t("categoryList.sustainable_products") },
+    { value: "Shërbime", label: t("categoryList.services") },
+    { value: "Energji e ripërtëritshme", label: t("categoryList.renewable_energy") },
+    { value: "Ushqim dhe bujqësi", label: t("categoryList.food_agriculture") },
+    { value: "Tekstile", label: t("categoryList.textiles") },
+    { value: "Elektronikë", label: t("categoryList.electronics") },
+    { value: "Tjera", label: t("categoryList.others") },
   ]
 
   // Simple filter state management without navigation
@@ -156,7 +156,7 @@ export default function MarketplaceClientPage({
         setHasMore(data.hasMore)
       } catch (err) {
         console.error("[MarketplaceClient] Failed to load listings", err)
-        setError("Ka ndodhur një gabim gjatë ngarkimit të listimeve")
+        setError(t("errorLoading"))
         setListings([])
         setHasMore(false)
       } finally {
@@ -247,8 +247,8 @@ export default function MarketplaceClientPage({
             <SelectContent>
               <SelectItem value="all">{t("allCategories")}</SelectItem>
               {categories.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
+                <SelectItem key={category.value} value={category.value}>
+                  {category.label}
                 </SelectItem>
               ))}
             </SelectContent>

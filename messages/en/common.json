@@ -17,5 +17,7 @@
   "next": "Next",
   "previous": "Previous",
   "albanianOnlyTitle": "Albanian Language Only",
-  "albanianOnlyDescription": "This page is currently only available in Albanian. We're working on translating it to English. Please switch to Albanian (SQ) using the language selector in the header."
+  "albanianOnlyDescription": "This page is currently only available in Albanian. We're working on translating it to English. Please switch to Albanian (SQ) using the language selector in the header.",
+  "accessDenied": "Access Denied",
+  "loginRequired": "You must be logged in to view this page."
 }
