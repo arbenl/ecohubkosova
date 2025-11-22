@@ -19,11 +19,17 @@ import { useEffect, useState, useCallback, useMemo } from "react"
 interface MarketplaceClientPageProps {
   locale: string
   initialSearchParams: Record<string, string | string[] | undefined>
+  showHero?: boolean
+  heroTitle?: string
+  hideSearchBar?: boolean
 }
 
 export default function MarketplaceClientPage({
   locale,
   initialSearchParams,
+  showHero = true,
+  heroTitle = "The Marketplace for Circular Economy",
+  hideSearchBar = false,
 }: MarketplaceClientPageProps) {
   const t = useTranslations("marketplace")
   const router = useRouter()
@@ -173,6 +179,13 @@ export default function MarketplaceClientPage({
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
+      {/* Hero Section (optional) */}
+      {showHero && (
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{heroTitle}</h2>
+        </div>
+      )}
+
       {/* Tab Selection */}
       <div className="flex flex-wrap gap-3 justify-center">
         <Button
@@ -203,35 +216,37 @@ export default function MarketplaceClientPage({
 
       {/* Filter Section */}
       <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
-        {/* Search Form */}
-        <form
-          className="flex flex-col md:flex-row gap-4"
-          onSubmit={(e) => {
-            e.preventDefault()
-            updateFilter("search", (e.target as any).search.value)
-          }}
-        >
-          <div className="relative flex-grow">
-            <Input
-              name="search"
-              type="text"
-              placeholder={t("searchPlaceholder")}
-              className="pl-10 pr-4 py-2 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-              defaultValue={filters.search}
-              disabled={isLoading}
-            />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-          </div>
-
-          <Button
-            type="submit"
-            className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
-            disabled={isLoading}
+        {/* Search Form - hidden when embedded in landing */}
+        {!hideSearchBar && (
+          <form
+            className="flex flex-col md:flex-row gap-4"
+            onSubmit={(e) => {
+              e.preventDefault()
+              updateFilter("search", (e.target as any).search.value)
+            }}
           >
-            <SlidersHorizontal className="w-5 h-5" />
-            {isLoading ? t("filtering") : t("filter")}
-          </Button>
-        </form>
+            <div className="relative flex-grow">
+              <Input
+                name="search"
+                type="text"
+                placeholder={t("searchPlaceholder")}
+                className="pl-10 pr-4 py-2 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                defaultValue={filters.search}
+                disabled={isLoading}
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            </div>
+
+            <Button
+              type="submit"
+              className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
+              disabled={isLoading}
+            >
+              <SlidersHorizontal className="w-5 h-5" />
+              {isLoading ? t("filtering") : t("filter")}
+            </Button>
+          </form>
+        )}
 
         {/* Additional Filters */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

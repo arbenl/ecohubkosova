@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "Partnerët dhe Përkrahësit",
+    "subtitle": "EcoHub Kosova ndërtohet së bashku me organizata që kujdesen për ekonominë rrethore, ajrin e pastër dhe një të ardhme më të shëndetshme. Partnerët na ndihmojnë ta zgjerojmë rrjetin, të arrijmë te më shumë biznese dhe ta mbajmë platformën të pavarur dhe falas për përdorues.",
+    "cta": {
+      "primary": "Shiko ricikluesit dhe shërbimet",
+      "primaryHref": "eco-organizations",
+      "secondary": "Shfleto tregun",
+      "secondaryHref": "marketplace"
+    }
+  },
+  "types": {
+    "heading": "Si kontribuojnë partnerët",
+    "strategic": {
+      "title": "Partnerë strategjikë",
+      "description": "e përkrahin EcoHub si pjesë të politikave më të gjera për mjedisin, mbeturinat dhe shëndetin publik."
+    },
+    "technical": {
+      "title": "Partnerë teknikë",
+      "description": "ofrojnë ekspertizë për riciklim, logjistikë, të dhëna dhe mjete digjitale."
+    },
+    "community": {
+      "title": "Partnerë komunitarë",
+      "description": "shkolla, OJQ dhe rrjete që ndihmojnë EcoHub-in të arrijë te bizneset lokale dhe qytetarët."
+    }
+  },
+  "become": {
+    "heading": "A dëshironi që organizata juaj ta përkrahë ose ta integrojë EcoHub-in?",
+    "body": "Na kontaktoni për të diskutuar format e bashkëpunimit, nga dukshmëria e thjeshtë deri te bashkëpunimet më të thella programore.",
+    "cta": "Bëhu partner"
+  },
+  "why": {
+    "heading": "Pse janë të rëndësishëm partnerët për biznese dhe qytetarë",
+    "body": "Partneritetet e forta bëjnë që EcoHub të mos jetë vetëm një faqe interneti, por një infrastrukturë e gjallë: të dhënat përditësohen, organizatat verifikohen dhe mundësi të reja rrethore paraqiten me kalimin e kohës. Kjo e bën më të lehtë për bizneset ta besojnë platformën, dhe për qytetarët e komunat ta rekomandojnë si mjet praktik, jo vetëm si faqe fushate."
+  }
+}

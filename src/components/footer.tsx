@@ -20,20 +20,26 @@ export function Footer() {
                 ECO HUB KOSOVA
               </span>
             </div>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              {t('footer.description')}
-            </p>
+            <p className="text-gray-600 text-sm leading-relaxed">{t("footer.description")}</p>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-gray-800">{t('footer.links')}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-gray-800">{t("footer.links")}</h3>
             <ul className="space-y-3">
               <li>
                 <Link
-                  href={`/${locale}/explore`}
+                  href={`/${locale}/marketplace`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
-                  {t('footer.explore')}
+                  {t("footer.marketplace")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${locale}/eco-organizations`}
+                  className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
+                >
+                  {t("footer.organizations")}
                 </Link>
               </li>
               <li>
@@ -41,15 +47,7 @@ export function Footer() {
                   href={`/${locale}/partners`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
-                  {t('footer.partners')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${locale}/marketplace`}
-                  className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
-                >
-                  {t('footer.marketplace')}
+                  {t("footer.partners")}
                 </Link>
               </li>
               <li>
@@ -57,21 +55,21 @@ export function Footer() {
                   href={`/${locale}/knowledge`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
-                  {t('footer.knowledge')}
+                  {t("footer.knowledge")}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-gray-800">{t('footer.about')}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-gray-800">{t("footer.about")}</h3>
             <ul className="space-y-3">
               <li>
                 <Link
                   href={`/${locale}/about/vision`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
-                  {t('footer.whoWeAre')}
+                  {t("footer.whoWeAre")}
                 </Link>
               </li>
               <li>
@@ -79,7 +77,7 @@ export function Footer() {
                   href={`/${locale}/about/mission`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
-                  {t('footer.mission')}
+                  {t("footer.mission")}
                 </Link>
               </li>
               <li>
@@ -87,26 +85,29 @@ export function Footer() {
                   href={`/${locale}/about/coalition`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
-                  {t('footer.coalition')}
+                  {t("footer.coalition")}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-gray-800">{t('footer.support')}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-gray-800">{t("footer.support")}</h3>
             <ul className="space-y-3">
               <li>
                 <Link
                   href={`/${locale}/contact`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
-                  {t('footer.contact')}
+                  {t("footer.contact")}
                 </Link>
               </li>
               <li>
-                <Link href={`/${locale}/faq`} className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm">
-                  {t('footer.faq')}
+                <Link
+                  href={`/${locale}/faq`}
+                  className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
+                >
+                  {t("footer.faq")}
                 </Link>
               </li>
               <li>
@@ -114,7 +115,7 @@ export function Footer() {
                   href={`/${locale}/help`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
-                  {t('footer.help')}
+                  {t("footer.help")}
                 </Link>
               </li>
               <li>
@@ -122,7 +123,7 @@ export function Footer() {
                   href={`/${locale}/legal/terms`}
                   className="text-gray-600 hover:text-[#00C896] transition-colors duration-300 text-sm"
                 >
-                  {t('footer.terms')}
+                  {t("footer.terms")}
                 </Link>
               </li>
             </ul>
@@ -131,9 +132,9 @@ export function Footer() {
 
         <div className="mt-16 pt-8 border-t border-gray-200 text-center">
           <p className="text-gray-600 text-sm">
-            &copy; {new Date().getFullYear()} ECO HUB KOSOVA. {t('footer.copyright')}
+            &copy; {new Date().getFullYear()} ECO HUB KOSOVA. {t("footer.copyright")}
           </p>
-          <p className="mt-2 text-sm text-gray-500">{t('footer.supportedBy')}</p>
+          <p className="mt-2 text-sm text-gray-500">{t("footer.supportedBy")}</p>
         </div>
       </div>
     </footer>

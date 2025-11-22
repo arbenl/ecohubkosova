@@ -21,7 +21,7 @@ export default function SavedListingsClient({
   total,
   locale,
 }: SavedListingsClientProps) {
-  const t = useTranslations("marketplace-v2")
+  const t = useTranslations("marketplace")
   const router = useRouter()
   const [listings, setListings] = useState(initialListings)
 
@@ -37,16 +37,12 @@ export default function SavedListingsClient({
             <div className="mb-4">
               <Bookmark className="h-16 w-16 text-gray-300 mx-auto" />
             </div>
-            <CardTitle className="text-2xl mb-2">
-              {t("savedListings.emptyTitle")}
-            </CardTitle>
+            <CardTitle className="text-2xl mb-2">{t("savedListings.emptyTitle")}</CardTitle>
             <CardDescription className="text-base mb-6">
               {t("savedListings.emptyBody")}
             </CardDescription>
             <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
-              <Link href={`/${locale}/marketplace-v2`}>
-                {t("savedListings.browseCTA")}
-              </Link>
+              <Link href={`/${locale}/marketplace`}>{t("savedListings.browseCTA")}</Link>
             </Button>
           </CardHeader>
         </Card>
@@ -74,14 +70,10 @@ export default function SavedListingsClient({
                 <Bookmark className="h-6 w-6 text-emerald-600" />
                 {total} {t("savedListings.count", { count: total })}
               </CardTitle>
-              <CardDescription>
-                Opportunities you want to track
-              </CardDescription>
+              <CardDescription>Opportunities you want to track</CardDescription>
             </div>
             <Button variant="ghost" asChild>
-              <Link href={`/${locale}/marketplace-v2`}>
-                Browse more
-              </Link>
+              <Link href={`/${locale}/marketplace`}>Browse more</Link>
             </Button>
           </div>
         </CardHeader>
@@ -90,11 +82,7 @@ export default function SavedListingsClient({
       {/* Listings Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {listings.map((listing) => (
-          <SavedListingCard
-            key={listing.id}
-            listing={listing}
-            onRemove={handleRemoveSave}
-          />
+          <SavedListingCard key={listing.id} listing={listing} onRemove={handleRemoveSave} />
         ))}
       </div>
 

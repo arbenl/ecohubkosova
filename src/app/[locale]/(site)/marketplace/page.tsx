@@ -1,10 +1,10 @@
-import MarketplaceLandingClient from "./marketplace-landing-client"
+import MarketplaceClientPage from "./marketplace-client-page"
 import { getServerUser } from "@/lib/supabase/server"
 
 interface MarketplacePageProps {
-  params: {
+  params: Promise<{
     locale: string
-  }
+  }>
   searchParams?: Record<string, string | string[] | undefined>
 }
 
@@ -15,11 +15,5 @@ export default async function MarketplacePageServer({
   const { locale } = await params
   const { user } = await getServerUser()
 
-  return (
-    <MarketplaceLandingClient
-      locale={locale}
-      user={user}
-      initialSearchParams={searchParams ?? {}}
-    />
-  )
+  return <MarketplaceClientPage locale={locale} initialSearchParams={searchParams ?? {}} />
 }

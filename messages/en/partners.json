@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "Partners & Supporters",
+    "subtitle": "EcoHub Kosova is built together with organizations that care about circular economy, clean air and a healthier future. Partners help us grow the network, reach more businesses and keep the platform independent and free to use.",
+    "cta": {
+      "primary": "See recyclers & services",
+      "primaryHref": "eco-organizations",
+      "secondary": "Browse the marketplace",
+      "secondaryHref": "marketplace"
+    }
+  },
+  "types": {
+    "heading": "How partners contribute",
+    "strategic": {
+      "title": "Strategic partners",
+      "description": "support EcoHub as part of broader policies on environment, waste and public health."
+    },
+    "technical": {
+      "title": "Technical partners",
+      "description": "provide expertise on recycling, logistics, data and digital tools."
+    },
+    "community": {
+      "title": "Community partners",
+      "description": "schools, NGOs and networks that help EcoHub reach local businesses and citizens."
+    }
+  },
+  "become": {
+    "heading": "Want your organization to support or integrate with EcoHub?",
+    "body": "Contact us to discuss partnership options, from simple visibility to deeper programmatic cooperation.",
+    "cta": "Become a partner"
+  },
+  "why": {
+    "heading": "Why this matters for businesses and citizens",
+    "body": "Strong partnerships mean that EcoHub is not just a website, but a living infrastructure: data is updated, organizations are verified, and new circular opportunities appear over time. This makes it easier for businesses to trust the platform, and for citizens and municipalities to recommend it as a practical tool, not just a campaign page."
+  }
+}

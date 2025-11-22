@@ -27,15 +27,13 @@ export default function MyOrganizationClient({
 }: MyOrganizationClientProps) {
   const t = useTranslations("my-organization")
   const [organizations, setOrganizations] = useState(initialOrganizations)
-  const [activeOrgId, setActiveOrgId] = useState<string | null>(
-    initialOrganizations[0]?.id || null
-  )
+  const [activeOrgId, setActiveOrgId] = useState<string | null>(initialOrganizations[0]?.id || null)
   const [activeTab, setActiveTab] = useState<"profile" | "analytics" | "members">("profile")
   const [analytics, setAnalytics] = useState<OrganizationAnalytics | null>(null)
   const [analyticsLoading, setAnalyticsLoading] = useState(false)
-  const [selectedTimeRange, setSelectedTimeRange] = useState<"last30Days" | "last90Days" | "allTime">(
-    "last30Days"
-  )
+  const [selectedTimeRange, setSelectedTimeRange] = useState<
+    "last30Days" | "last90Days" | "allTime"
+  >("last30Days")
 
   useEffect(() => {
     if (initialOrganizations.length > 0 && !activeOrgId) {
@@ -66,9 +64,7 @@ export default function MyOrganizationClient({
 
   if (error) {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-600">
-        {error}
-      </div>
+      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-600">{error}</div>
     )
   }
 
@@ -135,16 +131,13 @@ export default function MyOrganizationClient({
           />
         )}
         {activeTab === "members" && (
-          <MembersTab
-            organizationId={org.id}
-            userRole={org.role_in_organization}
-          />
+          <MembersTab organizationId={org.id} userRole={org.role_in_organization} />
         )}
 
         {/* Actions */}
         <div className="flex gap-4">
           <Link
-            href={`/${locale}/marketplace/create`}
+            href={`/${locale}/marketplace/add`}
             className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
           >
             <Plus className="h-5 w-5" />
@@ -239,16 +232,13 @@ export default function MyOrganizationClient({
         />
       )}
       {activeOrg && activeTab === "members" && (
-        <MembersTab
-          organizationId={activeOrg.id}
-          userRole={activeOrg.role_in_organization}
-        />
+        <MembersTab organizationId={activeOrg.id} userRole={activeOrg.role_in_organization} />
       )}
 
       {/* Actions */}
       <div className="flex gap-4">
         <Link
-          href={`/${locale}/marketplace/create`}
+          href={`/${locale}/marketplace/add`}
           className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
         >
           <Plus className="h-5 w-5" />

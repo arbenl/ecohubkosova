@@ -3,6 +3,7 @@
   "explore": "Explore",
   "partners": "Partners",
   "organizations": "Organizations",
+  "recyclersServices": "Recyclers & Services",
   "marketplace": "Marketplace",
   "about": "About",
   "listings": "Listings",
@@ -22,5 +23,8 @@
   "login": "Login",
   "startCollaboration": "Start Collaboration",
   "loading": "Loading...",
-  "exit": "Exit"
+  "exit": "Exit",
+  "myEcoHub": "My EcoHub",
+  "myOrganization": "My Organization",
+  "savedListings": "Saved Listings"
 }

@@ -3,6 +3,7 @@
   "explore": "Eksploro",
   "partners": "Partnerët",
   "organizations": "Organizata",
+  "recyclersServices": "Rikupëruesit & Shërbimet",
   "marketplace": "Tregu",
   "about": "Rreth Nesh",
   "listings": "Ofertat",
@@ -22,5 +23,8 @@
   "login": "Kyçu",
   "startCollaboration": "Fillo Bashkëpunimin",
   "loading": "Duke ngarkuar...",
-  "exit": "Dil"
+  "exit": "Dil",
+  "myEcoHub": "Meu EcoHub",
+  "myOrganization": "Organizata Ime",
+  "savedListings": "Ofertat e Ruajtura"
 }
