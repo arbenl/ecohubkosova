@@ -67,6 +67,29 @@ export default function MarketplaceClientPage({
     { value: "Tjera", label: t("categoryList.others") },
   ]
 
+  // Kosovo cities and towns
+  const kosovaLocations = [
+    "Prishtinë",
+    "Prizren",
+    "Pejë",
+    "Gjakovë",
+    "Mitrovicë",
+    "Vushtrri",
+    "Ferizaj",
+    "Obiliq",
+    "Drenas",
+    "Graçanicë",
+    "Kaçanik",
+    "Lipjan",
+    "Podujevë",
+    "Suva Reka",
+    "Shillovë",
+    "Kamenicë",
+    "Gjilan",
+    "Tetovë",
+    "Skopje (maqedonas)",
+  ]
+
   // Simple filter state management without navigation
   const [filters, setFilters] = useState(initialFilters)
 
@@ -289,16 +312,26 @@ export default function MarketplaceClientPage({
             </SelectContent>
           </Select>
 
-          {/* Location Filter */}
-          <Input
-            type="text"
-            placeholder={t("location")}
+          {/* Location Filter - Dropdown */}
+          <Select
+            onValueChange={(value) => updateFilter("location", value)}
             value={filters.location}
-            onChange={(e) => updateFilter("location", e.target.value)}
-            onBlur={() => updateFilter("location", filters.location)}
-            onKeyDown={(e) => e.key === "Enter" && updateFilter("location", filters.location)}
-            className="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-          />
+            disabled={isLoading}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={t("location")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">
+                {t("location")} - {t("allCategories")}
+              </SelectItem>
+              {kosovaLocations.map((city) => (
+                <SelectItem key={city} value={city}>
+                  {city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
           {/* Sort Control */}
           <Select
