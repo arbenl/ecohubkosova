@@ -153,7 +153,7 @@ export default function MarketplaceClientPage({
           params.set("condition", filters.condition.trim())
         }
 
-        if (filters.location.trim()) {
+        if (filters.location.trim() && filters.location !== "all") {
           params.set("location", filters.location.trim())
         }
 
@@ -322,7 +322,7 @@ export default function MarketplaceClientPage({
               <SelectValue placeholder={t("location")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">
+              <SelectItem value="all">
                 {t("location")} - {t("allCategories")}
               </SelectItem>
               {kosovaLocations.map((city) => (
