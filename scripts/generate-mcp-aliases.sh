@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define paths
-MCP_CONTEXT_PATH="/Users/arbenlila/development/mcp-context-server/dist/server.js"
+MCP_CONTEXT_PATH="/Users/arbenlila/development/ecohubkosova/tools/mcp-context-server/dist/server.js"
 ECOHUB_QA_PATH="/Users/arbenlila/development/ecohubkosova/tools/ecohub-qa/dist/index.js"
 
 # Check if files exist

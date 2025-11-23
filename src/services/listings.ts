@@ -1,7 +1,14 @@
 import { unstable_noStore as noStore } from "next/cache"
 import { and, asc, desc, eq, ilike } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
-import { marketplaceListings, organizationMembers, organizations, users } from "@/db/schema"
+import {
+  marketplaceListings,
+  organizationMembers,
+  organizations,
+  users,
+  ecoListings,
+  ecoCategories,
+} from "@/db/schema"
 import type { Listing } from "@/types"
 import type { ListingCreateInput } from "@/validation/listings"
 
@@ -72,7 +79,7 @@ const formatListingRow = (row: ListingRow): Listing => ({
 
 /**
  * Fetch marketplace listings with filtering, searching, and pagination.
- * 
+ *
  * Supports:
  * - Filtering by type (shes/blej or te-gjitha for all)
  * - Text search in title
@@ -81,7 +88,7 @@ const formatListingRow = (row: ListingRow): Listing => ({
  * - Location filtering
  * - Sorting by newest/oldest
  * - Pagination
- * 
+ *
  * Returns typed result with data, pagination flag, and optional error.
  * No profile required to view listings.
  */
@@ -136,7 +143,11 @@ export async function fetchListings({
       .leftJoin(users, eq(marketplaceListings.created_by_user_id, users.id))
       .leftJoin(organizations, eq(marketplaceListings.organization_id, organizations.id))
       .where(whereClause)
-      .orderBy(sort === "oldest" ? asc(marketplaceListings.created_at) : desc(marketplaceListings.created_at))
+      .orderBy(
+        sort === "oldest"
+          ? asc(marketplaceListings.created_at)
+          : desc(marketplaceListings.created_at)
+      )
       .limit(ITEMS_PER_PAGE + 1)
       .offset(offset)
 
@@ -155,7 +166,8 @@ export async function fetchListings({
       type: error instanceof Error ? error.constructor.name : typeof error,
       fullError: error,
     })
-    const errorMessage = error instanceof Error ? error.message : "Gabim gjatë ngarkimit të listimeve."
+    const errorMessage =
+      error instanceof Error ? error.message : "Gabim gjatë ngarkimit të listimeve."
     return {
       data: [],
       hasMore: false,
@@ -166,7 +178,8 @@ export async function fetchListings({
 
 /**
  * Fetch a single listing by ID.
- * Only returns approved listings.
+ * V2 Migration: Now queries eco_listings (V2) instead of tregu_listime (V1)
+ * Only returns ACTIVE + PUBLIC listings.
  */
 export async function fetchListingById(id: string) {
   noStore()
@@ -175,26 +188,54 @@ export async function fetchListingById(id: string) {
     const records = await db
       .get()
       .select({
-        listing: marketplaceListings,
-        owner_name: users.full_name,
-        owner_email: users.email,
-        organization_name: organizations.name,
-        organization_email: organizations.contact_email,
+        listing: ecoListings,
+        category_name_en: ecoCategories.name_en,
+        category_name_sq: ecoCategories.name_sq,
       })
-      .from(marketplaceListings)
-      .leftJoin(users, eq(marketplaceListings.created_by_user_id, users.id))
-      .leftJoin(organizations, eq(marketplaceListings.organization_id, organizations.id))
-      .where(eq(marketplaceListings.id, id))
+      .from(ecoListings)
+      .leftJoin(ecoCategories, eq(ecoListings.category_id, ecoCategories.id))
+      .where(
+        and(
+          eq(ecoListings.id, id),
+          eq(ecoListings.status, "ACTIVE"),
+          eq(ecoListings.visibility, "PUBLIC")
+        )
+      )
       .limit(1)
+
     const record = records[0]
 
     if (!record) {
-      throw new Error("Listimi nuk u gjet ose nuk është i aprovuar.")
+      return {
+        data: null,
+        error: "Listimi nuk u gjet ose nuk është i aprovuar.",
+      }
     }
 
-    return { data: formatListingRow(record), error: null as string | null }
+    // Map V2 data to V1 Listing type for backward compatibility
+    const listing: Listing = {
+      id: record.listing.id,
+      title: record.listing.title,
+      description: record.listing.description || "",
+      foto_url: null,
+      price: record.listing.price ? Number(record.listing.price) : null,
+      currency: record.listing.currency,
+      category: record.category_name_sq || record.category_name_en || "",
+      condition: record.listing.condition || "",
+      location: record.listing.city || "",
+      contact: "", // V2 doesn't store contact directly
+      created_at: record.listing.created_at.toISOString(),
+      user_id: record.listing.created_by_user_id,
+      is_published: true, // If it's ACTIVE and PUBLIC, it's published
+      quantity: record.listing.quantity?.toString() || "",
+      unit: record.listing.unit || "",
+      listing_type: record.listing.flow_type?.startsWith("OFFER") ? "shes" : "blej",
+    }
+
+    return { data: listing, error: null as string | null }
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Listimi nuk u gjet ose nuk është i aprovuar."
+    const errorMessage =
+      error instanceof Error ? error.message : "Listimi nuk u gjet ose nuk është i aprovuar."
     console.error("[fetchListingById] Query failed:", { id, error: errorMessage })
     return {
       data: null,
@@ -228,7 +269,10 @@ async function findApprovedOrganizationId(userId: string) {
   return membership?.organization_id ?? null
 }
 
-export async function createUserListing(userId: string, payload: ListingCreateInput): Promise<ListingMutationResult> {
+export async function createUserListing(
+  userId: string,
+  payload: ListingCreateInput
+): Promise<ListingMutationResult> {
   const price = formatPrice(payload.price)
   if (price === null) {
     return { error: "Çmimi është i detyrueshëm dhe duhet të jetë numër pozitiv." }
@@ -238,24 +282,21 @@ export async function createUserListing(userId: string, payload: ListingCreateIn
     const organizationId = await findApprovedOrganizationId(userId)
     const now = new Date()
 
-    await db
-      .get()
-      .insert(marketplaceListings)
-      .values({
-        created_by_user_id: userId,
-        organization_id: organizationId,
-        title: payload.title,
-        description: payload.description,
-        category: payload.category,
-        price: price,
-        unit: payload.unit,
-        location: payload.location,
-        quantity: payload.quantity,
-        listing_type: payload.listing_type,
-        is_approved: false,
-        created_at: now,
-        updated_at: now,
-      })
+    await db.get().insert(marketplaceListings).values({
+      created_by_user_id: userId,
+      organization_id: organizationId,
+      title: payload.title,
+      description: payload.description,
+      category: payload.category,
+      price: price,
+      unit: payload.unit,
+      location: payload.location,
+      quantity: payload.quantity,
+      listing_type: payload.listing_type,
+      is_approved: false,
+      created_at: now,
+      updated_at: now,
+    })
 
     return { success: true }
   } catch (error) {
@@ -290,7 +331,12 @@ export async function updateUserListing(
         is_approved: false,
         updated_at: new Date(),
       })
-      .where(and(eq(marketplaceListings.id, listingId), eq(marketplaceListings.created_by_user_id, userId)))
+      .where(
+        and(
+          eq(marketplaceListings.id, listingId),
+          eq(marketplaceListings.created_by_user_id, userId)
+        )
+      )
       .returning({ id: marketplaceListings.id })
 
     const updated = updateResult?.[0]
@@ -306,12 +352,20 @@ export async function updateUserListing(
   }
 }
 
-export async function deleteUserListing(listingId: string, userId: string): Promise<ListingMutationResult> {
+export async function deleteUserListing(
+  listingId: string,
+  userId: string
+): Promise<ListingMutationResult> {
   try {
     const deleteResult = await db
       .get()
       .delete(marketplaceListings)
-      .where(and(eq(marketplaceListings.id, listingId), eq(marketplaceListings.created_by_user_id, userId)))
+      .where(
+        and(
+          eq(marketplaceListings.id, listingId),
+          eq(marketplaceListings.created_by_user_id, userId)
+        )
+      )
       .returning({ id: marketplaceListings.id })
 
     const deleted = deleteResult?.[0]

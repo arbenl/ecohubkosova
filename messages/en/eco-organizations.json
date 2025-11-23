@@ -1,13 +1,15 @@
 {
-  "pageTitle": "Eco Organizations Directory",
-  "pageSubtitle": "Discover Kosovo's recycling and waste management organizations",
-  "filterRoleLabel": "Organization Role",
+  "pageTitle": "Recyclers & green organizations in Kosovo",
+  "pageSubtitle": "Discover recyclers, collectors, and eco-service providers.",
+  "filterRoleLabel": "Role",
+  "allRoles": "All roles",
   "filterCityLabel": "City",
-  "allRoles": "All Roles",
-  "allCities": "All Cities",
+  "allCities": "All cities",
+  "noResults": "No organizations match your filters",
+  "tryAdjustingFilters": "Try adjusting the role or city to see more results.",
   "roleLabels": {
     "RECYCLER": "Recycler",
-    "COLLECTOR": "Waste Collector",
+    "COLLECTOR": "Collector",
     "SERVICE_PROVIDER": "Service Provider",
     "PRODUCER": "Producer",
     "RESELLER": "Reseller",
@@ -16,24 +18,6 @@
     "RESEARCH": "Research"
   },
   "cardMainMaterials": "Main Materials",
-  "cardServiceAreas": "Service Areas",
   "cardCertifications": "Certifications",
-  "cardViewOrganization": "View Organization",
-  "cardViewListings": "View Listings from this Organization",
-  "emptyState": "No organizations found for this filter.",
-  "emptyStateHelp": "Try adjusting your filters or browse all organizations.",
-  "organizationPage": {
-    "title": "Organization Profile",
-    "role": "Organization Role",
-    "materials": "Waste Types Handled",
-    "areas": "Service Areas",
-    "certifications": "Certifications",
-    "description": "About",
-    "contact": "Contact",
-    "website": "Website",
-    "email": "Email",
-    "phone": "Phone",
-    "relatedListings": "Listings from this Organization",
-    "noListings": "No listings yet from this organization."
-  }
+  "cardViewOrganization": "View Organization"
 }

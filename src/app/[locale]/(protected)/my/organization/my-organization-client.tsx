@@ -12,6 +12,8 @@ import OrganizationOnboarding from "./organization-onboarding"
 import AnalyticsTab from "./analytics-tab"
 import MembersTab from "./members-tab"
 
+import { PageHeader } from "@/components/layout/page-header"
+
 interface MyOrganizationClientProps {
   locale: string
   initialOrganizations: UserOrganization[]
@@ -78,10 +80,15 @@ export default function MyOrganizationClient({
     const org = organizations[0]
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t("workspace.title")}</h1>
-          <p className="mt-2 text-gray-600">{org.name}</p>
-        </div>
+        <PageHeader title={t("workspace.title")} subtitle={org.name} className="rounded-xl">
+          <Link
+            href={`/${locale}/marketplace/add`}
+            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
+          >
+            <Plus className="h-5 w-5" />
+            {t("workspace.actions.createListing")}
+          </Link>
+        </PageHeader>
 
         {/* Tabs */}
         <div className="border-b border-gray-200">
@@ -133,17 +140,6 @@ export default function MyOrganizationClient({
         {activeTab === "members" && (
           <MembersTab organizationId={org.id} userRole={org.role_in_organization} />
         )}
-
-        {/* Actions */}
-        <div className="flex gap-4">
-          <Link
-            href={`/${locale}/marketplace/add`}
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
-          >
-            <Plus className="h-5 w-5" />
-            {t("workspace.actions.createListing")}
-          </Link>
-        </div>
       </div>
     )
   }
@@ -153,10 +149,19 @@ export default function MyOrganizationClient({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">{t("workspace.title")}</h1>
-        <p className="mt-2 text-gray-600">{t("onboarding.subtitle")}</p>
-      </div>
+      <PageHeader
+        title={t("workspace.title")}
+        subtitle={t("onboarding.subtitle")}
+        className="rounded-xl"
+      >
+        <Link
+          href={`/${locale}/marketplace/add`}
+          className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
+        >
+          <Plus className="h-5 w-5" />
+          {t("workspace.actions.createListing")}
+        </Link>
+      </PageHeader>
 
       {/* Organization Switcher */}
       <div className="flex items-center gap-3 bg-white rounded-lg border border-gray-200 p-4">
@@ -234,17 +239,6 @@ export default function MyOrganizationClient({
       {activeOrg && activeTab === "members" && (
         <MembersTab organizationId={activeOrg.id} userRole={activeOrg.role_in_organization} />
       )}
-
-      {/* Actions */}
-      <div className="flex gap-4">
-        <Link
-          href={`/${locale}/marketplace/add`}
-          className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
-        >
-          <Plus className="h-5 w-5" />
-          {t("workspace.actions.createListing")}
-        </Link>
-      </div>
     </div>
   )
 }

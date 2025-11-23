@@ -54,5 +54,13 @@
     "textiles": "Tekstile",
     "electronics": "Elektronikë",
     "others": "Tjera"
+  },
+  "savedListings": {
+    "title": "Ofertat e ruajtura",
+    "subtitle": "Mundësitë që dëshironi të ndiqni",
+    "emptyTitle": "Nuk keni ruajtur ende asnjë ofertë",
+    "emptyBody": "Shfletoni tregun dhe ruani ofertat që dëshironi t'i mbani nën vëzhgim.",
+    "browseCTA": "Shfleto tregun",
+    "count": "Oferta të ruajtura"
   }
 }

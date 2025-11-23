@@ -71,10 +71,7 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
     []
   )
 
-  const profileManager = useMemo(
-    () => new ProfileManager(profileFetchAbortRef),
-    []
-  )
+  const profileManager = useMemo(() => new ProfileManager(profileFetchAbortRef), [])
 
   const supabaseInitializer = useMemo(
     () => new SupabaseInitializer(supabase, profileManager, userStateManager, profileFetchAbortRef),
@@ -82,10 +79,7 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
   )
 
   const sessionExpirationHandler = useMemo(
-    () => new SessionExpirationHandler(
-      () => userStateManager.reset(),
-      startTransition
-    ),
+    () => new SessionExpirationHandler(() => userStateManager.reset(), startTransition),
     [userStateManager, startTransition]
   )
 
@@ -145,10 +139,22 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
     logAuthAction("primeUser", "Priming user on mount")
     setIsLoading(true)
     try {
+      // Create a timeout promise
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Auth timeout")), 5000)
+      )
+
+      // Race Supabase against the timeout
+       
       const {
         data: { user },
         error,
-      } = await supabase.auth.getUser()
+      } = (await Promise.race([
+        supabase.auth.getUser(),
+        timeoutPromise.then(() => {
+          throw new Error("Auth timeout")
+        }),
+      ])) as any
 
       if (error) {
         throw error
@@ -156,7 +162,7 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
 
       await hydrateUser(user ?? null)
     } catch (error) {
-      logAuthAction("primeUser", "Error during priming", {
+      logAuthAction("primeUser", "Error/Timeout during priming", {
         error: error instanceof Error ? error.message : String(error),
       })
       await hydrateUser(null)

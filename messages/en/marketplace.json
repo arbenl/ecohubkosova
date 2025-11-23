@@ -54,5 +54,13 @@
     "textiles": "Textiles",
     "electronics": "Electronics",
     "others": "Others"
+  },
+  "savedListings": {
+    "title": "Saved offers",
+    "subtitle": "Opportunities you want to follow",
+    "emptyTitle": "You haven't saved any listings yet",
+    "emptyBody": "Browse the marketplace and save the offers you want to keep an eye on.",
+    "browseCTA": "Browse marketplace",
+    "count": "Saved Listings"
   }
 }

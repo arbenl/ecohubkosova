@@ -3,8 +3,9 @@
 import { useTranslations } from "next-intl"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useMemo } from "react"
-import { ChevronRight } from "lucide-react"
+import { ChevronRight, Building2 } from "lucide-react"
 import Link from "next/link"
+import { EmptyStateBlock } from "@/components/shared/empty-state-block"
 
 interface Organization {
   id: string
@@ -130,10 +131,12 @@ export default function EcoOrganizationsClient({
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm p-12 text-center border border-gray-200">
-          <p className="text-gray-600 mb-2">{t("emptyState")}</p>
-          <p className="text-sm text-gray-500">{t("emptyStateHelp")}</p>
-        </div>
+        <EmptyStateBlock
+          icon={Building2}
+          title={t("noResults")}
+          description={t("tryAdjustingFilters")}
+          className="max-w-2xl mx-auto"
+        />
       )}
     </div>
   )
@@ -176,10 +179,7 @@ function EcoOrganizationCard({ organization, t, locale }: CardProps) {
             <p className="text-xs font-semibold text-gray-700 mb-2">{t("cardMainMaterials")}</p>
             <div className="flex flex-wrap gap-2">
               {organization.waste_types_handled.slice(0, 3).map((type) => (
-                <span
-                  key={type}
-                  className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
-                >
+                <span key={type} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
                   {type}
                 </span>
               ))}

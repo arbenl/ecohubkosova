@@ -13,7 +13,13 @@ export default async function MarketplacePageServer({
   searchParams,
 }: MarketplacePageProps) {
   const { locale } = await params
-  const { user } = await getServerUser()
+  let user = null
+  try {
+    const auth = await getServerUser()
+    user = auth.user
+  } catch (error) {
+    console.error("[Marketplace] Auth check failed, proceeding as guest:", error)
+  }
 
   return <MarketplaceClientPage locale={locale} initialSearchParams={searchParams ?? {}} />
 }

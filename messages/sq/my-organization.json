@@ -1,231 +1,77 @@
 {
-  "onboarding": {
-    "title": "Organizata Juaj",
-    "subtitle": "Menaxhoni prezencat tuaj në EcoHub Kosova",
-    "noOrgYet": "Nuk jeni anëtar i ndonjë organizate akoma",
-    "noOrgDescription": "Nëse përfaqësoni një biznes ose organizatë, krijoni një të re ose kërkoni të lidheni me një ekzistuese.",
-    "searchExisting": "Kërkoni organizatën tuaj në drejtori",
-    "createNew": "Krijoni një organizatë të re"
-  },
-  "claim": {
-    "title": "Kërkoni akses në organizatë",
-    "subtitle": "Kërkoni të lidheni me një organizatë ekzistuese",
-    "search": "Kërkoni sipas emrit ose qyteti",
-    "requestAccess": "Kërkoni akses",
-    "requestSubmitted": "Kërkesa juaj për akses është dërguar",
-    "success": "Jeni bashkuar në organizatë!",
-    "alreadyMember": "Ju jeni tashmë anëtar i kësaj organizate"
-  },
-  "create": {
-    "title": "Krijoni organizatën tuaj",
-    "subtitle": "Regjistroni biznesin ose organizatën tuaj në EcoHub",
-    "form": {
-      "name": "Emri i organizatës",
-      "namePlaceholder": "p.sh. GreenTech Kosova",
-      "description": "Përshkrimi",
-      "descriptionPlaceholder": "Përshkruani organizatën dhe punën tuaj...",
-      "type": "Lloji i organizatës",
-      "typeOJQ": "OJQ",
-      "typeCompany": "Ndërmarrje Sociale",
-      "typeEnterprise": "Kompani",
-      "primaryInterest": "Interesi primar",
-      "primaryInterestPlaceholder": "p.sh. Riciklim, Mbledhje Mbetjesh",
-      "contactPerson": "Emri i personit kontakti",
-      "contactPersonPlaceholder": "Emri juaj ose i menaxherit",
-      "contactEmail": "Email kontakti",
-      "contactEmailPlaceholder": "kontakt@organizata.com",
-      "location": "Qyteti",
-      "submit": "Krijoni organizatën",
-      "cancel": "Anullo"
-    },
-    "success": "Organizata juaj u krijua!",
-    "createError": "Gabim gjatë krijimit të organizatës"
-  },
   "workspace": {
-    "title": "Zona e punës",
-    "switchOrganization": "Ndrysho organizatën",
+    "title": "Organizata Ime",
+    "subtitle": "Menaxho profilin e organizatës dhe ofertat",
+    "switchOrganization": "Ndërro Organizatën",
     "section": {
-      "profile": "Profili i organizatës",
-      "listings": "Ofertat",
-      "actions": "Veprime"
-    },
-    "actions": {
-      "editProfile": "Redakto profilin",
-      "createListing": "Krijo ofertë të re",
-      "viewPublicProfile": "Shiko profilin publik"
+      "profile": "Profili"
     },
     "profile": {
-      "name": "Emri",
-      "type": "Lloji",
       "location": "Vendndodhja",
-      "description": "Përshkrimi",
-      "primaryInterest": "Interesi primar",
-      "contactPerson": "Personi kontakti",
+      "contactPerson": "Personi kontaktues",
       "contactEmail": "Email kontakti",
-      "status": "Statusi",
-      "statusApproved": "I aprovuar",
-      "statusPending": "Në pritje të aprovimit",
-      "memberRole": "Roli juaj",
-      "memberRoleAdmin": "Administrator",
-      "memberRoleEditor": "Redaktor",
-      "memberRoleViewer": "Shikues"
+      "primaryInterest": "Interesi kryesor",
+      "memberRoleAdmin": "Admin",
+      "statusPending": "Në pritje të aprovimit"
+    },
+    "actions": {
+      "viewPublicProfile": "Shiko profilin publik",
+      "editProfile": "Ndrysho profilin",
+      "createListing": "Krijo Ofertë"
     }
   },
-  "listings": {
-    "title": "Ofertat e organizatës",
-    "emptyTitle": "Nuk ka oferta akoma",
-    "emptyBody": "Krijoni ofertën tuaj të parë për të filluar",
-    "createFirstListing": "Krijo ofertën e parë",
-    "table": {
-      "title": "Titilli",
-      "type": "Lloji",
-      "status": "Statusi",
-      "createdAt": "Krijuar",
-      "actions": "Veprime",
-      "edit": "Redakto",
-      "delete": "Fshi"
-    }
-  },
-  "form": {
-    "invalidOrg": "Organizata nuk është e vlefshme",
-    "createError": "Gabim gjatë krijimit të organizatës"
+  "onboarding": {
+    "title": "Lidhni organizatën tuaj",
+    "subtitle": "Menaxho profilin e organizatës dhe ofertat",
+    "createChoice": "Krijo një organizatë të re",
+    "claimChoice": "Kërko një organizatë ekzistuese"
   },
   "analytics": {
     "tabs": {
-      "analytics": "Analytics"
-    },
-    "title": "Ndikimi & Përfundime",
-    "subtitle": "Ndjekini se si njerëzit po lidhen me ofertat tuaj",
-    "range": {
-      "label": "Periudha kohore",
-      "last30Days": "30 ditët e fundit",
-      "last90Days": "90 ditët e fundit",
-      "allTime": "Gjithmonë"
-    },
-    "summary": {
-      "title": "Ndikimi juaj në shikim",
-      "views": "Shikime",
-      "viewsDescription": "Sa shpesh shikësohen ofertat tuaj",
-      "contacts": "Kontakte",
-      "contactsDescription": "Kërkesa për interes të marra",
-      "saves": "Të ruajtura",
-      "savesDescription": "Shtuar në të preferuarat",
-      "shares": "Ndajje",
-      "sharesDescription": "Herë të ndara me të tjerë"
-    },
-    "listings": {
-      "title": "Si funksionojnë ofertat tuaj",
-      "table": {
-        "name": "Emri i ofertës",
-        "status": "Statusi",
-        "views": "Shikime",
-        "contacts": "Kontakte",
-        "saves": "Të ruajtura",
-        "shares": "Ndajje"
-      },
-      "empty": "Nuk ka oferta me aktivitet akoma",
-      "noData": "Nuk ka të dhëna të disponueshme për këtë periudhë kohore"
+      "analytics": "Analitika"
     },
     "empty": {
-      "title": "Nuk ka aktiviteti akoma",
-      "description": "Kur njerëzit fillojnë të shikojnë dhe të ruajnë ofertat tuaj, aktiviteti i tyre do të shfaqet këtu."
+      "title": "Ende nuk ka aktivitet",
+      "description": "Sapo njerëzit të fillojnë të shikojnë dhe kontaktojnë ofertat tuaja, këtu do të shfaqen statistikat për shikimet, kontaktet, ruajtjet dhe shpërndarjet."
     }
   },
   "members": {
     "tabs": {
-      "members": "Ekipa"
+      "members": "Anëtarët"
     },
-    "title": "Ekipa & Bashkëpunim",
-    "subtitle": "Menaxhoni anëtarët e ekipës së organizatës tuaj",
+    "title": "Anëtarët e Ekipit",
+    "subtitle": "Personat që menaxhojnë këtë organizatë në EcoHub",
+    "empty": {
+      "title": "Ende nuk ka anëtarë",
+      "description": "Ftoni kolegët t'ju ndihmojnë në menaxhimin e ofertave dhe profilit tuaj."
+    },
+    "invite": {
+      "title": "Fto Anëtar",
+      "emailLabel": "Adresa e Email-it",
+      "emailPlaceholder": "kolegu@example.com",
+      "roleLabel": "Roli",
+      "submit": "Dërgo Ftesën",
+      "sending": "Duke dërguar...",
+      "cancel": "Anulo",
+      "error": "Dështoi dërgimi i ftesës"
+    },
     "table": {
       "name": "Emri",
       "email": "Email",
       "role": "Roli",
       "joinedDate": "U bashkua",
-      "actions": "Veprime"
+      "actions": "Veprimet"
     },
     "roleLabels": {
-      "ADMIN": "Administrator",
-      "EDITOR": "Redaktor",
+      "ADMIN": "Admin",
+      "EDITOR": "Redaktues",
       "VIEWER": "Shikues"
     },
-    "roleDescriptions": {
-      "ADMIN": "Akses i plotë në cilësimet e organizatës dhe menaxhimin e ekipës",
-      "EDITOR": "Mund të krijoni dhe redaktoni ofertat",
-      "VIEWER": "Mund të shikoni informacionin e organizatës"
-    },
     "actions": {
-      "changeRole": "Ndrysho rolin",
-      "remove": "Hiq nga ekipa",
-      "leaving": "Lëshoni organizatën"
-    },
-    "empty": {
-      "title": "Ekipa juaj sapo po fillon",
-      "description": "Ftoni anëtarë të ekipës për të bashkëpunuar dhe menaxhuar organizatën tuaj bashkë"
-    },
-    "invite": {
-      "title": "Ftoni anëtar të ekipës",
-      "description": "Ftoni dikë të bashkohet me ekipën e organizatës tuaj",
-      "emailLabel": "Adresa e emailit",
-      "emailPlaceholder": "anëtar@shembull.com",
-      "roleLabel": "Roli",
-      "roleDescription": "Zgjidhni rolin për këtë anëtar",
-      "submit": "Dërgoni ftesën",
-      "cancel": "Anullo",
-      "sending": "Po dërgohej...",
-      "success": "Ftesa u dërgua!",
-      "successDescription": "Një ftesë u dërgua në {email}",
-      "error": "Dështoi të dërgohej ftesa",
-      "invalidEmail": "Ju lutemi, futni një adresë email të vlefshme",
-      "requiredRole": "Ju lutemi, zgjidhni një rol"
-    },
-    "pending": {
-      "title": "Ftesat në pritje",
-      "emptyTitle": "Nuk ka ftesa në pritje",
-      "emptyDescription": "Të gjitha ftesat janë pranuar ose anuluar",
-      "table": {
-        "email": "Email",
-        "role": "Roli",
-        "sentDate": "U dërgua",
-        "actions": "Veprime"
-      },
-      "actions": {
-        "revoke": "Anuloni ftesën",
-        "revoking": "Po anulohet...",
-        "revoked": "Ftesa u anulua"
-      }
+      "remove": "Hiq anëtarin"
     },
     "confirmations": {
-      "removeTitle": "Të hiqet anëtar i ekipës?",
-      "removeDescription": "A jeni i sigurt që doni të hiqni {name} nga organizata? Ky veprim nuk mund të ndryshojë.",
-      "removeButton": "Hiq",
-      "leaveTitle": "Të lihet organizata?",
-      "leaveDescription": "A jeni i sigurt që doni të lini këtë organizatë? Mund të kërkoni të lidheni përsëri më vonë.",
-      "leaveButton": "Largohu",
-      "lastAdminTitle": "Nuk mund të hiqet administratori i fundit",
-      "lastAdminDescription": "Të paktën një administrator duhet të mbetet në organizatë",
-      "lastAdminButton": "Kuptuar"
-    },
-    "notifications": {
-      "roleChanged": "{name} është tani {role}",
-      "memberRemoved": "{name} u hoq nga organizata",
-      "youLeft": "Ju keni lënë organizatën",
-      "invitationError": "Nuk mund të dërgohet ftesa. Ju lutemi, provoni përsëri."
+      "removeDescription": "Jeni i sigurt që dëshironi të hiqni {name} nga kjo organizatë?"
     }
-  },
-  "inviteAccept": {
-    "title": "Bashkohuni me organizatën",
-    "subtitle": "Jeni ftuar të bashkoheni me {organizationName}",
-    "roleDescription": "Do të bashkoheni si: {role}",
-    "accept": "Pranuaj ftesën",
-    "decline": "Refuzo",
-    "accepting": "Po pranohej...",
-    "accepted": "Jeni bashkuar me organizatën!",
-    "invalid": "Kjo ftesë nuk është më e vlefshme",
-    "invalidDescription": "Ftesa mund të jetë anuluar ose e skaduar. Ju lutemi, kontaktoni administratorin e organizatës.",
-    "alreadyMember": "Jeni tashmë anëtar i kësaj organizate",
-    "emailMismatch": "Kjo ftesë nuk përputhet me adresën tuaj të emailit",
-    "error": "Ndodhi një gabim gjatë pranimit të ftesës"
   }
 }
-

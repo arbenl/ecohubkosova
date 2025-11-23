@@ -1,39 +1,23 @@
 {
-  "pageTitle": "Direktorium i Organizatave Eco",
-  "pageSubtitle": "Zbuloni organizatat e riciklimit dhe menaxhimit të mbeturinave të Kosovës",
-  "filterRoleLabel": "Roli i Organizatës",
+  "pageTitle": "Ricikluesit & organizatat e gjelbra në Kosovë",
+  "pageSubtitle": "Zbuloni ricikluesit, grumbulluesit dhe ofruesit e shërbimeve ekologjike.",
+  "filterRoleLabel": "Roli",
+  "allRoles": "Të gjitha rolet",
   "filterCityLabel": "Qyteti",
-  "allRoles": "Të Gjitha Rolet",
-  "allCities": "Të Gjitha Qytetet",
+  "allCities": "Të gjitha qytetet",
+  "noResults": "Asnjë organizatë nuk përputhet me filtrat tuaj",
+  "tryAdjustingFilters": "Provoni të ndryshoni rolin ose qytetin për të parë më shumë rezultate.",
   "roleLabels": {
     "RECYCLER": "Riciklues",
-    "COLLECTOR": "Mbledhës Mbeturinash",
+    "COLLECTOR": "Grumbullues",
     "SERVICE_PROVIDER": "Ofrues Shërbimi",
     "PRODUCER": "Prodhues",
     "RESELLER": "Rishitës",
     "PUBLIC_INSTITUTION": "Institucion Publik",
     "NGO": "OJQ",
-    "RESEARCH": "Kërkime"
+    "RESEARCH": "Hulumtim"
   },
   "cardMainMaterials": "Materialet Kryesore",
-  "cardServiceAreas": "Zonat e Shërbimit",
-  "cardCertifications": "Sertifikimet",
-  "cardViewOrganization": "Shiko Organizatën",
-  "cardViewListings": "Shiko Shpalljet nga kjo Organizatë",
-  "emptyState": "Nuk u gjetën organizata për këtë filtër.",
-  "emptyStateHelp": "Përpiquni të ndryshoni filtrat ose shikoni të gjitha organizatat.",
-  "organizationPage": {
-    "title": "Profili i Organizatës",
-    "role": "Roli i Organizatës",
-    "materials": "Llojat e Mbeturinave të Përpunuara",
-    "areas": "Zonat e Shërbimit",
-    "certifications": "Sertifikimet",
-    "description": "Rreth",
-    "contact": "Kontakti",
-    "website": "Faqja e Internetit",
-    "email": "Email",
-    "phone": "Telefon",
-    "relatedListings": "Shpalljet nga kjo Organizatë",
-    "noListings": "Nuk ka akoma shpalljenga kjo organizatë."
-  }
+  "cardCertifications": "Certifikimet",
+  "cardViewOrganization": "Shiko Organizatën"
 }

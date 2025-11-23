@@ -15,12 +15,13 @@ CREATE TABLE public.organization_member_invites (
   created_by_user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE SET NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-  accepted_at TIMESTAMP WITH TIME ZONE,
-
-  -- Ensure unique pending invites per organization/email
-  CONSTRAINT unique_pending_invite_per_org_email UNIQUE (organization_id, email, status)
-    WHERE status = 'PENDING'
+  accepted_at TIMESTAMP WITH TIME ZONE
 );
+
+-- Create partial unique index for pending invites (replaces the inline constraint)
+CREATE UNIQUE INDEX unique_pending_invite_per_org_email 
+  ON public.organization_member_invites(organization_id, email) 
+  WHERE status = 'PENDING';
 
 -- Create indexes for common queries
 CREATE INDEX idx_organization_member_invites_token ON public.organization_member_invites(token);

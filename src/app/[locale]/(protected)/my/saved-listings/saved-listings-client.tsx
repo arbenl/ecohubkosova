@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Bookmark } from "lucide-react"
 import type { EcoListing } from "@/db/schema"
 import SavedListingCard from "./saved-listing-card"
+import { PageHeader } from "@/components/layout/page-header"
+import { EmptyStateBlock } from "@/components/shared/empty-state-block"
 
 interface SavedListingsClientProps {
   initialListings: EcoListing[]
@@ -32,20 +33,14 @@ export default function SavedListingsClient({
   if (listings.length === 0) {
     return (
       <div className="max-w-2xl mx-auto">
-        <Card className="border-0 shadow-lg">
-          <CardHeader className="text-center py-12">
-            <div className="mb-4">
-              <Bookmark className="h-16 w-16 text-gray-300 mx-auto" />
-            </div>
-            <CardTitle className="text-2xl mb-2">{t("savedListings.emptyTitle")}</CardTitle>
-            <CardDescription className="text-base mb-6">
-              {t("savedListings.emptyBody")}
-            </CardDescription>
-            <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
-              <Link href={`/${locale}/marketplace`}>{t("savedListings.browseCTA")}</Link>
-            </Button>
-          </CardHeader>
-        </Card>
+        <EmptyStateBlock
+          icon={Bookmark}
+          title={t("savedListings.emptyTitle")}
+          description={t("savedListings.emptyBody")}
+          actionLabel={t("savedListings.browseCTA")}
+          actionHref={`/${locale}/marketplace`}
+          className="mb-8"
+        />
 
         <div className="mt-8 text-center">
           <Button variant="ghost" asChild>
@@ -60,24 +55,17 @@ export default function SavedListingsClient({
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto space-y-8">
       {/* Summary */}
-      <Card className="mb-8 border-0 shadow-lg bg-white/80 backdrop-blur">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <Bookmark className="h-6 w-6 text-emerald-600" />
-                {total} {t("savedListings.count", { count: total })}
-              </CardTitle>
-              <CardDescription>Opportunities you want to track</CardDescription>
-            </div>
-            <Button variant="ghost" asChild>
-              <Link href={`/${locale}/marketplace`}>Browse more</Link>
-            </Button>
-          </div>
-        </CardHeader>
-      </Card>
+      <PageHeader
+        title={`${listings.length} ${t("savedListings.count", { count: listings.length })}`}
+        subtitle="Opportunities you want to track"
+        className="rounded-xl"
+      >
+        <Button variant="ghost" asChild>
+          <Link href={`/${locale}/marketplace`}>Browse more</Link>
+        </Button>
+      </PageHeader>
 
       {/* Listings Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

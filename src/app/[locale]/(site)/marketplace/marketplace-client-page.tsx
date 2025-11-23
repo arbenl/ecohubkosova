@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ListingCard } from "@/components/listings/ListingCard"
+import { ListingCardV2 } from "@/components/marketplace-v2/ListingCardV2"
 import type { Listing } from "@/types"
 import { Search, SlidersHorizontal } from "lucide-react"
 import { useEffect, useState, useCallback, useMemo } from "react"
@@ -112,6 +112,7 @@ export default function MarketplaceClientPage({
         const params = new URLSearchParams()
         params.set("page", filters.page.toString())
         params.set("pageSize", "12")
+        params.set("locale", locale) // Pass locale to API
 
         if (filters.type !== "te-gjitha") {
           params.set("type", filters.type)
@@ -337,7 +338,7 @@ export default function MarketplaceClientPage({
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {listings.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} onContact={handleContactClick} />
+            <ListingCardV2 key={listing.id} listing={listing} locale={locale} />
           ))}
         </div>
       )}

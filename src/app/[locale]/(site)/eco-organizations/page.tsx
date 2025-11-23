@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server"
 import { and, eq, ilike } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
 import { ecoOrganizations, organizations } from "@/db/schema"
+import { PageHeader } from "@/components/layout/page-header"
 import EcoOrganizationsClient from "./EcoOrganizationsClient"
 import type { Metadata } from "next"
 
@@ -75,7 +76,8 @@ async function getDistinctCities(): Promise<string[]> {
       .selectDistinct({
         city: organizations.location,
       })
-      .from(organizations)
+      .from(ecoOrganizations)
+      .innerJoin(organizations, eq(ecoOrganizations.organization_id, organizations.id))
       .where(eq(organizations.is_approved, true))
       .orderBy(organizations.location)
 
@@ -104,13 +106,7 @@ export default async function EcoOrganizationsPage({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-200">
-        <div className="container mx-auto px-4 md:px-6 py-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-green-900 mb-2">{t("pageTitle")}</h1>
-          <p className="text-lg text-green-700">{t("pageSubtitle")}</p>
-        </div>
-      </div>
+      <PageHeader title={t("pageTitle")} subtitle={t("pageSubtitle")} />
 
       {/* Content */}
       <div className="container mx-auto px-4 md:px-6 py-12">

@@ -26,6 +26,8 @@ export default getRequestConfig(async ({ locale }) => {
     metadata,
     profile,
     marketplaceV2,
+    myOrganization,
+    ecoOrganizations,
   ] = await Promise.all([
     import(`../../messages/${validLocale}/navigation.json`),
     import(`../../messages/${validLocale}/cta.json`),
@@ -46,6 +48,8 @@ export default getRequestConfig(async ({ locale }) => {
     import(`../../messages/${validLocale}/metadata.json`),
     import(`../../messages/${validLocale}/profile.json`),
     import(`../../messages/${validLocale}/marketplace-v2.json`),
+    import(`../../messages/${validLocale}/my-organization.json`),
+    import(`../../messages/${validLocale}/eco-organizations.json`),
   ])
 
   return {
@@ -70,6 +74,8 @@ export default getRequestConfig(async ({ locale }) => {
       metadata: metadata.default,
       profile: profile.default,
       "marketplace-v2": marketplaceV2.default,
+      "my-organization": myOrganization.default,
+      "eco-organizations": ecoOrganizations.default,
     },
   }
 })
