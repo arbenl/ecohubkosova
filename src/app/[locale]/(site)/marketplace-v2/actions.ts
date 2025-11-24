@@ -8,6 +8,15 @@ import { listingFormSchema, type ListingFormInput } from "@/validation/listings"
 import { db } from "@/lib/drizzle"
 import { ecoListings, ecoListingMedia } from "@/db/schema/marketplace-v2"
 import { eq } from "drizzle-orm"
+import { isMarketplaceV2WritesEnabled } from "@/lib/env"
+
+const warnIfV2FlagDisabled = () => {
+  if (!isMarketplaceV2WritesEnabled()) {
+    console.warn(
+      "[marketplace] USE_MARKETPLACE_V2_WRITES is false, but V1 path is retired. Continuing with eco_listings."
+    )
+  }
+}
 
 /**
  * Create a new listing
@@ -33,6 +42,8 @@ export async function createListingAction(formData: ListingFormInput, locale: st
   const payload = parsed.data
 
   try {
+    warnIfV2FlagDisabled()
+
     const result = await db
       .get()
       .insert(ecoListings)
@@ -119,6 +130,8 @@ export async function updateListingAction(
   const payload = parsed.data
 
   try {
+    warnIfV2FlagDisabled()
+
     // Verify ownership
     const existingListing = await db
       .get()

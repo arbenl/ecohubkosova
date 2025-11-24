@@ -2,9 +2,9 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr"
 import { NextRequest, NextResponse } from "next/server"
 import createIntlMiddleware from "next-intl/middleware"
-import { locales, defaultLocale } from "./src/lib/locales"
+import { defaultLocale, deriveLocaleFromPath, locales } from "./src/lib/locale"
 
-const PROTECTED_ROUTES = ["/dashboard", "/profile", "/admin", "/settings", "/listings"]
+const PROTECTED_ROUTES = ["/dashboard", "/profile", "/admin", "/settings", "/listings", "/my"]
 const AUTH_ROUTES = ["/login", "/register"]
 
 // Create the next-intl middleware
@@ -24,8 +24,8 @@ export async function middleware(request: NextRequest) {
     const pathname = url.pathname
 
     // Extract locale from pathname (after intl middleware processing)
-    const locale = locales.find((loc) => pathname.startsWith(`/${loc}/`) || pathname === `/${loc}`)
-    const pathWithoutLocale = locale ? pathname.replace(`/${locale}`, "") : pathname
+    const locale = deriveLocaleFromPath(pathname)
+    const pathWithoutLocale = pathname.startsWith(`/${locale}`) ? pathname.replace(`/${locale}`, "") : pathname
 
     // Create response with intl's headers
     let response = intlResponse || NextResponse.next()
@@ -56,12 +56,17 @@ export async function middleware(request: NextRequest) {
 
     // If user is not logged in and tries to access a protected route, redirect to login
     if (!session && PROTECTED_ROUTES.some((route) => pathWithoutLocale.startsWith(route))) {
-      return NextResponse.redirect(new URL(`/${locale || defaultLocale}/login`, request.url))
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
     }
 
-    // If user is logged in and tries to access an auth route, redirect to dashboard
+    // If user is logged in and tries to access an auth route, redirect to workspace
     if (session && AUTH_ROUTES.some((route) => pathWithoutLocale.startsWith(route))) {
-      return NextResponse.redirect(new URL(`/${locale || defaultLocale}/dashboard`, request.url))
+      return NextResponse.redirect(new URL(`/${locale}/my`, request.url))
+    }
+
+    // Redirect legacy dashboard paths to new workspace destination
+    if (session && pathWithoutLocale.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL(`/${locale}/my`, request.url))
     }
 
     return response
@@ -78,9 +83,10 @@ export async function middleware(request: NextRequest) {
 // Match all requests except Next internals and static assets
 export const config = {
   matcher: [
-    // Match root and locale-prefixed routes only
-    "/",
-    "/(sq|en)/:path*",
+    // Match all pathnames except for
+    // - … if they start with `/api`, `/_next` or `/_vercel`
+    // - … the ones containing a dot (e.g. `favicon.ico`)
+    '/((?!api|_next|_vercel|.*\\..*).*)',
   ],
 }
 

@@ -43,12 +43,17 @@ export default function MarketplaceV2Client({ locale, user }: MarketplaceV2Clien
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const requestedPage = useMemo(() => parsePageParam(searchParams.get("page")), [searchParams])
-  const requestedLimit = useMemo(() => parseLimitParam(searchParams.get("limit")), [searchParams])
+  const searchParamsString = useMemo(() => searchParams.toString(), [searchParams])
+  const requestedPage = useMemo(() => parsePageParam(searchParams.get("page")), [searchParamsString])
+  const requestedLimit = useMemo(() => parseLimitParam(searchParams.get("limit")), [searchParamsString])
 
   useEffect(() => {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 10000) // 10s timeout
+
+    const paramsFromUrl = new URLSearchParams(searchParamsString)
+    const q = paramsFromUrl.get("q") || ""
+    const flowType = paramsFromUrl.get("flowType") || ""
 
     async function fetchListings() {
       try {
@@ -57,9 +62,6 @@ export default function MarketplaceV2Client({ locale, user }: MarketplaceV2Clien
 
         // Build query string from search params
         const params = new URLSearchParams()
-
-        const q = searchParams.get("q")
-        const flowType = searchParams.get("flowType")
 
         if (q) params.set("q", q)
         if (flowType) params.set("flowType", flowType)
@@ -94,13 +96,13 @@ export default function MarketplaceV2Client({ locale, user }: MarketplaceV2Clien
           })
 
           // Normalize URL if API adjusted page/limit (e.g., clamped to last page)
-          const currentPageParam = searchParams.get("page") || "1"
-          const currentLimitParam = searchParams.get("limit") || `${DEFAULT_LIMIT}`
+          const currentPageParam = paramsFromUrl.get("page") || "1"
+          const currentLimitParam = paramsFromUrl.get("limit") || `${DEFAULT_LIMIT}`
           if (
             data.page?.toString() !== currentPageParam ||
             data.limit?.toString() !== currentLimitParam
           ) {
-            const normalizedParams = new URLSearchParams(searchParams.toString())
+            const normalizedParams = new URLSearchParams(searchParamsString)
             normalizedParams.set("page", data.page.toString())
             normalizedParams.set("limit", data.limit.toString())
             router.replace(`?${normalizedParams.toString()}`, { scroll: false })
@@ -124,7 +126,7 @@ export default function MarketplaceV2Client({ locale, user }: MarketplaceV2Clien
       clearTimeout(timeoutId)
       controller.abort()
     }
-  }, [searchParams, locale, router, requestedPage, requestedLimit])
+  }, [searchParamsString, locale, router, requestedPage, requestedLimit])
 
   const handlePageChange = (page: number) => {
     const nextPage = Math.max(1, page)
@@ -147,7 +149,7 @@ export default function MarketplaceV2Client({ locale, user }: MarketplaceV2Clien
         </div>
 
         {/* Grid skeleton */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <ListingCardSkeleton key={i} />
           ))}
@@ -212,7 +214,7 @@ export default function MarketplaceV2Client({ locale, user }: MarketplaceV2Clien
           </div>
 
           {/* Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {listings.map((listing) => (
               <ListingCardV2 key={listing.id} listing={listing} locale={locale} />
             ))}

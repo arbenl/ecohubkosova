@@ -39,21 +39,22 @@ export function useLatestArticlesSection(latestArticles: Article[] = []) {
 }
 
 export function useKeyPartnersSection(keyPartners: Partner[] = []) {
+  const locale = useLocale()
   const items = useMemo(
     () =>
       (keyPartners ?? []).map((partner) => ({
         id: partner.id,
         name: partner.name,
         meta: `${partner.type} • ${partner.location}`,
-        href: `/partners/${partner.id}`,
+        href: `/${locale}/partners/${partner.id}`,
       })),
-    [keyPartners]
+    [keyPartners, locale]
   )
 
   return {
     items,
     hasItems: items.length > 0,
-    ctaHref: "/partners",
+    ctaHref: `/${locale}/partners`,
     ctaLabel: "Shiko të gjithë partnerët",
     emptyMessage: "Nuk ka partnerë të disponueshëm aktualisht.",
   }

@@ -6,6 +6,12 @@
 pnpm dev:orchestrator && cat prompts/bootstrap.claude.md
 ```
 
+## VS Code One-Click
+
+- Open the EcoHub folder and run the `eco:dev-all` task when prompted (runs MCP + Next dev in parallel).
+- Individual tasks: `eco:mcp-servers`, `eco:next-dev`, `eco:dev-orchestrator`, `eco:mcp-health-check`.
+- Debug config `EcoHub: Next.js dev` uses `eco:dev-all` as its `preLaunchTask` to ensure everything is up.
+
 ## The 5-Minute Setup
 
 1. **Run orchestrator** (takes ~10 seconds):
@@ -45,6 +51,14 @@ pnpm dev:orchestrator && cat prompts/bootstrap.claude.md
 | -------------- | ------------------------------------------------------ |
 | `mcp-outputs/` | Live status logs (Supabase, build health, MCP servers) |
 | `prompts/`     | AI model-specific bootstraps                           |
+
+---
+
+## MCP Health Check (single source of truth)
+
+- Run `./scripts/check-mcp-health.sh` (or `node tools/run-mcp-task.js build_health '{}'`) before any model session.
+- Health snapshots: `mcp-outputs/mcp-health.json` and `mcp-outputs/build_health.log`.
+- VS Code task: `eco:mcp-health-check`.
 
 ---
 

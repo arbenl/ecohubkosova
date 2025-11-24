@@ -3,6 +3,7 @@
 import { Leaf, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 interface EmptyStateProps {
     locale: string
@@ -10,32 +11,30 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({ locale, user }: EmptyStateProps) {
+    const t = useTranslations("marketplace-v2")
+    
     return (
         <div className="flex flex-col items-center justify-center py-16 px-4">
-            <div className="rounded-full bg-green-50 p-6 mb-6">
-                <Leaf className="h-16 w-16 text-green-600" />
+            <div className="rounded-full bg-emerald-50 p-6 mb-6">
+                <Leaf className="h-16 w-16 text-emerald-600" />
             </div>
 
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                {locale === "sq"
-                    ? "Asnjë ofertë aktualisht"
-                    : "No listings yet"}
+                {t("emptyState")}
             </h3>
 
             <p className="text-muted-foreground text-center max-w-md mb-6">
-                {locale === "sq"
-                    ? "Bëhu i pari që ofron materiale, produkte ose shërbime në ekonominë qarkulluese."
-                    : "Be the first to offer materials, products, or services in the circular economy."}
+                {t("emptyStateDescription")}
             </p>
 
             {user && (
                 <Button
                     asChild
-                    className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+                    className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800"
                 >
                     <Link href={`/${locale}/marketplace/add`}>
                         <Plus className="mr-2 h-4 w-4" />
-                        {locale === "sq" ? "Shto Ofertë" : "Create Listing"}
+                        {t("createListing")}
                     </Link>
                 </Button>
             )}

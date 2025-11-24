@@ -1,52 +1,63 @@
-import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react"
-import { describe, expect, it, vi } from "vitest"
+import { render, screen, waitFor } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import { describe, expect, it, beforeEach, vi, afterEach } from "vitest"
 import MarketplaceClientPage from "./marketplace-client-page"
-import { NextIntlClientProvider } from "next-intl"
 
-// Mock hooks
-vi.mock("@/hooks/use-marketplace-filters", () => ({
-  useMarketplaceFilters: vi.fn(),
-}))
-
-// Mock next-intl
+// Mock translations to simple echo values
 vi.mock("next-intl", () => ({
-  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  useLocale: () => "en",
+  useTranslations: () => (key: string) => key,
 }))
 
-// Mock Supabase
-vi.mock("@/lib/supabase", () => ({
-  createClientSupabaseClient: vi.fn(() => ({
-    from: vi.fn(() => ({
-      select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          order: vi.fn(() => ({
-            limit: vi.fn(() => Promise.resolve({ data: [], error: null })),
-          })),
-        })),
-      })),
-    })),
-  })),
+// Simplify ListingCardV2 to avoid Radix/Intl complexity
+vi.mock("@/components/marketplace-v2/ListingCardV2", () => ({
+  ListingCardV2: ({ listing }: { listing: { title: string } }) => (
+    <div data-testid="listing-card">{listing.title}</div>
+  ),
 }))
 
-describe("MarketplaceClientPage component", () => {
-  it("renders without crashing", () => {
-    expect(() =>
-      render(
-        <NextIntlClientProvider locale="en" messages={{}}>
-          <MarketplaceClientPage locale="en" initialSearchParams={{}} showHero={true} />
-        </NextIntlClientProvider>
-      )
-    ).not.toThrow()
+describe("MarketplaceClientPage filter → request wiring", () => {
+  const fetchMock = vi.fn()
+
+  beforeEach(() => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({ listings: [], hasMore: false }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
   })
 
-  it("renders with basic structure", () => {
-    const { container } = render(
-      <NextIntlClientProvider locale="en" messages={{}}>
-        <MarketplaceClientPage locale="en" initialSearchParams={{}} showHero={false} />
-      </NextIntlClientProvider>
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    vi.clearAllMocks()
+  })
+
+  it("does not send category when selecting 'all categories'", async () => {
+    render(<MarketplaceClientPage locale="sq" initialSearchParams={{ category: "all" }} />)
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+
+    const url = fetchMock.mock.calls[0][0] as string
+    expect(url).not.toContain("category=")
+    expect(url).toContain("locale=sq")
+  })
+
+  it("sends category slug when a specific category is selected", async () => {
+    const user = userEvent.setup()
+    render(<MarketplaceClientPage locale="sq" initialSearchParams={{}} />)
+
+    // Wait for initial load
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
+
+    const trigger = screen.getByText("category")
+    await user.click(trigger)
+    const option = await screen.findByText("categoryList.recyclable_materials")
+    await user.click(option)
+
+    await waitFor(() =>
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining("category=recycled-metals"),
+        expect.anything()
+      )
     )
-    expect(container).toBeInTheDocument()
   })
 })

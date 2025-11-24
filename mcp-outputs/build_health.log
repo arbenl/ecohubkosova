@@ -1,0 +1,16 @@
+{
+  "status": "Build Health Snapshot",
+  "lint": {
+    "pass": true,
+    "output": "\n> my-v0-project@0.1.0 lint /Users/arbenlila/development/ecohubkosova\n> node scripts/check-src-structure.mjs\n\n✓ Source layout check passed.\n"
+  },
+  "tsc": {
+    "pass": true,
+    "output": ""
+  },
+  "build": {
+    "pass": false,
+    "output": "Command failed: set -o pipefail; pnpm build 2>&1 | tail -20"
+  },
+  "timestamp": "2025-11-24T16:58:26.648Z"
+}

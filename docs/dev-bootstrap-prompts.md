@@ -17,6 +17,10 @@ Context for this workspace (EcoHub Kosova):
     - locating real files in this repo,
     - reading their contents,
     - and basing changes ONLY on actual code (no guessing paths).
+  - Expanded MCP set available:
+    - context7 (semantic code/doc lookup), playwright (browser/E2E automation), markitdown (doc → Markdown)
+    - mcp-context-server (project_map/code_search/read_files), ecohub-qa (build_health), plus planned db/test/docs/ux servers
+    - Logical mapping: DB tools (mcp-db-schema, mcp-db-inspect) → context7; Tests (mcp-test-runner) → ecohub-qa; Docs/knowledge + UX/assets (mcp-docs-knowledge, mcp-ux-assets) → context7 (+ markitdown for docs)
   - Use ecohub-qa equivalents conceptually: after bigger changes, I will manually run:
     - tools/ecohub-qa: node run-qa-tool.js build_health
     - playwright E2E tests

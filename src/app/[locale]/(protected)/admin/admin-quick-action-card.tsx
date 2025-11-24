@@ -15,12 +15,12 @@ export default function AdminQuickActionCard({ title, icon, href }: AdminQuickAc
 
   return (
     <Card
-      className="p-4 hover:bg-gray-50 cursor-pointer transition-all duration-300 hover-lift border-gray-200"
+      className="rounded-2xl border-emerald-100 bg-white shadow-sm p-4 hover:shadow-md cursor-pointer transition-shadow"
       onClick={() => router.push(href)}
     >
       <div className="flex flex-col items-center text-center">
         {icon}
-        <h3 className="font-medium text-gray-900">{title}</h3>
+        <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
       </div>
     </Card>
   )

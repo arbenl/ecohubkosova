@@ -53,7 +53,7 @@ export default function CreateOrganizationForm({
         className="mb-6 flex items-center gap-2 text-gray-600 hover:text-gray-900"
       >
         <ArrowLeft className="h-4 w-4" />
-        Kthehu mbrapa
+        {t("create.form.cancel")}
       </button>
 
       <div className="mb-8">
@@ -95,7 +95,7 @@ export default function CreateOrganizationForm({
             {...register("type")}
             className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
           >
-            <option value="">Zgjidhni llojin</option>
+            <option value="">{t("create.form.typePlaceholder")}</option>
             <option value="OJQ">{t("create.form.typeOJQ")}</option>
             <option value="Ndërmarrje Sociale">{t("create.form.typeCompany")}</option>
             <option value="Kompani">{t("create.form.typeEnterprise")}</option>
@@ -157,7 +157,7 @@ export default function CreateOrganizationForm({
           <input
             {...register("location")}
             type="text"
-            placeholder="Prishtinë, Prizren, Pejë..."
+            placeholder={t("create.form.locationPlaceholder")}
             className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 placeholder-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
           />
           {errors.location && <p className="mt-1 text-sm text-red-500">{String(errors.location.message)}</p>}
@@ -178,7 +178,7 @@ export default function CreateOrganizationForm({
             disabled={isPending}
             className="flex-1 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 disabled:opacity-50"
           >
-            {isPending ? "Duke krijuar..." : t("create.form.submit")}
+            {isPending ? t("create.form.submit") : t("create.form.submit")}
           </button>
         </div>
       </form>

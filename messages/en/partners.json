@@ -1,36 +1,98 @@
 {
+  "page": {
+    "title": "EcoHub Partners & Ecosystem",
+    "subtitle": "Businesses, recyclers, NGOs and institutions working together for a circular Kosovo."
+  },
+  "pageTitle": "EcoHub Partners & Ecosystem",
+  "pageSubtitle": "Businesses, recyclers, NGOs and institutions working together for a circular Kosovo.",
   "hero": {
-    "title": "Partners & Supporters",
-    "subtitle": "EcoHub Kosova is built together with organizations that care about circular economy, clean air and a healthier future. Partners help us grow the network, reach more businesses and keep the platform independent and free to use.",
-    "cta": {
-      "primary": "See recyclers & services",
-      "primaryHref": "eco-organizations",
-      "secondary": "Browse the marketplace",
-      "secondaryHref": "marketplace"
+    "ctaBecomePartner": "Become a partner",
+    "ctaViewMarketplace": "View marketplace"
+  },
+  "stats": {
+    "organizations": "organizations",
+    "cities": "cities",
+    "roles": "roles"
+  },
+  "filters": {
+    "role": {
+      "all": "All roles",
+      "RECYCLER": "Recyclers",
+      "SERVICE_PROVIDER": "Service providers",
+      "OJQ": "NGOs",
+      "SOCIAL_ENTERPRISE": "Social enterprises",
+      "COLLECTOR": "Collectors",
+      "PUBLIC_INSTITUTION": "Public institutions"
     }
   },
-  "types": {
-    "heading": "How partners contribute",
-    "strategic": {
-      "title": "Strategic partners",
-      "description": "support EcoHub as part of broader policies on environment, waste and public health."
-    },
-    "technical": {
-      "title": "Technical partners",
-      "description": "provide expertise on recycling, logistics, data and digital tools."
-    },
-    "community": {
-      "title": "Community partners",
-      "description": "schools, NGOs and networks that help EcoHub reach local businesses and citizens."
+  "card": {
+    "viewProfile": "View profile",
+    "contactCta": "Contact partner",
+    "communityLabel": "Community partner",
+    "verifiedBadge": "Verified partner",
+    "roleLabels": {
+      "RECYCLER": "Recycler",
+      "SERVICE_PROVIDER": "Service provider",
+      "NGO": "NGO",
+      "SOCIAL_ENTERPRISE": "Social enterprise",
+      "COLLECTOR": "Collector",
+      "PUBLIC_INSTITUTION": "Public institution",
+      "OTHER": "Partner"
     }
   },
-  "become": {
-    "heading": "Want your organization to support or integrate with EcoHub?",
-    "body": "Contact us to discuss partnership options, from simple visibility to deeper programmatic cooperation.",
-    "cta": "Become a partner"
+  "detail": {
+    "aboutTitle": "About the organization",
+    "servicesTitle": "Services & focus areas",
+    "areasTitle": "Operating regions",
+    "contactTitle": "Connect with the team",
+    "verifiedBadge": "Verified partner",
+    "notFoundTitle": "Partner not found",
+    "notFoundBody": "We couldn’t find this partner profile. It may have been moved or is no longer published.",
+    "backToPartners": "Back to partners"
   },
-  "why": {
-    "heading": "Why this matters for businesses and citizens",
-    "body": "Strong partnerships mean that EcoHub is not just a website, but a living infrastructure: data is updated, organizations are verified, and new circular opportunities appear over time. This makes it easier for businesses to trust the platform, and for citizens and municipalities to recommend it as a practical tool, not just a campaign page."
+  "sections": {
+    "featured": {
+      "title": "Featured Eco Organizations"
+    },
+    "recyclers": {
+      "title": "Recyclers & Material Handlers"
+    },
+    "services": {
+      "title": "Service Providers & Logistics"
+    },
+    "ngos": {
+      "title": "NGOs & Community Partners"
+    },
+    "institutions": {
+      "title": "Institutional & Donor Partners"
+    },
+    "join": {
+      "title": "Join the EcoHub Ecosystem",
+      "description": "Create or claim your organization profile, publish offers and requests, and join circular economy initiatives across Kosovo."
+    }
+  },
+  "cards": {
+    "viewProfile": "View profile",
+    "contactPartner": "Contact partner",
+    "cityLabel": "City",
+    "roleLabel": "Role",
+    "roleRecycler": "Recycler",
+    "roleCollector": "Collector",
+    "roleServiceProvider": "Service provider",
+    "roleNGO": "NGO",
+    "roleSocialEnterprise": "Social enterprise",
+    "verified": "Verified partner",
+    "community": "Community partner",
+    "verifiedBadge": "Verified partner",
+    "locationLabel": "Location",
+    "wasteTypesLabel": "Waste types",
+    "serviceAreasLabel": "Service areas"
+  },
+  "cta": {
+    "browseOrgs": "Browse eco organizations",
+    "joinEcoHub": "Create or claim your organization",
+    "title": "Bring your organization into EcoHub",
+    "body": "Join the verified network of recyclers, service providers, NGOs, and institutions driving the circular economy.",
+    "button": "Start partner onboarding"
   }
 }

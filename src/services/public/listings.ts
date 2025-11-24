@@ -1,6 +1,6 @@
-import { and, eq, ilike } from "drizzle-orm"
+import { and, eq, ilike, or, sql, type SQL } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
-import { marketplaceListings, organizations } from "@/db/schema"
+import { ecoCategories, ecoListings, organizations } from "@/db/schema"
 
 export type PublicListing = {
   id: string
@@ -25,42 +25,59 @@ export type PublicListingFilters = {
 
 export async function fetchPublicListings(filters: PublicListingFilters = {}) {
   try {
-    const conditions = [eq(marketplaceListings.is_approved, true)]
+    const conditions: SQL<unknown>[] = [
+      eq(ecoListings.status, "ACTIVE" as any),
+      eq(ecoListings.visibility, "PUBLIC" as any),
+    ]
 
     if (filters.category) {
-      conditions.push(eq(marketplaceListings.category, filters.category))
+      const categoryCondition = or(
+        eq(ecoCategories.slug, filters.category),
+        ilike(ecoCategories.name_en, `%${filters.category}%`),
+        ilike(ecoCategories.name_sq, `%${filters.category}%`)
+      )
+      if (categoryCondition) {
+        conditions.push(categoryCondition)
+      }
     }
 
     if (filters.type) {
-      conditions.push(eq(marketplaceListings.listing_type, filters.type))
+      const flowTypeClause: SQL<unknown> =
+        filters.type === "shes"
+          ? sql`${ecoListings.flow_type}::text ILIKE 'OFFER%'`
+          : sql`${ecoListings.flow_type}::text ILIKE 'REQUEST%'`
+      conditions.push(flowTypeClause)
     }
 
     if (filters.search) {
       const term = `%${filters.search}%`
-      conditions.push(ilike(marketplaceListings.title, term))
+      conditions.push(ilike(ecoListings.title, term))
     }
 
     const rows = await db
       .get()
       .select({
-        listing: marketplaceListings,
+        listing: ecoListings,
         organization_name: organizations.name,
+        category_name_en: ecoCategories.name_en,
+        category_name_sq: ecoCategories.name_sq,
       })
-      .from(marketplaceListings)
-      .leftJoin(organizations, eq(marketplaceListings.organization_id, organizations.id))
+      .from(ecoListings)
+      .leftJoin(ecoCategories, eq(ecoListings.category_id, ecoCategories.id))
+      .leftJoin(organizations, eq(ecoListings.organization_id, organizations.id))
       .where(and(...conditions))
-      .orderBy(marketplaceListings.created_at)
+      .orderBy(ecoListings.created_at)
 
     const data: PublicListing[] = rows.map(({ listing, organization_name }) => ({
       id: listing.id,
       title: listing.title,
       description: listing.description,
-      category: listing.category,
-      price: Number(listing.price),
-      unit: listing.unit,
-      location: listing.location,
-      quantity: listing.quantity,
-      listing_type: listing.listing_type as "shes" | "blej",
+      category: listing.category_id || "",
+      price: listing.price ? Number(listing.price) : 0,
+      unit: listing.unit || "",
+      location: [listing.city, listing.region].filter(Boolean).join(", "),
+      quantity: listing.quantity ? listing.quantity.toString() : "",
+      listing_type: listing.flow_type?.startsWith("OFFER") ? "shes" : "blej",
       organization_name: organization_name ?? null,
       created_at: listing.created_at.toISOString(),
       updated_at: listing.updated_at ? listing.updated_at.toISOString() : null,

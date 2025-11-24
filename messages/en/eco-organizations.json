@@ -1,6 +1,7 @@
 {
   "pageTitle": "Recyclers & green organizations in Kosovo",
   "pageSubtitle": "Discover recyclers, collectors, and eco-service providers.",
+  "browseMarketplace": "Browse marketplace",
   "filterRoleLabel": "Role",
   "allRoles": "All roles",
   "filterCityLabel": "City",
@@ -19,5 +20,7 @@
   },
   "cardMainMaterials": "Main Materials",
   "cardCertifications": "Certifications",
-  "cardViewOrganization": "View Organization"
+  "cardViewOrganization": "View Organization",
+  "contactPersonLabel": "Contact person",
+  "serviceAreasLabel": "Service areas"
 }

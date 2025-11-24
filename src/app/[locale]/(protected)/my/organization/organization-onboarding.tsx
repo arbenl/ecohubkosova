@@ -31,6 +31,15 @@ export default function OrganizationOnboarding({ locale, userId }: OrganizationO
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-gray-900">{t("onboarding.title")}</h1>
         <p className="mt-2 text-gray-600">{t("onboarding.noOrgDescription")}</p>
+        <div className="mt-4 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setStep("create")}
+            className="rounded-full bg-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+          >
+            {t("onboarding.startRegistration")}
+          </button>
+        </div>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
@@ -44,9 +53,7 @@ export default function OrganizationOnboarding({ locale, userId }: OrganizationO
           </div>
           <div className="text-left">
             <h3 className="font-semibold text-gray-900">{t("onboarding.createNew")}</h3>
-            <p className="mt-1 text-sm text-gray-600">
-              Krijoni një profil për biznesin ose organizatën tuaj
-            </p>
+            <p className="mt-1 text-sm text-gray-600">{t("onboarding.createDescription")}</p>
           </div>
         </button>
 
@@ -60,9 +67,7 @@ export default function OrganizationOnboarding({ locale, userId }: OrganizationO
           </div>
           <div className="text-left">
             <h3 className="font-semibold text-gray-900">{t("onboarding.searchExisting")}</h3>
-            <p className="mt-1 text-sm text-gray-600">
-              Kërkoni dhe lidhuni me një organizatë ekzistuese
-            </p>
+            <p className="mt-1 text-sm text-gray-600">{t("onboarding.searchDescription")}</p>
           </div>
         </button>
       </div>

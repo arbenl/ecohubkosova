@@ -71,3 +71,12 @@ The previous hand-written SQL lives under `scripts/` for reference, but those fi
 - `supabase/seed.sql`
 
 Don’t edit the `scripts/` files going forward; always generate new migrations through the CLI so every change is traceable and reproducible.
+
+MCP tools usage (mandatory):
+	•	If you are connected to MCP servers, always call:
+	•	project_map first, then code_search, then read_files before editing.
+	•	ecohub-qa.build_health after any non-trivial change.
+	•	If you are not connected to MCP servers (e.g. Gemini web, Grok):
+	•	Ask me explicitly for:
+	•	The latest project_map.log and build_health.log from run-mcp-tools.sh.
+	•	Base your reasoning only on that real code structure, do not invent paths.

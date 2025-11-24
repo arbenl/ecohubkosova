@@ -27,7 +27,11 @@ export default getRequestConfig(async ({ locale }) => {
     profile,
     marketplaceV2,
     myOrganization,
+    myWorkspace,
+    adminWorkspace,
     ecoOrganizations,
+    partners,
+    howItWorks,
   ] = await Promise.all([
     import(`../../messages/${validLocale}/navigation.json`),
     import(`../../messages/${validLocale}/cta.json`),
@@ -49,7 +53,11 @@ export default getRequestConfig(async ({ locale }) => {
     import(`../../messages/${validLocale}/profile.json`),
     import(`../../messages/${validLocale}/marketplace-v2.json`),
     import(`../../messages/${validLocale}/my-organization.json`),
+    import(`../../messages/${validLocale}/my-workspace.json`),
+    import(`../../messages/${validLocale}/admin-workspace.json`),
     import(`../../messages/${validLocale}/eco-organizations.json`),
+    import(`../../messages/${validLocale}/partners.json`),
+    import(`../../messages/${validLocale}/how-it-works.json`),
   ])
 
   return {
@@ -75,7 +83,11 @@ export default getRequestConfig(async ({ locale }) => {
       profile: profile.default,
       "marketplace-v2": marketplaceV2.default,
       "my-organization": myOrganization.default,
+      "my-workspace": myWorkspace.default,
+      "admin-workspace": adminWorkspace.default,
       "eco-organizations": ecoOrganizations.default,
+      partners: partners.default,
+      "how-it-works": howItWorks.default,
     },
   }
 })

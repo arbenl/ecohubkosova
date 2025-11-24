@@ -111,7 +111,13 @@
     "copied": "U kopjua",
     "disclaimer": "Ndaje me kujdes dhe mbaje bisedën miqësore ndaj mjedisit.",
     "sendEmail": "Dërgo email",
-    "contactCount": "Kjo ofertë është kontaktuar {count} herë"
+    "contactCount": "Kjo ofertë është kontaktuar {count} herë",
+    "anonymousLabel": "Organizatë anonime",
+    "orgFallbackName": "Organizata",
+    "creatorFallbackName": "Krijuesi i ofertës",
+    "phoneLabel": "Telefoni",
+    "websiteLabel": "Faqja e internetit",
+    "contactPersonLabel": "Person kontakti"
   },
   "form": {
     "title": "Titulli",

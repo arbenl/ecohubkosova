@@ -1,0 +1,32 @@
+{
+  "pageTitle": "How EcoHub Works",
+  "pageSubtitle": "EcoHub Kosova is the digital marketplace and green partner network connecting businesses, recyclers and NGOs for real circular economy solutions.",
+  "heroCtaPrimary": "Explore the marketplace",
+  "heroCtaSecondary": "Meet our partners",
+  "stepsTitle": "Three simple steps",
+  "steps": {
+    "discover": {
+      "title": "Discover green offers & requests",
+      "body": "Browse listings for recyclable materials, green services and circular products from all over Kosovo."
+    },
+    "connect": {
+      "title": "Connect with eco partners",
+      "body": "Reach out directly to recyclers, service providers and NGOs to start concrete collaborations."
+    },
+    "closeLoop": {
+      "title": "Close the loop",
+      "body": "Turn waste into resources, sign long-term agreements and help build a circular economy in Kosovo."
+    }
+  },
+  "audiencesTitle": "Who is EcoHub for?",
+  "audiences": {
+    "business": {
+      "title": "Businesses & recyclers",
+      "body": "List your surplus materials, services or needs and find reliable partners to process, buy or supply."
+    },
+    "ngo": {
+      "title": "NGOs & initiatives",
+      "body": "Promote your environmental projects, join campaigns and support local circular solutions."
+    }
+  }
+}

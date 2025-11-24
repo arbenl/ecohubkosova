@@ -1,7 +1,8 @@
 import { unstable_noStore as noStore } from "next/cache"
 import { count, desc, eq } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
-import { articles, marketplaceListings, organizations, users } from "@/db/schema"
+import { articles, organizations, users } from "@/db/schema"
+import { ecoListings } from "@/db/schema/marketplace-v2"
 
 // ============================================================================
 // UTILITIES - Shared helpers
@@ -120,8 +121,8 @@ async function fetchListingsCount(): Promise<number> {
       const result = await db
         .get() // Fresh connection
         .select({ value: count() })
-        .from(marketplaceListings)
-        .where(eq(marketplaceListings.is_approved, true))
+        .from(ecoListings)
+        .where(eq(ecoListings.status, "ACTIVE"))
 
       return result[0]?.value ?? 0
     },

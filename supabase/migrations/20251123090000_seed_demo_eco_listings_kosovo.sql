@@ -60,8 +60,9 @@ SELECT
    JOIN organizations o ON eo.organization_id = o.id 
    WHERE o.name ILIKE '%REC-KOS%' LIMIT 1),
   (SELECT id FROM eco_categories WHERE slug = 'recycled-metals' LIMIT 1),
-  'Metale të Përziera për Riciklim - Zona Industriale',
-  'Metale skrapi të pastra dhe të ndara, të përshtatshme për riciklim nga zona industriale e Fushë Kosovës. Përfshijnë hekur, alumin dhe metale të tjera jo-ferroze. Cilësi e lartë, të gatshme për përpunim. Mundësi për marrje në vend me kamion.',
+  'Metale të Përziera për Riciklim - Zona Industriale / Mixed Scrap Metals - Industrial Zone',
+  'Metale skrapi të pastra dhe të ndara, të përshtatshme për riciklim nga zona industriale e Fushë Kosovës. Përfshijnë hekur, alumin dhe metale të tjera jo-ferroze. Cilësi e lartë, të gatshme për përpunim. Mundësi për marrje në vend me kamion.'
+    || E'\n\nEnglish: Clean, separated scrap metals ready for recycling from the industrial zone in Fushë Kosovë (iron, aluminum, non-ferrous). Truck pickup available.',
   'OFFER_WASTE'::flow_type,
   'SCRAP'::condition,
   'END_OF_LIFE'::lifecycle_stage,
@@ -123,8 +124,9 @@ SELECT
    JOIN organizations o ON eo.organization_id = o.id 
    WHERE o.name ILIKE '%PLASTIKA%' LIMIT 1),
   (SELECT id FROM eco_categories WHERE slug = 'plastic-packaging' LIMIT 1),
-  'Bala PET nga Rrjeti i Supermarketeve - Ferizaj',
-  'Bala PET të para-selektuara nga rrjeti i supermarketeve lokale në Ferizaj. Shishe plastike të pastra, të ngjeshura dhe të gatshme për riciklim. Cilësi e mirë, pa ndotje. Furnizim i rregullt mujor. Transport i disponueshëm brenda rajonit.',
+  'Bala PET nga Rrjeti i Supermarketeve - Ferizaj / PET bales from supermarkets - Ferizaj',
+  'Bala PET të para-selektuara nga rrjeti i supermarketeve lokale në Ferizaj. Shishe plastike të pastra, të ngjeshura dhe të gatshme për riciklim. Cilësi e mirë, pa ndotje. Furnizim i rregullt mujor. Transport i disponueshëm brenda rajonit.'
+    || E'\n\nEnglish: Clean, compressed PET bottle bales from a supermarket network in Ferizaj. Ready for recycling with regular monthly supply and regional delivery.',
   'OFFER_WASTE'::flow_type,
   'USED_GOOD'::condition,
   'END_OF_LIFE'::lifecycle_stage,
@@ -186,8 +188,9 @@ SELECT
    JOIN organizations o ON eo.organization_id = o.id 
    WHERE o.name ILIKE '%ECO KOS%' LIMIT 1),
   (SELECT id FROM eco_categories WHERE slug = 'textiles-light' LIMIT 1),
-  'Kërkohen Mbetje Tekstili për Upcycling - Prizren',
-  'Ndërmarrja sociale ECO KOS kërkon mbetje tekstili dhe copëza pëlhure nga punëtoritë dhe fabrikat e veshjeve në Prizren dhe rrethinë. Materialet do të përdoren për prodhimin e produkteve të upcycling-ut dhe materialeve izoluese. Pranojmë sasi të vogla dhe të mëdha. Shërbim falas i grumbullimit.',
+  'Kërkohen Mbetje Tekstili për Upcycling - Prizren / Textile offcuts wanted for upcycling - Prizren',
+  'Ndërmarrja sociale ECO KOS kërkon mbetje tekstili dhe copëza pëlhure nga punëtoritë dhe fabrikat e veshjeve në Prizren dhe rrethinë. Materialet do të përdoren për prodhimin e produkteve të upcycling-ut dhe materialeve izoluese. Pranojmë sasi të vogla dhe të mëdha. Shërbim falas i grumbullimit.'
+    || E'\n\nEnglish: Social enterprise ECO KOS needs textile scraps and offcuts for upcycling and insulation products. Free pickup around Prizren; small and large quantities accepted.',
   'REQUEST_MATERIAL'::flow_type,
   NULL, -- No condition for requests
   'WASTE'::lifecycle_stage,
@@ -249,8 +252,9 @@ SELECT
    JOIN organizations o ON eo.organization_id = o.id 
    WHERE o.name ILIKE '%POWERPACK%' LIMIT 1),
   (SELECT id FROM eco_categories WHERE slug = 'wood-pallets' LIMIT 1),
-  'Shërbim Riparimi dhe Blerje e Paletave - Prishtinë',
-  'POWERPACK ofron shërbim profesional të riparimit dhe programin e blerjes së paletave druri nga magazinat logjistike. Pranojmë paleta të dëmtuara për riparim ose blerje. Çmim konkurrues, shërbim i shpejtë. Kontriboni në ekonominë qarkulluese duke ripërdorur paletat tuaja.',
+  'Shërbim Riparimi dhe Blerje e Paletave - Prishtinë / Pallet repair & buy-back - Prishtina',
+  'POWERPACK ofron shërbim profesional të riparimit dhe programin e blerjes së paletave druri nga magazinat logjistike. Pranojmë paleta të dëmtuara për riparim ose blerje. Çmim konkurrues, shërbim i shpejtë. Kontriboni në ekonominë qarkulluese duke ripërdorur paletat tuaja.'
+    || E'\n\nEnglish: POWERPACK repairs and buys back wooden pallets from logistics warehouses. Competitive pricing and fast service to keep pallets in circular use.',
   'SERVICE_REPAIR'::flow_type,
   'USED_REPAIRABLE'::condition,
   'END_OF_LIFE'::lifecycle_stage,
@@ -312,8 +316,9 @@ SELECT
    JOIN organizations o ON eo.organization_id = o.id 
    WHERE o.name ILIKE '%EUROGOMA%' LIMIT 1),
   (SELECT id FROM eco_categories WHERE slug = 'materials-' || 'organic' LIMIT 1), -- Reuse existing category
-  'Grumbullim Gomash të Përdorura - Ferizaj',
-  'EUROGOMA pranon goma të përdorura nga automjetet për riciklim profesional. Përpunim i sigurt dhe ekologjik i gomave në fund të jetës. Shërbim falas i grumbullimit për sasi mbi 100 copa. Certifikatë e disponueshme për asgjësim të rregullt.',
+  'Grumbullim Gomash të Përdorura - Ferizaj / Used tyre collection - Ferizaj',
+  'EUROGOMA pranon goma të përdorura nga automjetet për riciklim profesional. Përpunim i sigurt dhe ekologjik i gomave në fund të jetës. Shërbim falas i grumbullimit për sasi mbi 100 copa. Certifikatë e disponueshme për asgjësim të rregullt.'
+    || E'\n\nEnglish: EUROGOMA collects used vehicle tyres for professional recycling. Free pickup for 100+ pieces and certified end-of-life processing.',
   'SERVICE_COLLECTION'::flow_type,
   'SCRAP'::condition,
   'END_OF_LIFE'::lifecycle_stage,
@@ -375,8 +380,9 @@ SELECT
    JOIN organizations o ON eo.organization_id = o.id 
    WHERE o.name ILIKE '%SIMPLY GREEN%' LIMIT 1),
   (SELECT id FROM eco_categories WHERE slug = 'materials-organic' LIMIT 1),
-  'Shërbim Kompostimi për Mbetje Organike - Mitrovicë',
-  'SIMPLY GREEN ofron shërbim profesional të kompostimit për mbetje organike nga restorantet, hotelet dhe fermat në Mitrovicë dhe rrethinë. Transformojmë mbetjet organike në kompost cilësor. Kontriboni në uljen e mbetjeve dhe prodhimin e plehut natyror. Çmime konkurruese për kontrata mujore.',
+  'Shërbim Kompostimi për Mbetje Organike - Mitrovicë / Organic waste composting - Mitrovica',
+  'SIMPLY GREEN ofron shërbim profesional të kompostimit për mbetje organike nga restorantet, hotelet dhe fermat në Mitrovicë dhe rrethinë. Transformojmë mbetjet organike në kompost cilësor. Kontriboni në uljen e mbetjeve dhe prodhimin e plehut natyror. Çmime konkurruese për kontrata mujore.'
+    || E'\n\nEnglish: SIMPLY GREEN composts organic waste from restaurants, hotels, and farms around Mitrovica. Turns waste into quality compost with competitive monthly contracts.',
   'SERVICE_OTHER'::flow_type,
   NULL,
   'WASTE'::lifecycle_stage,

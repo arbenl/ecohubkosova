@@ -12,13 +12,18 @@ import OrganizationOnboarding from "./organization-onboarding"
 import AnalyticsTab from "./analytics-tab"
 import MembersTab from "./members-tab"
 
-import { PageHeader } from "@/components/layout/page-header"
+import { WorkspaceLayout } from "@/components/workspace/workspace-layout"
 
 interface MyOrganizationClientProps {
   locale: string
   initialOrganizations: UserOrganization[]
   userId: string
   error?: string
+  listingCounts?: Record<string, number>
+  listingSummaries?: Record<
+    string,
+    { id: string; title: string; status: string | null; city: string | null }[]
+  >
 }
 
 export default function MyOrganizationClient({
@@ -26,6 +31,8 @@ export default function MyOrganizationClient({
   initialOrganizations,
   userId,
   error,
+  listingCounts,
+  listingSummaries,
 }: MyOrganizationClientProps) {
   const t = useTranslations("my-organization")
   const [organizations, setOrganizations] = useState(initialOrganizations)
@@ -78,9 +85,15 @@ export default function MyOrganizationClient({
   // Single organization - show profile directly
   if (organizations.length === 1) {
     const org = organizations[0]
+    const listings = listingSummaries?.[org.id] || []
+
     return (
-      <div className="space-y-6">
-        <PageHeader title={t("workspace.title")} subtitle={org.name} className="rounded-xl">
+
+      <WorkspaceLayout
+        badge={t("workspace.title")}
+        title={org.name}
+        subtitle=""
+        actions={
           <Link
             href={`/${locale}/marketplace/add`}
             className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
@@ -88,38 +101,36 @@ export default function MyOrganizationClient({
             <Plus className="h-5 w-5" />
             {t("workspace.actions.createListing")}
           </Link>
-        </PageHeader>
+        }
+      >
 
         {/* Tabs */}
         <div className="border-b border-gray-200">
           <div className="flex gap-4">
             <button
               onClick={() => setActiveTab("profile")}
-              className={`px-4 py-2 font-medium transition-colors ${
-                activeTab === "profile"
-                  ? "border-b-2 border-green-600 text-green-600"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
+              className={`px-4 py-2 font-medium transition-colors ${activeTab === "profile"
+                ? "border-b-2 border-emerald-600 text-emerald-600"
+                : "text-gray-600 hover:text-gray-900"
+                }`}
             >
               {t("workspace.section.profile")}
             </button>
             <button
               onClick={() => setActiveTab("analytics")}
-              className={`px-4 py-2 font-medium transition-colors ${
-                activeTab === "analytics"
-                  ? "border-b-2 border-green-600 text-green-600"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
+              className={`px-4 py-2 font-medium transition-colors ${activeTab === "analytics"
+                ? "border-b-2 border-emerald-600 text-emerald-600"
+                : "text-gray-600 hover:text-gray-900"
+                }`}
             >
               {t("analytics.tabs.analytics")}
             </button>
             <button
               onClick={() => setActiveTab("members")}
-              className={`px-4 py-2 font-medium transition-colors ${
-                activeTab === "members"
-                  ? "border-b-2 border-green-600 text-green-600"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
+              className={`px-4 py-2 font-medium transition-colors ${activeTab === "members"
+                ? "border-b-2 border-emerald-600 text-emerald-600"
+                : "text-gray-600 hover:text-gray-900"
+                }`}
             >
               {t("members.tabs.members")}
             </button>
@@ -127,7 +138,7 @@ export default function MyOrganizationClient({
         </div>
 
         {/* Tab Content */}
-        {activeTab === "profile" && <OrganizationProfile locale={locale} organization={org} />}
+        {activeTab === "profile" && <OrganizationProfile locale={locale} organization={org} listings={listings} />}
         {activeTab === "analytics" && (
           <AnalyticsTab
             organizationId={org.id}
@@ -140,20 +151,21 @@ export default function MyOrganizationClient({
         {activeTab === "members" && (
           <MembersTab organizationId={org.id} userRole={org.role_in_organization} />
         )}
-      </div>
+      </WorkspaceLayout>
     )
   }
 
   // Multiple organizations - show selector
   const activeOrg = organizations.find((o) => o.id === activeOrgId)
+  const activeListings = activeOrgId ? listingSummaries?.[activeOrgId] || [] : []
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title={t("workspace.title")}
-        subtitle={t("onboarding.subtitle")}
-        className="rounded-xl"
-      >
+
+    <WorkspaceLayout
+      badge={t("workspace.title")}
+      title={t("onboarding.subtitle")}
+      subtitle=""
+      actions={
         <Link
           href={`/${locale}/marketplace/add`}
           className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
@@ -161,7 +173,8 @@ export default function MyOrganizationClient({
           <Plus className="h-5 w-5" />
           {t("workspace.actions.createListing")}
         </Link>
-      </PageHeader>
+      }
+    >
 
       {/* Organization Switcher */}
       <div className="flex items-center gap-3 bg-white rounded-lg border border-gray-200 p-4">
@@ -191,31 +204,28 @@ export default function MyOrganizationClient({
           <div className="flex gap-4">
             <button
               onClick={() => setActiveTab("profile")}
-              className={`px-4 py-2 font-medium transition-colors ${
-                activeTab === "profile"
-                  ? "border-b-2 border-green-600 text-green-600"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
+              className={`px-4 py-2 font-medium transition-colors ${activeTab === "profile"
+                ? "border-b-2 border-emerald-600 text-emerald-600"
+                : "text-gray-600 hover:text-gray-900"
+                }`}
             >
               {t("workspace.section.profile")}
             </button>
             <button
               onClick={() => setActiveTab("analytics")}
-              className={`px-4 py-2 font-medium transition-colors ${
-                activeTab === "analytics"
-                  ? "border-b-2 border-green-600 text-green-600"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
+              className={`px-4 py-2 font-medium transition-colors ${activeTab === "analytics"
+                ? "border-b-2 border-emerald-600 text-emerald-600"
+                : "text-gray-600 hover:text-gray-900"
+                }`}
             >
               {t("analytics.tabs.analytics")}
             </button>
             <button
               onClick={() => setActiveTab("members")}
-              className={`px-4 py-2 font-medium transition-colors ${
-                activeTab === "members"
-                  ? "border-b-2 border-green-600 text-green-600"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
+              className={`px-4 py-2 font-medium transition-colors ${activeTab === "members"
+                ? "border-b-2 border-emerald-600 text-emerald-600"
+                : "text-gray-600 hover:text-gray-900"
+                }`}
             >
               {t("members.tabs.members")}
             </button>
@@ -225,7 +235,7 @@ export default function MyOrganizationClient({
 
       {/* Tab Content */}
       {activeOrg && activeTab === "profile" && (
-        <OrganizationProfile locale={locale} organization={activeOrg} />
+        <OrganizationProfile locale={locale} organization={activeOrg} listings={activeListings} />
       )}
       {activeOrg && activeTab === "analytics" && (
         <AnalyticsTab
@@ -239,6 +249,6 @@ export default function MyOrganizationClient({
       {activeOrg && activeTab === "members" && (
         <MembersTab organizationId={activeOrg.id} userRole={activeOrg.role_in_organization} />
       )}
-    </div>
+    </WorkspaceLayout>
   )
 }

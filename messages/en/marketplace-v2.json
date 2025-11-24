@@ -111,7 +111,13 @@
     "copied": "Copied",
     "disclaimer": "Share thoughtfully and keep conversations eco-friendly.",
     "sendEmail": "Send email",
-    "contactCount": "This listing has been contacted {count} times"
+    "contactCount": "This listing has been contacted {count} times",
+    "anonymousLabel": "Anonymous organization",
+    "orgFallbackName": "Organization",
+    "creatorFallbackName": "Listing creator",
+    "phoneLabel": "Phone",
+    "websiteLabel": "Website",
+    "contactPersonLabel": "Contact person"
   },
   "form": {
     "title": "Title",

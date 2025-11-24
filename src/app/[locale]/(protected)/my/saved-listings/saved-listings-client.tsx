@@ -44,7 +44,7 @@ export default function SavedListingsClient({
 
         <div className="mt-8 text-center">
           <Button variant="ghost" asChild>
-            <Link href={`/${locale}/dashboard`}>
+            <Link href={`/${locale}/my/organization`}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to dashboard
             </Link>
@@ -77,7 +77,7 @@ export default function SavedListingsClient({
       {/* Footer Navigation */}
       <div className="mt-12 text-center">
         <Button variant="ghost" asChild>
-          <Link href={`/${locale}/dashboard`}>
+          <Link href={`/${locale}/my/organization`}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to dashboard
           </Link>

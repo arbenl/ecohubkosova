@@ -9,6 +9,21 @@
       "command": "node",
       "args": ["/Users/arbenlila/development/ecohubkosova/tools/ecohub-qa/dist/index.js"],
       "cwd": "/Users/arbenlila/development/ecohubkosova"
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["context7-mcp"],
+      "cwd": "/Users/arbenlila/development/ecohubkosova"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["mcp-server-playwright"],
+      "cwd": "/Users/arbenlila/development/ecohubkosova"
+    },
+    "markitdown": {
+      "command": "markitdown-mcp",
+      "args": [],
+      "cwd": "/Users/arbenlila/development/ecohubkosova"
     }
   }
 }

@@ -1,0 +1,31 @@
+{
+  "title": "My workspace",
+  "subtitle": "Manage your EcoHub activity and next steps",
+  "cards": {
+    "profile": {
+      "title": "Profile & notifications",
+      "description": "Update your details and preferences",
+      "cta": "Go to profile"
+    },
+    "saved": {
+      "title": "Saved listings",
+      "description": "Keep track of opportunities you bookmarked",
+      "cta": "View saved listings"
+    },
+    "partner": {
+      "title": "Become a partner",
+      "description": "Publish your organization profile and start listing offers",
+      "cta": "Start partner onboarding"
+    },
+    "organization": {
+      "title": "Your organization workspace",
+      "description": "Manage listings, analytics, and team members",
+      "ctaExisting": "Open organization workspace",
+      "ctaMissing": "Set up an organization"
+    }
+  },
+  "empty": {
+    "noOrg": "You haven't connected an organization yet.",
+    "noSaved": "You haven't saved any listings yet."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "title": "Hapësira ime",
+  "subtitle": "Menaxho aktivitetin dhe hapat e radhës në EcoHub",
+  "cards": {
+    "profile": {
+      "title": "Profili & njoftimet",
+      "description": "Përditëso të dhënat dhe preferencat",
+      "cta": "Shko te profili"
+    },
+    "saved": {
+      "title": "Listimet e ruajtura",
+      "description": "Mbaj shënim mundësitë që ke ruajtur",
+      "cta": "Shiko listimet e ruajtura"
+    },
+    "partner": {
+      "title": "Bëhu partner",
+      "description": "Publiko profilin e organizatës dhe nis listimet",
+      "cta": "Fillo onboardimin si partner"
+    },
+    "organization": {
+      "title": "Hapësira e organizatës",
+      "description": "Menaxho listimet, analitikën dhe ekipin",
+      "ctaExisting": "Hap hapësirën e organizatës",
+      "ctaMissing": "Krijo një organizatë"
+    }
+  },
+  "empty": {
+    "noOrg": "Nuk ke lidhur ende një organizatë.",
+    "noSaved": "Nuk ke ruajtur ende asnjë listim."
+  }
+}

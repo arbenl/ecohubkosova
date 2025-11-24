@@ -25,9 +25,34 @@ const PROJECT_ROOT = path.resolve(__dirname, "..")
 const OUTPUTS_DIR = path.join(PROJECT_ROOT, "mcp-outputs")
 const PROMPTS_DIR = path.join(PROJECT_ROOT, "prompts")
 const DOCS_DIR = path.join(PROJECT_ROOT, "docs")
+const LOGS_DIR = path.join(PROJECT_ROOT, "logs")
+const MCP_HEALTH_FILENAME = "mcp-health.json"
+
+const REQUIRED_MCP_SERVERS = [
+  "mcp-context-server",
+  "ecohub-qa",
+  "mcp-db-schema",
+  "mcp-db-inspect",
+  "mcp-test-runner",
+  "mcp-docs-knowledge",
+  "mcp-ux-assets",
+] as const
+
+const MCP_SERVER_MAP: Record<(typeof REQUIRED_MCP_SERVERS)[number], string> = {
+  "mcp-context-server": "mcp-context-server",
+  "ecohub-qa": "ecohub-qa",
+  // Map DB logical tools to context7 for now (semantic DB doc lookup) until dedicated DB MCP exists.
+  "mcp-db-schema": "context7",
+  "mcp-db-inspect": "context7",
+  // Tests leverage ecohub-qa until a dedicated runner MCP is available.
+  "mcp-test-runner": "ecohub-qa",
+  // Docs/UX assets use context7 (and markitdown) for knowledge lookups.
+  "mcp-docs-knowledge": "context7",
+  "mcp-ux-assets": "context7",
+}
 
 // Ensure output directories exist
-for (const dir of [OUTPUTS_DIR, PROMPTS_DIR]) {
+for (const dir of [OUTPUTS_DIR, PROMPTS_DIR, LOGS_DIR]) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true })
   }
@@ -53,10 +78,10 @@ function logInfo(message: string) {
   console.log(`ℹ️  ${message}`)
 }
 
-function writeLog(filename: string, content: string) {
-  const filepath = path.join(OUTPUTS_DIR, filename)
+function writeLog(filename: string, content: string, directory: string = OUTPUTS_DIR) {
+  const filepath = path.join(directory, filename)
   fs.writeFileSync(filepath, content, "utf-8")
-  logInfo(`Wrote ${filename}`)
+  logInfo(`Wrote ${path.relative(PROJECT_ROOT, filepath)}`)
 }
 
 function readDocIfExists(docName: string): string {
@@ -66,6 +91,107 @@ function readDocIfExists(docName: string): string {
   }
   return ""
 }
+
+type McpServerStatus = "running" | "available" | "missing" | "not-implemented"
+
+interface McpServerConfig {
+  name: string
+  binaryHint?: string
+  optional?: boolean
+  implemented: boolean
+  description?: string
+  commandHint?: string
+}
+
+interface McpServerHealth {
+  name: string
+  logicalName?: string
+  underlyingName?: string
+  status: McpServerStatus
+  ok: boolean
+  implemented: boolean
+  optional?: boolean
+  binaryFound: boolean
+  processDetected: boolean
+  message: string
+  commandHint?: string
+}
+
+interface McpHealthSnapshot {
+  allHealthy: boolean
+  availableCount: number
+  healthyCount: number
+  runningCount: number
+  servers: McpServerHealth[]
+  summary: string
+  timestamp: string
+}
+
+const MCP_SERVERS: McpServerConfig[] = [
+  {
+    name: "mcp-context-server",
+    binaryHint: path.join(PROJECT_ROOT, "tools", "mcp-context-server", "dist", "server.js"),
+    implemented: true,
+    description: "Code navigation (project_map/code_search/read_files)",
+  },
+  {
+    name: "ecohub-qa",
+    binaryHint: path.join(PROJECT_ROOT, "tools", "ecohub-qa", "dist", "index.js"),
+    implemented: true,
+    description: "QA audits (build_health + diagnostics)",
+  },
+  {
+    name: "context7",
+    binaryHint: path.join(PROJECT_ROOT, "node_modules", ".bin", "context7-mcp"),
+    commandHint: "npx context7-mcp",
+    implemented: true,
+    description: "Embeddings-backed code/doc context (resolve-library-id/get-library-docs)",
+  },
+  {
+    name: "playwright",
+    binaryHint: path.join(PROJECT_ROOT, "node_modules", ".bin", "mcp-server-playwright"),
+    commandHint: "npx mcp-server-playwright",
+    implemented: true,
+    description: "Browser/E2E automation via Playwright MCP",
+  },
+  {
+    name: "markitdown",
+    commandHint: "markitdown-mcp --http --port 3001",
+    implemented: true,
+    optional: true,
+    description: "Document → Markdown converter (convert_to_markdown) via Python pipx install",
+  },
+  {
+    name: "mcp-db-schema",
+    implemented: false,
+    optional: true,
+    description: "Planned: DB schema helper (describe_schema/sample_queries/explain_query)",
+  },
+  {
+    name: "mcp-db-inspect",
+    implemented: false,
+    optional: true,
+    description: "Planned: Read-only SQL inspector (run_readonly_sql)",
+  },
+  {
+    name: "mcp-test-runner",
+    implemented: false,
+    optional: true,
+    description: "Planned: Test runner (run_unit/run_e2e)",
+  },
+  {
+    name: "mcp-docs-knowledge",
+    implemented: false,
+    optional: true,
+    description: "Planned: Docs search (list_docs/search_docs/get_doc)",
+  },
+  {
+    name: "mcp-ux-assets",
+    implemented: false,
+    optional: true,
+    description: "Planned: UX assets catalog (list_assets/component_catalog)",
+  },
+]
 
 // ============================================================================
 // STEP 1: CHECK SUPABASE CONNECTIVITY
@@ -145,43 +271,147 @@ async function checkSupabaseConnectivity(): Promise<{
 // STEP 2: CHECK MCP SERVERS
 // ============================================================================
 
-async function checkMCPServers(): Promise<{
-  mcp_context_server: boolean
-  ecohub_qa_server: boolean
-  timestamp: string
-}> {
+async function checkMcpHealth(): Promise<McpHealthSnapshot> {
   log("Checking MCP servers...")
 
-  const result = {
-    mcp_context_server: false,
-    ecohub_qa_server: false,
+  let processList = ""
+  try {
+    processList = execSync("ps aux", { encoding: "utf-8" }).toLowerCase()
+  } catch {
+    logInfo("MCP process scan unavailable; falling back to binary hints only")
+  }
+
+  const physicalMap = new Map(MCP_SERVERS.map((cfg) => [cfg.name, cfg]))
+
+  const resolveBinary = (config: McpServerConfig): { binaryFound: boolean; commandHint?: string } => {
+    let binaryFound = config.binaryHint ? fs.existsSync(config.binaryHint) : false
+    let commandHint =
+      config.commandHint ||
+      (config.binaryHint && config.implemented ? `node ${path.relative(PROJECT_ROOT, config.binaryHint)}` : undefined)
+
+    if (!binaryFound && commandHint && !commandHint.startsWith("npx ")) {
+      try {
+        const cmd = commandHint.split(" ")[0]
+        const resolved = execSync(`command -v ${cmd}`, { encoding: "utf-8" }).trim()
+        binaryFound = resolved.length > 0
+      } catch {
+        binaryFound = false
+      }
+    }
+
+    return { binaryFound, commandHint }
+  }
+
+  const pingServer = (config: McpServerConfig, commandHint?: string): { ok: boolean; message?: string } => {
+    if (!commandHint) return { ok: false }
+    const helpCommand = `${commandHint} --help`
+    try {
+      execSync(helpCommand, {
+        cwd: PROJECT_ROOT,
+        encoding: "utf-8",
+        stdio: "pipe",
+        timeout: 1500,
+        shell: "bash",
+      })
+      return { ok: true, message: "Ping ok (--help)" }
+    } catch (err) {
+      return {
+        ok: false,
+        message: `Ping failed${err instanceof Error ? `: ${err.message.split("\\n")[0]}` : ""}`,
+      }
+    }
+  }
+
+  const physicalHealth: McpServerHealth[] = MCP_SERVERS.map((config) => {
+    const { binaryFound, commandHint } = resolveBinary(config)
+    const processDetected = processList ? processList.includes(config.name.toLowerCase()) : false
+
+    let status: McpServerStatus = "not-implemented"
+    if (config.implemented) {
+      if (processDetected) {
+        status = "running"
+      } else if (binaryFound) {
+        status = "available"
+      } else {
+        status = "missing"
+      }
+    }
+
+    let ok = config.implemented ? status === "running" : false
+    let message = config.description || ""
+    if (!config.implemented) {
+      message = "Not implemented in this repo (planned/TODO)"
+    } else if (status === "running") {
+      message = "Process detected"
+    } else if (status === "available") {
+      const ping = pingServer(config, commandHint)
+      if (ping.ok) {
+        message = ping.message || "Binary found; ping ok"
+        ok = true
+        status = "available"
+      } else {
+        message = ping.message || (commandHint ? `Binary found; start with "${commandHint}"` : "Binary found; start server")
+      }
+    } else if (status === "missing") {
+      message = "Binary not found"
+    }
+
+    return {
+      name: config.name,
+      status,
+      ok,
+      implemented: config.implemented,
+      optional: config.optional,
+      binaryFound,
+      processDetected,
+      message,
+      commandHint,
+    }
+  })
+
+  const logicalHealth: McpServerHealth[] = REQUIRED_MCP_SERVERS.map((logicalName) => {
+    const physicalName = MCP_SERVER_MAP[logicalName]
+    const physical = physicalMap.get(physicalName)
+    const fallback: McpServerHealth = {
+      name: physicalName,
+      logicalName,
+      underlyingName: physicalName,
+      status: "missing",
+      ok: false,
+      implemented: false,
+      binaryFound: false,
+      processDetected: false,
+      message: "No server config found",
+    }
+
+    if (!physical) return fallback
+
+    const health = physicalHealth.find((h) => h.name === physicalName)
+    if (!health) return fallback
+
+    return {
+      ...health,
+      logicalName,
+      underlyingName: physicalName,
+      optional: physical.optional,
+    }
+  })
+
+  const requiredLogical = logicalHealth.filter((s) => !s.optional)
+  const runningCount = requiredLogical.filter((s) => s.ok).length
+  const summaryParts = logicalHealth.map(
+    (s) => `${s.logicalName} → ${s.underlyingName} : ${s.ok ? "OK" : "DOWN"} (${s.status})`
+  )
+
+  return {
+    allHealthy: runningCount === requiredLogical.length,
+    availableCount: logicalHealth.filter((s) => s.status === "running" || s.status === "available").length,
+    healthyCount: runningCount,
+    runningCount,
+    servers: logicalHealth,
+    summary: summaryParts.join(" | "),
     timestamp: new Date().toISOString(),
   }
-
-  // Check if MCP processes are running by looking for typical processes
-  try {
-    const procs = execSync("ps aux | grep -E 'mcp|ecohub-qa'", {
-      encoding: "utf-8",
-    })
-    result.mcp_context_server = procs.includes("mcp-context-server")
-    result.ecohub_qa_server = procs.includes("ecohub-qa")
-  } catch {
-    logInfo("MCP process check incomplete; servers may still be starting")
-  }
-
-  if (result.mcp_context_server) {
-    logSuccess("MCP context server running")
-  } else {
-    logInfo("MCP context server not detected; you may need to run: npm run dev")
-  }
-
-  if (result.ecohub_qa_server) {
-    logSuccess("EcoHub QA server running")
-  } else {
-    logInfo("EcoHub QA server not detected; you may need to run: npm run dev")
-  }
-
-  return result
 }
 
 // ============================================================================
@@ -237,17 +467,14 @@ async function runBuildHealthChecks(): Promise<{
 
   // Build check (quick preview)
   try {
-    const output = execSync("pnpm build 2>&1 | tail -20", {
+    const output = execSync("set -o pipefail; pnpm build 2>&1 | tail -20", {
       cwd: PROJECT_ROOT,
       encoding: "utf-8",
       stdio: ["pipe", "pipe", "pipe"],
+      shell: "bash",
     })
-    result.build = { pass: output.includes("✓"), output: output.slice(0, 500) }
-    if (result.build.pass) {
-      logSuccess("Build check passed")
-    } else {
-      logInfo("Build output captured")
-    }
+    result.build = { pass: true, output: output.slice(0, 500) }
+    logSuccess("Build check passed")
   } catch (err) {
     result.build = {
       pass: false,
@@ -298,6 +525,7 @@ interface QASnapshot {
     build: { pass: boolean; output: string }
     timestamp: string
   }
+  mcpHealth: McpHealthSnapshot
 }
 
 function generateRootBootstrap(docs: ReturnType<typeof readCoreDocs>, qa: QASnapshot): string {
@@ -310,11 +538,17 @@ function generateRootBootstrap(docs: ReturnType<typeof readCoreDocs>, qa: QASnap
 - TypeScript: ${qa.buildHealth.tsc.pass ? "✅ PASS" : "❌ FAIL"}
 - Build: ${qa.buildHealth.build.pass ? "✅ PASS" : "❌ FAIL"}`
 
+  const mcpHealthLogRef = `logs/${MCP_HEALTH_FILENAME}`
+  const mcpStatusLine = qa.mcpHealth
+    ? `- MCP: ${qa.mcpHealth.summary} (log: ${mcpHealthLogRef})`
+    : "- MCP: not collected"
+
   return `# EcoHub Kosova – Dev Bootstrap & Context
 
 **Current Status Snapshot** (${new Date().toISOString()}):
 ${supabaseStatusLine}
 ${buildStatusLine}
+${mcpStatusLine}
 
 ---
 
@@ -356,26 +590,38 @@ EcoHub Kosova is a **Next.js 16 App Router** + **Supabase Postgres** + **Drizzle
 
 ---
 
-## 2. MCP Tools & Development Rules
+## 2. MCP tools you MUST use
 
-### If You Have MCP Tools Available (Claude/ChatGPT with Tools)
+- **Current MCP health:** ${qa.mcpHealth.summary}. See \`${mcpHealthLogRef}\` for details.
+- **Contract:** \`docs/mcp-contract.json\`
+- **Servers & methods**
+  - **mcp-context-server:** \`project_map\`, \`code_search\`, \`read_files\`
+  - **ecohub-qa:** \`build_health\`
+  - **context7:** \`resolve-library-id\`, \`get-library-docs\` (semantic code/doc context)
+  - **playwright:** browser automation & assertions (core/vision/pdf/testing tools)
+  - **markitdown:** \`convert_to_markdown\` (docs → Markdown)
+  - **DB tools (mapped to context7):** \`mcp-db-schema\` (\`describe_schema\`, \`sample_queries\`, \`explain_query\`), \`mcp-db-inspect\` (\`run_readonly_sql\`)
+  - **Tests (mapped to ecohub-qa):** \`mcp-test-runner\` (\`run_unit\`, \`run_e2e\`)
+  - **Docs/knowledge (mapped to context7/markitdown):** \`mcp-docs-knowledge\` (\`list_docs\`, \`search_docs\`, \`get_doc\`)
+  - **UX/assets (mapped to context7):** \`mcp-ux-assets\` (\`list_assets\`, \`component_catalog\`) (optional/planned)
 
-**Always follow this workflow before proposing code changes:**
+### Default workflow (with MCP)
 
-1. **Call \`project_map\`** to understand repo layout
-2. **Call \`code_search\`** to locate relevant files
-3. **Call \`read_files\`** to inspect actual code (never guess paths or invent imports)
-4. **Propose changes only based on real file contents**
-5. **After significant changes, manually run \`pnpm build && pnpm lint && pnpm tsc --noEmit\`** to validate
+1. \`project_map\` → understand structure (mcp-context-server)
+2. \`code_search\` → find modules/routes/services (mcp-context-server) and use **context7** for semantic/embedding lookups
+3. \`read_files\` → inspect real code before proposing changes
+4. Docs via **mcp-docs-knowledge** and **markitdown** for converting external PDFs/DOCX/etc. to Markdown
+5. DB via **mcp-db-schema** + **mcp-db-inspect** (schema, sample queries, read-only checks)
+6. Browser/E2E via **playwright** (smoke journeys, accessibility tree interactions)
+7. Implement minimal, safe changes (prefer service layer)
+8. Validate: **ecohub-qa.build_health** and **mcp-test-runner** (\`run_unit\`, \`run_e2e\`)
+9. Summarize: list files changed, note MCP tools used, surface any remaining failures
 
-### If You Do NOT Have MCP Tools (Gemini/Grok/Codex CLI)
+### If you do NOT have MCP tools (Gemini/Grok/Codex CLI)
 
-**Base your reasoning ONLY on the pasted logs and real documentation:**
-
-1. Ask me to provide \`mcp-outputs/*.log\` and \`docs/*.md\` if they're missing
-2. Trust the directory structure shown in logs; don't assume file paths
-3. When editing, be extra careful with imports and file extensions
-4. Request a fresh \`pnpm lint && pnpm build\` output after your changes
+- Ask for \`mcp-outputs/*.log\` (including \`${mcpHealthLogRef}\`) and relevant \`docs/*.md\`
+- Do not guess paths or imports—base reasoning on the provided logs/docs
+- Request fresh \`pnpm lint && pnpm tsc --noEmit && pnpm build\` output after your suggestions
 
 ---
 
@@ -395,12 +641,13 @@ EcoHub Kosova is a **Next.js 16 App Router** + **Supabase Postgres** + **Drizzle
    - Gemini 3.0 Pro → \`prompts/bootstrap.gemini.md\`
    - Grok → \`prompts/bootstrap.grok.md\`
    - Codex CLI → \`prompts/bootstrap.codex-cli.md\`
+   - Sonnet (dedicated) → \`prompts/bootstrap.sonnet.md\`
 
 3. **Paste the entire prompt into your model as the first message** before giving it any task.
 
 ### During Development
 
-- **Before touching files:** Always use MCP tools (if available) to \`code_search\` and \`read_files\`
+- **Before touching files:** Always use MCP tools (if available) to \`project_map\`, \`code_search\`, and \`read_files\`
 - **After big changes:** Run \`pnpm lint && pnpm tsc --noEmit && pnpm build\` locally and report results
 - **For marketplace changes:** Always verify you're editing files under \`app/[locale]/(site)/marketplace/\` and schema under \`src/db/schema/marketplace-v2.ts\`
 - **For API routes:** Ensure they call services from \`src/services/**\`, not Supabase directly
@@ -464,10 +711,46 @@ Call \`src/services/admin/stats.ts\`; it returns aggregated counts and insights.
 ## 7. Next Steps
 
 - Run \`pnpm dev\` to start the dev server
-- Ensure MCP servers are running (they start with \`pnpm dev\`)
+- Ensure MCP servers are running (they start with \`pnpm dev\` or your MCP launcher)
 - Use the model-specific prompt bundle from \`prompts/\` for your AI model
 - Ask your AI to inspect files via MCP tools before making changes
 - Report any blockers or unclear architecture to me
+`
+}
+
+function generateSonnetPrompt(
+  rootBootstrap: string,
+  docs: ReturnType<typeof readCoreDocs>
+): string {
+  return `${rootBootstrap}
+
+---
+
+## Claude Sonnet Instructions
+
+You have **MCP tools**. Follow the mandatory workflow:
+- \`project_map\` → \`code_search\` → \`read_files\` for any task
+- Semantic lookups via **context7** (deep code/doc search)
+- Docs via **mcp-docs-knowledge** and **markitdown** for doc → Markdown; DB via **mcp-db-schema** + **mcp-db-inspect**
+- Browser/E2E via **playwright** (smoke flows, accessibility-tree driven actions)
+- Validation via **ecohub-qa.build_health** and **mcp-test-runner** (\`run_unit\`, \`run_e2e\`)
+- UX consistency via **mcp-ux-assets** when modifying UI
+- Logical mapping: DB tools (\`mcp-db-schema\`, \`mcp-db-inspect\`) run on **context7**; tests (\`mcp-test-runner\`) run on **ecohub-qa**; docs/UX (\`mcp-docs-knowledge\`, \`mcp-ux-assets\`) run on **context7** (+ **markitdown** for docs).
+- MCP health snapshot: \`mcp-outputs/${MCP_HEALTH_FILENAME}\`
+
+### Guardrails
+
+- Marketplace V2 is the public surface; V1 tables are legacy-only
+- Keep data access inside \`src/services/**\`; enforce admin via \`requireAdminRole()\`
+- Prefer incremental changes with strict types; avoid guessing imports or paths
+- Run or request lint/tsc/build after meaningful edits
+
+### Reporting
+
+- List the MCP calls you used
+- Summarize files changed and any remaining failing checks (if any)
+
+Good luck! 🚀
 `
 }
 
@@ -487,6 +770,7 @@ You have **MCP tools** available in this conversation. Use them systematically:
 2. **Use \`code_search\`** to find relevant files by keyword
 3. **Use \`read_files\`** to inspect actual code before proposing changes
 4. **Base all suggestions ONLY on real code** – never invent file paths or imports
+- **Context & Docs/Tests:** Use **context7** for semantic context, \`mcp-db-schema\` + \`mcp-db-inspect\` (mapped to context7) for schema/data, \`mcp-docs-knowledge\` + **markitdown** for docs (mapped to context7/markitdown), **playwright** for browser/E2E, \`mcp-test-runner\` (mapped to ecohub-qa) for validation, and \`mcp-ux-assets\` (mapped to context7) when touching UI. Check \`mcp-outputs/${MCP_HEALTH_FILENAME}\` for availability.
 
 ### Your Responsibilities
 
@@ -523,6 +807,7 @@ You have **MCP tools** available via the Code Interpreter or Tools feature. Use 
 2. **Use \`code_search\`** to locate files
 3. **Use \`read_files\`** to read actual source code
 4. **Never invent paths or assume module structure** – always verify
+- **Context & Docs/Tests:** Use **context7** for semantic context, \`mcp-db-schema\` + \`mcp-db-inspect\` (mapped to context7) for schema/data, \`mcp-docs-knowledge\` + **markitdown** for docs (mapped to context7/markitdown), **playwright** for browser/E2E, \`mcp-test-runner\` (mapped to ecohub-qa) for validation, \`mcp-ux-assets\` (mapped to context7) for UI references. MCP health snapshot: \`mcp-outputs/${MCP_HEALTH_FILENAME}\`.
 
 ### Your Responsibilities
 
@@ -561,6 +846,7 @@ function generateGeminiPrompt(
 1. **Ask me to provide updated logs and docs:**
    - Ask for \`mcp-outputs/project_map.log\` to see repo structure
    - Ask for \`mcp-outputs/build_health.log\` to check build status
+   - Ask for \`mcp-outputs/${MCP_HEALTH_FILENAME}\` to see which MCP servers are available
    - Ask for relevant \`docs/*.md\` files if they're not included above
 
 2. **Base all reasoning ONLY on provided logs and documentation:**
@@ -601,6 +887,7 @@ function generateGrokPrompt(rootBootstrap: string, docs: ReturnType<typeof readC
 1. **If you need to see the repo structure:**
    - Ask: "Please provide mcp-outputs/project_map.log"
    - Use that log to understand file paths
+   - Ask for \`mcp-outputs/${MCP_HEALTH_FILENAME}\` to know which MCP servers are up
 
 2. **If you need build/lint status:**
    - Ask: "Please provide mcp-outputs/build_health.log"
@@ -658,6 +945,7 @@ function generateCodexPrompt(rootBootstrap: string, docs: ReturnType<typeof read
    \`\`\`bash
    cat mcp-outputs/project_map.log >> my-prompt.md
    cat docs/architecture-plan.md >> my-prompt.md
+   cat mcp-outputs/${MCP_HEALTH_FILENAME} >> my-prompt.md
    \`\`\`
 
 ### Your Responsibilities
@@ -698,6 +986,7 @@ async function generatePromptBundles(docs: ReturnType<typeof readCoreDocs>, qa: 
   const rootBootstrap = generateRootBootstrap(docs, qa)
 
   const prompts = {
+    "bootstrap.sonnet.md": generateSonnetPrompt(rootBootstrap, docs),
     "bootstrap.claude.md": generateClaudePrompt(rootBootstrap, docs),
     "bootstrap.chatgpt.md": generateChatGPTPrompt(rootBootstrap, docs),
     "bootstrap.gemini.md": generateGeminiPrompt(rootBootstrap, docs),
@@ -737,18 +1026,15 @@ async function main() {
     )
 
     // Step 2: Check MCP Servers
-    const mcpStatus = await checkMCPServers()
-    writeLog(
-      "mcp_status.log",
-      JSON.stringify(
-        {
-          status: "MCP Server Status Check",
-          ...mcpStatus,
-        },
-        null,
-        2
-      )
-    )
+    const mcpHealth = await checkMcpHealth()
+    const mcpLogPayload = {
+      status: "MCP Health Snapshot",
+      ...mcpHealth,
+    }
+    const mcpHealthJson = JSON.stringify(mcpLogPayload, null, 2)
+    writeLog(MCP_HEALTH_FILENAME, mcpHealthJson, LOGS_DIR)
+    writeLog(MCP_HEALTH_FILENAME, mcpHealthJson, OUTPUTS_DIR)
+    writeLog("mcp_status.log", mcpHealthJson, OUTPUTS_DIR)
 
     // Step 3: Run Build Health
     const buildHealth = await runBuildHealthChecks()
@@ -771,6 +1057,7 @@ async function main() {
     const qa: QASnapshot = {
       supabaseStatus,
       buildHealth,
+      mcpHealth,
     }
     await generatePromptBundles(docs, qa)
 
@@ -789,18 +1076,28 @@ async function main() {
     console.log(`   TypeScript: ${buildHealth.tsc.pass ? "✅ PASS" : "❌ FAIL"}`)
     console.log(`   Build: ${buildHealth.build.pass ? "✅ PASS" : "❌ FAIL"}`)
 
+    logInfo("✅ MCP Health:")
+    mcpHealth.servers.forEach((s) => {
+      const label = s.logicalName || s.name
+      const underlying = s.underlyingName ? ` -> ${s.underlyingName}` : ""
+      console.log(`   ${label}${underlying}: ${s.ok ? "OK" : "DOWN"} (${s.status})`)
+    })
+
     console.log("\n" + "=".repeat(60))
     logInfo("📂 Output Locations:")
-    console.log(`   Logs: ${OUTPUTS_DIR}/`)
+    console.log(`   Outputs: ${OUTPUTS_DIR}/`)
     console.log(`   Prompts: ${PROMPTS_DIR}/`)
+    console.log(`   MCP health: ${path.join(LOGS_DIR, MCP_HEALTH_FILENAME)}`)
+    console.log(`   Log files: ${LOGS_DIR}/`)
 
     console.log("\n" + "=".repeat(60))
     logInfo("🎯 Next Steps:")
     console.log("   1. Open prompts/bootstrap.claude.md and paste into Claude")
-    console.log("   2. For ChatGPT: use prompts/bootstrap.chatgpt.md")
-    console.log("   3. For Gemini: use prompts/bootstrap.gemini.md")
-    console.log("   4. For Grok: use prompts/bootstrap.grok.md")
-    console.log("   5. For Codex CLI: use prompts/bootstrap.codex-cli.md")
+    console.log("   2. For Claude Sonnet: use prompts/bootstrap.sonnet.md")
+    console.log("   3. For ChatGPT: use prompts/bootstrap.chatgpt.md")
+    console.log("   4. For Gemini: use prompts/bootstrap.gemini.md")
+    console.log("   5. For Grok: use prompts/bootstrap.grok.md")
+    console.log("   6. For Codex CLI: use prompts/bootstrap.codex-cli.md")
     console.log("\n   When in doubt, re-run: pnpm dev:orchestrator\n")
   } catch (err) {
     logError(`Orchestrator failed: ${err instanceof Error ? err.message : String(err)}`)

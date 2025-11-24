@@ -167,6 +167,7 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
       })
       await hydrateUser(null)
     } finally {
+      // Always clear loading, even on errors/timeouts
       setIsLoading(false)
     }
   }, [hydrateUser, supabase])

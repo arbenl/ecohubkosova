@@ -69,7 +69,7 @@ export default function ClaimOrganizationForm({
         className="mb-6 flex items-center gap-2 text-gray-600 hover:text-gray-900"
       >
         <ArrowLeft className="h-4 w-4" />
-        Kthehu mbrapa
+        {t("claim.back")}
       </button>
 
       <div className="mb-8">
@@ -93,7 +93,7 @@ export default function ClaimOrganizationForm({
             className="rounded-lg bg-emerald-600 px-6 py-2 text-white hover:bg-emerald-700 disabled:opacity-50 flex items-center gap-2"
           >
             <Search className="h-4 w-4" />
-            {isSearching ? "Duke kërkuar..." : "Kërko"}
+            {isSearching ? t("claim.searching") : t("claim.searchButton")}
           </button>
         </div>
       </form>
@@ -102,7 +102,7 @@ export default function ClaimOrganizationForm({
       <div className="space-y-4">
         {organizations.length === 0 && searchTerm && !isSearching && (
           <div className="rounded-lg bg-yellow-50 p-4 text-yellow-700">
-            Nuk u gjet asnjë organizatë që përputhet me kërkimin tuaj.
+            {t("claim.noResults")}
           </div>
         )}
 
@@ -125,7 +125,7 @@ export default function ClaimOrganizationForm({
               className="ml-4 rounded-lg bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
             >
               {claimingOrgId === org.id && isPending
-                ? "Duke kërkuar..."
+                ? t("claim.searching")
                 : t("claim.requestAccess")}
             </button>
           </div>

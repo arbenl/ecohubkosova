@@ -1,6 +1,4 @@
 "use client"
-
-import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -15,6 +13,11 @@ import { ListingCardV2 } from "@/components/marketplace-v2/ListingCardV2"
 import type { Listing } from "@/types"
 import { Search, SlidersHorizontal } from "lucide-react"
 import { useEffect, useState, useCallback, useMemo } from "react"
+
+type MarketplaceApiResponse = {
+  listings: Listing[]
+  hasMore: boolean
+}
 
 interface MarketplaceClientPageProps {
   locale: string
@@ -32,7 +35,6 @@ export default function MarketplaceClientPage({
   hideSearchBar = false,
 }: MarketplaceClientPageProps) {
   const t = useTranslations("marketplace")
-  const router = useRouter()
   const [listings, setListings] = useState<Listing[]>([])
   const [hasMore, setHasMore] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -56,15 +58,14 @@ export default function MarketplaceClientPage({
       | "oldest",
   }
 
+  // Map dropdown options to the V2 category slugs stored in eco_categories.slug
   const categories = [
-    { value: "Materiale të riciklueshme", label: t("categoryList.recyclable_materials") },
-    { value: "Produkte të qëndrueshme", label: t("categoryList.sustainable_products") },
-    { value: "Shërbime", label: t("categoryList.services") },
-    { value: "Energji e ripërtëritshme", label: t("categoryList.renewable_energy") },
-    { value: "Ushqim dhe bujqësi", label: t("categoryList.food_agriculture") },
-    { value: "Tekstile", label: t("categoryList.textiles") },
-    { value: "Elektronikë", label: t("categoryList.electronics") },
-    { value: "Tjera", label: t("categoryList.others") },
+    { value: "recycled-metals", label: t("categoryList.recyclable_materials") },
+    { value: "plastic-packaging", label: t("categoryList.sustainable_products") },
+    { value: "ewaste", label: t("categoryList.electronics") },
+    { value: "wood-pallets", label: t("categoryList.services") },
+    { value: "textiles-light", label: t("categoryList.textiles") },
+    { value: "materials-organic", label: t("categoryList.food_agriculture") },
   ]
 
   // Kosovo cities and towns
@@ -167,23 +168,10 @@ export default function MarketplaceClientPage({
           throw new Error("Failed to load listings")
         }
 
-        const data = await response.json()
+        const data: MarketplaceApiResponse = await response.json()
 
-        // Transform API response to match Listing type
-        const transformedListings: Listing[] = data.listings.map((item: any) => ({
-          id: item.id,
-          title: item.title,
-          description: item.description,
-          foto_url: null, // Not available in API response
-          price: Number(item.price),
-          currency: null, // Not available in API response
-          category: item.category,
-          condition: item.gjendja || "",
-          // Add other fields as needed
-        }))
-
-        setListings(transformedListings)
-        setHasMore(data.hasMore)
+        setListings(data.listings || [])
+        setHasMore(Boolean(data.hasMore))
       } catch (err) {
         console.error("[MarketplaceClient] Failed to load listings", err)
         setError(t("errorLoading"))
@@ -195,14 +183,10 @@ export default function MarketplaceClientPage({
     }
 
     loadListings()
-  }, [filters])
-
-  const handleContactClick = (listing: Listing) => {
-    router.push(`/${locale}/marketplace/${listing.id}`)
-  }
+  }, [filters, locale])
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-8">
       {/* Hero Section (optional) */}
       {showHero && (
         <div className="text-center mb-8">
@@ -239,7 +223,7 @@ export default function MarketplaceClientPage({
       </div>
 
       {/* Filter Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
+      <div className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5 md:p-6 space-y-4">
         {/* Search Form - hidden when embedded in landing */}
         {!hideSearchBar && (
           <form

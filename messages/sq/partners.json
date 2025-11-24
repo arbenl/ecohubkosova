@@ -1,36 +1,98 @@
 {
+  "page": {
+    "title": "Partnerët & Ekosistemi i EcoHub",
+    "subtitle": "Biznese, riciklues, OJQ dhe institucione që punojnë së bashku për një Kosovë rrethore."
+  },
+  "pageTitle": "Partnerët & Ekosistemi i EcoHub",
+  "pageSubtitle": "Biznese, riciklues, OJQ dhe institucione që punojnë së bashku për një Kosovë rrethore.",
   "hero": {
-    "title": "Partnerët dhe Përkrahësit",
-    "subtitle": "EcoHub Kosova ndërtohet së bashku me organizata që kujdesen për ekonominë rrethore, ajrin e pastër dhe një të ardhme më të shëndetshme. Partnerët na ndihmojnë ta zgjerojmë rrjetin, të arrijmë te më shumë biznese dhe ta mbajmë platformën të pavarur dhe falas për përdorues.",
-    "cta": {
-      "primary": "Shiko ricikluesit dhe shërbimet",
-      "primaryHref": "eco-organizations",
-      "secondary": "Shfleto tregun",
-      "secondaryHref": "marketplace"
+    "ctaBecomePartner": "Bëhu partner",
+    "ctaViewMarketplace": "Shiko tregun"
+  },
+  "stats": {
+    "organizations": "organizata",
+    "cities": "qytete",
+    "roles": "role"
+  },
+  "filters": {
+    "role": {
+      "all": "Të gjitha rolet",
+      "RECYCLER": "Riciklues",
+      "SERVICE_PROVIDER": "Ofrues shërbimesh",
+      "OJQ": "OJQ",
+      "SOCIAL_ENTERPRISE": "Ndërmarrje sociale",
+      "COLLECTOR": "Grumbullues",
+      "PUBLIC_INSTITUTION": "Institucione publike"
     }
   },
-  "types": {
-    "heading": "Si kontribuojnë partnerët",
-    "strategic": {
-      "title": "Partnerë strategjikë",
-      "description": "e përkrahin EcoHub si pjesë të politikave më të gjera për mjedisin, mbeturinat dhe shëndetin publik."
-    },
-    "technical": {
-      "title": "Partnerë teknikë",
-      "description": "ofrojnë ekspertizë për riciklim, logjistikë, të dhëna dhe mjete digjitale."
-    },
-    "community": {
-      "title": "Partnerë komunitarë",
-      "description": "shkolla, OJQ dhe rrjete që ndihmojnë EcoHub-in të arrijë te bizneset lokale dhe qytetarët."
+  "card": {
+    "viewProfile": "Shiko profilin",
+    "contactCta": "Kontakto partnerin",
+    "communityLabel": "Partner komunitar",
+    "verifiedBadge": "Partner i verifikuar",
+    "roleLabels": {
+      "RECYCLER": "Riciklues",
+      "SERVICE_PROVIDER": "Ofrues shërbimesh",
+      "NGO": "OJQ",
+      "SOCIAL_ENTERPRISE": "Ndërmarrje sociale",
+      "COLLECTOR": "Grumbullues",
+      "PUBLIC_INSTITUTION": "Institucion publik",
+      "OTHER": "Partner"
     }
   },
-  "become": {
-    "heading": "A dëshironi që organizata juaj ta përkrahë ose ta integrojë EcoHub-in?",
-    "body": "Na kontaktoni për të diskutuar format e bashkëpunimit, nga dukshmëria e thjeshtë deri te bashkëpunimet më të thella programore.",
-    "cta": "Bëhu partner"
+  "detail": {
+    "aboutTitle": "Rreth organizatës",
+    "servicesTitle": "Shërbimet & fokuset",
+    "areasTitle": "Zonat e operimit",
+    "contactTitle": "Lidhu me ekipin",
+    "verifiedBadge": "Partner i verifikuar",
+    "notFoundTitle": "Partneri nuk u gjet",
+    "notFoundBody": "Nuk mundëm të gjejmë këtë profil partneri. Mund të jetë zhvendosur ose të mos jetë më publik.",
+    "backToPartners": "Kthehu te partnerët"
   },
-  "why": {
-    "heading": "Pse janë të rëndësishëm partnerët për biznese dhe qytetarë",
-    "body": "Partneritetet e forta bëjnë që EcoHub të mos jetë vetëm një faqe interneti, por një infrastrukturë e gjallë: të dhënat përditësohen, organizatat verifikohen dhe mundësi të reja rrethore paraqiten me kalimin e kohës. Kjo e bën më të lehtë për bizneset ta besojnë platformën, dhe për qytetarët e komunat ta rekomandojnë si mjet praktik, jo vetëm si faqe fushate."
+  "sections": {
+    "featured": {
+      "title": "Organizatat e veçuara të gjelbra"
+    },
+    "recyclers": {
+      "title": "Ricikluesit & trajtuesit e materialeve"
+    },
+    "services": {
+      "title": "Ofruesit e shërbimeve & logjistikës"
+    },
+    "ngos": {
+      "title": "OJQ-të & partnerët komunitarë"
+    },
+    "institutions": {
+      "title": "Partnerët institucionalë & donatorët"
+    },
+    "join": {
+      "title": "Bëhu pjesë e ekosistemit EcoHub",
+      "description": "Krijoni ose kërkoni profilin e organizatës suaj, publikoni oferta dhe kërkesa, dhe bashkohuni në nismat e ekonomisë rrethore në Kosovë."
+    }
+  },
+  "cards": {
+    "viewProfile": "Shiko profilin",
+    "contactPartner": "Kontakto partnerin",
+    "cityLabel": "Qyteti",
+    "roleLabel": "Roli",
+    "roleRecycler": "Riciklues",
+    "roleCollector": "Grumbullues",
+    "roleServiceProvider": "Ofrues shërbimesh",
+    "roleNGO": "OJQ",
+    "roleSocialEnterprise": "Ndërmarrje sociale",
+    "verified": "Partner i verifikuar",
+    "community": "Partner komunitar",
+    "verifiedBadge": "Partner i verifikuar",
+    "locationLabel": "Lokacioni",
+    "wasteTypesLabel": "Llojet e mbetjeve",
+    "serviceAreasLabel": "Zonat e shërbimit"
+  },
+  "cta": {
+    "browseOrgs": "Shfleto organizatat e gjelbra",
+    "joinEcoHub": "Krijo ose kërko organizatën tënde",
+    "title": "Sillni organizatën tuaj në EcoHub",
+    "body": "Bëhuni pjesë e rrjetit të verifikuar të ricikluesve, ofruesve të shërbimeve, OJQ-ve dhe institucioneve që shtyjnë përpara ekonominë qarkulluese.",
+    "button": "Fillo regjistrimin si partner"
   }
 }

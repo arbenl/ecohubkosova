@@ -1,7 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache"
 import { and, eq } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
-import { organizationMembers, organizations, users } from "@/db/schema"
+import { organizationMembers, organizations, users, ecoOrganizations } from "@/db/schema"
 
 /**
  * Organization onboarding service
@@ -28,6 +28,7 @@ export interface UserOrganization {
   location: string
   type: string
   is_approved: boolean
+  verification_status: string | null
   role_in_organization: string
   created_at: string
 }
@@ -80,6 +81,18 @@ export async function createOrganizationForUser(
         user_id: userId,
         role_in_organization: "admin",
         is_approved: true,
+      })
+
+      // Map legacy type to V2 org_role
+      let orgRole: "NGO" | "PRODUCER" | "SERVICE_PROVIDER" = "PRODUCER"
+      if (input.type === "OJQ") orgRole = "NGO"
+      else if (input.type === "Ndërmarrje Sociale") orgRole = "SERVICE_PROVIDER"
+
+      // Create eco_organization entry (required for V2)
+      await tx.insert(ecoOrganizations).values({
+        organization_id: createdOrgId,
+        org_role: orgRole,
+        verification_status: "UNVERIFIED",
       })
     })
 
@@ -155,12 +168,14 @@ export async function fetchUserOrganizations(userId: string): Promise<{ data: Us
       .select({
         organization: organizations,
         member: organizationMembers,
+        ecoOrg: ecoOrganizations,
       })
       .from(organizationMembers)
       .innerJoin(organizations, eq(organizationMembers.organization_id, organizations.id))
+      .leftJoin(ecoOrganizations, eq(organizations.id, ecoOrganizations.organization_id))
       .where(eq(organizationMembers.user_id, userId))
 
-    const data: UserOrganization[] = rows.map(({ organization, member }) => ({
+    const data: UserOrganization[] = rows.map(({ organization, member, ecoOrg }) => ({
       id: organization.id,
       name: organization.name,
       description: organization.description,
@@ -170,6 +185,7 @@ export async function fetchUserOrganizations(userId: string): Promise<{ data: Us
       location: organization.location,
       type: organization.type,
       is_approved: organization.is_approved,
+      verification_status: ecoOrg?.verification_status ?? "UNVERIFIED",
       role_in_organization: member.role_in_organization,
       created_at: organization.created_at.toISOString(),
     }))
@@ -218,9 +234,11 @@ export async function fetchUserOrganization(
       .select({
         organization: organizations,
         member: organizationMembers,
+        ecoOrg: ecoOrganizations,
       })
       .from(organizationMembers)
       .innerJoin(organizations, eq(organizationMembers.organization_id, organizations.id))
+      .leftJoin(ecoOrganizations, eq(organizations.id, ecoOrganizations.organization_id))
       .where(and(eq(organizationMembers.user_id, userId), eq(organizationMembers.organization_id, organizationId)))
       .limit(1)
 
@@ -228,7 +246,7 @@ export async function fetchUserOrganization(
       return { data: null, error: "Organizata nuk u gjet ose nuk jeni anëtar." }
     }
 
-    const { organization, member } = rows[0]
+    const { organization, member, ecoOrg } = rows[0]
 
     return {
       data: {
@@ -241,6 +259,7 @@ export async function fetchUserOrganization(
         location: organization.location,
         type: organization.type,
         is_approved: organization.is_approved,
+        verification_status: ecoOrg?.verification_status ?? "UNVERIFIED",
         role_in_organization: member.role_in_organization,
         created_at: organization.created_at.toISOString(),
       },
@@ -253,3 +272,10 @@ export async function fetchUserOrganization(
     }
   }
 }
+
+/**
+ * Organization onboarding service
+ * Handles creation, claiming, and membership management for organizations
+ */
+
+

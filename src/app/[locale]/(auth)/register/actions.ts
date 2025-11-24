@@ -111,7 +111,7 @@ export async function registerUser(formData: RegistrationFormData) {
     }
 
     // Revalidate paths that might display user/organization data
-    revalidatePath("/dashboard")
+    revalidatePath("/my/organization")
     revalidatePath("/profile")
     revalidatePath("/partners")
 

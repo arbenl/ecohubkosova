@@ -58,17 +58,17 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
-            href={`/${locale}/eco-organizations`}
-            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-          >
-            {t("recyclersServices")}
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link
             href={`/${locale}/partners`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             {t("partners")}
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
+          </Link>
+          <Link
+            href={`/${locale}/how-it-works`}
+            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
+          >
+            {t("howItWorks")}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
@@ -114,7 +114,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                     {t("savedListings")}
                   </Link>
                   <Link
-                    href={`/${locale}/dashboard`}
+                    href={`/${locale}/my/organization`}
                     className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] transition-colors"
                   >
                     {t("dashboard")}
@@ -176,18 +176,18 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                 {t("marketplace")}
               </Link>
               <Link
-                href={`/${locale}/eco-organizations`}
-                className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t("recyclersServices")}
-              </Link>
-              <Link
                 href={`/${locale}/partners`}
                 className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t("partners")}
+              </Link>
+              <Link
+                href={`/${locale}/how-it-works`}
+                className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t("howItWorks")}
               </Link>
               <Link
                 href={`/${locale}/about`}
@@ -239,7 +239,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                       className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
                       asChild
                     >
-                      <Link href={`/${locale}/dashboard`} onClick={() => setIsMenuOpen(false)}>
+                      <Link href={`/${locale}/my/organization`} onClick={() => setIsMenuOpen(false)}>
                         {t("dashboard")}
                       </Link>
                     </Button>

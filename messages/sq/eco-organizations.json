@@ -1,6 +1,7 @@
 {
   "pageTitle": "Ricikluesit & organizatat e gjelbra në Kosovë",
   "pageSubtitle": "Zbuloni ricikluesit, grumbulluesit dhe ofruesit e shërbimeve ekologjike.",
+  "browseMarketplace": "Shfleto tregun",
   "filterRoleLabel": "Roli",
   "allRoles": "Të gjitha rolet",
   "filterCityLabel": "Qyteti",
@@ -19,5 +20,7 @@
   },
   "cardMainMaterials": "Materialet Kryesore",
   "cardCertifications": "Certifikimet",
-  "cardViewOrganization": "Shiko Organizatën"
+  "cardViewOrganization": "Shiko Organizatën",
+  "contactPersonLabel": "Person kontakti",
+  "serviceAreasLabel": "Zonat e shërbimit"
 }

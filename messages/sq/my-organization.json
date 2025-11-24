@@ -12,19 +12,82 @@
       "contactEmail": "Email kontakti",
       "primaryInterest": "Interesi kryesor",
       "memberRoleAdmin": "Admin",
-      "statusPending": "Në pritje të aprovimit"
+      "memberRoleEditor": "Redaktor",
+      "memberRoleViewer": "Vëzhgues",
+      "memberRole": "Roli juaj",
+      "statusPending": "Në pritje të aprovimit",
+      "verification": {
+        "verified": "E verifikuar",
+        "pending": "Në pritje të verifikimit",
+        "unverified": "E paverifikuar"
+      }
     },
     "actions": {
       "viewPublicProfile": "Shiko profilin publik",
       "editProfile": "Ndrysho profilin",
       "createListing": "Krijo Ofertë"
+    },
+    "listings": {
+      "title": "Listimet në treg",
+      "subtitle": "Ofertat dhe kërkesat aktive të organizatës",
+      "empty": "Ende nuk ka listime. Publiko listimin e parë për t'u shfaqur në treg.",
+      "headers": {
+        "title": "Titulli",
+        "status": "Statusi",
+        "location": "Vendndodhja"
+      },
+      "actions": {
+        "view": "Shiko",
+        "archive": "Arkivo"
+      }
     }
   },
   "onboarding": {
     "title": "Lidhni organizatën tuaj",
     "subtitle": "Menaxho profilin e organizatës dhe ofertat",
+    "noOrgDescription": "Ende nuk keni të lidhur asnjë organizatë me EcoHub. Mund të krijoni një profil të ri ose të lidheni me një organizatë ekzistuese.",
+    "createNew": "Krijoni organizatë të re",
+    "searchExisting": "Lidheni një organizatë ekzistuese",
+    "createDescription": "Krijoni një profil për biznesin ose organizatën tuaj.",
+    "searchDescription": "Kërkoni dhe lidheni me një organizatë që ekziston në EcoHub.",
+    "startRegistration": "Fillo regjistrimin",
     "createChoice": "Krijo një organizatë të re",
     "claimChoice": "Kërko një organizatë ekzistuese"
+  },
+  "claim": {
+    "title": "Gjej organizatën tënde",
+    "subtitle": "Kërko një organizatë ekzistuese dhe kërko qasje.",
+    "search": "Kërko sipas emrit ose përshkrimit",
+    "searchButton": "Kërko",
+    "searching": "Duke kërkuar...",
+    "noResults": "Nuk u gjet asnjë organizatë që përputhet me kërkimin tuaj.",
+    "requestAccess": "Kërko qasje",
+    "back": "Kthehu mbrapa"
+  },
+  "create": {
+    "title": "Krijoni profilin e organizatës suaj",
+    "subtitle": "Shtoni të dhënat bazë në mënyrë që të tjerët t’ju gjejnë dhe kontaktojnë përmes EcoHub.",
+    "form": {
+      "name": "Emri i organizatës",
+      "namePlaceholder": "p.sh. REC-KOS Sh.p.k.",
+      "description": "Përshkrimi",
+      "descriptionPlaceholder": "Përshkrim i shkurtër i aktivitetit të organizatës",
+      "type": "Lloji i organizatës",
+      "typePlaceholder": "Zgjidhni llojin",
+      "typeOJQ": "OJQ",
+      "typeCompany": "Ndërmarrje sociale",
+      "typeEnterprise": "Kompani",
+      "primaryInterest": "Fokusi kryesor",
+      "primaryInterestPlaceholder": "p.sh. Menaxhimi i mbetjeve, riciklimi, ekonomia rrethore",
+      "contactPerson": "Personi kontaktues",
+      "contactPersonPlaceholder": "Emri dhe mbiemri i personit kontaktues",
+      "contactEmail": "Email kontakti",
+      "contactEmailPlaceholder": "Emaili zyrtar për kontakt në EcoHub",
+      "location": "Lokacioni",
+      "locationPlaceholder": "Prishtinë, Prizren, Pejë…",
+      "cancel": "Anulo",
+      "submit": "Krijo organizatën"
+    }
   },
   "analytics": {
     "tabs": {

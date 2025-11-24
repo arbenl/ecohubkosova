@@ -139,7 +139,7 @@ export default async function SustainabilityPage({
                 ))}
               </ul>
               <Button asChild className="bg-teal-600 hover:bg-teal-700">
-                <Link href={`/${locale}/eco-organizations`}>{t("certification.cta")}</Link>
+                <Link href={`/${locale}/partners`}>{t("certification.cta")}</Link>
               </Button>
             </div>
           </div>

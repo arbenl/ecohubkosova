@@ -7,33 +7,28 @@ import { MapPin, Leaf } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Skeleton } from "@/components/ui/skeleton"
 
-// Type for the listing data from API
-// We use a flexible type here to support both V1 and V2 listing shapes during migration
+// Flexible listing shape that works for both V1 and V2 data during migration
 interface ListingCardV2Props {
   listing: {
     id: string
     title: string
     description: string | null
-    // V2 specific fields (optional for V1 compatibility)
-    flow_type?: string
-    pricing_type?: string
+    flow_type?: string | null
+    pricing_type?: string | null
     city?: string | null
+    region?: string | null
     eco_labels?: string[] | null
     tags?: string[] | null
     category_name_en?: string | null
     category_name_sq?: string | null
-
-    // V1 fields that map to V2 concepts
     price?: string | number | null
     currency?: string | null
     location?: string | null // Maps to city
     listing_type?: string // Maps to flow_type
-
-    // Common fields
     slug?: string | null
     images?: string[] | null
-    status?: string
-    visibility?: string
+    status?: string | null
+    visibility?: string | null
     created_at?: string
     updated_at?: string | null
     user_id?: string
@@ -42,7 +37,8 @@ interface ListingCardV2Props {
     quantity?: string | null
     unit?: string | null
     condition?: string | null
-    category?: string // V1 field
+    category?: string
+    contact?: string
   }
   locale: string
 }
