@@ -72,7 +72,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
-            href={`/${locale}/about`}
+            href={`/${locale}/about-us`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             {t("about")}
@@ -190,7 +190,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                 {t("howItWorks")}
               </Link>
               <Link
-                href={`/${locale}/about`}
+                href={`/${locale}/about-us`}
                 className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -239,7 +239,10 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                       className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
                       asChild
                     >
-                      <Link href={`/${locale}/my/organization`} onClick={() => setIsMenuOpen(false)}>
+                      <Link
+                        href={`/${locale}/my/organization`}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         {t("dashboard")}
                       </Link>
                     </Button>

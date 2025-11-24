@@ -24,7 +24,8 @@
   "filterTypes": {
     "all": "Të gjitha",
     "forSale": "Për Shitje",
-    "wanted": "Kërkoj të Blej"
+    "wanted": "Kërkoj të Blej",
+    "services": "Shërbime"
   },
   "loginToViewEmail": "Kyçu për ta parë emailin",
   "name": "Emri",

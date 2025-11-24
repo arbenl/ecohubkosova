@@ -63,7 +63,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
           </Link>
 
           <Link
-            href={`/${locale}/about`}
+            href={`/${locale}/about-us`}
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             {t("navigation.about")}
@@ -142,7 +142,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
             {t("navigation.partners")}
           </Link>
           <Link
-            href={`/${locale}/about`}
+            href={`/${locale}/about-us`}
             className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
             onClick={() => setIsMenuOpen(false)}
           >

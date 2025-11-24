@@ -24,7 +24,8 @@
   "filterTypes": {
     "all": "All",
     "forSale": "For Sale",
-    "wanted": "Wanted to Buy"
+    "wanted": "Wanted to Buy",
+    "services": "Services"
   },
   "loginToViewEmail": "Login to view email",
   "name": "Name",
