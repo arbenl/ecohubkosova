@@ -89,7 +89,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                 asChild
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
               >
-                <Link href={`/${locale}/dashboard`}>{t("navigation.dashboard")}</Link>
+                <Link href={`/${locale}/my/organization`}>{t("navigation.dashboard")}</Link>
               </Button>
               <SignOutButton
                 variant="ghost"
@@ -168,7 +168,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                   {t("navigation.welcome")}, {derivedName}
                 </div>
                 <Button className="w-full eco-gradient text-white rounded-xl font-medium" asChild>
-                  <Link href={`/${locale}/dashboard`} onClick={() => setIsMenuOpen(false)}>
+                  <Link href={`/${locale}/my/organization`} onClick={() => setIsMenuOpen(false)}>
                     {t("navigation.dashboard")}
                   </Link>
                 </Button>

@@ -1,0 +1,42 @@
+{
+  "hero": {
+    "title": "Tregu për Ekonominë Rrethore",
+    "subtitle": "Blej, shes dhe shkëmbe produkte në mënyrë të qëndrueshme. Lidhu me ricikluesit, koleksionuesit dhe shërbimet në komunitetin tënd.",
+    "ctaBrowse": "Shfletoni Ofertat",
+    "ctaFindOrgs": "Gjeni Ricikluesit & Shërbimet",
+    "ctaCreateListingForOrg": "Krijoni Ofertë për Organizatën Tuaj"
+  },
+  "recyclers": {
+    "title": "Direktoria e Ricikluesve & Shërbimeve",
+    "subtitle": "Zbuloni organizatat e certifikuara që ofrojnë riciklim, koleksion dhe shërbime për ekonominë rrethore",
+    "ctaAll": "Shikoni Të Gjithë Ricikluesit & Shërbimet"
+  },
+  "forOrgs": {
+    "title": "Për Organizatat",
+    "subtitle": "Rritni ndikimin tuaj ekologjik: listoni produkte, ndjekni analitikën dhe bashkëpunoni me ekipin tuaj.",
+    "features": {
+      "feature1": "Krijoni dhe menaxhoni ofertat miqësore ndaj mjedisit",
+      "feature2": "Ndjekni shikimet, kontaktet dhe ndarjet në kohë reale",
+      "feature3": "Ftoni dhe menaxhoni anëtarët e ekipit",
+      "feature4": "Lidhu me komunitetin e ekonomisë rrethore"
+    },
+    "ctaCreateProfile": "Krijoni Profilin e Organizatës",
+    "ctaStartOnboarding": "Filloni Përpunimin e Organizatës",
+    "ctaMyOrganization": "Shkoni te Organizata Ime"
+  },
+  "myEcoHub": {
+    "title": "EcoHub-i Juaj",
+    "savedListings": "Ofertat e Ruajtura",
+    "viewAllSaved": "Shikoni Të Gjitha të Ruajturet",
+    "orgImpact": "Ndikimi i Organizatës",
+    "viewAnalytics": "Shikoni Analitikën",
+    "lastThirtyDays": "30 Ditët e Fundit"
+  },
+  "story": {
+    "title": "Rreth EcoHub Kosova",
+    "content": "EcoHub Kosova është një treg dixhital që lidh individët dhe organizatat në ekonominë rrethore. Ne e bëjmë të lehtë blerjen, shitjen dhe shkëmbimin në mënyrë të qëndrueshme ndërsa mbështesim bizneset vendore.",
+    "statsOrganizations": "Organizata Aktive",
+    "statsListings": "Ofertat Eko",
+    "statsCommunities": "Komunitetet e Shërbimit"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "status": "MCP Health Snapshot",
+  "allHealthy": true,
+  "availableCount": 7,
+  "healthyCount": 7,
+  "runningCount": 7,
+  "servers": [
+    {
+      "name": "mcp-context-server",
+      "status": "running",
+      "ok": true,
+      "implemented": true,
+      "binaryFound": true,
+      "processDetected": true,
+      "message": "Process detected",
+      "commandHint": "node tools/mcp-context-server/dist/server.js",
+      "logicalName": "mcp-context-server",
+      "underlyingName": "mcp-context-server"
+    },
+    {
+      "name": "ecohub-qa",
+      "status": "running",
+      "ok": true,
+      "implemented": true,
+      "binaryFound": true,
+      "processDetected": true,
+      "message": "Process detected",
+      "commandHint": "node tools/ecohub-qa/dist/index.js",
+      "logicalName": "ecohub-qa",
+      "underlyingName": "ecohub-qa"
+    },
+    {
+      "name": "context7",
+      "status": "running",
+      "ok": true,
+      "implemented": true,
+      "binaryFound": true,
+      "processDetected": true,
+      "message": "Process detected",
+      "commandHint": "npx context7-mcp",
+      "logicalName": "mcp-db-schema",
+      "underlyingName": "context7"
+    },
+    {
+      "name": "context7",
+      "status": "running",
+      "ok": true,
+      "implemented": true,
+      "binaryFound": true,
+      "processDetected": true,
+      "message": "Process detected",
+      "commandHint": "npx context7-mcp",
+      "logicalName": "mcp-db-inspect",
+      "underlyingName": "context7"
+    },
+    {
+      "name": "ecohub-qa",
+      "status": "running",
+      "ok": true,
+      "implemented": true,
+      "binaryFound": true,
+      "processDetected": true,
+      "message": "Process detected",
+      "commandHint": "node tools/ecohub-qa/dist/index.js",
+      "logicalName": "mcp-test-runner",
+      "underlyingName": "ecohub-qa"
+    },
+    {
+      "name": "context7",
+      "status": "running",
+      "ok": true,
+      "implemented": true,
+      "binaryFound": true,
+      "processDetected": true,
+      "message": "Process detected",
+      "commandHint": "npx context7-mcp",
+      "logicalName": "mcp-docs-knowledge",
+      "underlyingName": "context7"
+    },
+    {
+      "name": "context7",
+      "status": "running",
+      "ok": true,
+      "implemented": true,
+      "binaryFound": true,
+      "processDetected": true,
+      "message": "Process detected",
+      "commandHint": "npx context7-mcp",
+      "logicalName": "mcp-ux-assets",
+      "underlyingName": "context7"
+    }
+  ],
+  "summary": "mcp-context-server → mcp-context-server : OK (running) | ecohub-qa → ecohub-qa : OK (running) | mcp-db-schema → context7 : OK (running) | mcp-db-inspect → context7 : OK (running) | mcp-test-runner → ecohub-qa : OK (running) | mcp-docs-knowledge → context7 : OK (running) | mcp-ux-assets → context7 : OK (running)",
+  "timestamp": "2025-11-24T16:58:26.648Z"
+}

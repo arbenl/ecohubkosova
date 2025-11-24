@@ -1,0 +1,140 @@
+{
+  "workspace": {
+    "title": "My Organization",
+    "subtitle": "Manage your organization profile and listings",
+    "switchOrganization": "Switch Organization",
+    "section": {
+      "profile": "Profile"
+    },
+    "profile": {
+      "location": "Location",
+      "contactPerson": "Contact person",
+      "contactEmail": "Contact email",
+      "primaryInterest": "Primary interest",
+      "memberRoleAdmin": "Admin",
+      "memberRoleEditor": "Editor",
+      "memberRoleViewer": "Viewer",
+      "memberRole": "Your role",
+      "statusPending": "Pending approval",
+      "verification": {
+        "verified": "Verified",
+        "pending": "Pending Verification",
+        "unverified": "Unverified"
+      }
+    },
+    "actions": {
+      "viewPublicProfile": "View public profile",
+      "editProfile": "Edit profile",
+      "createListing": "Create Listing"
+    },
+    "listings": {
+      "title": "Marketplace listings",
+      "subtitle": "Active offers and requests for your organization",
+      "empty": "No listings yet. Publish your first listing to appear in the marketplace.",
+      "headers": {
+        "title": "Title",
+        "status": "Status",
+        "location": "Location"
+      },
+      "actions": {
+        "view": "View",
+        "archive": "Archive"
+      }
+    }
+  },
+  "onboarding": {
+    "title": "Connect your organization",
+    "subtitle": "Manage your organization profile and listings",
+    "noOrgDescription": "You don’t have an organization connected to EcoHub yet. You can either create a new profile or connect to an existing organization.",
+    "createNew": "Create a new organization",
+    "searchExisting": "Connect to an existing organization",
+    "createDescription": "Create a profile for your business or organization.",
+    "searchDescription": "Find and connect to an organization that already exists on EcoHub.",
+    "startRegistration": "Start registration",
+    "createChoice": "Create a new organization",
+    "claimChoice": "Claim an existing organization"
+  },
+  "claim": {
+    "title": "Find your organization",
+    "subtitle": "Search for an existing organization and request access.",
+    "search": "Search by name or description",
+    "searchButton": "Search",
+    "searching": "Searching...",
+    "noResults": "No organizations matched your search.",
+    "requestAccess": "Request access",
+    "back": "Back"
+  },
+  "create": {
+    "title": "Create your organization profile",
+    "subtitle": "Add basic information so others can find and contact you through EcoHub.",
+    "form": {
+      "name": "Organization name",
+      "namePlaceholder": "e.g. REC-KOS Sh.p.k.",
+      "description": "Description",
+      "descriptionPlaceholder": "Short description of what your organization does",
+      "type": "Organization type",
+      "typePlaceholder": "Choose type",
+      "typeOJQ": "NGO",
+      "typeCompany": "Social enterprise",
+      "typeEnterprise": "Company",
+      "primaryInterest": "Primary focus",
+      "primaryInterestPlaceholder": "e.g. Waste management, recycling, circular economy",
+      "contactPerson": "Contact person",
+      "contactPersonPlaceholder": "Full name of the main contact",
+      "contactEmail": "Contact email",
+      "contactEmailPlaceholder": "Official email for EcoHub contact",
+      "location": "Location",
+      "locationPlaceholder": "Prishtina, Prizren, Peja…",
+      "cancel": "Cancel",
+      "submit": "Create organization"
+    }
+  },
+  "analytics": {
+    "tabs": {
+      "analytics": "Analytics"
+    },
+    "empty": {
+      "title": "No activity yet",
+      "description": "Once people start viewing and contacting your listings, you'll see statistics here about views, contacts, saves, and shares."
+    }
+  },
+  "members": {
+    "tabs": {
+      "members": "Members"
+    },
+    "title": "Team Members",
+    "subtitle": "People who manage this organization on EcoHub",
+    "empty": {
+      "title": "No members yet",
+      "description": "Invite colleagues to help manage listings and your organization profile."
+    },
+    "invite": {
+      "title": "Invite Member",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "colleague@example.com",
+      "roleLabel": "Role",
+      "submit": "Send Invite",
+      "sending": "Sending...",
+      "cancel": "Cancel",
+      "error": "Failed to send invitation"
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "joinedDate": "Joined",
+      "actions": "Actions"
+    },
+    "roleLabels": {
+      "ADMIN": "Admin",
+      "EDITOR": "Editor",
+      "VIEWER": "Viewer"
+    },
+    "actions": {
+      "remove": "Remove member"
+    },
+    "confirmations": {
+      "removeDescription": "Are you sure you want to remove {name} from this organization?"
+    }
+  }
+}

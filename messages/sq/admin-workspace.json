@@ -1,0 +1,30 @@
+{
+  "title": "Paneli i administratorit",
+  "subtitle": "Monitoro aktivitetin, partnerët dhe listimet në EcoHub",
+  "stats": {
+    "users": "Përdorues",
+    "usersDescription": "Përdorues të regjistruar në platformë",
+    "organizations": "Organizata",
+    "organizationsDescription": "Organizata të regjistruara në platformë",
+    "organizationsPending": "Në pritje të aprovimit",
+    "articles": "Artikuj",
+    "articlesDescription": "Artikuj në platformë",
+    "articlesPending": "Në pritje të publikimit",
+    "listings": "Listime në treg",
+    "listingsDescription": "Listime në tregun e platformës",
+    "listingsPending": "Listime draft"
+  },
+  "quickActions": {
+    "title": "Veprime të shpejta",
+    "description": "Hyr shpejt në flukset kryesore të administrimit",
+    "users": "Menaxho përdoruesit",
+    "organizations": "Aprovo organizatat",
+    "articles": "Publiko artikujt",
+    "listings": "Rishiko listimet"
+  },
+  "activity": {
+    "title": "Aktiviteti i fundit",
+    "description": "Përditësimet më të reja në platformë",
+    "placeholder": "Feed i aktivitetit vjen së shpejti"
+  }
+}

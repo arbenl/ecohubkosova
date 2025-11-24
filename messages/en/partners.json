@@ -1,0 +1,98 @@
+{
+  "page": {
+    "title": "EcoHub Partners & Ecosystem",
+    "subtitle": "Businesses, recyclers, NGOs and institutions working together for a circular Kosovo."
+  },
+  "pageTitle": "EcoHub Partners & Ecosystem",
+  "pageSubtitle": "Businesses, recyclers, NGOs and institutions working together for a circular Kosovo.",
+  "hero": {
+    "ctaBecomePartner": "Become a partner",
+    "ctaViewMarketplace": "View marketplace"
+  },
+  "stats": {
+    "organizations": "organizations",
+    "cities": "cities",
+    "roles": "roles"
+  },
+  "filters": {
+    "role": {
+      "all": "All roles",
+      "RECYCLER": "Recyclers",
+      "SERVICE_PROVIDER": "Service providers",
+      "OJQ": "NGOs",
+      "SOCIAL_ENTERPRISE": "Social enterprises",
+      "COLLECTOR": "Collectors",
+      "PUBLIC_INSTITUTION": "Public institutions"
+    }
+  },
+  "card": {
+    "viewProfile": "View profile",
+    "contactCta": "Contact partner",
+    "communityLabel": "Community partner",
+    "verifiedBadge": "Verified partner",
+    "roleLabels": {
+      "RECYCLER": "Recycler",
+      "SERVICE_PROVIDER": "Service provider",
+      "NGO": "NGO",
+      "SOCIAL_ENTERPRISE": "Social enterprise",
+      "COLLECTOR": "Collector",
+      "PUBLIC_INSTITUTION": "Public institution",
+      "OTHER": "Partner"
+    }
+  },
+  "detail": {
+    "aboutTitle": "About the organization",
+    "servicesTitle": "Services & focus areas",
+    "areasTitle": "Operating regions",
+    "contactTitle": "Connect with the team",
+    "verifiedBadge": "Verified partner",
+    "notFoundTitle": "Partner not found",
+    "notFoundBody": "We couldn’t find this partner profile. It may have been moved or is no longer published.",
+    "backToPartners": "Back to partners"
+  },
+  "sections": {
+    "featured": {
+      "title": "Featured Eco Organizations"
+    },
+    "recyclers": {
+      "title": "Recyclers & Material Handlers"
+    },
+    "services": {
+      "title": "Service Providers & Logistics"
+    },
+    "ngos": {
+      "title": "NGOs & Community Partners"
+    },
+    "institutions": {
+      "title": "Institutional & Donor Partners"
+    },
+    "join": {
+      "title": "Join the EcoHub Ecosystem",
+      "description": "Create or claim your organization profile, publish offers and requests, and join circular economy initiatives across Kosovo."
+    }
+  },
+  "cards": {
+    "viewProfile": "View profile",
+    "contactPartner": "Contact partner",
+    "cityLabel": "City",
+    "roleLabel": "Role",
+    "roleRecycler": "Recycler",
+    "roleCollector": "Collector",
+    "roleServiceProvider": "Service provider",
+    "roleNGO": "NGO",
+    "roleSocialEnterprise": "Social enterprise",
+    "verified": "Verified partner",
+    "community": "Community partner",
+    "verifiedBadge": "Verified partner",
+    "locationLabel": "Location",
+    "wasteTypesLabel": "Waste types",
+    "serviceAreasLabel": "Service areas"
+  },
+  "cta": {
+    "browseOrgs": "Browse eco organizations",
+    "joinEcoHub": "Create or claim your organization",
+    "title": "Bring your organization into EcoHub",
+    "body": "Join the verified network of recyclers, service providers, NGOs, and institutions driving the circular economy.",
+    "button": "Start partner onboarding"
+  }
+}

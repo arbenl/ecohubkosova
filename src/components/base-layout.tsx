@@ -1,5 +1,5 @@
 import type React from "react"
-import { Footer } from "@/components/footer"
+import { FooterV2 } from "@/components/layout/FooterV2"
 import { Header } from "@/components/header"
 
 interface BaseLayoutProps {
@@ -19,7 +19,7 @@ export function BaseLayout({ children, className = "" }: BaseLayoutProps) {
       <main className={`flex-1 ${className}`}>
         <div className="animate-fade-in">{children}</div>
       </main>
-      <Footer />
+      <FooterV2 />
     </div>
   )
 }

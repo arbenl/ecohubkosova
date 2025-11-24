@@ -1,21 +1,27 @@
 import Link from "next/link"
 
-
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Calendar, MapPin, Package, Euro, User, Building } from "lucide-react"
+import { ArrowLeft, Calendar, MapPin, Package, Euro } from "lucide-react"
 import { getServerUser } from "@/lib/supabase/server"
 import ContactListingButton from "./contact-listing-button"
+import { ContactCardV2 } from "@/components/marketplace-v2/ContactCardV2"
 import { fetchListingById } from "@/services/listings"
 import type { Listing } from "@/types"
-import { getLocale } from "next-intl/server"
+import { getLocale, getTranslations } from "next-intl/server"
 
-export default async function ListingDetailPage({ params }: { params: { id: string } }) {
+export default async function ListingDetailPage({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>
+}) {
+  const { id } = await params
   const locale = await getLocale()
+  const t = await getTranslations("marketplace-v2")
   const { user } = await getServerUser()
 
-  const { data: listing, error } = await fetchListingById(params.id)
+  const { data: listing, error } = await fetchListingById(id)
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -30,194 +36,167 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
     return (
       <div className="flex min-h-screen flex-col">
         <>
-        <main className="flex-1 py-12">
-          <div className="container px-4 md:px-6">
-            <div className="text-center py-12">
-              <h1 className="text-2xl font-bold mb-4">Listimi nuk u gjet</h1>
-              <p className="text-gray-600 mb-6">{error}</p>
-              <Button asChild>
-                <Link href={`/${locale}/marketplace`}>
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Kthehu në Treg
-                </Link>
-              </Button>
+          <main className="flex-1 py-12">
+            <div className="container px-4 md:px-6">
+              <div className="text-center py-12">
+                <h1 className="text-2xl font-bold mb-4">{t("detail.notFoundTitle")}</h1>
+                <p className="text-gray-600 mb-6">
+                  {error || t("detail.notFoundDescription")}
+                </p>
+                <Button asChild>
+                  <Link href={`/${locale}/marketplace`}>
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    {t("pagination.previous")}
+                  </Link>
+                </Button>
+              </div>
             </div>
-          </div>
-        </main>
+          </main>
         </>
       </div>
     )
   }
 
+  const flowTypeLabel = listing.flow_type
+    ? t(`flowTypes.${listing.flow_type}` as any)
+    : listing.listing_type === "shes"
+      ? t("flowTypes.OFFER_MATERIAL")
+      : t("flowTypes.REQUEST_MATERIAL")
+  const locationLabel = listing.location || listing.city || ""
   return (
     <div className="flex min-h-screen flex-col">
       <>
-      <main className="flex-1 py-12">
-        <div className="container px-4 md:px-6 max-w-4xl">
-          <div className="mb-6">
-            <Button variant="ghost" asChild>
-              <Link href="/marketplace">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Kthehu në Treg
-              </Link>
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main Content */}
-            <div className="lg:col-span-2">
-              <Card>
-                <CardHeader className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Badge
-                      variant={listing.listing_type === "shes" ? "default" : "secondary"}
-                      className={
-                        listing.listing_type === "shes"
-                          ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
-                          : "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                      }
-                    >
-                      {listing.listing_type === "shes" ? "Për Shitje" : "Kërkoj të Blej"}
-                    </Badge>
-                    <span className="text-sm text-gray-500">{formatDate(listing.created_at)}</span>
-                  </div>
-
-                  <CardTitle className="text-3xl font-bold">{listing.title}</CardTitle>
-
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline">{listing.category}</Badge>
-                  </div>
-                </CardHeader>
-
-                <CardContent className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3">Përshkrimi</h3>
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{listing.description}</p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2">
-                      <Euro className="h-5 w-5 text-gray-500" />
-                      <div>
-                        <span className="font-medium">Çmimi:</span>
-                        <p className="text-lg font-bold text-emerald-600">
-                          {listing.price} € / {listing.unit}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Package className="h-5 w-5 text-gray-500" />
-                      <div>
-                        <span className="font-medium">Sasia:</span>
-                        <p>{listing.quantity}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-5 w-5 text-gray-500" />
-                      <div>
-                        <span className="font-medium">Vendndodhja:</span>
-                        <p>{listing.location}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-5 w-5 text-gray-500" />
-                      <div>
-                        <span className="font-medium">Publikuar:</span>
-                        <p>{formatDate(listing.created_at)}</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+        <main className="flex-1 py-12">
+          <div className="container px-4 md:px-6 max-w-4xl">
+            <div className="mb-6">
+              <Button variant="ghost" asChild>
+                <Link href={`/${locale}/marketplace`}>
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  {t("pagination.previous")}
+                </Link>
+              </Button>
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {/* Contact Information */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Informacione Kontakti</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {listing.organizations ? (
-                    <div className="flex items-start gap-3">
-                      <Building className="h-5 w-5 text-gray-500 mt-0.5" />
-                      <div>
-                        <p className="font-medium">{listing.organizations.name}</p>
-                        {user ? (
-                          <a
-                            href={`mailto:${listing.organizations.contact_email}`}
-                            className="text-sm text-emerald-600 hover:underline"
-                          >
-                            {listing.organizations.contact_email}
-                          </a>
-                        ) : (
-                          <p className="text-sm italic text-gray-400">Kyçu për ta parë emailin</p>
-                        )}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Main Content */}
+              <div className="lg:col-span-2">
+                <Card>
+                  <CardHeader className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Badge
+                        variant="outline"
+                        className={
+                          listing.listing_type === "shes"
+                            ? "bg-emerald-100 text-emerald-800 border-emerald-200"
+                            : "bg-blue-100 text-blue-800 border-blue-200"
+                        }
+                      >
+                        {flowTypeLabel}
+                      </Badge>
+                      <span className="text-sm text-gray-500">
+                        {formatDate(listing.created_at)}
+                      </span>
+                    </div>
+
+                    <CardTitle className="text-3xl font-bold">{listing.title}</CardTitle>
+
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline">
+                        {listing.category_name_sq || listing.category_name_en || listing.category}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="space-y-6">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-3">{t("detail.overview")}</h3>
+                      <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                        {listing.description}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex items-center gap-2">
+                        <Euro className="h-5 w-5 text-gray-500" />
+                        <div>
+                          <span className="font-medium">{t("detail.price")}:</span>
+                          <p className="text-lg font-bold text-emerald-600">
+                            {listing.price !== null ? `${listing.price}` : t("pricingTypes.FREE")}{" "}
+                            {listing.currency || "€"} {listing.unit && `/ ${listing.unit}`}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Package className="h-5 w-5 text-gray-500" />
+                        <div>
+                          <span className="font-medium">{t("detail.quantity")}:</span>
+                          <p>{listing.quantity}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-5 w-5 text-gray-500" />
+                        <div>
+                          <span className="font-medium">{t("detail.location")}:</span>
+                          <p>{locationLabel}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-5 w-5 text-gray-500" />
+                        <div>
+                          <span className="font-medium">{t("detail.postedOn", { date: formatDate(listing.created_at) })}</span>
+                          <p>{formatDate(listing.created_at)}</p>
+                        </div>
                       </div>
                     </div>
-                  ) : (
-                    <div className="flex items-start gap-3">
-                      <User className="h-5 w-5 text-gray-500 mt-0.5" />
-                      <div>
-                        <p className="font-medium">{listing.users?.full_name || "Anonim"}</p>
-                        {user ? (
-                          <a
-                            href={`mailto:${listing.users?.email}`}
-                            className="text-sm text-emerald-600 hover:underline"
-                          >
-                            {listing.users?.email}
-                          </a>
-                        ) : (
-                          <p className="text-sm italic text-gray-400">Kyçu për ta parë emailin</p>
-                        )}
-                      </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Sidebar */}
+              <div className="space-y-6">
+                {/* Contact Information */}
+                <ContactCardV2 listing={listing} listingUrl={`/${locale}/marketplace/${listing.id}`} />
+                <ContactListingButton listing={listing} user={user} />
+
+                {/* Quick Info */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">{t("detail.ecoInfo")}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">{t("detail.condition")}:</span>
+                      <span className="font-medium">
+                        {flowTypeLabel}
+                      </span>
                     </div>
-                  )}
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">{t("form.category")}:</span>
+                      <span className="font-medium">{listing.category}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">{t("form.unit")}:</span>
+                      <span className="font-medium">{listing.unit}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">{t("detail.location")}:</span>
+                      <span className="font-medium">{locationLabel}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
 
-                  <ContactListingButton listing={listing} user={user} />
-                </CardContent>
-              </Card>
-
-              {/* Quick Info */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Detaje të Shpejta</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Lloji:</span>
-                    <span className="font-medium">
-                      {listing.listing_type === "shes" ? "Për Shitje" : "Kërkoj të Blej"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Kategoria:</span>
-                    <span className="font-medium">{listing.category}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Njësia:</span>
-                    <span className="font-medium">{listing.unit}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Vendndodhja:</span>
-                    <span className="font-medium">{listing.location}</span>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="mt-8 text-center">
+              <Button asChild variant="outline">
+                <Link href={`/${locale}/marketplace`}>{t("browseListings")}</Link>
+              </Button>
             </div>
           </div>
-
-          <div className="mt-8 text-center">
-            <Button asChild variant="outline">
-              <Link href="/marketplace">Shiko më shumë listime</Link>
-            </Button>
-          </div>
-        </div>
-      </main>
+        </main>
       </>
     </div>
   )

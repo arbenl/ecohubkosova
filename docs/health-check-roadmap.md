@@ -33,7 +33,7 @@
 ### Priority 1: Stability & Quality (This Week)
 
 - [x] **Fix Flaky E2E Tests**: Stabilize `home-i18n.spec.ts` (Done).
-- [ ] **Stabilize Auth E2E**: Check `auth-flow.e2e.spec.ts` for similar strict mode issues.
+- [x] **Stabilize Auth E2E**: Check `auth-flow.e2e.spec.ts` for similar strict mode issues (Done).
 - [ ] **Content Audit**: Scan for hardcoded Albanian strings in TSX files.
 
 ### Priority 2: Developer Experience (Next Week)

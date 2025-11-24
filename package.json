@@ -28,12 +28,15 @@
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
     "start": "next start",
+    "dev:orchestrator": "tsx scripts/dev-orchestrator.ts",
+    "dev:all": "bash scripts/dev-all.sh",
     "drizzle:generate": "drizzle-kit generate",
     "db:sync": "SUPABASE_DB_URL=${SUPABASE_DB_URL} pnpm dlx supabase db diff --file auto-update --db-url \"$SUPABASE_DB_URL\" && SUPABASE_DB_URL=${SUPABASE_DB_URL} pnpm dlx supabase db push --db-url \"$SUPABASE_DB_URL\" && pnpm drizzle:generate",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@genkit-ai/google-genai": "1.24.0",
     "@hookform/resolvers": "5.2.2",
     "@radix-ui/react-accordion": "1.2.12",
     "@radix-ui/react-alert-dialog": "1.1.15",
@@ -72,6 +75,7 @@
     "date-fns": "4.1.0",
     "drizzle-orm": "0.44.7",
     "embla-carousel-react": "8.6.0",
+    "genkit": "1.24.0",
     "input-otp": "1.4.2",
     "lucide-react": "0.554.0",
     "next": "16.0.3",
@@ -95,6 +99,7 @@
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.22.0",
     "@next/bundle-analyzer": "^16.0.3",
+    "@playwright/mcp": "^0.0.48",
     "@playwright/test": "^1.56.1",
     "@solana/wallet-standard-features": "1.2.0",
     "@storybook/addon-essentials": "^8.6.14",
@@ -107,6 +112,7 @@
     "@types/react": "19.2.5",
     "@types/react-dom": "19.2.3",
     "@types/swagger-ui-express": "^4.1.8",
+    "@upstash/context7-mcp": "^1.0.29",
     "@vitest/coverage-v8": "^4.0.10",
     "drizzle-kit": "0.31.7",
     "eslint": "9.39.1",
@@ -118,6 +124,7 @@
     "postcss": "8.5.0",
     "prettier": "^3.6.2",
     "tailwindcss": "3.4.17",
+    "tsx": "4.20.6",
     "typescript": "5.9.3",
     "vitest": "4.0.10"
   },

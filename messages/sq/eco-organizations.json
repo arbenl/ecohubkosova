@@ -1,0 +1,26 @@
+{
+  "pageTitle": "Ricikluesit & organizatat e gjelbra në Kosovë",
+  "pageSubtitle": "Zbuloni ricikluesit, grumbulluesit dhe ofruesit e shërbimeve ekologjike.",
+  "browseMarketplace": "Shfleto tregun",
+  "filterRoleLabel": "Roli",
+  "allRoles": "Të gjitha rolet",
+  "filterCityLabel": "Qyteti",
+  "allCities": "Të gjitha qytetet",
+  "noResults": "Asnjë organizatë nuk përputhet me filtrat tuaj",
+  "tryAdjustingFilters": "Provoni të ndryshoni rolin ose qytetin për të parë më shumë rezultate.",
+  "roleLabels": {
+    "RECYCLER": "Riciklues",
+    "COLLECTOR": "Grumbullues",
+    "SERVICE_PROVIDER": "Ofrues Shërbimi",
+    "PRODUCER": "Prodhues",
+    "RESELLER": "Rishitës",
+    "PUBLIC_INSTITUTION": "Institucion Publik",
+    "NGO": "OJQ",
+    "RESEARCH": "Hulumtim"
+  },
+  "cardMainMaterials": "Materialet Kryesore",
+  "cardCertifications": "Certifikimet",
+  "cardViewOrganization": "Shiko Organizatën",
+  "contactPersonLabel": "Person kontakti",
+  "serviceAreasLabel": "Zonat e shërbimit"
+}

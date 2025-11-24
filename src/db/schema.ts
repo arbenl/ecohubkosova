@@ -33,6 +33,8 @@ export const organizations = pgTable("organizations", {
   primary_interest: text("primary_interest").notNull(),
   contact_person: text("contact_person").notNull(),
   contact_email: text("contact_email").notNull(),
+  contact_phone: text("contact_phone"), // Added: normalized from eco_organizations.metadata
+  contact_website: text("contact_website"), // Added: normalized from eco_organizations.metadata
   location: text("location").notNull(),
   type: text("type").notNull(),
   is_approved: boolean("is_approved").default(false).notNull(),
@@ -92,6 +94,7 @@ export const articles = pgTable("artikuj", {
     .notNull(),
 })
 
+// LEGACY V1 marketplace table – read-only, kept for historical/admin views. Do not write new data here.
 export const marketplaceListings = pgTable("tregu_listime", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
   created_by_user_id: uuid("created_by_user_id")
@@ -137,3 +140,7 @@ export type OrganizationMember = typeof organizationMembers.$inferSelect
 export type Article = typeof articles.$inferSelect
 export type MarketplaceListing = typeof marketplaceListings.$inferSelect
 export type City = typeof cities.$inferSelect
+
+// Marketplace V2 - Eco-First Circular Economy
+export * from "./schema/enums"
+export * from "./schema/marketplace-v2"

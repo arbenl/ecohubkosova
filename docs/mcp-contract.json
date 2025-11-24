@@ -1,0 +1,88 @@
+{
+  "servers": [
+    {
+      "name": "mcp-context-server",
+      "description": "Code navigation and repository introspection",
+      "capabilities": [
+        { "method": "project_map", "description": "List the project structure and key directories" },
+        { "method": "code_search", "description": "Search the codebase for patterns, symbols, or components" },
+        { "method": "read_files", "description": "Read source files by path for grounded reasoning" }
+      ]
+    },
+    {
+      "name": "ecohub-qa",
+      "description": "Build and lint health snapshots",
+      "capabilities": [
+        { "method": "build_health", "description": "Run lint, TypeScript, and build checks and report pass/fail" }
+      ]
+    },
+    {
+      "name": "context7",
+      "description": "Embeddings-backed code/doc context",
+      "capabilities": [
+        { "method": "resolve-library-id", "description": "Resolve library identifiers for context lookups" },
+        { "method": "get-library-docs", "description": "Retrieve library documentation and references" }
+      ]
+    },
+    {
+      "name": "playwright",
+      "description": "Browser/E2E automation via Playwright MCP",
+      "capabilities": [
+        { "method": "browser_navigate", "description": "Navigate to a URL and return page snapshot" },
+        { "method": "browser_click", "description": "Click elements via accessibility tree references" },
+        { "method": "browser_fill_form", "description": "Fill inputs/forms based on labels or refs" },
+        { "method": "browser_hover", "description": "Hover over elements" },
+        { "method": "browser_pdf_save", "description": "Save current page as PDF (requires pdf capability)" },
+        { "method": "browser_verify_text_visible", "description": "Assert text visibility (testing capability)" }
+      ]
+    },
+    {
+      "name": "markitdown",
+      "description": "Document → Markdown conversion (Python)",
+      "capabilities": [
+        { "method": "convert_to_markdown", "description": "Convert http/https/file/data URIs to Markdown" }
+      ]
+    },
+    {
+      "name": "mcp-db-schema",
+      "description": "Database schema understanding",
+      "capabilities": [
+        { "method": "describe_schema", "description": "Describe tables, columns, foreign keys, and enums" },
+        { "method": "sample_queries", "description": "Provide safe SQL query patterns for the schema" },
+        { "method": "explain_query", "description": "Explain what a SQL query does and highlight risks" }
+      ]
+    },
+    {
+      "name": "mcp-db-inspect",
+      "description": "Read-only SQL inspection for live data",
+      "capabilities": [
+        { "method": "run_readonly_sql", "description": "Execute SELECT-only queries to inspect runtime data safely" }
+      ]
+    },
+    {
+      "name": "mcp-test-runner",
+      "description": "Automated test orchestration",
+      "capabilities": [
+        { "method": "run_unit", "description": "Run targeted unit/integration suites (Vitest)" },
+        { "method": "run_e2e", "description": "Run Playwright end-to-end suites" }
+      ]
+    },
+    {
+      "name": "mcp-docs-knowledge",
+      "description": "Internal documentation lookup",
+      "capabilities": [
+        { "method": "list_docs", "description": "List available internal documentation entries" },
+        { "method": "search_docs", "description": "Search across documentation for relevant topics" },
+        { "method": "get_doc", "description": "Retrieve the contents of a specific document" }
+      ]
+    },
+    {
+      "name": "mcp-ux-assets",
+      "description": "Design system and asset discovery (planned/optional)",
+      "capabilities": [
+        { "method": "list_assets", "description": "List available brand and UX assets" },
+        { "method": "component_catalog", "description": "Surface reusable UI components and patterns" }
+      ]
+    }
+  ]
+}

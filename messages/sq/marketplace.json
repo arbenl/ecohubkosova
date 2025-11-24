@@ -44,5 +44,23 @@
   "page": "Faqja",
   "loading": "Duke u ngarkuar...",
   "previous": "← Më parë",
-  "next": "Më pas →"
+  "next": "Më pas →",
+  "categoryList": {
+    "recyclable_materials": "Materiale të riciklueshme",
+    "sustainable_products": "Produkte të qëndrueshme",
+    "services": "Shërbimet",
+    "renewable_energy": "Energji e ripërtëritshme",
+    "food_agriculture": "Ushqim dhe bujqësi",
+    "textiles": "Tekstile",
+    "electronics": "Elektronikë",
+    "others": "Tjera"
+  },
+  "savedListings": {
+    "title": "Ofertat e ruajtura",
+    "subtitle": "Mundësitë që dëshironi të ndiqni",
+    "emptyTitle": "Nuk keni ruajtur ende asnjë ofertë",
+    "emptyBody": "Shfletoni tregun dhe ruani ofertat që dëshironi t'i mbani nën vëzhgim.",
+    "browseCTA": "Shfleto tregun",
+    "count": "Oferta të ruajtura"
+  }
 }

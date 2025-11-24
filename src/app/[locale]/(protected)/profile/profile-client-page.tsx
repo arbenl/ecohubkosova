@@ -1,6 +1,7 @@
 "use client"
 
 import { type ReactNode } from "react"
+import { useTranslations } from "next-intl"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UserProfileForm } from "./components/user-profile-form"
 import { OrganizationProfileForm } from "./components/org-profile-form"
@@ -41,6 +42,8 @@ type TabConfig = {
 }
 
 export default function ProfileClientPage({ userProfile, organization }: ProfileClientPageProps) {
+  const t = useTranslations("profile")
+
   if (!userProfile) {
     return null
   }
@@ -48,12 +51,12 @@ export default function ProfileClientPage({ userProfile, organization }: Profile
   const tabs: TabConfig[] = [
     {
       value: "personal",
-      label: "Informacione personale",
+      label: t("tabs.personal"),
       show: true,
       content: (
         <ProfileSectionCard
-          title="Profili Personal"
-          description="Ndrysho informacionet personale."
+          title={t("personalProfile")}
+          description={t("manageProfileDescription")}
         >
           <UserProfileForm
             initialFullName={userProfile.full_name}
@@ -65,12 +68,12 @@ export default function ProfileClientPage({ userProfile, organization }: Profile
     },
     {
       value: "organization",
-      label: "Profili i organizatës",
+      label: t("tabs.organization"),
       show: true,
       content: (
         <ProfileSectionCard
-          title="Profili i organizatës"
-          description="Ndrysho të dhënat e organizatës."
+          title={t("orgProfile")}
+          description={t("manageOrgDescription")}
         >
           {organization ? (
             <OrganizationProfileForm
@@ -85,18 +88,18 @@ export default function ProfileClientPage({ userProfile, organization }: Profile
               }}
             />
           ) : (
-            <p className="text-sm text-gray-500">Nuk ka organizatë për të përditësuar.</p>
+            <p className="text-sm text-gray-500">{t("noOrgToUpdate")}</p>
           )}
         </ProfileSectionCard>
       ),
     },
     {
       value: "password",
-      label: "Ndrysho fjalëkalimin",
+      label: t("changePassword"),
       show: true,
       content: (
-        <ProfileSectionCard title="Ndrysho fjalëkalimin" description="Zëvendëso fjalëkalimin ekzistues me një të ri.">
-          <p>Forma për ndryshim fjalëkalimi do të shtohet këtu.</p>
+        <ProfileSectionCard title={t("changePassword")} description={t("changePasswordDescription")}>
+          <p>{t("changePasswordPlaceholder")}</p>
         </ProfileSectionCard>
       ),
     },

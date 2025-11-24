@@ -1,6 +1,4 @@
 "use client"
-
-import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -11,22 +9,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ListingCard } from "@/components/listings/ListingCard"
+import { ListingCardV2 } from "@/components/marketplace-v2/ListingCardV2"
 import type { Listing } from "@/types"
 import { Search, SlidersHorizontal } from "lucide-react"
 import { useEffect, useState, useCallback, useMemo } from "react"
 
+type MarketplaceApiResponse = {
+  listings: Listing[]
+  hasMore: boolean
+}
+
 interface MarketplaceClientPageProps {
   locale: string
   initialSearchParams: Record<string, string | string[] | undefined>
+  showHero?: boolean
+  heroTitle?: string
+  hideSearchBar?: boolean
 }
 
 export default function MarketplaceClientPage({
   locale,
   initialSearchParams,
+  showHero = true,
+  heroTitle = "The Marketplace for Circular Economy",
+  hideSearchBar = false,
 }: MarketplaceClientPageProps) {
   const t = useTranslations("marketplace")
-  const router = useRouter()
   const [listings, setListings] = useState<Listing[]>([])
   const [hasMore, setHasMore] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -50,15 +58,37 @@ export default function MarketplaceClientPage({
       | "oldest",
   }
 
+  // Map dropdown options to the V2 category slugs stored in eco_categories.slug
   const categories = [
-    "Materiale të riciklueshme",
-    "Produkte të qëndrueshme",
-    "Shërbime",
-    "Energji e ripërtëritshme",
-    "Ushqim dhe bujqësi",
-    "Tekstile",
-    "Elektronikë",
-    "Tjera",
+    { value: "recycled-metals", label: t("categoryList.recyclable_materials") },
+    { value: "plastic-packaging", label: t("categoryList.sustainable_products") },
+    { value: "ewaste", label: t("categoryList.electronics") },
+    { value: "wood-pallets", label: t("categoryList.services") },
+    { value: "textiles-light", label: t("categoryList.textiles") },
+    { value: "materials-organic", label: t("categoryList.food_agriculture") },
+  ]
+
+  // Kosovo cities and towns
+  const kosovaLocations = [
+    "Prishtinë",
+    "Prizren",
+    "Pejë",
+    "Gjakovë",
+    "Mitrovicë",
+    "Vushtrri",
+    "Ferizaj",
+    "Obiliq",
+    "Drenas",
+    "Graçanicë",
+    "Kaçanik",
+    "Lipjan",
+    "Podujevë",
+    "Suva Reka",
+    "Shillovë",
+    "Kamenicë",
+    "Gjilan",
+    "Tetovë",
+    "Skopje (maqedonas)",
   ]
 
   // Simple filter state management without navigation
@@ -106,6 +136,7 @@ export default function MarketplaceClientPage({
         const params = new URLSearchParams()
         params.set("page", filters.page.toString())
         params.set("pageSize", "12")
+        params.set("locale", locale) // Pass locale to API
 
         if (filters.type !== "te-gjitha") {
           params.set("type", filters.type)
@@ -123,7 +154,7 @@ export default function MarketplaceClientPage({
           params.set("condition", filters.condition.trim())
         }
 
-        if (filters.location.trim()) {
+        if (filters.location.trim() && filters.location !== "all") {
           params.set("location", filters.location.trim())
         }
 
@@ -137,26 +168,13 @@ export default function MarketplaceClientPage({
           throw new Error("Failed to load listings")
         }
 
-        const data = await response.json()
+        const data: MarketplaceApiResponse = await response.json()
 
-        // Transform API response to match Listing type
-        const transformedListings: Listing[] = data.listings.map((item: any) => ({
-          id: item.id,
-          title: item.title,
-          description: item.description,
-          foto_url: null, // Not available in API response
-          price: Number(item.price),
-          currency: null, // Not available in API response
-          category: item.category,
-          condition: item.gjendja || "",
-          // Add other fields as needed
-        }))
-
-        setListings(transformedListings)
-        setHasMore(data.hasMore)
+        setListings(data.listings || [])
+        setHasMore(Boolean(data.hasMore))
       } catch (err) {
         console.error("[MarketplaceClient] Failed to load listings", err)
-        setError("Ka ndodhur një gabim gjatë ngarkimit të listimeve")
+        setError(t("errorLoading"))
         setListings([])
         setHasMore(false)
       } finally {
@@ -165,14 +183,17 @@ export default function MarketplaceClientPage({
     }
 
     loadListings()
-  }, [filters])
-
-  const handleContactClick = (listing: Listing) => {
-    router.push(`/${locale}/marketplace/${listing.id}`)
-  }
+  }, [filters, locale])
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-8">
+      {/* Hero Section (optional) */}
+      {showHero && (
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{heroTitle}</h2>
+        </div>
+      )}
+
       {/* Tab Selection */}
       <div className="flex flex-wrap gap-3 justify-center">
         <Button
@@ -202,36 +223,38 @@ export default function MarketplaceClientPage({
       </div>
 
       {/* Filter Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
-        {/* Search Form */}
-        <form
-          className="flex flex-col md:flex-row gap-4"
-          onSubmit={(e) => {
-            e.preventDefault()
-            updateFilter("search", (e.target as any).search.value)
-          }}
-        >
-          <div className="relative flex-grow">
-            <Input
-              name="search"
-              type="text"
-              placeholder={t("searchPlaceholder")}
-              className="pl-10 pr-4 py-2 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-              defaultValue={filters.search}
-              disabled={isLoading}
-            />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-          </div>
-
-          <Button
-            type="submit"
-            className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
-            disabled={isLoading}
+      <div className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5 md:p-6 space-y-4">
+        {/* Search Form - hidden when embedded in landing */}
+        {!hideSearchBar && (
+          <form
+            className="flex flex-col md:flex-row gap-4"
+            onSubmit={(e) => {
+              e.preventDefault()
+              updateFilter("search", (e.target as any).search.value)
+            }}
           >
-            <SlidersHorizontal className="w-5 h-5" />
-            {isLoading ? t("filtering") : t("filter")}
-          </Button>
-        </form>
+            <div className="relative flex-grow">
+              <Input
+                name="search"
+                type="text"
+                placeholder={t("searchPlaceholder")}
+                className="pl-10 pr-4 py-2 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                defaultValue={filters.search}
+                disabled={isLoading}
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            </div>
+
+            <Button
+              type="submit"
+              className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
+              disabled={isLoading}
+            >
+              <SlidersHorizontal className="w-5 h-5" />
+              {isLoading ? t("filtering") : t("filter")}
+            </Button>
+          </form>
+        )}
 
         {/* Additional Filters */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -247,8 +270,8 @@ export default function MarketplaceClientPage({
             <SelectContent>
               <SelectItem value="all">{t("allCategories")}</SelectItem>
               {categories.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
+                <SelectItem key={category.value} value={category.value}>
+                  {category.label}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -273,16 +296,26 @@ export default function MarketplaceClientPage({
             </SelectContent>
           </Select>
 
-          {/* Location Filter */}
-          <Input
-            type="text"
-            placeholder={t("location")}
+          {/* Location Filter - Dropdown */}
+          <Select
+            onValueChange={(value) => updateFilter("location", value)}
             value={filters.location}
-            onChange={(e) => updateFilter("location", e.target.value)}
-            onBlur={() => updateFilter("location", filters.location)}
-            onKeyDown={(e) => e.key === "Enter" && updateFilter("location", filters.location)}
-            className="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-          />
+            disabled={isLoading}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={t("location")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                {t("location")} - {t("allCategories")}
+              </SelectItem>
+              {kosovaLocations.map((city) => (
+                <SelectItem key={city} value={city}>
+                  {city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
           {/* Sort Control */}
           <Select
@@ -322,7 +355,7 @@ export default function MarketplaceClientPage({
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {listings.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} onContact={handleContactClick} />
+            <ListingCardV2 key={listing.id} listing={listing} locale={locale} />
           ))}
         </div>
       )}

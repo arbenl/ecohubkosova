@@ -43,6 +43,25 @@ export interface Listing {
   created_at: string
   user_id: string
   is_published: boolean
+  // V2 marketplace fields (optional to keep compatibility with legacy callers)
+  flow_type?: string
+  pricing_type?: string | null
+  visibility?: string | null
+  status?: string | null
+  city?: string | null
+  region?: string | null
+  eco_labels?: string[] | null
+  tags?: string[] | null
+  category_name_en?: string | null
+  category_name_sq?: string | null
+  organization_id?: string | null
+  organization_name?: string | null
+  organization_contact_email?: string | null
+  organization_contact_phone?: string | null
+  organization_contact_website?: string | null
+  organization_contact_person?: string | null
+  creator_full_name?: string | null
+  creator_email?: string | null
   // Joined relations
   users?: {
     full_name: string
@@ -51,6 +70,7 @@ export interface Listing {
   organizations?: {
     name: string
     contact_email?: string // Include email for contact if necessary
+    contact_person?: string
   }
   // This type is used by the full listing details, which might include these
   quantity: string

@@ -16,7 +16,7 @@ vi.mock("@/components/ui/button", () => ({
 }))
 
 vi.mock("next/navigation", () => ({
-  usePathname: () => "/dashboard",
+  usePathname: () => "/my/organization",
 }))
 
 vi.mock("next-intl", () => ({

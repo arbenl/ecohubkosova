@@ -39,7 +39,7 @@ export function EksploroCTA() {
           size="lg"
           className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
         >
-          <Link href={`/${locale}/dashboard`}>
+          <Link href={`/${locale}/my/organization`}>
             <ArrowRight className="mr-2 h-5 w-5" />
             {t("dashboard")}
           </Link>

@@ -51,8 +51,8 @@ export function Sidebar({ userRole }: SidebarProps) {
     {
       label: t('dashboard'),
       icon: LayoutDashboard,
-      href: `/${locale}/dashboard`,
-      active: pathname === `/${locale}/dashboard`,
+      href: `/${locale}/my/organization`,
+      active: pathname === `/${locale}/my/organization`,
     },
     {
       label: t('knowledge'),

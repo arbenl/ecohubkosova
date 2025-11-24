@@ -1,6 +1,7 @@
 import { count, eq } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
-import { articles, marketplaceListings, organizations, users } from "@/db/schema"
+import { articles, organizations, users } from "@/db/schema"
+import { ecoListings } from "@/db/schema/marketplace-v2"
 
 export interface AdminStats {
   users: number
@@ -32,11 +33,11 @@ export async function fetchAdminStats(): Promise<FetchAdminStatsResult> {
         .select({ value: count() })
         .from(articles)
         .where(eq(articles.is_published, false)),
-      database.select({ value: count() }).from(marketplaceListings),
+      database.select({ value: count() }).from(ecoListings),
       database
         .select({ value: count() })
-        .from(marketplaceListings)
-        .where(eq(marketplaceListings.is_approved, false)),
+        .from(ecoListings)
+        .where(eq(ecoListings.status, "DRAFT")),
     ])
 
     const stats: AdminStats = {

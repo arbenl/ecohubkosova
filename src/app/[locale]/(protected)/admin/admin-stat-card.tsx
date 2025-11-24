@@ -27,14 +27,14 @@ export default function AdminStatCard({
   const router = useRouter()
 
   return (
-    <Card className="glass-card hover-lift cursor-pointer" onClick={() => router.push(href)}>
+    <Card className="rounded-2xl border-emerald-100 bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={() => router.push(href)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-gray-700">{title}</CardTitle>
+        <CardTitle className="text-lg font-semibold text-gray-900">{title}</CardTitle>
         {icon}
       </CardHeader>
       <CardContent>
         <div className="text-3xl font-bold text-gray-900">{value}</div>
-        <p className="text-xs text-gray-500 mt-1">{description}</p>
+        <p className="text-sm text-gray-600 mt-1">{description}</p>
         {pendingCount && pendingCount > 0 && (
           <div className="mt-2 flex items-center text-amber-600 text-xs">
             <AlertCircle className="h-3 w-3 mr-1" />

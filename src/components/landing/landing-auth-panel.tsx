@@ -29,7 +29,7 @@ export function LandingAuthPanel() {
             asChild
             className="flex-1 eco-gradient text-white rounded-xl font-semibold hover:shadow-xl hover:shadow-[#00C896]/25"
           >
-            <Link href={`/${locale}/dashboard`}>
+            <Link href={`/${locale}/my/organization`}>
               Shko te Dashboardi
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

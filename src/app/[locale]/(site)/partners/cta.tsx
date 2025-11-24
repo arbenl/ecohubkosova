@@ -12,7 +12,7 @@ export function PartnereCTA() {
 
   return isAuthenticated ? (
     <Button asChild className="bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:shadow-md transition">
-      <Link href={`/${locale}/dashboard`}>Shko në Dashboard</Link>
+      <Link href={`/${locale}/my/organization`}>Shko në EcoHub</Link>
     </Button>
   ) : (
     <Button asChild variant="outline">

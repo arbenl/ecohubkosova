@@ -1,5 +1,5 @@
 import type React from "react"
-import { Footer } from "@/components/footer"
+import { FooterV2 } from "@/components/layout/FooterV2"
 import { Header } from "@/components/layout/header/header"
 
 export interface PageLayoutProps {
@@ -14,7 +14,7 @@ export function PageLayout({ children, className = "" }: PageLayoutProps) {
       <main className={`flex-1 ${className}`}>
         <div className="animate-fade-in">{children}</div>
       </main>
-      <Footer />
+      <FooterV2 />
     </div>
   )
 }

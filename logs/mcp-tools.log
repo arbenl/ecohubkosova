@@ -1,0 +1,11 @@
+[MCP] Starting mcp-context-server -> node /Users/arbenlila/development/ecohubkosova/tools/mcp-context-server/dist/server.js
+[MCP] Starting ecohub-qa -> node /Users/arbenlila/development/ecohubkosova/tools/ecohub-qa/dist/index.js
+[MCP] Starting context7 -> /Users/arbenlila/development/ecohubkosova/node_modules/.bin/context7-mcp
+[MCP] Starting playwright -> /Users/arbenlila/development/ecohubkosova/node_modules/.bin/mcp-server-playwright
+[MCP] TODO: markitdown not implemented – pipx install markitdown-mcp (optional extras: markitdown[all])
+[MCP] TODO: mcp-db-schema not implemented – no local package present
+[MCP] TODO: mcp-db-inspect not implemented – no local package present
+[MCP] TODO: mcp-test-runner not implemented – no local package present
+[MCP] TODO: mcp-docs-knowledge not implemented – no local package present
+[MCP] TODO: mcp-ux-assets not implemented – no local package present
+[MCP] Servers started. Logs → /Users/arbenlila/development/ecohubkosova/logs/mcp

@@ -1,0 +1,32 @@
+{
+  "pageTitle": "Si funksionon EcoHub",
+  "pageSubtitle": "EcoHub Kosova është tregu digjital dhe rrjeti i partnerëve të gjelbër që lidh biznese, riciklues dhe OJQ për zgjidhje konkrete të ekonomisë qarkulluese.",
+  "heroCtaPrimary": "Eksploro tregun",
+  "heroCtaSecondary": "Njihe partnerët",
+  "stepsTitle": "Tre hapa të thjeshtë",
+  "steps": {
+    "discover": {
+      "title": "Zbuloni oferta & kërkesa të gjelbra",
+      "body": "Shfletoni lista për materiale të riciklueshme, shërbime të gjelbra dhe produkte qarkulluese nga e gjithë Kosova."
+    },
+    "connect": {
+      "title": "Lidhu me partnerë ekologjikë",
+      "body": "Kontaktoni drejtpërdrejt me riciklues, ofrues shërbimesh dhe OJQ për të nisur bashkëpunime konkrete."
+    },
+    "closeLoop": {
+      "title": "Mbyll qarkun",
+      "body": "Kthe mbetjet në resurse, nënshkruaj marrëveshje afatgjata dhe ndihmo ndërtimin e ekonomisë qarkulluese në Kosovë."
+    }
+  },
+  "audiencesTitle": "Kush përfiton nga EcoHub?",
+  "audiences": {
+    "business": {
+      "title": "Biznese & riciklues",
+      "body": "Publikoni materialet e tepërta, shërbimet apo nevojat tuaja dhe gjeni partnerë të besueshëm për t’i përpunuar, blerë ose furnizuar."
+    },
+    "ngo": {
+      "title": "OJQ & iniciativa",
+      "body": "Promovoni projektet tuaja mjedisore, bashkohuni në fushata dhe mbështesni zgjidhjet lokale qarkulluese."
+    }
+  }
+}

@@ -2,25 +2,81 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "$0")" && pwd)
-MCP_CONTEXT="$ROOT/../mcp-context-server/dist/server.js"
+MCP_CONTEXT="$ROOT/tools/mcp-context-server/dist/server.js"
 ECOHUB_QA="$ROOT/tools/ecohub-qa/dist/index.js"
-OUTPUT_DIR="$ROOT/mcp-outputs"
+CONTEXT7_BIN="$ROOT/node_modules/.bin/context7-mcp"
+PLAYWRIGHT_BIN="$ROOT/node_modules/.bin/mcp-server-playwright"
+MARKITDOWN_BIN="$(command -v markitdown-mcp || true)"
+LOG_DIR="$ROOT/logs/mcp"
 
-mkdir -p "$OUTPUT_DIR"
+mkdir -p "$LOG_DIR"
 
-run_tool() {
+PIDS=()
+
+start_server() {
   local name=$1; shift
-  local target="$OUTPUT_DIR/$name.log"
-  echo "Running: $*" > "$target"
-  "$@" >> "$target" 2>&1
+  local log_file="$LOG_DIR/${name}.log"
+  echo "[MCP] Starting $name -> $*" | tee "$log_file"
+  "$@" >>"$log_file" 2>&1 &
+  PIDS+=($!)
 }
 
-run_tool "project_map" node "$MCP_CONTEXT" project_map
-run_tool "code_search" node "$MCP_CONTEXT" code_search --query="runtime" --paths="src/middleware.ts,next.config.mjs,src/app/[locale]/**"
-run_tool "read_files" node "$MCP_CONTEXT" read_files --paths="src/middleware.ts,next.config.mjs,src/app/[locale]/layout.tsx,src/app/[locale]/page.tsx"
-run_tool "build_health" node "$ECOHUB_QA" build_health
-run_tool "runtime_log_sq" node "$ECOHUB_QA" runtime_log_scan --scope=production --route=/sq/home
-run_tool "runtime_log_en" node "$ECOHUB_QA" runtime_log_scan --scope=production --route=/en/home
-run_tool "navigation_audit" node "$ECOHUB_QA" navigation_audit --routes="/sq/home,/en/home"
+note_todo() {
+  local name=$1
+  local message=$2
+  echo "[MCP] TODO: $name not implemented – $message" | tee "$LOG_DIR/${name}.log"
+}
 
-echo "Output saved under $OUTPUT_DIR"
+cleanup() {
+  for pid in "${PIDS[@]}"; do
+    if kill -0 "$pid" 2>/dev/null; then
+      kill "$pid" 2>/dev/null || true
+    fi
+  done
+}
+trap cleanup EXIT INT TERM
+
+if [[ -f "$MCP_CONTEXT" ]]; then
+  start_server "mcp-context-server" node "$MCP_CONTEXT"
+else
+  echo "[MCP] mcp-context-server binary missing at $MCP_CONTEXT"
+fi
+
+if [[ -f "$ECOHUB_QA" ]]; then
+  start_server "ecohub-qa" node "$ECOHUB_QA"
+else
+  echo "[MCP] ecohub-qa binary missing at $ECOHUB_QA"
+fi
+
+if [[ -x "$CONTEXT7_BIN" ]]; then
+  start_server "context7" "$CONTEXT7_BIN"
+else
+  note_todo "context7" "install @upstash/context7-mcp (pnpm add -D @upstash/context7-mcp)"
+fi
+
+if [[ -x "$PLAYWRIGHT_BIN" ]]; then
+  start_server "playwright" "$PLAYWRIGHT_BIN"
+else
+  note_todo "playwright" "install @playwright/mcp (pnpm add -D @playwright/mcp)"
+fi
+
+if [[ -n "$MARKITDOWN_BIN" ]]; then
+  start_server "markitdown" "$MARKITDOWN_BIN" --http --port 3001
+else
+  note_todo "markitdown" "pipx install markitdown-mcp (optional extras: markitdown[all])"
+fi
+
+# Planned MCP servers (declared, not implemented yet)
+note_todo "mcp-db-schema" "no local package present"
+note_todo "mcp-db-inspect" "no local package present"
+note_todo "mcp-test-runner" "no local package present"
+note_todo "mcp-docs-knowledge" "no local package present"
+note_todo "mcp-ux-assets" "no local package present"
+
+if ((${#PIDS[@]} == 0)); then
+  echo "[MCP] No MCP servers started"
+  exit 0
+fi
+
+echo "[MCP] Servers started. Logs → $LOG_DIR"
+wait "${PIDS[@]}"

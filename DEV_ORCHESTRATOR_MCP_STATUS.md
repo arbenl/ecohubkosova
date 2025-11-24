@@ -1,0 +1,31 @@
+## Dev Orchestrator MCP Status (EcoHub Kosova)
+
+- Updated files: `scripts/dev-orchestrator.ts`, `mcp.json`, `docs/mcp-servers.md`, `docs/dev-bootstrap-prompts.md`, `prompts/bootstrap.*.md`
+- REQUIRED_MCP_SERVERS:
+  - mcp-context-server
+  - ecohub-qa
+  - mcp-db-schema
+  - mcp-db-inspect
+  - mcp-test-runner
+  - mcp-docs-knowledge
+  - mcp-ux-assets
+- MCP_SERVER_MAP:
+  - mcp-context-server → mcp-context-server
+  - ecohub-qa → ecohub-qa
+  - mcp-db-schema → context7
+  - mcp-db-inspect → context7
+  - mcp-test-runner → ecohub-qa
+  - mcp-docs-knowledge → context7
+  - mcp-ux-assets → context7
+- Example orchestrator MCP summary (latest run):
+  - mcp-context-server -> mcp-context-server: OK (running)
+  - ecohub-qa -> ecohub-qa: OK (available)
+  - mcp-db-schema -> context7: OK (available)
+  - mcp-db-inspect -> context7: OK (available)
+  - mcp-test-runner -> ecohub-qa: OK (available)
+  - mcp-docs-knowledge -> context7: OK (available)
+  - mcp-ux-assets -> context7: OK (available)
+- Servers needing manual start/setup:
+  - context7 (`npx context7-mcp`)
+  - ecohub-qa (`node tools/ecohub-qa/dist/index.js`)
+  - markitdown (optional; `pipx install markitdown-mcp` then `markitdown-mcp --http --port 3001`)

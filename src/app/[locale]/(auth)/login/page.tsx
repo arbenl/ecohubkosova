@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { signIn, signInWithGoogle, type SignInResponse } from "./actions"
-import type { Locale } from "@/lib/locales"
+import type { Locale } from "@/lib/locale"
+import { defaultLocale } from "@/lib/locale"
 import { useSupabase } from "@/lib/auth-provider"
 
 function SubmitButton({ isSubmitting }: { isSubmitting: boolean }) {
@@ -82,7 +83,7 @@ function GoogleSignInButton({ isSubmitting }: { isSubmitting: boolean }) {
 export default function KycuPage() {
   const t = useTranslations("auth")
   const router = useRouter()
-  const locale = useLocale() as Locale
+  const locale = (useLocale() as Locale | undefined) ?? defaultLocale
   const supabase = useSupabase()
   const searchParams = useSearchParams()
   const message = searchParams.get("message")
@@ -137,7 +138,7 @@ export default function KycuPage() {
           /* ignore */
         }
 
-        router.push(`/${locale}/dashboard`)
+        router.push(`/${locale}/my/organization`)
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : t("loginError"))

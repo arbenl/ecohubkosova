@@ -1,0 +1,26 @@
+{
+  "pageTitle": "Recyclers & green organizations in Kosovo",
+  "pageSubtitle": "Discover recyclers, collectors, and eco-service providers.",
+  "browseMarketplace": "Browse marketplace",
+  "filterRoleLabel": "Role",
+  "allRoles": "All roles",
+  "filterCityLabel": "City",
+  "allCities": "All cities",
+  "noResults": "No organizations match your filters",
+  "tryAdjustingFilters": "Try adjusting the role or city to see more results.",
+  "roleLabels": {
+    "RECYCLER": "Recycler",
+    "COLLECTOR": "Collector",
+    "SERVICE_PROVIDER": "Service Provider",
+    "PRODUCER": "Producer",
+    "RESELLER": "Reseller",
+    "PUBLIC_INSTITUTION": "Public Institution",
+    "NGO": "NGO",
+    "RESEARCH": "Research"
+  },
+  "cardMainMaterials": "Main Materials",
+  "cardCertifications": "Certifications",
+  "cardViewOrganization": "View Organization",
+  "contactPersonLabel": "Contact person",
+  "serviceAreasLabel": "Service areas"
+}

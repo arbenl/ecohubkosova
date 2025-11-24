@@ -1,0 +1,30 @@
+{
+  "title": "Platform admin workspace",
+  "subtitle": "Monitor EcoHub activity, partners, and listings",
+  "stats": {
+    "users": "Users",
+    "usersDescription": "Registered users on the platform",
+    "organizations": "Organizations",
+    "organizationsDescription": "Registered organizations on the platform",
+    "organizationsPending": "Pending approvals",
+    "articles": "Articles",
+    "articlesDescription": "Articles on the platform",
+    "articlesPending": "Pending publication",
+    "listings": "Marketplace listings",
+    "listingsDescription": "Listings in the marketplace",
+    "listingsPending": "Draft listings"
+  },
+  "quickActions": {
+    "title": "Quick actions",
+    "description": "Jump into common admin workflows",
+    "users": "Manage users",
+    "organizations": "Approve organizations",
+    "articles": "Publish articles",
+    "listings": "Review listings"
+  },
+  "activity": {
+    "title": "Recent activity",
+    "description": "Latest updates across the platform",
+    "placeholder": "Activity feed coming soon"
+  }
+}

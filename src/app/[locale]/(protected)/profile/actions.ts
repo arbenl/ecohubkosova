@@ -3,6 +3,7 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 import {
   ensureUserOrganizationMembership,
   fetchCurrentUserProfile,
@@ -29,6 +30,8 @@ export async function getProfileData(): Promise<ProfileResult> {
 export type UserProfileUpdate = UserProfileUpdateInput
 
 export async function updateUserProfile(formData: UserProfileUpdateInput) {
+  const t = await getTranslations("profile")
+  const tCommon = await getTranslations("common")
   const supabase = await createServerSupabaseClient()
 
   const {
@@ -36,12 +39,12 @@ export async function updateUserProfile(formData: UserProfileUpdateInput) {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/login?message=Ju duhet të kyçeni për të përditësuar profilin.")
+    redirect(`/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
   }
 
   const parsed = userProfileUpdateSchema.safeParse(formData)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? "Të dhëna të pavlefshme për profilin personal." }
+    return { error: parsed.error.errors[0]?.message ?? t("updateError") }
   }
 
   const payload = parsed.data
@@ -51,14 +54,14 @@ export async function updateUserProfile(formData: UserProfileUpdateInput) {
 
     if (error) {
       console.error("Error updating user profile:", error)
-      return { error: error.message || "Gabim gjatë përditësimit të profilit personal." }
+      return { error: error.message || t("updateError") }
     }
 
     revalidatePath("/profile")
     return { success: true }
   } catch (error: any) {
     console.error("Server Action Error (updateUserProfile):", error)
-    return { error: error.message || "Gabim i panjohur gjatë përditësimit të profilit personal." }
+    return { error: error.message || t("unknownError") }
   }
 }
 
@@ -66,6 +69,8 @@ export async function updateOrganizationProfile(
   organizationId: string,
   formData: OrganizationProfileUpdateInput
 ) {
+  const t = await getTranslations("profile")
+  const tCommon = await getTranslations("common")
   const supabase = await createServerSupabaseClient()
 
   const {
@@ -73,12 +78,12 @@ export async function updateOrganizationProfile(
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/login?message=Ju duhet të kyçeni për të përditësuar profilin e organizatës.")
+    redirect(`/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
   }
 
   const parsed = organizationProfileUpdateSchema.safeParse(formData)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? "Të dhëna të pavlefshme për organizatën." }
+    return { error: parsed.error.errors[0]?.message ?? t("updateError") }
   }
 
   const payload = parsed.data
@@ -88,24 +93,24 @@ export async function updateOrganizationProfile(
 
     if (membership.error) {
       console.error("Error verifying organization membership:", membership.error)
-      return { error: "Gabim gjatë verifikimit të autorizimit të organizatës." }
+      return { error: t("updateError") }
     }
 
     if (!membership.isMember) {
-      return { error: "Nuk jeni i autorizuar të përditësoni këtë organizatë." }
+      return { error: tCommon("accessDenied") }
     }
 
     const { error } = await updateOrganizationRecord(organizationId, payload)
 
     if (error) {
       console.error("Error updating organization profile:", error)
-      return { error: error.message || "Gabim gjatë përditësimit të profilit të organizatës." }
+      return { error: error.message || t("updateError") }
     }
 
     revalidatePath("/profile")
     return { success: true }
   } catch (error: any) {
     console.error("Server Action Error (updateOrganizationProfile):", error)
-    return { error: error.message || "Gabim i panjohur gjatë përditësimit të profilit të organizatës." }
+    return { error: error.message || t("unknownError") }
   }
 }
