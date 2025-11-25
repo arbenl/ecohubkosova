@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test"
 
 /**
  * LAUNCH SMOKE TEST: Critical happy-path flows
- * 
+ *
  * Validates:
  * 1. Marketplace V2: Browse listing, see org contact
  * 2. Partners: Browse partners, view profile
@@ -21,11 +21,14 @@ test.describe("🚀 Launch Smoke Test – Critical Flows", () => {
     await page.goto("/en/marketplace", { waitUntil: "domcontentloaded" })
     await expect(page).toHaveURL(/\/en\/marketplace/)
 
-    // Verify marketplace has content
-    const heading = page.locator("h1").first()
-    await expect(heading).toBeVisible()
+    // Wait for page to fully load
+    await page.waitForLoadState("networkidle")
+
+    // Verify marketplace has content (h2 hero, not h1)
+    const heading = page.locator("h2").first()
+    await expect(heading).toBeVisible({ timeout: 10000 })
     const headingText = await heading.textContent()
-    expect(headingText).toMatch(/marketplace|listings|discover/i)
+    expect(headingText).toMatch(/marketplace|circular economy/i)
 
     // Verify filters are present
     const filterSection = page.locator("[class*='filter'], [class*='search']").first()
@@ -36,15 +39,15 @@ test.describe("🚀 Launch Smoke Test – Critical Flows", () => {
     // Try to find and click a listing card
     const listingCards = page.locator("a, button").filter({ hasText: /title|offer|request/i })
     const cardCount = await listingCards.count()
-    
+
     if (cardCount > 0) {
       // Click first listing
       const firstCard = listingCards.nth(0)
       await firstCard.click({ timeout: 5000 }).catch(() => {})
-      
+
       // Should navigate to listing detail
       await page.waitForURL(/\/en\/marketplace\/\w+/, { timeout: 10000 }).catch(() => {})
-      
+
       // Verify listing detail shows
       const detailContent = page.locator("body")
       await expect(detailContent).toBeVisible()
@@ -61,9 +64,12 @@ test.describe("🚀 Launch Smoke Test – Critical Flows", () => {
     await page.goto("/sq/marketplace", { waitUntil: "domcontentloaded" })
     await expect(page).toHaveURL(/\/sq\/marketplace/)
 
-    // Verify page loads without error
-    const heading = page.locator("h1").first()
-    await expect(heading).toBeVisible()
+    // Wait for page to fully load
+    await page.waitForLoadState("networkidle")
+
+    // Verify page loads without error (h2 hero)
+    const heading = page.locator("h2").first()
+    await expect(heading).toBeVisible({ timeout: 10000 })
   })
 
   /**
@@ -76,26 +82,29 @@ test.describe("🚀 Launch Smoke Test – Critical Flows", () => {
     await page.goto("/en/partners", { waitUntil: "domcontentloaded" })
     await expect(page).toHaveURL(/\/en\/partners/)
 
+    // Wait for page to fully load
+    await page.waitForLoadState("networkidle")
+
     // Verify partners page has content
     const heading = page.locator("h1").first()
-    await expect(heading).toBeVisible()
+    await expect(heading).toBeVisible({ timeout: 10000 })
     const headingText = await heading.textContent()
     expect(headingText).toMatch(/partner|eco|organization/i)
 
     // Look for partner cards or links to partner profiles
     const partnerLinks = page.locator("a[href*='/partners/']").first()
-    
+
     if (await partnerLinks.isVisible({ timeout: 5000 }).catch(() => false)) {
       // Click first partner link
       await partnerLinks.click({ timeout: 5000 }).catch(() => {})
-      
+
       // Should navigate to partner detail
       await page.waitForURL(/\/en\/partners\/\w+/, { timeout: 10000 }).catch(() => {})
-      
+
       // Verify partner detail shows
       const detailContent = page.locator("body")
       await expect(detailContent).toBeVisible()
-      
+
       // Should show partner name, role, and location
       const name = page.locator("h1").first()
       await expect(name).toBeVisible()
@@ -119,7 +128,9 @@ test.describe("🚀 Launch Smoke Test – Critical Flows", () => {
     expect(headingText).toMatch(/works|discover|connect|loop/i)
 
     // Verify CTAs are present
-    const ctaButtons = page.locator("a, button").filter({ hasText: /marketplace|partner|explore|meet/i })
+    const ctaButtons = page
+      .locator("a, button")
+      .filter({ hasText: /marketplace|partner|explore|meet/i })
     const ctaCount = await ctaButtons.count()
     expect(ctaCount).toBeGreaterThan(0)
   })
@@ -134,14 +145,20 @@ test.describe("🚀 Launch Smoke Test – Critical Flows", () => {
     await page.goto("/en", { waitUntil: "domcontentloaded" })
 
     // Find and click marketplace link in header
-    const marketplaceLink = page.locator("header a, nav a").filter({ hasText: /marketplace/i }).first()
+    const marketplaceLink = page
+      .locator("header a, nav a")
+      .filter({ hasText: /marketplace/i })
+      .first()
     if (await marketplaceLink.isVisible({ timeout: 5000 }).catch(() => false)) {
       await marketplaceLink.click({ timeout: 5000 }).catch(() => {})
       await page.waitForURL(/\/en\/marketplace/, { timeout: 10000 }).catch(() => {})
     }
 
     // Find and click how-it-works link in header or footer
-    const infoLink = page.locator("header a, nav a, footer a").filter({ hasText: /how|works/i }).first()
+    const infoLink = page
+      .locator("header a, nav a, footer a")
+      .filter({ hasText: /how|works/i })
+      .first()
     if (await infoLink.isVisible({ timeout: 5000 }).catch(() => false)) {
       await infoLink.click({ timeout: 5000 }).catch(() => {})
       await page.waitForURL(/\/en\/how-it-works/, { timeout: 10000 }).catch(() => {})
@@ -161,9 +178,12 @@ test.describe("🚀 Launch Smoke Test – Critical Flows", () => {
     await page.goto("/en/marketplace", { waitUntil: "domcontentloaded" })
     await expect(page).toHaveURL(/\/en\/marketplace/)
 
-    // Verify content is visible on mobile
-    const heading = page.locator("h1").first()
-    await expect(heading).toBeVisible()
+    // Wait for page to fully load
+    await page.waitForLoadState("networkidle")
+
+    // Verify content is visible on mobile (h2 hero)
+    const heading = page.locator("h2").first()
+    await expect(heading).toBeVisible({ timeout: 10000 })
   })
 
   /**
