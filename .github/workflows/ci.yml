@@ -47,6 +47,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: MCP contract + config validation
+        run: CI=true ./scripts/check-mcp-health.sh
+
       - name: Lint
         run: pnpm lint
 
@@ -70,4 +73,3 @@ jobs:
 
       # - name: E2E tests
       #   run: pnpm test:e2e
-

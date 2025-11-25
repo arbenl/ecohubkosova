@@ -1,0 +1,6 @@
+# MCP infrastructure guardrails
+mcp.json @arbenl
+tools/mcp-contract.json @arbenl
+scripts/check-mcp-health.* @arbenl
+.vscode/tasks.json @arbenl
+.vscode/launch.json @arbenl
