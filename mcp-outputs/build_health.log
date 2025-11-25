@@ -9,8 +9,8 @@
     "output": ""
   },
   "build": {
-    "pass": false,
-    "output": "Command failed: set -o pipefail; pnpm build 2>&1 | tail -20"
+    "pass": true,
+    "output": "├ ƒ /api/docs\n├ ƒ /api/health\n├ ƒ /api/health/db\n├ ƒ /api/marketplace-v2/interactions\n├ ƒ /api/marketplace-v2/listings\n├ ƒ /api/marketplace-v2/related\n├ ƒ /api/marketplace/listings\n├ ƒ /api/public/organizations\n├ ƒ /api/sentry-test\n├ ƒ /api/v1/articles\n├ ƒ /api/v1/listings\n├ ƒ /api/v1/organizations\n├ ƒ /openapi.json\n└ ƒ /sentry-test\n\n\nƒ Proxy (Middleware)\n\nƒ  (Dynamic)  server-rendered on demand\n\n"
   },
-  "timestamp": "2025-11-24T16:58:26.648Z"
+  "timestamp": "2025-11-25T10:45:33.339Z"
 }

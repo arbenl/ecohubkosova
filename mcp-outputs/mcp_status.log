@@ -91,5 +91,5 @@
     }
   ],
   "summary": "mcp-context-server → mcp-context-server : OK (running) | ecohub-qa → ecohub-qa : OK (running) | mcp-db-schema → context7 : OK (running) | mcp-db-inspect → context7 : OK (running) | mcp-test-runner → ecohub-qa : OK (running) | mcp-docs-knowledge → context7 : OK (running) | mcp-ux-assets → context7 : OK (running)",
-  "timestamp": "2025-11-24T16:58:26.648Z"
+  "timestamp": "2025-11-25T10:45:33.338Z"
 }

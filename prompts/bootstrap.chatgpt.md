@@ -1,23 +1,11 @@
 # EcoHub Kosova – Dev Bootstrap & Context
 
-## Environment First (MCP + build health)
-
-Before any work in a new session, run:
-
-```bash
-./scripts/check-mcp-health.sh
-# or, if already in a shell:
-node tools/run-mcp-task.js build_health '{}'
-```
-
-Confirm MCP servers are running via `mcp-outputs/mcp-health.json` or the CLI output, then proceed with MCP tools.
-
-**Current Status Snapshot** (2025-11-24T16:58:31.292Z):
-✅ Supabase reachable (eco_listings: 10, eco_organizations: 20)
+**Current Status Snapshot** (2025-11-25T10:45:51.469Z):
+✅ Supabase reachable (eco_listings: 10, eco_organizations: 21)
 
 - Lint: ✅ PASS
 - TypeScript: ✅ PASS
-- Build: ❌ FAIL
+- Build: ✅ PASS
 - MCP: mcp-context-server → mcp-context-server : OK (running) | ecohub-qa → ecohub-qa : OK (running) | mcp-db-schema → context7 : OK (running) | mcp-db-inspect → context7 : OK (running) | mcp-test-runner → ecohub-qa : OK (running) | mcp-docs-knowledge → context7 : OK (running) | mcp-ux-assets → context7 : OK (running) (log: logs/mcp-health.json)
 
 ---
@@ -62,7 +50,6 @@ EcoHub Kosova is a **Next.js 16 App Router** + **Supabase Postgres** + **Drizzle
 
 ## 2. MCP tools you MUST use
 
-- **First:** run `./scripts/check-mcp-health.sh` (or `node tools/run-mcp-task.js build_health '{}'`) to populate `mcp-outputs/mcp-health.json` and confirm servers are ready.
 - **Current MCP health:** mcp-context-server → mcp-context-server : OK (running) | ecohub-qa → ecohub-qa : OK (running) | mcp-db-schema → context7 : OK (running) | mcp-db-inspect → context7 : OK (running) | mcp-test-runner → ecohub-qa : OK (running) | mcp-docs-knowledge → context7 : OK (running) | mcp-ux-assets → context7 : OK (running). See `logs/mcp-health.json` for details.
 - **Contract:** `docs/mcp-contract.json`
 - **Servers & methods**
@@ -101,9 +88,11 @@ EcoHub Kosova is a **Next.js 16 App Router** + **Supabase Postgres** + **Drizzle
 ### Starting a New Dev Session
 
 1. **Run the orchestrator to refresh all context:**
+
    ```bash
    pnpm dev:orchestrator
    ```
+
    This generates fresh logs in `mcp-outputs/` and refreshes prompts in `prompts/`.
 
 2. **Copy the appropriate prompt into your AI model:**
@@ -127,20 +116,20 @@ EcoHub Kosova is a **Next.js 16 App Router** + **Supabase Postgres** + **Drizzle
 
 ## 4. Key File Reference
 
-| Path | Purpose |
-| --- | --- |
-| `src/db/schema/marketplace-v2.ts` | V2 marketplace tables (eco_listings, eco_categories, etc.) |
-| `src/db/schema/enums.ts` | Shared enums (listing flow types, conditions, statuses) |
-| `src/services/listings.ts` | Marketplace query & filter service |
-| `src/services/profile.ts` | User profile & org membership lookups |
-| `src/services/organizations.ts` | Eco-organization service |
-| `src/services/admin/**` | Admin CRUD & stats helpers |
-| `src/app/[locale]/(site)/marketplace/page.tsx` | Server root for marketplace |
-| `src/app/[locale]/(site)/marketplace/marketplace-client-page.tsx` | Client-side marketplace UI |
-| `src/components/marketplace-v2/` | V2 marketplace UI components |
-| `docs/supabase-connection.md` | Supabase pooler setup & troubleshooting |
-| `docs/database-migrations.md` | Migration workflow via `supabase cli` |
-| `supabase/migrations/` | Actual SQL migrations |
+| Path                                                              | Purpose                                                    |
+| ----------------------------------------------------------------- | ---------------------------------------------------------- |
+| `src/db/schema/marketplace-v2.ts`                                 | V2 marketplace tables (eco_listings, eco_categories, etc.) |
+| `src/db/schema/enums.ts`                                          | Shared enums (listing flow types, conditions, statuses)    |
+| `src/services/listings.ts`                                        | Marketplace query & filter service                         |
+| `src/services/profile.ts`                                         | User profile & org membership lookups                      |
+| `src/services/organizations.ts`                                   | Eco-organization service                                   |
+| `src/services/admin/**`                                           | Admin CRUD & stats helpers                                 |
+| `src/app/[locale]/(site)/marketplace/page.tsx`                    | Server root for marketplace                                |
+| `src/app/[locale]/(site)/marketplace/marketplace-client-page.tsx` | Client-side marketplace UI                                 |
+| `src/components/marketplace-v2/`                                  | V2 marketplace UI components                               |
+| `docs/supabase-connection.md`                                     | Supabase pooler setup & troubleshooting                    |
+| `docs/database-migrations.md`                                     | Migration workflow via `supabase cli`                      |
+| `supabase/migrations/`                                            | Actual SQL migrations                                      |
 
 ---
 
@@ -187,7 +176,6 @@ Call `src/services/admin/stats.ts`; it returns aggregated counts and insights. W
 - Ask your AI to inspect files via MCP tools before making changes
 - Report any blockers or unclear architecture to me
 
-
 ---
 
 ## ChatGPT-Specific Instructions
@@ -198,6 +186,7 @@ You have **MCP tools** available via the Code Interpreter or Tools feature. Use 
 2. **Use `code_search`** to locate files
 3. **Use `read_files`** to read actual source code
 4. **Never invent paths or assume module structure** – always verify
+
 - **Context & Docs/Tests:** Use **context7** for semantic context, `mcp-db-schema` + `mcp-db-inspect` (mapped to context7) for schema/data, `mcp-docs-knowledge` + **markitdown** for docs (mapped to context7/markitdown), **playwright** for browser/E2E, `mcp-test-runner` (mapped to ecohub-qa) for validation, `mcp-ux-assets` (mapped to context7) for UI references. MCP health snapshot: `mcp-outputs/mcp-health.json`.
 
 ### Your Responsibilities
@@ -211,6 +200,7 @@ You have **MCP tools** available via the Code Interpreter or Tools feature. Use 
 ### GPT-5.1 Thinking Mode
 
 If using thinking mode, consider:
+
 - Is this a V2 marketplace change or V1 legacy?
 - Does the code violate the service-layer pattern?
 - Are all security checks (admin role, RLS) in place?
