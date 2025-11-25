@@ -1,13 +1,13 @@
 {
   "mcpServers": {
     "mcp-context-server": {
-      "command": "node",
-      "args": ["/Users/arbenlila/development/ecohubkosova/tools/mcp-context-server/dist/server.js"],
+      "command": "./scripts/use-mcp-toolkit-server.sh",
+      "args": ["mcp-context-server"],
       "cwd": "/Users/arbenlila/development/ecohubkosova"
     },
     "ecohub-qa": {
-      "command": "node",
-      "args": ["/Users/arbenlila/development/ecohubkosova/tools/ecohub-qa/dist/index.js"],
+      "command": "./scripts/use-mcp-toolkit-server.sh",
+      "args": ["ecohub-qa"],
       "cwd": "/Users/arbenlila/development/ecohubkosova"
     },
     "context7": {

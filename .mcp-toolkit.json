@@ -1,0 +1,13 @@
+{
+  "repoContext": {
+    "allowList": ["src/**", "app/**", "tools/**", "docs/**", "supabase/**"],
+    "ignore": ["coverage", "test-results"]
+  },
+  "qa": {
+    "buildHealth": ["pnpm lint", "pnpm tsc --noEmit", "pnpm build"],
+    "testSuites": {
+      "smoke": "pnpm test:e2e:smoke",
+      "e2e": "pnpm test:e2e"
+    }
+  }
+}

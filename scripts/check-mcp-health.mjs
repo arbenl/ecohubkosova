@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, access } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import { spawn } from "node:child_process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -9,6 +10,33 @@ const projectRoot = resolve(__dirname, "..");
 const logPath = resolve(projectRoot, "logs", "mcp-health.json");
 const modeArg = process.argv.find((arg) => arg.startsWith("--mode="));
 const normalizedMode = modeArg?.split("=")[1] === "ci" ? "ci" : "local";
+
+const preferToolkit = process.env.USE_MCP_TOOLKIT === "1";
+const toolkitPath = process.env.MCP_TOOLKIT_PATH
+  ? resolve(process.env.MCP_TOOLKIT_PATH)
+  : resolve(projectRoot, "..", "mcp-toolkit");
+
+async function tryToolkitDelegation() {
+  if (!preferToolkit) return null;
+  const candidate = resolve(toolkitPath, "scripts", "check-mcp-health.mjs");
+  try {
+    await access(candidate);
+  } catch {
+    return null;
+  }
+
+  const exitCode = await new Promise((resolvePromise) => {
+    const child = spawn("node", [candidate, `--project-root=${projectRoot}`], { stdio: "inherit" });
+    child.on("close", (code) => resolvePromise(code ?? 1));
+    child.on("error", () => resolvePromise(1));
+  });
+  return exitCode;
+}
+
+const delegatedExit = await tryToolkitDelegation();
+if (delegatedExit !== null) {
+  process.exit(delegatedExit);
+}
 
 const report = {
   timestamp: new Date().toISOString(),

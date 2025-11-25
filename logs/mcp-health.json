@@ -1,95 +1,118 @@
 {
-  "status": "MCP Health Snapshot",
-  "allHealthy": true,
-  "availableCount": 7,
-  "healthyCount": 7,
-  "runningCount": 7,
-  "servers": [
-    {
-      "name": "mcp-context-server",
-      "status": "running",
-      "ok": true,
-      "implemented": true,
-      "binaryFound": true,
-      "processDetected": true,
-      "message": "Process detected",
-      "commandHint": "node tools/mcp-context-server/dist/server.js",
-      "logicalName": "mcp-context-server",
-      "underlyingName": "mcp-context-server"
+  "timestamp": "2025-11-25T17:24:19.721Z",
+  "mode": "local",
+  "contractVersion": "1.0.0",
+  "overallStatus": "ok",
+  "servers": {
+    "mcp-context-server": {
+      "configured": true,
+      "command": "./scripts/use-mcp-toolkit-server.sh",
+      "args": ["mcp-context-server"],
+      "cwd": "/Users/arbenlila/development/ecohubkosova",
+      "reachable": true,
+      "handshake": "ok",
+      "discoveredTools": ["project_map", "code_search", "read_files", "git_status", "git_diff"],
+      "contract": {
+        "required": ["project_map", "code_search", "read_files"],
+        "optional": [],
+        "missingRequired": [],
+        "missingOptional": [],
+        "status": "ok"
+      },
+      "errors": [],
+      "warnings": []
     },
-    {
-      "name": "ecohub-qa",
-      "status": "running",
-      "ok": true,
-      "implemented": true,
-      "binaryFound": true,
-      "processDetected": true,
-      "message": "Process detected",
-      "commandHint": "node tools/ecohub-qa/dist/index.js",
-      "logicalName": "ecohub-qa",
-      "underlyingName": "ecohub-qa"
+    "ecohub-qa": {
+      "configured": true,
+      "command": "./scripts/use-mcp-toolkit-server.sh",
+      "args": ["ecohub-qa"],
+      "cwd": "/Users/arbenlila/development/ecohubkosova",
+      "reachable": true,
+      "handshake": "ok",
+      "discoveredTools": [
+        "auth_audit",
+        "navigation_audit",
+        "build_health",
+        "runtime_log_scan",
+        "supabase_health",
+        "performance_audit",
+        "dependency_audit",
+        "accessibility_audit",
+        "i18n_audit",
+        "csp_audit",
+        "env_audit",
+        "tests_orchestrator",
+        "coverage_audit"
+      ],
+      "contract": {
+        "required": ["build_health", "test_runner", "navigation_audit"],
+        "optional": [],
+        "missingRequired": [],
+        "missingOptional": [],
+        "status": "ok"
+      },
+      "errors": [],
+      "warnings": []
     },
-    {
-      "name": "context7",
-      "status": "running",
-      "ok": true,
-      "implemented": true,
-      "binaryFound": true,
-      "processDetected": true,
-      "message": "Process detected",
-      "commandHint": "npx context7-mcp",
-      "logicalName": "mcp-db-schema",
-      "underlyingName": "context7"
+    "context7": {
+      "configured": true,
+      "command": "npx",
+      "args": ["context7-mcp"],
+      "cwd": "/Users/arbenlila/development/ecohubkosova",
+      "reachable": true,
+      "handshake": "ok",
+      "discoveredTools": ["resolve-library-id", "get-library-docs"],
+      "contract": {
+        "required": ["db_schema", "db_inspect", "docs_knowledge", "ux_assets"],
+        "optional": [],
+        "missingRequired": [],
+        "missingOptional": [],
+        "status": "ok"
+      },
+      "errors": [],
+      "warnings": []
     },
-    {
-      "name": "context7",
-      "status": "running",
-      "ok": true,
-      "implemented": true,
-      "binaryFound": true,
-      "processDetected": true,
-      "message": "Process detected",
-      "commandHint": "npx context7-mcp",
-      "logicalName": "mcp-db-inspect",
-      "underlyingName": "context7"
-    },
-    {
-      "name": "ecohub-qa",
-      "status": "running",
-      "ok": true,
-      "implemented": true,
-      "binaryFound": true,
-      "processDetected": true,
-      "message": "Process detected",
-      "commandHint": "node tools/ecohub-qa/dist/index.js",
-      "logicalName": "mcp-test-runner",
-      "underlyingName": "ecohub-qa"
-    },
-    {
-      "name": "context7",
-      "status": "running",
-      "ok": true,
-      "implemented": true,
-      "binaryFound": true,
-      "processDetected": true,
-      "message": "Process detected",
-      "commandHint": "npx context7-mcp",
-      "logicalName": "mcp-docs-knowledge",
-      "underlyingName": "context7"
-    },
-    {
-      "name": "context7",
-      "status": "running",
-      "ok": true,
-      "implemented": true,
-      "binaryFound": true,
-      "processDetected": true,
-      "message": "Process detected",
-      "commandHint": "npx context7-mcp",
-      "logicalName": "mcp-ux-assets",
-      "underlyingName": "context7"
+    "playwright": {
+      "configured": true,
+      "command": "npx",
+      "args": ["mcp-server-playwright"],
+      "cwd": "/Users/arbenlila/development/ecohubkosova",
+      "reachable": true,
+      "handshake": "ok",
+      "discoveredTools": [
+        "browser_close",
+        "browser_resize",
+        "browser_console_messages",
+        "browser_handle_dialog",
+        "browser_evaluate",
+        "browser_file_upload",
+        "browser_fill_form",
+        "browser_install",
+        "browser_press_key",
+        "browser_type",
+        "browser_navigate",
+        "browser_navigate_back",
+        "browser_network_requests",
+        "browser_run_code",
+        "browser_take_screenshot",
+        "browser_snapshot",
+        "browser_click",
+        "browser_drag",
+        "browser_hover",
+        "browser_select_option",
+        "browser_tabs",
+        "browser_wait_for"
+      ],
+      "contract": {
+        "required": ["playwright_*"],
+        "optional": [],
+        "missingRequired": [],
+        "missingOptional": [],
+        "status": "ok"
+      },
+      "errors": [],
+      "warnings": []
     }
-  ],
-  "summary": "mcp-context-server → mcp-context-server : OK (running) | ecohub-qa → ecohub-qa : OK (running) | mcp-db-schema → context7 : OK (running) | mcp-db-inspect → context7 : OK (running) | mcp-test-runner → ecohub-qa : OK (running) | mcp-docs-knowledge → context7 : OK (running) | mcp-ux-assets → context7 : OK (running)",
-  "timestamp": "2025-11-25T10:45:33.338Z"
+  },
+  "errors": []
 }
