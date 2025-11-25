@@ -56,6 +56,15 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Run smoke tests
+        run: pnpm test:e2e:smoke
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
       # - name: Unit tests
       #   run: pnpm test
 

@@ -15,6 +15,7 @@
     "test:automate": "node scripts/test-coverage-automator.js",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:e2e:smoke": "playwright test e2e/launch-smoke.spec.ts --project=chromium --reporter=github",
     "test:e2e:core": "playwright test e2e/marketplace/browse.spec.ts e2e/example.spec.ts e2e/diagnostic.spec.ts --project=chromium --timeout=30000",
     "test:e2e:extended": "playwright test --ignore e2e/marketplace/browse.spec.ts --ignore e2e/example.spec.ts --ignore e2e/diagnostic.spec.ts",
     "test:unit:legacy": "NODE_OPTIONS='--max-old-space-size=2048' vitest run",
