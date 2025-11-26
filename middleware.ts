@@ -25,7 +25,9 @@ export async function middleware(request: NextRequest) {
 
     // Extract locale from pathname (after intl middleware processing)
     const locale = deriveLocaleFromPath(pathname)
-    const pathWithoutLocale = pathname.startsWith(`/${locale}`) ? pathname.replace(`/${locale}`, "") : pathname
+    const pathWithoutLocale = pathname.startsWith(`/${locale}`)
+      ? pathname.replace(`/${locale}`, "")
+      : pathname
 
     // Create response with intl's headers
     let response = intlResponse || NextResponse.next()
@@ -64,11 +66,6 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL(`/${locale}/my`, request.url))
     }
 
-    // Redirect legacy dashboard paths to new workspace destination
-    if (session && pathWithoutLocale.startsWith("/dashboard")) {
-      return NextResponse.redirect(new URL(`/${locale}/my`, request.url))
-    }
-
     return response
   } catch (error) {
     // Log and surface a minimal error response to help debug edge crashes
@@ -86,7 +83,7 @@ export const config = {
     // Match all pathnames except for
     // - … if they start with `/api`, `/_next` or `/_vercel`
     // - … the ones containing a dot (e.g. `favicon.ico`)
-    '/((?!api|_next|_vercel|.*\\..*).*)',
+    "/((?!api|_next|_vercel|.*\\..*).*)",
   ],
 }
 

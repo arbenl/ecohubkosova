@@ -3,6 +3,7 @@ mcp.json @arbenl
 .mcp-toolkit.json @arbenl
 tools/mcp-contract.json @arbenl
 scripts/check-mcp-health.* @arbenl
+scripts/mcp-acceptance.sh @arbenl
 scripts/use-mcp-toolkit-server.sh @arbenl
 .vscode/tasks.json @arbenl
 .vscode/launch.json @arbenl

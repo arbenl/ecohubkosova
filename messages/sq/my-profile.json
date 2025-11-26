@@ -1,0 +1,18 @@
+{
+  "title": "Profili im",
+  "subtitle": "Ndrysho informacionin personal",
+  "description": "Përditëso emrin dhe vendndodhjen tënde",
+  "errorTitle": "Gabim",
+  "formTitle": "Informacioni personal",
+  "formDescription": "Mbaje profilin e përditësuar",
+  "fields": {
+    "fullName": "Emri i plotë",
+    "location": "Vendndodhja",
+    "locationPlaceholder": "p.sh., Prishtinë, Kosovë"
+  },
+  "save": "Ruaj ndryshimet",
+  "saving": "Duke ruajtur...",
+  "cancel": "Anulo",
+  "success": "Profili u përditësua me sukses!",
+  "error": "Gabim gjatë përditësimit të profilit"
+}

@@ -1,25 +1,39 @@
 {
-  "timestamp": "2025-11-25T17:24:19.721Z",
+  "timestamp": "2025-11-26T18:58:41.055Z",
   "mode": "local",
   "contractVersion": "1.0.0",
-  "overallStatus": "ok",
+  "overallStatus": "fail",
   "servers": {
     "mcp-context-server": {
       "configured": true,
       "command": "./scripts/use-mcp-toolkit-server.sh",
       "args": ["mcp-context-server"],
       "cwd": "/Users/arbenlila/development/ecohubkosova",
-      "reachable": true,
-      "handshake": "ok",
+      "optional": false,
+      "reachable": false,
+      "handshake": "fail",
       "discoveredTools": ["project_map", "code_search", "read_files", "git_status", "git_diff"],
       "contract": {
-        "required": ["project_map", "code_search", "read_files"],
+        "required": [
+          {
+            "logical": "project_map",
+            "anyOf": ["project_map"]
+          },
+          {
+            "logical": "code_search",
+            "anyOf": ["code_search"]
+          },
+          {
+            "logical": "read_files",
+            "anyOf": ["read_files"]
+          }
+        ],
         "optional": [],
         "missingRequired": [],
         "missingOptional": [],
-        "status": "ok"
+        "status": "pending"
       },
-      "errors": [],
+      "errors": ["Failed to query server mcp-context-server: pattern.includes is not a function"],
       "warnings": []
     },
     "ecohub-qa": {
@@ -27,8 +41,9 @@
       "command": "./scripts/use-mcp-toolkit-server.sh",
       "args": ["ecohub-qa"],
       "cwd": "/Users/arbenlila/development/ecohubkosova",
-      "reachable": true,
-      "handshake": "ok",
+      "optional": false,
+      "reachable": false,
+      "handshake": "fail",
       "discoveredTools": [
         "auth_audit",
         "navigation_audit",
@@ -42,16 +57,35 @@
         "csp_audit",
         "env_audit",
         "tests_orchestrator",
-        "coverage_audit"
+        "coverage_audit",
+        "test_runner"
       ],
       "contract": {
-        "required": ["build_health", "test_runner", "navigation_audit"],
+        "required": [
+          {
+            "logical": "build_health",
+            "anyOf": ["build_health"],
+            "timeoutMs": 120000
+          },
+          {
+            "logical": "test_runner",
+            "anyOf": ["test_runner", "tests_orchestrator"],
+            "args": {
+              "suite": "smoke"
+            },
+            "timeoutMs": 180000
+          },
+          {
+            "logical": "navigation_audit",
+            "anyOf": ["navigation_audit"]
+          }
+        ],
         "optional": [],
         "missingRequired": [],
         "missingOptional": [],
-        "status": "ok"
+        "status": "pending"
       },
-      "errors": [],
+      "errors": ["Failed to query server ecohub-qa: pattern.includes is not a function"],
       "warnings": []
     },
     "context7": {
@@ -59,17 +93,27 @@
       "command": "npx",
       "args": ["context7-mcp"],
       "cwd": "/Users/arbenlila/development/ecohubkosova",
-      "reachable": true,
-      "handshake": "ok",
+      "optional": true,
+      "reachable": false,
+      "handshake": "fail",
       "discoveredTools": ["resolve-library-id", "get-library-docs"],
       "contract": {
-        "required": ["db_schema", "db_inspect", "docs_knowledge", "ux_assets"],
-        "optional": [],
+        "required": [],
+        "optional": [
+          {
+            "logical": "docs_knowledge",
+            "anyOf": ["docs_knowledge", "get-library-docs", "resolve-library-id"]
+          },
+          {
+            "logical": "ux_assets",
+            "anyOf": ["ux_assets", "get-library-docs", "resolve-library-id"]
+          }
+        ],
         "missingRequired": [],
         "missingOptional": [],
-        "status": "ok"
+        "status": "pending"
       },
-      "errors": [],
+      "errors": ["Failed to query server context7: pattern.includes is not a function"],
       "warnings": []
     },
     "playwright": {
@@ -77,8 +121,9 @@
       "command": "npx",
       "args": ["mcp-server-playwright"],
       "cwd": "/Users/arbenlila/development/ecohubkosova",
-      "reachable": true,
-      "handshake": "ok",
+      "optional": true,
+      "reachable": false,
+      "handshake": "fail",
       "discoveredTools": [
         "browser_close",
         "browser_resize",
@@ -104,15 +149,75 @@
         "browser_wait_for"
       ],
       "contract": {
-        "required": ["playwright_*"],
+        "required": [
+          {
+            "logical": "playwright_*",
+            "anyOf": ["playwright_*", "browser_*"]
+          }
+        ],
         "optional": [],
         "missingRequired": [],
         "missingOptional": [],
-        "status": "ok"
+        "status": "pending"
       },
-      "errors": [],
+      "errors": ["Failed to query server playwright: pattern.includes is not a function"],
+      "warnings": []
+    },
+    "markitdown": {
+      "configured": true,
+      "command": "markitdown-mcp",
+      "args": [],
+      "cwd": "/Users/arbenlila/development/ecohubkosova",
+      "optional": true,
+      "reachable": false,
+      "handshake": "fail",
+      "discoveredTools": [],
+      "contract": {
+        "required": [
+          {
+            "logical": "convert_document",
+            "anyOf": ["convert_document"]
+          }
+        ],
+        "optional": [],
+        "missingRequired": [],
+        "missingOptional": [],
+        "status": "pending"
+      },
+      "errors": ["Failed to query server markitdown: spawn markitdown-mcp ENOENT"],
+      "warnings": []
+    },
+    "github": {
+      "configured": true,
+      "command": "./scripts/use-github-mcp-server.sh",
+      "args": [],
+      "cwd": "/Users/arbenlila/development/ecohubkosova",
+      "optional": true,
+      "reachable": false,
+      "handshake": "fail",
+      "discoveredTools": [],
+      "contract": {
+        "required": [
+          {
+            "logical": "github_search",
+            "anyOf": ["search_repositories", "get_file_contents", "*"]
+          }
+        ],
+        "optional": [],
+        "missingRequired": [],
+        "missingOptional": [],
+        "status": "pending"
+      },
+      "errors": ["Failed to query server github: MCP error -32000: Connection closed"],
       "warnings": []
     }
   },
-  "errors": []
+  "errors": [
+    "Failed to query server mcp-context-server: pattern.includes is not a function",
+    "Failed to query server ecohub-qa: pattern.includes is not a function",
+    "Failed to query server context7: pattern.includes is not a function",
+    "Failed to query server playwright: pattern.includes is not a function",
+    "Failed to query server markitdown: spawn markitdown-mcp ENOENT",
+    "Failed to query server github: MCP error -32000: Connection closed"
+  ]
 }

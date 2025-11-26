@@ -81,6 +81,6 @@ export default defineConfig({
     command: "pnpm dev --hostname 127.0.0.1 --port 3000",
     url: "http://127.0.0.1:3000",
     reuseExistingServer: !process.env.CI,
-    timeout: 60000,
+    timeout: 120000, // Increased to 120s for Next.js build/startup
   },
 })

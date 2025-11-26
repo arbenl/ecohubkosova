@@ -25,7 +25,9 @@
     "actions": {
       "viewPublicProfile": "View public profile",
       "editProfile": "Edit profile",
-      "createListing": "Create Listing"
+      "createListing": "Create Listing",
+      "notAvailable": "not yet available",
+      "profileNotPublished": "Public profile not yet published. Complete eco-organization verification to enable."
     },
     "listings": {
       "title": "Marketplace listings",

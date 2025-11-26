@@ -5,7 +5,16 @@ import { usePathname } from "next/navigation"
 import { useLocale } from "next-intl"
 import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, BookOpen, Users, ShoppingCart, User, Settings, Menu, X } from "lucide-react"
+import {
+  LayoutDashboard,
+  BookOpen,
+  Users,
+  ShoppingCart,
+  User,
+  Settings,
+  Menu,
+  X,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
 import { SignOutButton } from "@/components/sign-out-button"
@@ -17,7 +26,7 @@ interface SidebarProps {
 export function Sidebar({ userRole }: SidebarProps) {
   const pathname = usePathname()
   const locale = useLocale()
-  const t = useTranslations('navigation')
+  const t = useTranslations("navigation")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const handleBeforeSignOut = () => setIsMobileMenuOpen(false)
 
@@ -49,31 +58,34 @@ export function Sidebar({ userRole }: SidebarProps) {
 
   const routes = [
     {
-      label: t('dashboard'),
+      label: t("dashboard"),
       icon: LayoutDashboard,
-      href: `/${locale}/my/organization`,
-      active: pathname === `/${locale}/my/organization`,
+      href: `/${locale}/dashboard`,
+      active:
+        pathname === `/${locale}/dashboard` ||
+        pathname === `/${locale}/my` ||
+        pathname === `/${locale}/admin`,
     },
     {
-      label: t('knowledge'),
+      label: t("knowledge"),
       icon: BookOpen,
       href: `/${locale}/knowledge`,
       active: pathname === `/${locale}/knowledge`,
     },
     {
-      label: t('directory'),
+      label: t("directory"),
       icon: Users,
       href: `/${locale}/partners`,
       active: pathname === `/${locale}/partners`,
     },
     {
-      label: t('marketplace'),
+      label: t("marketplace"),
       icon: ShoppingCart,
       href: `/${locale}/marketplace`,
       active: pathname === `/${locale}/marketplace`,
     },
     {
-      label: t('profile'),
+      label: t("profile"),
       icon: User,
       href: `/${locale}/profile`,
       active: pathname === `/${locale}/profile`,
@@ -83,7 +95,7 @@ export function Sidebar({ userRole }: SidebarProps) {
   // Add admin route if user is admin
   if (userRole === "Admin") {
     routes.push({
-      label: t('administration'),
+      label: t("administration"),
       icon: Settings,
       href: `/${locale}/admin`,
       active: pathname.startsWith(`/${locale}/admin`),
@@ -100,7 +112,11 @@ export function Sidebar({ userRole }: SidebarProps) {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="w-14 h-14 rounded-full eco-gradient shadow-lg hover:shadow-xl transition-all duration-300"
         >
-          {isMobileMenuOpen ? <X className="h-6 w-6 text-white" /> : <Menu className="h-6 w-6 text-white" />}
+          {isMobileMenuOpen ? (
+            <X className="h-6 w-6 text-white" />
+          ) : (
+            <Menu className="h-6 w-6 text-white" />
+          )}
         </Button>
       </div>
 
@@ -112,7 +128,7 @@ export function Sidebar({ userRole }: SidebarProps) {
         id="mobile-sidebar"
         className={cn(
           "fixed top-0 left-0 h-full w-64 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 md:hidden",
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full",
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Mobile Sidebar Header */}
@@ -138,7 +154,7 @@ export function Sidebar({ userRole }: SidebarProps) {
                   "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 active:scale-95",
                   route.active
                     ? "bg-gradient-to-r from-[#00C896] to-[#00A07E] text-white shadow-lg"
-                    : "text-gray-700 hover:bg-gray-100 active:bg-gray-200",
+                    : "text-gray-700 hover:bg-gray-100 active:bg-gray-200"
                 )}
               >
                 <route.icon className="h-5 w-5 flex-shrink-0" />
@@ -171,7 +187,7 @@ export function Sidebar({ userRole }: SidebarProps) {
                   "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
                   route.active
                     ? "bg-gradient-to-r from-[#00C896] to-[#00A07E] text-white shadow-lg"
-                    : "text-gray-600 hover:text-[#00C896] hover:bg-gray-50",
+                    : "text-gray-600 hover:text-[#00C896] hover:bg-gray-50"
                 )}
               >
                 <route.icon className="h-5 w-5" />

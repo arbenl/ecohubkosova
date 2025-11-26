@@ -2,29 +2,117 @@
   "title": "Platform admin workspace",
   "subtitle": "Monitor EcoHub activity, partners, and listings",
   "stats": {
+    "title": "Platform Statistics",
+    "viewDetails": "View Details",
     "users": "Users",
     "usersDescription": "Registered users on the platform",
+    "usersAriaLabel": "View user management details",
     "organizations": "Organizations",
     "organizationsDescription": "Registered organizations on the platform",
+    "organizationsAriaLabel": "View organization management details",
     "organizationsPending": "Pending approvals",
     "articles": "Articles",
     "articlesDescription": "Articles on the platform",
+    "articlesAriaLabel": "View article management details",
     "articlesPending": "Pending publication",
     "listings": "Marketplace listings",
     "listingsDescription": "Listings in the marketplace",
-    "listingsPending": "Draft listings"
+    "listingsAriaLabel": "View listing management details",
+    "listingsPending": "Draft listings",
+    "pending": "pending"
   },
   "quickActions": {
     "title": "Quick actions",
     "description": "Jump into common admin workflows",
     "users": "Manage users",
+    "usersDescription": "View and manage platform users",
+    "usersAriaLabel": "Go to user management",
     "organizations": "Approve organizations",
+    "organizationsDescription": "Review and approve organizations",
+    "organizationsAriaLabel": "Go to organization management",
     "articles": "Publish articles",
-    "listings": "Review listings"
+    "articlesDescription": "Review and publish articles",
+    "articlesAriaLabel": "Go to article management",
+    "listings": "Review listings",
+    "members": "Organization members",
+    "membersDescription": "Manage organization member relationships",
+    "membersAriaLabel": "Go to organization members management",
+    "audits": "System audits",
+    "auditsDescription": "View system activity logs",
+    "auditsAriaLabel": "Go to system audits"
   },
   "activity": {
     "title": "Recent activity",
     "description": "Latest updates across the platform",
-    "placeholder": "Activity feed coming soon"
+    "placeholder": "Activity feed coming soon",
+    "emptyTitle": "No recent activity",
+    "emptyDescription": "Recent platform activity will appear here once users start interacting with the system.",
+    "comingSoon": "Coming soon",
+    "setupDescription": "Activity setup will be available soon.",
+    "setup": "Setup activity"
+  },
+  "welcome": "Welcome back! Today is {date}",
+  "refresh": "Refresh",
+  "refreshAriaLabel": "Refresh dashboard data",
+  "users": {
+    "title": "User Management",
+    "subtitle": "Manage and monitor platform users",
+    "refresh": "Refresh",
+    "search": {
+      "placeholder": "Search users by name, email, or location..."
+    },
+    "filters": {
+      "role": "Role",
+      "roleAll": "All roles",
+      "roleAdmin": "Admin",
+      "roleUser": "User",
+      "roleModerator": "Moderator",
+      "status": "Status",
+      "statusAll": "All statuses",
+      "statusApproved": "Approved",
+      "statusPending": "Pending"
+    },
+    "table": {
+      "headers": {
+        "user": "User",
+        "email": "Email",
+        "location": "Location",
+        "role": "Role",
+        "status": "Status",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "empty": "No users found"
+    },
+    "roles": {
+      "admin": "Admin",
+      "user": "User",
+      "moderator": "Moderator"
+    },
+    "status": {
+      "approved": "Approved",
+      "pending": "Pending"
+    },
+    "actions": {
+      "openMenu": "Open menu",
+      "edit": "Edit user",
+      "delete": "Delete user"
+    },
+    "empty": {
+      "noUsers": {
+        "title": "No users yet",
+        "description": "Users will appear here once they register on the platform."
+      },
+      "filtered": {
+        "title": "No users match your filters",
+        "description": "Try adjusting your search or filter criteria."
+      },
+      "clearFilters": "Clear filters"
+    },
+    "error": {
+      "title": "Failed to load users",
+      "retry": "Try again",
+      "generic": "Something went wrong while loading users."
+    }
   }
 }

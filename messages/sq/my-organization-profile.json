@@ -1,0 +1,23 @@
+{
+  "title": "Profili i Organizatës",
+  "subtitle": "Ndrysho detajet e organizatës",
+  "description": "Përditëso informacionin dhe detajet kontaktuese të organizatës",
+  "errorTitle": "Gabim",
+  "noOrganization": "Nuk keni të lidhur asnjë organizatë. Ju lutem krijoni ose bashkohuni në një të tillë më parë.",
+  "noPermission": "Nuk keni leje për të ndryshuar këtë organizatë. Vetëm adminët dhe redaktorët mund të bëjnë ndryshime.",
+  "formTitle": "Detajet e organizatës",
+  "formDescription": "Mbaje informacionin e organizatës të përditësuar",
+  "fields": {
+    "name": "Emri i organizatës",
+    "description": "Përshkrimi",
+    "primaryInterest": "Interesi kryesor",
+    "contactPerson": "Personi kontaktues",
+    "contactEmail": "Email kontakti",
+    "location": "Vendndodhja"
+  },
+  "save": "Ruaj ndryshimet",
+  "saving": "Duke ruajtur...",
+  "cancel": "Anulo",
+  "success": "Profili i organizatës u përditësua me sukses!",
+  "error": "Gabim gjatë përditësimit të profilit të organizatës"
+}

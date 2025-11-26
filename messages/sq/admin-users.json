@@ -1,0 +1,25 @@
+{
+  "users": {
+    "title": "Përdoruesit",
+    "subtitle": "Menaxho përdoruesit e platformës",
+    "refresh": "Rifresko",
+    "search": {
+      "placeholder": "Kërko përdorues..."
+    },
+    "filters": {
+      "roleAll": "Të gjitha rolet",
+      "statusAll": "Të gjitha statuset"
+    },
+    "table": {
+      "headers": {
+        "user": "Përdoruesi",
+        "email": "Email",
+        "location": "Vendndodhja",
+        "role": "Roli",
+        "status": "Statusi",
+        "joined": "Regjistruar",
+        "actions": "Veprime"
+      }
+    }
+  }
+}

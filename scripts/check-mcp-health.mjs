@@ -26,7 +26,13 @@ async function tryToolkitDelegation() {
   }
 
   const exitCode = await new Promise((resolvePromise) => {
-    const child = spawn("node", [candidate, `--project-root=${projectRoot}`], { stdio: "inherit" });
+    const contractPath = resolve(projectRoot, "tools", "mcp-contract.json");
+    const configPath = resolve(projectRoot, "mcp.json");
+    const child = spawn(
+      "node",
+      [candidate, `--project-root=${projectRoot}`, `--contract=${contractPath}`, `--config=${configPath}`],
+      { stdio: "inherit" }
+    );
     child.on("close", (code) => resolvePromise(code ?? 1));
     child.on("error", () => resolvePromise(1));
   });
@@ -63,6 +69,14 @@ function markFail(message) {
     report.errors.push(message);
   }
   report.overallStatus = "fail";
+}
+
+function recordIssue(message, optional) {
+  if (optional) {
+    markWarn(message);
+  } else {
+    markFail(message);
+  }
 }
 
 function escapeRegex(value) {
@@ -197,12 +211,14 @@ async function main() {
       const requiredTools = Array.isArray(entry.requiredTools) ? entry.requiredTools : [];
       const optionalTools = Array.isArray(entry.optionalTools) ? entry.optionalTools : [];
       const serverConfig = serverConfigs[serverName];
+      const optionalServer = entry?.optional === true;
 
       const serverReport = {
         configured: Boolean(serverConfig),
         command: serverConfig?.command ?? null,
         args: serverConfig?.args ?? [],
         cwd: serverConfig?.cwd ?? projectRoot,
+        optional: optionalServer,
         reachable: null,
         handshake: normalizedMode === "local" ? "pending" : "skipped",
         discoveredTools: [],
@@ -220,10 +236,10 @@ async function main() {
       if (!serverConfig) {
         serverReport.handshake = "skipped";
         serverReport.reachable = false;
-        serverReport.contract.status = "fail";
+        serverReport.contract.status = optionalServer ? "warn" : "fail";
         const message = `Missing server configuration for ${serverName}.`;
         serverReport.errors.push(message);
-        markFail(message);
+        recordIssue(message, optionalServer);
         report.servers[serverName] = serverReport;
         continue;
       }
@@ -238,12 +254,12 @@ async function main() {
           const evaluation = evaluateContract(requiredTools, optionalTools, tools);
           serverReport.contract.missingRequired = evaluation.missingRequired;
           serverReport.contract.missingOptional = evaluation.missingOptional;
-          serverReport.contract.status = evaluation.status;
+          serverReport.contract.status = optionalServer && evaluation.status === "fail" ? "warn" : evaluation.status;
 
           if (evaluation.missingRequired.length > 0) {
             const message = `Server ${serverName} is missing required tools: ${evaluation.missingRequired.join(", ")}`;
             serverReport.errors.push(message);
-            markFail(message);
+            recordIssue(message, optionalServer);
           } else if (evaluation.missingOptional.length > 0) {
             const message = `Server ${serverName} is missing optional tools: ${evaluation.missingOptional.join(", ")}`;
             serverReport.warnings.push(message);
@@ -256,7 +272,7 @@ async function main() {
           serverReport.reachable = false;
           serverReport.handshake = "fail";
           serverReport.errors.push(message);
-          markFail(message);
+          recordIssue(message, optionalServer);
         }
       } else {
         // CI mode only validates structure, not tool availability

@@ -1,6 +1,28 @@
 {
   "title": "My workspace",
   "subtitle": "Manage your EcoHub activity and next steps",
+  "sections": {
+    "profile": "Profile",
+    "listings": "Saved Listings",
+    "organization": "Organization",
+    "partners": "Partners"
+  },
+  "profile": {
+    "description": "Manage your personal information and account settings",
+    "edit": "Edit Profile"
+  },
+  "listings": {
+    "description": "View and manage your saved marketplace listings",
+    "view": "View Saved"
+  },
+  "organization": {
+    "description": "Manage your organization profile and team",
+    "manage": "Manage Organization"
+  },
+  "partners": {
+    "description": "Explore partnership opportunities",
+    "explore": "Explore Partners"
+  },
   "cards": {
     "profile": {
       "title": "Profile & notifications",

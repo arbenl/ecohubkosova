@@ -25,7 +25,9 @@
     "actions": {
       "viewPublicProfile": "Shiko profilin publik",
       "editProfile": "Ndrysho profilin",
-      "createListing": "Krijo Ofertë"
+      "createListing": "Krijo Ofertë",
+      "profileNotPublished": "Profili publik ende nuk është publikuar. Kompletoni verifikimin e eko-organizatës për ta aktivizuar.",
+      "notAvailable": "nuk është e disponueshme"
     },
     "listings": {
       "title": "Listimet në treg",

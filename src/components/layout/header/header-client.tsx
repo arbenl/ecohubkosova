@@ -12,9 +12,14 @@ import { LanguageSwitcher } from "./language-switcher"
 interface HeaderClientProps {
   fallbackUserName?: string | null
   fallbackUserEmail?: string | null
+  userRole?: string | null
 }
 
-export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: HeaderClientProps) {
+export default function HeaderClient({
+  fallbackUserName,
+  fallbackUserEmail,
+  userRole,
+}: HeaderClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const locale = useLocale()
   const t = useTranslations("navigation")
@@ -22,6 +27,8 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
   const derivedName =
     user?.email?.split("@")[0] || fallbackUserName || fallbackUserEmail?.split("@")[0]
   const isAuthenticated = Boolean(user || fallbackUserEmail)
+
+  const dashboardLink = userRole === "Admin" ? `/${locale}/admin` : `/${locale}/my`
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -102,7 +109,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                 </Button>
                 <div className="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-200 hidden group-hover:block z-50">
                   <Link
-                    href={`/${locale}/my/organization`}
+                    href={`/${locale}/my`}
                     className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] first:rounded-t-xl transition-colors"
                   >
                     {t("myOrganization")}
@@ -114,8 +121,9 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                     {t("savedListings")}
                   </Link>
                   <Link
-                    href={`/${locale}/my/organization`}
+                    href={dashboardLink}
                     className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] transition-colors"
+                    prefetch={false}
                   >
                     {t("dashboard")}
                   </Link>
@@ -217,10 +225,7 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                       className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
                       asChild
                     >
-                      <Link
-                        href={`/${locale}/my/organization`}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
+                      <Link href={`/${locale}/my`} onClick={() => setIsMenuOpen(false)}>
                         {t("myOrganization")}
                       </Link>
                     </Button>
@@ -240,8 +245,9 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
                       asChild
                     >
                       <Link
-                        href={`/${locale}/my/organization`}
+                        href={dashboardLink}
                         onClick={() => setIsMenuOpen(false)}
+                        prefetch={false}
                       >
                         {t("dashboard")}
                       </Link>

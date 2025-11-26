@@ -1,0 +1,25 @@
+{
+  "users": {
+    "title": "Users",
+    "subtitle": "Manage platform users",
+    "refresh": "Refresh",
+    "search": {
+      "placeholder": "Search users..."
+    },
+    "filters": {
+      "roleAll": "All Roles",
+      "statusAll": "All Statuses"
+    },
+    "table": {
+      "headers": {
+        "user": "User",
+        "email": "Email",
+        "location": "Location",
+        "role": "Role",
+        "status": "Status",
+        "joined": "Joined",
+        "actions": "Actions"
+      }
+    }
+  }
+}

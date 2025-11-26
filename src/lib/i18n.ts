@@ -32,6 +32,8 @@ export default getRequestConfig(async ({ locale }) => {
     ecoOrganizations,
     partners,
     howItWorks,
+    myOrganizationProfile,
+    adminUsers,
   ] = await Promise.all([
     import(`../../messages/${validLocale}/navigation.json`),
     import(`../../messages/${validLocale}/cta.json`),
@@ -58,6 +60,8 @@ export default getRequestConfig(async ({ locale }) => {
     import(`../../messages/${validLocale}/eco-organizations.json`),
     import(`../../messages/${validLocale}/partners.json`),
     import(`../../messages/${validLocale}/how-it-works.json`),
+    import(`../../messages/${validLocale}/my-organization-profile.json`),
+    import(`../../messages/${validLocale}/admin-users.json`),
   ])
 
   return {
@@ -88,6 +92,8 @@ export default getRequestConfig(async ({ locale }) => {
       "eco-organizations": ecoOrganizations.default,
       partners: partners.default,
       "how-it-works": howItWorks.default,
+      "my-organization-profile": myOrganizationProfile.default,
+      "admin-users": adminUsers.default,
     },
   }
 })

@@ -1,6 +1,28 @@
 {
   "title": "Hapësira ime",
   "subtitle": "Menaxho aktivitetin dhe hapat e radhës në EcoHub",
+  "sections": {
+    "profile": "Profili",
+    "listings": "Listimet e Ruajtura",
+    "organization": "Organizata",
+    "partners": "Partnerët"
+  },
+  "profile": {
+    "description": "Menaxho informacionin personal dhe cilësimet e llogarisë",
+    "edit": "Ndrysho Profilin"
+  },
+  "listings": {
+    "description": "Shiko dhe menaxho listimet e ruajtura në treg",
+    "view": "Shiko të Ruajturat"
+  },
+  "organization": {
+    "description": "Menaxho profilin e organizatës dhe ekipin",
+    "manage": "Menaxho Organizatën"
+  },
+  "partners": {
+    "description": "Eksploro mundësitë e partneritetit",
+    "explore": "Eksploro Partnerët"
+  },
   "cards": {
     "profile": {
       "title": "Profili & njoftimet",

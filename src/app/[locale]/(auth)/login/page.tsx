@@ -138,7 +138,7 @@ export default function KycuPage() {
           /* ignore */
         }
 
-        router.push(`/${locale}/my/organization`)
+        router.push(`/${locale}/my`)
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : t("loginError"))

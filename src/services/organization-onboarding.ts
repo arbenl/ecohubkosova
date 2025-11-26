@@ -20,6 +20,7 @@ export interface CreateOrganizationInput {
 
 export interface UserOrganization {
   id: string
+  eco_org_id?: string | null
   name: string
   description: string
   primary_interest: string
@@ -103,7 +104,9 @@ export async function createOrganizationForUser(
     return { data: { organizationId: createdOrgId } }
   } catch (error) {
     console.error("[organization-onboarding] createOrganizationForUser failed:", error)
-    return { error: error instanceof Error ? error.message : "Gabim gjatë krijimit të organizatës." }
+    return {
+      error: error instanceof Error ? error.message : "Gabim gjatë krijimit të organizatës.",
+    }
   }
 }
 
@@ -123,7 +126,12 @@ export async function claimOrganizationForUser(
     }
 
     // Verify organization exists
-    const orgRecord = await db.get().select().from(organizations).where(eq(organizations.id, organizationId)).limit(1)
+    const orgRecord = await db
+      .get()
+      .select()
+      .from(organizations)
+      .where(eq(organizations.id, organizationId))
+      .limit(1)
     if (!orgRecord[0]) {
       return { error: "Organizata nuk u gjet." }
     }
@@ -133,7 +141,12 @@ export async function claimOrganizationForUser(
       .get()
       .select()
       .from(organizationMembers)
-      .where(and(eq(organizationMembers.user_id, userId), eq(organizationMembers.organization_id, organizationId)))
+      .where(
+        and(
+          eq(organizationMembers.user_id, userId),
+          eq(organizationMembers.organization_id, organizationId)
+        )
+      )
       .limit(1)
 
     if (existingMembership[0]) {
@@ -152,14 +165,18 @@ export async function claimOrganizationForUser(
     return { data: { organizationId } }
   } catch (error) {
     console.error("[organization-onboarding] claimOrganizationForUser failed:", error)
-    return { error: error instanceof Error ? error.message : "Gabim gjatë kërkesës për organizatën." }
+    return {
+      error: error instanceof Error ? error.message : "Gabim gjatë kërkesës për organizatën.",
+    }
   }
 }
 
 /**
  * Fetch all organizations for a user where user is a member
  */
-export async function fetchUserOrganizations(userId: string): Promise<{ data: UserOrganization[]; error?: string }> {
+export async function fetchUserOrganizations(
+  userId: string
+): Promise<{ data: UserOrganization[]; error?: string }> {
   noStore()
 
   try {
@@ -177,6 +194,7 @@ export async function fetchUserOrganizations(userId: string): Promise<{ data: Us
 
     const data: UserOrganization[] = rows.map(({ organization, member, ecoOrg }) => ({
       id: organization.id,
+      eco_org_id: ecoOrg?.id ?? null,
       name: organization.name,
       description: organization.description,
       primary_interest: organization.primary_interest,
@@ -239,7 +257,12 @@ export async function fetchUserOrganization(
       .from(organizationMembers)
       .innerJoin(organizations, eq(organizationMembers.organization_id, organizations.id))
       .leftJoin(ecoOrganizations, eq(organizations.id, ecoOrganizations.organization_id))
-      .where(and(eq(organizationMembers.user_id, userId), eq(organizationMembers.organization_id, organizationId)))
+      .where(
+        and(
+          eq(organizationMembers.user_id, userId),
+          eq(organizationMembers.organization_id, organizationId)
+        )
+      )
       .limit(1)
 
     if (!rows[0]) {
@@ -277,5 +300,3 @@ export async function fetchUserOrganization(
  * Organization onboarding service
  * Handles creation, claiming, and membership management for organizations
  */
-
-

@@ -1,0 +1,149 @@
+{
+  "timestamp": "2025-11-26T10:21:30.077Z",
+  "projectRoot": "/Users/arbenlila/development/ecohubkosova",
+  "contractPath": "/Users/arbenlila/development/ecohubkosova/tools/mcp-contract.json",
+  "healthLog": "/Users/arbenlila/development/ecohubkosova/logs/mcp-health.json",
+  "servers": {
+    "mcp-context-server": {
+      "optional": false,
+      "probes": [
+        {
+          "logicalTool": "project_map",
+          "resolvedTool": "project_map",
+          "status": "ok",
+          "durationMs": 3,
+          "invocationUsed": "tools_call",
+          "argsUsed": {},
+          "timeoutMs": 10000
+        },
+        {
+          "logicalTool": "code_search",
+          "resolvedTool": "code_search",
+          "status": "ok",
+          "durationMs": 36,
+          "invocationUsed": "tools_call",
+          "argsUsed": {
+            "query": "WorkspaceLayout"
+          },
+          "timeoutMs": 10000
+        },
+        {
+          "logicalTool": "read_files",
+          "resolvedTool": "read_files",
+          "status": "ok",
+          "durationMs": 2,
+          "invocationUsed": "tools_call",
+          "argsUsed": {
+            "paths": ["package.json"]
+          },
+          "timeoutMs": 10000
+        }
+      ],
+      "status": "ok",
+      "invocationMode": "tools_call",
+      "toolListSupported": true
+    },
+    "ecohub-qa": {
+      "optional": false,
+      "probes": [
+        {
+          "logicalTool": "build_health",
+          "resolvedTool": "build_health",
+          "status": "ok",
+          "durationMs": 18066,
+          "invocationUsed": "tools_call",
+          "argsUsed": {},
+          "timeoutMs": 120000
+        },
+        {
+          "logicalTool": "test_runner",
+          "resolvedTool": "test_runner",
+          "status": "ok",
+          "durationMs": 11764,
+          "invocationUsed": "tools_call",
+          "argsUsed": {
+            "suite": "smoke"
+          },
+          "timeoutMs": 180000
+        },
+        {
+          "logicalTool": "navigation_audit",
+          "resolvedTool": "navigation_audit",
+          "status": "ok",
+          "durationMs": 0,
+          "invocationUsed": "tools_call",
+          "argsUsed": {},
+          "timeoutMs": 10000
+        }
+      ],
+      "status": "ok",
+      "invocationMode": "tools_call",
+      "toolListSupported": true
+    },
+    "context7": {
+      "optional": true,
+      "probes": [
+        {
+          "logicalTool": "docs_knowledge",
+          "resolvedTool": "get-library-docs",
+          "status": "ok",
+          "durationMs": 0,
+          "invocationUsed": "tools_call",
+          "argsUsed": {
+            "topic": "workspace v2"
+          },
+          "timeoutMs": 10000
+        },
+        {
+          "logicalTool": "ux_assets",
+          "resolvedTool": "get-library-docs",
+          "status": "ok",
+          "durationMs": 1,
+          "invocationUsed": "tools_call",
+          "argsUsed": {
+            "area": "public-pages-hero",
+            "style": "v2"
+          },
+          "timeoutMs": 10000
+        }
+      ],
+      "status": "ok",
+      "invocationMode": "tools_call",
+      "toolListSupported": true
+    },
+    "playwright": {
+      "optional": true,
+      "probes": [
+        {
+          "logicalTool": "playwright_*",
+          "resolvedTool": "browser_close",
+          "status": "ok",
+          "durationMs": 2,
+          "invocationUsed": "tools_call",
+          "argsUsed": {},
+          "timeoutMs": 10000
+        }
+      ],
+      "status": "ok",
+      "invocationMode": "tools_call",
+      "toolListSupported": true
+    },
+    "markitdown": {
+      "optional": true,
+      "probes": [],
+      "status": "warn",
+      "invocationMode": "tools_call",
+      "toolListSupported": true,
+      "error": "spawn markitdown-mcp ENOENT"
+    },
+    "github": {
+      "optional": true,
+      "probes": [],
+      "status": "skipped",
+      "invocationMode": "tools_call",
+      "toolListSupported": false,
+      "skipReason": "Env var USE_GITHUB_MCP not set"
+    }
+  },
+  "overallStatus": "warn"
+}
