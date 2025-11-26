@@ -1,70 +1,111 @@
-name: EcoHub CI
+name: CI
 
 on:
   push:
-    branches: [main, ecohub-v2-launch]
+    branches: ["**"]
   pull_request:
-    branches: [main, ecohub-v2-launch]
-  workflow_dispatch: {}
 
 concurrency:
-  group: ecohub-ci-${{ github.ref }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    env:
+      CI: true
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout (no actions)
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE"
+          # wipe workspace contents safely
+          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+          git init
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --depth 1 origin "${GITHUB_SHA}"
+          git checkout -qf FETCH_HEAD
+          git submodule update --init --recursive || true
+          git rev-parse --short HEAD
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "pnpm"
+      - name: Install Node.js (no actions)
+        shell: bash
+        run: |
+          set -euo pipefail
+          NODE_VERSION="20.11.1"
+          ARCH="x64"
+          PLATFORM="linux"
+          curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-${PLATFORM}-${ARCH}.tar.xz" -o node.tar.xz
+          sudo tar -xJf node.tar.xz -C /usr/local --strip-components=1
+          rm -f node.tar.xz
+          node -v
+          npm -v
+          corepack --version || true
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: "10.22.0"
+      - name: Enable pnpm via Corepack
+        shell: bash
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare pnpm@10.22.0 --activate
+          pnpm -v
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install deps
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm install --frozen-lockfile
+
+      - name: MCP health (non-blocking)
+        shell: bash
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          ./scripts/check-mcp-health.sh
 
       - name: Lint
+        shell: bash
         run: pnpm lint
 
       - name: Typecheck
+        shell: bash
         run: pnpm tsc --noEmit
 
       - name: Build
+        shell: bash
         run: pnpm build
 
-      - name: MCP health check (non-blocking)
-        run: ./scripts/check-mcp-health.sh
-        continue-on-error: true
-
-      - name: Check Supabase env (controls e2e)
+      - name: Check Supabase env (gate e2e)
         id: supabase_env
         shell: bash
         run: |
+          set -euo pipefail
           if [[ -n "${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" && -n "${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" ]]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-            echo "Supabase secrets found: e2e will run."
+            echo "has_supabase_secrets=true" >> $GITHUB_OUTPUT
           else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "Supabase secrets missing: skipping e2e."
+            echo "has_supabase_secrets=false" >> $GITHUB_OUTPUT
+            echo "::warning::Supabase secrets missing; skipping e2e."
           fi
 
-      - name: Install Playwright browsers
-        if: steps.supabase_env.outputs.available == 'true'
-        run: pnpm exec playwright install chromium --with-deps
+      - name: Install Playwright (only if secrets exist)
+        if: steps.supabase_env.outputs.has_supabase_secrets == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm exec playwright install --with-deps
 
-      - name: Run e2e smoke tests
-        if: steps.supabase_env.outputs.available == 'true'
-        run: pnpm test:e2e:smoke
+      - name: Run E2E smoke (only if secrets exist)
+        if: steps.supabase_env.outputs.has_supabase_secrets == 'true'
+        shell: bash
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          pnpm test:e2e:smoke
