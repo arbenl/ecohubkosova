@@ -1,0 +1,23 @@
+{
+  "title": "Organization Profile",
+  "subtitle": "Edit organization details",
+  "description": "Update your organization's information and contact details",
+  "errorTitle": "Error",
+  "noOrganization": "You don't have an organization connected. Please create or join one first.",
+  "noPermission": "You don't have permission to edit this organization. Only admins and editors can make changes.",
+  "formTitle": "Organization Details",
+  "formDescription": "Keep your organization information current",
+  "fields": {
+    "name": "Organization name",
+    "description": "Description",
+    "primaryInterest": "Primary interest",
+    "contactPerson": "Contact person",
+    "contactEmail": "Contact email",
+    "location": "Location"
+  },
+  "save": "Save changes",
+  "saving": "Saving...",
+  "cancel": "Cancel",
+  "success": "Organization profile updated successfully!",
+  "error": "Error updating organization profile"
+}

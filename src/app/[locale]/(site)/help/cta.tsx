@@ -12,7 +12,7 @@ export function NdhimeCTA() {
 
   return isAuthenticated ? (
     <Button asChild className="w-full mt-4" size="sm">
-      <Link href={`/${locale}/my/organization`}>Shko në EcoHub</Link>
+      <Link href={`/${locale}/dashboard`}>Shko në EcoHub</Link>
     </Button>
   ) : (
     <Button asChild className="w-full mt-4" size="sm">

@@ -1,0 +1,18 @@
+{
+  "title": "Admin Profile",
+  "subtitle": "Edit administrator profile",
+  "description": "Manage your admin account details",
+  "errorTitle": "Error",
+  "formTitle": "Administrator Profile",
+  "formDescription": "Update your admin account information",
+  "fields": {
+    "fullName": "Full name",
+    "location": "Location",
+    "locationPlaceholder": "e.g., Prishtina, Kosovo"
+  },
+  "save": "Save changes",
+  "saving": "Saving...",
+  "cancel": "Cancel",
+  "success": "Admin profile updated successfully!",
+  "error": "Error updating admin profile"
+}

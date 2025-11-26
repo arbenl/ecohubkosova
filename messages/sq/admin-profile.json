@@ -1,0 +1,18 @@
+{
+  "title": "Profili i Administratorit",
+  "subtitle": "Ndrysho profilin e administratorit",
+  "description": "Menaxho detajet e llogarisë së administratorit",
+  "errorTitle": "Gabim",
+  "formTitle": "Profili i Administratorit",
+  "formDescription": "Përditëso informacionin e llogarisë së administratorit",
+  "fields": {
+    "fullName": "Emri i plotë",
+    "location": "Vendndodhja",
+    "locationPlaceholder": "p.sh., Prishtinë, Kosovë"
+  },
+  "save": "Ruaj ndryshimet",
+  "saving": "Duke ruajtur...",
+  "cancel": "Anulo",
+  "success": "Profili i administratorit u përditësua me sukses!",
+  "error": "Gabim gjatë përditësimit të profilit të administratorit"
+}

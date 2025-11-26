@@ -1,4 +1,4 @@
 [MCP] Starting ecohub-qa -> node /Users/arbenlila/development/ecohubkosova/tools/ecohub-qa/dist/index.js
-[dotenv@17.2.3] injecting env (12) from .env.local -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.2.3] injecting env (12) from .env.local -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
 [EcoHub QA] Server started successfully
-[EcoHub QA] Available tools: auth_audit, navigation_audit, build_health, runtime_log_scan, supabase_health, performance_audit, dependency_audit, accessibility_audit, i18n_audit, csp_audit, env_audit, tests_orchestrator, coverage_audit
+[EcoHub QA] Available tools: auth_audit, navigation_audit, build_health, runtime_log_scan, supabase_health, performance_audit, dependency_audit, accessibility_audit, i18n_audit, csp_audit, env_audit, tests_orchestrator, coverage_audit, test_runner

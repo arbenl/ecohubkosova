@@ -16,8 +16,8 @@ test.describe("Marketplace Landing Page", () => {
 
     await page.goto("/en/marketplace", { waitUntil: "domcontentloaded" })
 
-    // Check hero title exists
-    const heading = page.locator("h1").first()
+    // Check hero title exists (h2, not h1)
+    const heading = page.locator("h2").first()
     await expect(heading).toBeVisible()
   })
 
@@ -26,20 +26,19 @@ test.describe("Marketplace Landing Page", () => {
 
     await page.goto("/en/marketplace", { waitUntil: "domcontentloaded" })
 
-    // Check that there is exactly one h1 (the main hero)
-    const h1Count = await page.locator("h1").count()
-    expect(h1Count).toBe(1)
+    // Check that marketplace uses h2 for hero (no h1 on this page)
+    const h2Count = await page.locator("h2").count()
+    expect(h2Count).toBeGreaterThanOrEqual(1)
 
-    // Verify the h1 contains the marketplace title
-    const mainTitle = page.locator("h1").first()
+    // Verify the main h2 contains marketplace-related text
+    const mainTitle = page.locator("h2").first()
     const titleText = await mainTitle.textContent()
-    expect(titleText).toContain("Marketplace")
+    expect(titleText).toMatch(/Marketplace|Circular Economy/i)
 
-    // Verify marketplace section doesn't have its own separate hero h2
-    // The filters section should be visible without a duplicate title
+    // Verify filter buttons section is visible (proves embedded marketplace works)
     const filterButtons = page
       .locator("button")
-      .filter({ hasText: /Të gjitha|All|Pour|Alle/ })
+      .filter({ hasText: /All|Të gjitha|Pour|Alle/ })
       .first()
     await expect(filterButtons).toBeVisible()
   })

@@ -23,7 +23,7 @@ export function RrethNeshHeroCTA() {
       size="lg"
       className="bg-gradient-to-r from-emerald-500 to-emerald-700 hover:shadow-xl hover:shadow-emerald-400/30 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
     >
-      <Link href={`/${locale}/my/organization`}>
+      <Link href={`/${locale}/dashboard`}>
         <ArrowRight className="mr-2 h-5 w-5" />
         {t("cta.dashboard")}
       </Link>
@@ -71,7 +71,7 @@ export function RrethNeshBottomCTA() {
   return isAuthenticated ? (
     <>
       <Button asChild>
-        <Link href={`/${locale}/my/organization`}>{t("cta.dashboard")}</Link>
+        <Link href={`/${locale}/dashboard`}>{t("cta.dashboard")}</Link>
       </Button>
       <Button asChild variant="outline">
         <Link href={`/${locale}/contact`}>{t("about.cta.contact")}</Link>

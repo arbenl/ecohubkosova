@@ -1,13 +1,14 @@
 "use client"
 
+import React from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { FormField } from "./form-field"
-import { FormStatus } from "./form-status"
 import { updateOrganizationProfile } from "../actions"
 import type { OrganizationProfileUpdateInput } from "@/validation/profile"
 import { useOrganizationProfileForm } from "@/hooks/use-profile-forms"
+import { useToast } from "@/hooks/use-toast"
 
 interface OrgProfileFormProps {
   organizationId: string
@@ -15,15 +16,31 @@ interface OrgProfileFormProps {
 }
 
 export function OrganizationProfileForm({ organizationId, initialData }: OrgProfileFormProps) {
-  const { formData, fieldErrors, saving, error, success, handleChange, handleSubmit } = useOrganizationProfileForm({
-    organizationId,
-    initialData,
-    submit: updateOrganizationProfile,
-  })
+  const { toast } = useToast()
+  const { formData, fieldErrors, saving, error, success, handleChange, handleSubmit } =
+    useOrganizationProfileForm({
+      organizationId,
+      initialData,
+      submit: updateOrganizationProfile,
+    })
+
+  // Show success toast when success state changes
+  React.useEffect(() => {
+    if (success) {
+      toast({
+        title: "Sukses",
+        description: success,
+      })
+    }
+  }, [success, toast])
 
   return (
     <div>
-      <FormStatus error={error} success={success} />
+      {error && (
+        <div className="rounded-lg border border-red-100 bg-red-50 p-4 mb-4">
+          <p className="text-sm text-red-800">{error}</p>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormField label="Emri" name="name" error={fieldErrors.name}>
           <Input name="name" value={formData.name} onChange={handleChange} />
@@ -31,8 +48,16 @@ export function OrganizationProfileForm({ organizationId, initialData }: OrgProf
         <FormField label="Përshkrimi" name="description" error={fieldErrors.description}>
           <Textarea name="description" value={formData.description} onChange={handleChange} />
         </FormField>
-        <FormField label="Interesi Primar" name="primary_interest" error={fieldErrors.primary_interest}>
-          <Input name="primary_interest" value={formData.primary_interest} onChange={handleChange} />
+        <FormField
+          label="Interesi Primar"
+          name="primary_interest"
+          error={fieldErrors.primary_interest}
+        >
+          <Input
+            name="primary_interest"
+            value={formData.primary_interest}
+            onChange={handleChange}
+          />
         </FormField>
         <FormField label="Person Kontakti" name="contact_person" error={fieldErrors.contact_person}>
           <Input name="contact_person" value={formData.contact_person} onChange={handleChange} />
@@ -43,9 +68,24 @@ export function OrganizationProfileForm({ organizationId, initialData }: OrgProf
         <FormField label="Vendndodhja" name="location" error={fieldErrors.location}>
           <Input name="location" value={formData.location} onChange={handleChange} />
         </FormField>
-        <Button type="submit" disabled={saving}>
-          {saving ? "Duke ruajtur..." : "Ruaj"}
-        </Button>
+        <div className="flex gap-3">
+          <Button
+            type="submit"
+            disabled={saving}
+            className="rounded-full bg-emerald-600 hover:bg-emerald-700 focus:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          >
+            {saving ? "Duke ruajtur..." : "Ruaj"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => window.history.back()}
+            disabled={saving}
+            className="rounded-full"
+          >
+            Anulo
+          </Button>
+        </div>
       </form>
     </div>
   )

@@ -9,11 +9,12 @@ import { ecoListings, ecoOrganizations } from "@/db/schema/marketplace-v2"
 import { eq, desc, count } from "drizzle-orm"
 
 interface PageProps {
-  params: { locale: string }
+  params: Promise<{ locale: string }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const t = await getTranslations({ locale: params.locale, namespace: "my-organization" })
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: "my-organization" })
 
   return {
     title: t("workspace.title"),
@@ -22,16 +23,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function MyOrganizationPage({ params }: PageProps) {
+  const { locale } = await params
   const supabase = await createServerSupabaseClient()
-  const t = await getTranslations({ locale: params.locale, namespace: "my-organization" })
-  const tCommon = await getTranslations({ locale: params.locale, namespace: "common" })
+  const t = await getTranslations({ locale, namespace: "my-organization" })
+  const tCommon = await getTranslations({ locale, namespace: "common" })
 
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
   if (!user?.id) {
-    redirect(`/${params.locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
   }
 
   // Fetch user's organizations
@@ -78,7 +80,7 @@ export default async function MyOrganizationPage({ params }: PageProps) {
   return (
     <div className="container mx-auto py-8 px-4">
       <MyOrganizationClient
-        locale={params.locale}
+        locale={locale}
         initialOrganizations={organizations}
         userId={user.id}
         error={error}

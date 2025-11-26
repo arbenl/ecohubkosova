@@ -2,29 +2,117 @@
   "title": "Paneli i administratorit",
   "subtitle": "Monitoro aktivitetin, partnerët dhe listimet në EcoHub",
   "stats": {
+    "title": "Statistikat e Platformës",
+    "viewDetails": "Shiko Detajet",
     "users": "Përdorues",
     "usersDescription": "Përdorues të regjistruar në platformë",
+    "usersAriaLabel": "Shiko detajet e menaxhimit të përdoruesve",
     "organizations": "Organizata",
     "organizationsDescription": "Organizata të regjistruara në platformë",
+    "organizationsAriaLabel": "Shiko detajet e menaxhimit të organizatave",
     "organizationsPending": "Në pritje të aprovimit",
     "articles": "Artikuj",
     "articlesDescription": "Artikuj në platformë",
+    "articlesAriaLabel": "Shiko detajet e menaxhimit të artikujve",
     "articlesPending": "Në pritje të publikimit",
     "listings": "Listime në treg",
     "listingsDescription": "Listime në tregun e platformës",
-    "listingsPending": "Listime draft"
+    "listingsAriaLabel": "Shiko detajet e menaxhimit të listimeve",
+    "listingsPending": "Listime draft",
+    "pending": "në pritje"
   },
   "quickActions": {
     "title": "Veprime të shpejta",
     "description": "Hyr shpejt në flukset kryesore të administrimit",
     "users": "Menaxho përdoruesit",
+    "usersDescription": "Shiko dhe menaxho përdoruesit e platformës",
+    "usersAriaLabel": "Shko te menaxhimi i përdoruesve",
     "organizations": "Aprovo organizatat",
+    "organizationsDescription": "Rishiko dhe aprovo organizatat",
+    "organizationsAriaLabel": "Shko te menaxhimi i organizatave",
     "articles": "Publiko artikujt",
-    "listings": "Rishiko listimet"
+    "articlesDescription": "Rishiko dhe publiko artikujt",
+    "articlesAriaLabel": "Shko te menaxhimi i artikujve",
+    "listings": "Rishiko listimet",
+    "members": "Anëtarët e organizatave",
+    "membersDescription": "Menaxho marrëdhëniet e anëtarëve të organizatave",
+    "membersAriaLabel": "Shko te menaxhimi i anëtarëve",
+    "audits": "Auditimet e sistemit",
+    "auditsDescription": "Shiko logjet e aktivitetit të sistemit",
+    "auditsAriaLabel": "Shko te auditimet e sistemit"
   },
   "activity": {
     "title": "Aktiviteti i fundit",
     "description": "Përditësimet më të reja në platformë",
-    "placeholder": "Feed i aktivitetit vjen së shpejti"
+    "placeholder": "Feed i aktivitetit vjen së shpejti",
+    "emptyTitle": "Nuk ka aktivitet të fundit",
+    "emptyDescription": "Aktiviteti i fundit i platformës do të shfaqet këtu sapo përdoruesit të fillojnë të ndërveprojnë me sistemin.",
+    "comingSoon": "Vjen së shpejti",
+    "setupDescription": "Konfigurimi i aktiviteteve do të jetë i disponueshëm së shpejti.",
+    "setup": "Konfiguro aktivitetet"
+  },
+  "welcome": "Mirë se vini! Sot është {date}",
+  "refresh": "Rifresko",
+  "refreshAriaLabel": "Rifresko të dhënat e panelit",
+  "users": {
+    "title": "Menaxhimi i Përdoruesve",
+    "subtitle": "Menaxho dhe monitoro përdoruesit e platformës",
+    "refresh": "Rifresko",
+    "search": {
+      "placeholder": "Kërko përdorues sipas emri, email ose vendndodhje..."
+    },
+    "filters": {
+      "role": "Roli",
+      "roleAll": "Të gjithë rolet",
+      "roleAdmin": "Admin",
+      "roleUser": "Përdorues",
+      "roleModerator": "Moderator",
+      "status": "Statusi",
+      "statusAll": "Të gjithë statuset",
+      "statusApproved": "Aprovuar",
+      "statusPending": "Në pritje"
+    },
+    "table": {
+      "headers": {
+        "user": "Përdorues",
+        "email": "Email",
+        "location": "Vendndodhja",
+        "role": "Roli",
+        "status": "Statusi",
+        "created": "Krijuar",
+        "actions": "Veprime"
+      },
+      "empty": "Nuk u gjetën përdorues"
+    },
+    "roles": {
+      "admin": "Admin",
+      "user": "Përdorues",
+      "moderator": "Moderator"
+    },
+    "status": {
+      "approved": "Aprovuar",
+      "pending": "Në pritje"
+    },
+    "actions": {
+      "openMenu": "Hap menunë",
+      "edit": "Ndrysho përdoruesin",
+      "delete": "Fshij përdoruesin"
+    },
+    "empty": {
+      "noUsers": {
+        "title": "Ende nuk ka përdorues",
+        "description": "Përdoruesit do të shfaqen këtu sapo të regjistrohen në platformë."
+      },
+      "filtered": {
+        "title": "Nuk ka përdorues që përputhen me filtrat",
+        "description": "Provoni të ndryshoni kërkimin ose kriteret e filtrimit."
+      },
+      "clearFilters": "Pastro filtrat"
+    },
+    "error": {
+      "title": "Dështoi ngarkimi i përdoruesve",
+      "retry": "Provo përsëri",
+      "generic": "Diçka shkoi keq gjatë ngarkimit të përdoruesve."
+    }
   }
 }

@@ -1,127 +1,99 @@
-import { redirect } from "next/navigation"
-import { getTranslations, getLocale } from "next-intl/server"
-import Link from "next/link"
-import { WorkspaceLayout } from "@/components/workspace/workspace-layout"
+import { Suspense } from "react"
+import { getTranslations } from "next-intl/server"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowUpRight, Bookmark, Building2, Bell, Sparkles } from "lucide-react"
-import { getServerUser } from "@/lib/supabase/server"
-import { fetchUserOrganizations } from "@/services/organization-onboarding"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { User, FileText, Building2, Heart } from "lucide-react"
+import { DashboardSkeleton } from "./components/DashboardSkeleton"
 
-export default async function MyWorkspacePage() {
-  const locale = await getLocale()
+export default async function MyPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
   const t = await getTranslations("my-workspace")
-  const tCommon = await getTranslations("common")
-
-  const { user } = await getServerUser()
-
-  if (!user?.id) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
-  }
-
-  const { data: organizations = [] } = await fetchUserOrganizations(user.id)
-  const primaryOrg = organizations[0]
 
   return (
-    <WorkspaceLayout
-      badge={t("title")}
-      title={t("subtitle")}
-      subtitle=""
-    >
-
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="rounded-2xl border-emerald-100 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-lg font-semibold text-gray-900">{t("cards.profile.title")}</CardTitle>
-            <Bell className="h-5 w-5 text-emerald-600" />
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-gray-600">{t("cards.profile.description")}</p>
-            <Link
-              href={`/${locale}/profile`}
-              className="inline-flex items-center gap-2 text-emerald-700 font-medium hover:text-emerald-800"
-            >
-              {t("cards.profile.cta")}
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl border-emerald-100 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-lg font-semibold text-gray-900">{t("cards.saved.title")}</CardTitle>
-            <Bookmark className="h-5 w-5 text-emerald-600" />
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-gray-600">{t("cards.saved.description")}</p>
-            <Link
-              href={`/${locale}/my/saved-listings`}
-              className="inline-flex items-center gap-2 text-emerald-700 font-medium hover:text-emerald-800"
-            >
-              {t("cards.saved.cta")}
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl border-emerald-100 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-lg font-semibold text-gray-900">
-              {t("cards.partner.title")}
-            </CardTitle>
-            <Sparkles className="h-5 w-5 text-emerald-600" />
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-gray-600">{t("cards.partner.description")}</p>
-            <Link
-              href={`/${locale}/partners#behu-partner`}
-              className="inline-flex items-center gap-2 text-emerald-700 font-medium hover:text-emerald-800"
-            >
-              {t("cards.partner.cta")}
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-2xl border-emerald-100 shadow-sm md:col-span-2 lg:col-span-3">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <div>
-              <CardTitle className="text-lg font-semibold text-gray-900">
-                {t("cards.organization.title")}
-              </CardTitle>
-              <p className="text-sm text-gray-600">{t("cards.organization.description")}</p>
-            </div>
-            <Building2 className="h-5 w-5 text-emerald-600" />
-          </CardHeader>
-          <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            {primaryOrg ? (
-              <>
-                <div className="space-y-1">
-                  <p className="text-base font-semibold text-gray-900">{primaryOrg.name}</p>
-                  <p className="text-sm text-gray-600">{primaryOrg.primary_interest}</p>
-                </div>
-                <Link
-                  href={`/${locale}/my/organization`}
-                  className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
-                >
-                  {t("cards.organization.ctaExisting")}
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </>
-            ) : (
-              <>
-                <p className="text-sm text-gray-600">{t("empty.noOrg")}</p>
-                <Link
-                  href={`/${locale}/my/organization`}
-                  className="inline-flex items-center gap-2 rounded-lg border border-emerald-300 bg-emerald-50 px-4 py-2 text-emerald-700 hover:bg-emerald-100"
-                >
-                  {t("cards.organization.ctaMissing")}
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </>
-            )}
-          </CardContent>
-        </Card>
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+      <div className="mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{t("title")}</h1>
+        <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
       </div>
-    </WorkspaceLayout>
+
+      <Suspense fallback={<DashboardSkeleton />}>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm p-5 md:p-6 hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                {t("sections.profile")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">{t("profile.description")}</p>
+              <Button
+                asChild
+                className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+              >
+                <Link href={`/${locale}/my/profile`}>{t("profile.edit")}</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm p-5 md:p-6 hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                {t("sections.listings")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">{t("listings.description")}</p>
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full border border-emerald-200 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+              >
+                <Link href={`/${locale}/my/saved-listings`}>{t("listings.view")}</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm p-5 md:p-6 hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2">
+                <Building2 className="h-5 w-5" />
+                {t("sections.organization")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">{t("organization.description")}</p>
+              <Button
+                asChild
+                className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+              >
+                <Link href={`/${locale}/my/organization`}>{t("organization.manage")}</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm p-5 md:p-6 hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2">
+                <Heart className="h-5 w-5" />
+                {t("sections.partners")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">{t("partners.description")}</p>
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full border border-emerald-200 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+              >
+                <Link href={`/${locale}/partners`}>{t("partners.explore")}</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </Suspense>
+    </div>
   )
 }

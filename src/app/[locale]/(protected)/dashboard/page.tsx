@@ -1,29 +1,33 @@
 import { redirect } from "next/navigation"
-import { getTranslations } from "next-intl/server"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { db } from "@/lib/drizzle"
 import { users } from "@/db/schema"
-import { isUserOrgMember } from "@/services/organization-onboarding"
 import { eq } from "drizzle-orm"
 
 interface PageProps {
-  params: { locale: string }
+  params: Promise<{ locale: string }>
 }
 
+/**
+ * Legacy /dashboard route - redirects to role-appropriate destination.
+ * This route exists solely for backward compatibility with old links.
+ * It renders NO UI to prevent V1 flicker.
+ */
 export default async function DashboardRedirectPage({ params }: PageProps) {
-  const { locale: localeParam } = params
+  const { locale: localeParam } = await params
   const locale = localeParam || "sq"
-  const supabase = await createServerSupabaseClient()
-  const tCommon = await getTranslations({ locale, namespace: "common" })
 
+  const supabase = await createServerSupabaseClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Not logged in - redirect to login
   if (!user?.id) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+    redirect(`/${locale}/login`)
   }
 
+  // Fetch role from DB
   let role: string | null = null
   try {
     const result = await db
@@ -37,19 +41,8 @@ export default async function DashboardRedirectPage({ params }: PageProps) {
     console.error("[dashboard redirect] failed to load user role", error)
   }
 
-  let hasOrg = false
-  try {
-    hasOrg = await isUserOrgMember(user.id)
-  } catch (error) {
-    console.error("[dashboard redirect] failed to check organization membership", error)
-  }
-
-  const destination =
-    role === "Admin"
-      ? `/${locale}/admin`
-      : hasOrg
-        ? `/${locale}/my/organization`
-        : `/${locale}/my`
+  // Redirect based on role
+  const destination = role?.toLowerCase() === "admin" ? `/${locale}/admin` : `/${locale}/my`
 
   redirect(destination)
 }

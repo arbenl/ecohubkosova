@@ -47,7 +47,9 @@ export default function MarketplaceClientPage({
         ? "blej"
         : (initialSearchParams.type as string) === "shes"
           ? "shes"
-          : "te-gjitha",
+          : (initialSearchParams.type as string) === "sherbime"
+            ? "sherbime"
+            : "te-gjitha",
     search: (initialSearchParams.search as string) || "",
     category: (initialSearchParams.category as string) || "all",
     page: Math.max(1, Number.parseInt((initialSearchParams.page as string) || "1")),
@@ -219,6 +221,14 @@ export default function MarketplaceClientPage({
           disabled={isLoading}
         >
           {t("filterTypes.wanted")}
+        </Button>
+        <Button
+          variant={filters.type === "sherbime" ? "default" : "outline"}
+          className="rounded-full px-6"
+          onClick={() => updateFilter("type", "sherbime")}
+          disabled={isLoading}
+        >
+          {t("filterTypes.services")}
         </Button>
       </div>
 

@@ -16,13 +16,15 @@ const ALLOWED_TOP_LEVEL_DIRS = new Set([
   "e2e",
   ".storybook",
   "tools",
+  "archive",
 ])
 
 const SKIP_DIRS = new Set(["node_modules", ".git", ".next", ".pnpm-store", "drizzle", "playwright-report", "test-results"])
 
 const ALLOWED_FILES = new Set([
-  ".eslintrc.js",
+  ".eslintrc.cjs",
   "eslint.config.js",
+  ".eslintrc.cjs",
   ".gitignore",
   "AGENTS.md",
   "GEMINI.md",

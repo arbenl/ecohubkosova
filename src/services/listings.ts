@@ -1,7 +1,14 @@
 import { unstable_noStore as noStore } from "next/cache"
 import { and, asc, desc, eq, ilike, inArray, or, sql, type SQL } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
-import { organizationMembers, organizations, users, ecoListings, ecoCategories, ecoOrganizations } from "@/db/schema"
+import {
+  organizationMembers,
+  organizations,
+  users,
+  ecoListings,
+  ecoCategories,
+  ecoOrganizations,
+} from "@/db/schema"
 import { isMarketplaceV2WritesEnabled } from "@/lib/env"
 import type { Listing } from "@/types"
 import type { ListingCreateInput } from "@/validation/listings"
@@ -54,9 +61,7 @@ type ListingRow = {
  */
 const formatListingRow = (row: ListingRow): Listing => {
   const price =
-    row.listing.price !== null && row.listing.price !== undefined
-      ? Number(row.listing.price)
-      : null
+    row.listing.price !== null && row.listing.price !== undefined ? Number(row.listing.price) : null
   const city = row.listing.city || row.listing.region || row.listing.location_details || ""
   const flowType = row.listing.flow_type || null
   const listingType: "shes" | "blej" = flowType?.startsWith("OFFER") ? "shes" : "blej"
@@ -101,16 +106,16 @@ const formatListingRow = (row: ListingRow): Listing => {
     creator_email: row.owner_email,
     users: row.owner_name
       ? {
-        full_name: row.owner_name,
-        email: row.owner_email ?? undefined,
-      }
+          full_name: row.owner_name,
+          email: row.owner_email ?? undefined,
+        }
       : undefined,
     organizations: row.organization_name
       ? {
-        name: row.organization_name,
-        contact_email: row.organization_email ?? undefined,
-        contact_person: orgContactPerson ?? undefined,
-      }
+          name: row.organization_name,
+          contact_email: row.organization_email ?? undefined,
+          contact_person: orgContactPerson ?? undefined,
+        }
       : undefined,
     quantity: row.listing.quantity?.toString() || "",
     unit: row.listing.unit || "",
@@ -151,16 +156,15 @@ export async function fetchListings({
     const normalizedPage = Number.isFinite(page) && page > 0 ? page : 1
     const limit = Math.max(1, Math.min(pageSize, 100))
     const offset = (normalizedPage - 1) * limit
-    const filters: SQL[] = [
-      eq(ecoListings.status, "ACTIVE"),
-      eq(ecoListings.visibility, "PUBLIC"),
-    ]
+    const filters: SQL[] = [eq(ecoListings.status, "ACTIVE"), eq(ecoListings.visibility, "PUBLIC")]
 
     if (type && type !== "te-gjitha") {
       if (type === "shes") {
         filters.push(sql`${ecoListings.flow_type}::text ILIKE 'OFFER%'`)
       } else if (type === "blej") {
         filters.push(sql`${ecoListings.flow_type}::text ILIKE 'REQUEST%'`)
+      } else if (type === "sherbime") {
+        filters.push(sql`${ecoListings.flow_type}::text ILIKE 'SERVICE%'`)
       }
     }
 
@@ -235,11 +239,7 @@ export async function fetchListings({
       .leftJoin(organizations, eq(ecoOrganizations.organization_id, organizations.id))
       .leftJoin(users, eq(ecoListings.created_by_user_id, users.id))
       .where(whereClause)
-      .orderBy(
-        sort === "oldest"
-          ? asc(ecoListings.created_at)
-          : desc(ecoListings.created_at)
-      )
+      .orderBy(sort === "oldest" ? asc(ecoListings.created_at) : desc(ecoListings.created_at))
       .limit(limit + 1)
       .offset(offset)
 
@@ -357,16 +357,16 @@ export async function fetchListingById(id: string) {
       organization_contact_person,
       organizations: record.organization_name
         ? {
-          name: record.organization_name,
-          contact_email: record.organization_contact_email || "",
-          contact_person: organization_contact_person || undefined,
-        }
+            name: record.organization_name,
+            contact_email: record.organization_contact_email || "",
+            contact_person: organization_contact_person || undefined,
+          }
         : undefined,
       users: record.owner_name
         ? {
-          full_name: record.owner_name,
-          email: record.owner_email || undefined,
-        }
+            full_name: record.owner_name,
+            email: record.owner_email || undefined,
+          }
         : undefined,
       creator_full_name: record.owner_name,
       creator_email: record.owner_email,
@@ -495,7 +495,7 @@ export async function createUserListing(
       currency: "EUR",
       pricing_type: "FIXED",
       unit: payload.unit || null,
-      quantity: Number.isFinite(quantityValue) ? quantityValue?.toString() ?? null : null,
+      quantity: Number.isFinite(quantityValue) ? (quantityValue?.toString() ?? null) : null,
       country: "XK",
       city: payload.location || null,
       region: null,
@@ -546,7 +546,7 @@ export async function updateUserListing(
         flow_type: mapFlowType(payload.listing_type) as typeof ecoListings.$inferInsert.flow_type,
         price: price,
         unit: payload.unit || null,
-        quantity: Number.isFinite(quantityValue) ? quantityValue?.toString() ?? null : null,
+        quantity: Number.isFinite(quantityValue) ? (quantityValue?.toString() ?? null) : null,
         city: payload.location || null,
         location_details: payload.location || null,
         status: "ACTIVE",

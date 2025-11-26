@@ -1,0 +1,18 @@
+{
+  "title": "My Profile",
+  "subtitle": "Edit your personal information",
+  "description": "Update your name and location details",
+  "errorTitle": "Error",
+  "formTitle": "Personal Information",
+  "formDescription": "Keep your profile up to date",
+  "fields": {
+    "fullName": "Full name",
+    "location": "Location",
+    "locationPlaceholder": "e.g., Prishtina, Kosovo"
+  },
+  "save": "Save changes",
+  "saving": "Saving...",
+  "cancel": "Cancel",
+  "success": "Profile updated successfully!",
+  "error": "Error updating profile"
+}

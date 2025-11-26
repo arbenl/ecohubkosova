@@ -1,0 +1,14 @@
+{
+  "repoContext": {
+    "allowList": ["src/**", "app/**", "tools/**", "docs/**", "supabase/**"],
+    "ignore": ["coverage", "test-results"]
+  },
+  "qa": {
+    "defaultCwd": ".",
+    "commands": {
+      "build_health": "pnpm lint && pnpm tsc --noEmit && pnpm build",
+      "smoke": "pnpm test:e2e:smoke",
+      "e2e": "pnpm test:e2e"
+    }
+  }
+}

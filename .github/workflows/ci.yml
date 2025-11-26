@@ -1,64 +1,123 @@
-name: EcoHub CI
+name: CI
 
 on:
   push:
-    branches:
-      - main
-      - ecohub-v2-launch
+    branches: ["**"]
   pull_request:
-    branches:
-      - main
-      - ecohub-v2-launch
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
 
     env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      CI: true
 
     steps:
-      - name: Checkout repo
-        uses: arbenl/checkout@v4
+      - name: Checkout (no actions)
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE"
+          # wipe workspace contents safely
+          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+          git init
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --depth 1 origin "${GITHUB_SHA}"
+          git checkout -qf FETCH_HEAD
+          git submodule update --init --recursive || true
+          git rev-parse --short HEAD
 
-      - name: Setup pnpm
-        uses: arbenl/pnpm-setup@v4
-
-      - name: Setup Node
-        uses: arbenl/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
+      - name: Install Node.js (no actions)
         shell: bash
         run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+          set -euo pipefail
+          NODE_VERSION="20.11.1"
+          ARCH="x64"
+          PLATFORM="linux"
+          curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-${PLATFORM}-${ARCH}.tar.xz" -o node.tar.xz
+          sudo tar -xJf node.tar.xz -C /usr/local --strip-components=1
+          rm -f node.tar.xz
+          node -v
+          npm -v
+          corepack --version || true
 
-      - name: Setup pnpm cache
-        uses: arbenl/cache@v4
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+      - name: Enable pnpm via Corepack
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$(pwd)/.bin"
+          corepack enable --install-directory="$(pwd)/.bin"
+          export PATH="$(pwd)/.bin:$PATH"
+          echo "PATH=$(pwd)/.bin:$PATH" >> $GITHUB_ENV
+          pnpm --version
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install deps
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$(pwd)/.bin:$PATH"
+          pnpm install --frozen-lockfile
+
+      - name: MCP health (non-blocking)
+        shell: bash
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          export PATH="$(pwd)/.bin:$PATH"
+          ./scripts/check-mcp-health.sh
 
       - name: Lint
-        run: pnpm lint
+        shell: bash
+        run: |
+          export PATH="$(pwd)/.bin:$PATH"
+          pnpm lint
 
       - name: Typecheck
-        run: pnpm tsc --noEmit
+        shell: bash
+        run: |
+          export PATH="$(pwd)/.bin:$PATH"
+          pnpm tsc --noEmit
 
       - name: Build
-        run: pnpm build
+        shell: bash
+        run: |
+          export PATH="$(pwd)/.bin:$PATH"
+          pnpm build
 
-      # - name: Unit tests
-      #   run: pnpm test
+      - name: Check Supabase env (gate e2e)
+        id: supabase_env
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -n "${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" && -n "${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" ]]; then
+            echo "has_supabase_secrets=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_supabase_secrets=false" >> $GITHUB_OUTPUT
+            echo "::warning::Supabase secrets missing; skipping e2e."
+          fi
 
-      # - name: E2E tests
-      #   run: pnpm test:e2e
+      - name: Install Playwright (only if secrets exist)
+        if: steps.supabase_env.outputs.has_supabase_secrets == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$(pwd)/.bin:$PATH"
+          pnpm exec playwright install --with-deps
 
+      - name: Run E2E smoke (only if secrets exist)
+        if: steps.supabase_env.outputs.has_supabase_secrets == 'true'
+        shell: bash
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          export PATH="$(pwd)/.bin:$PATH"
+          pnpm test:e2e:smoke

@@ -95,7 +95,7 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
     setSelectedCity(city)
   }
 
-  const CTA_TARGET_FALLBACK = `/${locale}/my/organization`
+  const CTA_TARGET_FALLBACK = `/${locale}/dashboard`
   const ctaHref = user?.id
     ? CTA_TARGET_FALLBACK
     : `/${locale}/login?next=${encodeURIComponent(CTA_TARGET_FALLBACK)}`
@@ -103,14 +103,10 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
   const stats = useMemo(() => {
     const totalOrgs = partners.length
     const cities = new Set(
-      partners
-        .map((p) => p.city)
-        .filter((city): city is string => Boolean(city))
+      partners.map((p) => p.city).filter((city): city is string => Boolean(city))
     ).size
     const roles = new Set(
-      partners
-        .map((p) => p.org_role)
-        .filter((role): role is string => Boolean(role))
+      partners.map((p) => p.org_role).filter((role): role is string => Boolean(role))
     ).size
 
     return { totalOrgs, cities, roles }
@@ -120,8 +116,7 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
     return partners.filter((partner) => {
       const matchesRole = activeRole === "all" || partner.org_role === activeRole
       const matchesCity =
-        !selectedCity ||
-        (partner.city && partner.city.toLowerCase() === selectedCity.toLowerCase())
+        !selectedCity || (partner.city && partner.city.toLowerCase() === selectedCity.toLowerCase())
       return matchesRole && matchesCity
     })
   }, [partners, activeRole, selectedCity])
@@ -184,10 +179,11 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
               key={role.value}
               type="button"
               onClick={() => setActiveRole(role.value)}
-              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeRole === role.value
-                ? "border-emerald-600 bg-emerald-50 text-emerald-700"
-                : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
-                }`}
+              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
+                activeRole === role.value
+                  ? "border-emerald-600 bg-emerald-50 text-emerald-700"
+                  : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
+              }`}
             >
               {t(role.labelKey)}
             </button>
@@ -207,7 +203,7 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
         <div className="grid grid-cols-1 gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredPartners.map((partner) => {
             if (!partner.eco_org_id) {
-              console.warn('[PartnersClient] Partner missing eco_org_id:', partner.name, partner)
+              console.warn("[PartnersClient] Partner missing eco_org_id:", partner.name, partner)
               return null
             }
             const partnerId = partner.eco_org_id ?? partner.id
@@ -260,10 +256,11 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
                       </button>
                     )}
                     <span
-                      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${partner.verification_status === "VERIFIED"
-                        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                        : "border-slate-200 bg-slate-50 text-slate-700"
-                        }`}
+                      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${
+                        partner.verification_status === "VERIFIED"
+                          ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                          : "border-slate-200 bg-slate-50 text-slate-700"
+                      }`}
                     >
                       <ShieldCheck className="h-3.5 w-3.5" />
                       {partner.verification_status === "VERIFIED"
@@ -330,7 +327,7 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
           <p className="text-sm text-emerald-800">{t("cta.body")}</p>
         </div>
         <Link
-          href={`/${locale}/my/organization/onboarding`}
+          href={`/${locale}/dashboard`}
           className="rounded-full bg-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 transition"
         >
           {t("cta.button")}

@@ -29,7 +29,7 @@ export function LandingAuthPanel() {
             asChild
             className="flex-1 eco-gradient text-white rounded-xl font-semibold hover:shadow-xl hover:shadow-[#00C896]/25"
           >
-            <Link href={`/${locale}/my/organization`}>
+            <Link href={`/${locale}/dashboard`}>
               Shko te Dashboardi
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
@@ -50,7 +50,9 @@ export function LandingAuthPanel() {
     <div className="glass-card rounded-2xl border border-gray-100 bg-white/80 p-6 flex flex-col gap-4 shadow-lg">
       <div>
         <p className="text-lg font-semibold text-gray-900">Ke llogari ekzistuese?</p>
-        <p className="text-sm text-gray-600">Kyçu ose krijo një llogari të re për të filluar bashkëpunimin.</p>
+        <p className="text-sm text-gray-600">
+          Kyçu ose krijo një llogari të re për të filluar bashkëpunimin.
+        </p>
       </div>
       <div className="flex flex-col sm:flex-row gap-3">
         <Button
