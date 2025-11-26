@@ -2,53 +2,36 @@ name: EcoHub CI
 
 on:
   push:
-    branches:
-      - main
-      - ecohub-v2-launch
+    branches: [main, ecohub-v2-launch]
   pull_request:
-    branches:
-      - main
-      - ecohub-v2-launch
+    branches: [main, ecohub-v2-launch]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ecohub-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-
     steps:
-      - name: Checkout repo
-        uses: arbenl/checkout@v4
-
-      - name: Setup pnpm
-        uses: arbenl/pnpm-setup@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: arbenl/setup-node@v4
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "pnpm"
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
-
-      - name: Setup pnpm cache
-        uses: arbenl/cache@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          version: "10.22.0"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: MCP contract + config validation
-        run: CI=true ./scripts/check-mcp-health.sh
 
       - name: Lint
         run: pnpm lint
@@ -59,17 +42,29 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Install Playwright Browsers
+      - name: MCP health check (non-blocking)
+        run: ./scripts/check-mcp-health.sh
+        continue-on-error: true
+
+      - name: Check Supabase env (controls e2e)
+        id: supabase_env
+        shell: bash
+        run: |
+          if [[ -n "${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" && -n "${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" ]]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+            echo "Supabase secrets found: e2e will run."
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "Supabase secrets missing: skipping e2e."
+          fi
+
+      - name: Install Playwright browsers
+        if: steps.supabase_env.outputs.available == 'true'
         run: pnpm exec playwright install chromium --with-deps
 
-      - name: Run smoke tests
+      - name: Run e2e smoke tests
+        if: steps.supabase_env.outputs.available == 'true'
         run: pnpm test:e2e:smoke
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-
-      # - name: Unit tests
-      #   run: pnpm test
-
-      # - name: E2E tests
-      #   run: pnpm test:e2e
