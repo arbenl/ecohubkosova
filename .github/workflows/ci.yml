@@ -52,6 +52,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p "$(pwd)/.bin"
           corepack enable --install-directory="$(pwd)/.bin"
           export PATH="$(pwd)/.bin:$PATH"
           echo "PATH=$(pwd)/.bin:$PATH" >> $GITHUB_ENV
