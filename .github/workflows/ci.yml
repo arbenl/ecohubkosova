@@ -49,16 +49,19 @@ jobs:
           corepack --version || true
 
       - name: Enable pnpm via Corepack
+        shell: bash
         run: |
           set -euo pipefail
-          corepack enable
-          corepack prepare pnpm@10.22.0 --activate
-          pnpm -v
+          corepack enable --install-directory="$(pwd)/.bin"
+          export PATH="$(pwd)/.bin:$PATH"
+          echo "PATH=$(pwd)/.bin:$PATH" >> $GITHUB_ENV
+          pnpm --version
 
       - name: Install deps
         shell: bash
         run: |
           set -euo pipefail
+          export PATH="$(pwd)/.bin:$PATH"
           pnpm install --frozen-lockfile
 
       - name: MCP health (non-blocking)
@@ -66,19 +69,26 @@ jobs:
         continue-on-error: true
         run: |
           set -euo pipefail
+          export PATH="$(pwd)/.bin:$PATH"
           ./scripts/check-mcp-health.sh
 
       - name: Lint
         shell: bash
-        run: pnpm lint
+        run: |
+          export PATH="$(pwd)/.bin:$PATH"
+          pnpm lint
 
       - name: Typecheck
         shell: bash
-        run: pnpm tsc --noEmit
+        run: |
+          export PATH="$(pwd)/.bin:$PATH"
+          pnpm tsc --noEmit
 
       - name: Build
         shell: bash
-        run: pnpm build
+        run: |
+          export PATH="$(pwd)/.bin:$PATH"
+          pnpm build
 
       - name: Check Supabase env (gate e2e)
         id: supabase_env
@@ -97,6 +107,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          export PATH="$(pwd)/.bin:$PATH"
           pnpm exec playwright install --with-deps
 
       - name: Run E2E smoke (only if secrets exist)
@@ -107,4 +118,5 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
         run: |
           set -euo pipefail
+          export PATH="$(pwd)/.bin:$PATH"
           pnpm test:e2e:smoke
