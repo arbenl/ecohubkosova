@@ -11,7 +11,8 @@ import {
   useRef,
   useTransition,
 } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { useLocale } from "next-intl"
 import type { User, AuthResponse, SignInWithPasswordCredentials } from "@supabase/supabase-js"
 import type { SupabaseClient } from "@supabase/supabase-js"
@@ -145,7 +146,7 @@ export function AuthProvider({ children, initialUser }: AuthProviderProps) {
       )
 
       // Race Supabase against the timeout
-       
+
       const {
         data: { user },
         error,

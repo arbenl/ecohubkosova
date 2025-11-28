@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Calendar, User, Tag } from "lucide-react"
@@ -31,13 +31,13 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
 
   // Handle translation for Albanian locale
   let displayContent = article?.content
-  if (article && locale === 'sq' && article.original_language === 'en' && article.content) {
+  if (article && locale === "sq" && article.original_language === "en" && article.content) {
     try {
       displayContent = await translateToAlbanian(article.content)
     } catch (translationError) {
-      console.error('Translation failed:', translationError)
+      console.error("Translation failed:", translationError)
       // Fall back to original content with a note
-      displayContent = article.content + '\n\n[Përkthimi nuk është i disponueshëm për momentin]'
+      displayContent = article.content + "\n\n[Përkthimi nuk është i disponueshëm për momentin]"
     }
   }
 
@@ -59,7 +59,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
               <h1 className="text-2xl font-bold mb-4">Artikulli nuk u gjet</h1>
               <p className="text-gray-600 mb-6">{error}</p>
               <Button asChild>
-                <Link href={`/${locale}/knowledge`}>
+                <Link href="/knowledge">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Kthehu në Qendrën e Dijes
                 </Link>
@@ -77,7 +77,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
         <div className="container px-4 md:px-6 max-w-4xl">
           <div className="mb-6">
             <Button variant="ghost" asChild>
-              <Link href={`/${locale}/knowledge`}>
+              <Link href="/knowledge">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Kthehu në Qendrën e Dijes
               </Link>
@@ -109,7 +109,10 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
                 <div className="flex items-center gap-2 flex-wrap">
                   <Tag className="h-4 w-4 text-gray-500" />
                   {article.tags.map((tag, index) => (
-                    <span key={index} className="px-2 py-1 rounded-md text-xs bg-gray-100 text-gray-700">
+                    <span
+                      key={index}
+                      className="px-2 py-1 rounded-md text-xs bg-gray-100 text-gray-700"
+                    >
                       {tag}
                     </span>
                   ))}
@@ -118,13 +121,15 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
             </CardHeader>
 
             <CardContent className="prose prose-lg max-w-none">
-              <div className="whitespace-pre-wrap text-gray-800 leading-relaxed">{displayContent}</div>
+              <div className="whitespace-pre-wrap text-gray-800 leading-relaxed">
+                {displayContent}
+              </div>
             </CardContent>
           </Card>
 
           <div className="mt-8 text-center">
             <Button asChild>
-              <Link href={`/${locale}/knowledge`}>Shiko më shumë artikuj</Link>
+              <Link href="/knowledge">Shiko më shumë artikuj</Link>
             </Button>
           </div>
         </div>

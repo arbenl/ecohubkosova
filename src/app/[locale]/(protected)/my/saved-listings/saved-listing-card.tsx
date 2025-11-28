@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { useLocale } from "next-intl"
 import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
@@ -17,10 +17,7 @@ interface SavedListingCardProps {
   onRemove: (listingId: string) => void
 }
 
-export default function SavedListingCard({
-  listing,
-  onRemove,
-}: SavedListingCardProps) {
+export default function SavedListingCard({ listing, onRemove }: SavedListingCardProps) {
   const locale = useLocale()
   const t = useTranslations("marketplace-v2")
   const [isRemoving, setIsRemoving] = useState(false)
@@ -45,10 +42,12 @@ export default function SavedListingCard({
   }
 
   return (
-    <Link href={`/${locale}/marketplace/${listing.id}`}>
+    <Link href="/marketplace/${listing.id}">
       <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
         {/* Image Section */}
-        {listing.metadata && typeof listing.metadata === "object" && "primary_image_url" in listing.metadata ? (
+        {listing.metadata &&
+        typeof listing.metadata === "object" &&
+        "primary_image_url" in listing.metadata ? (
           <div className="relative h-40 w-full overflow-hidden bg-muted">
             <Image
               src={String((listing.metadata as any).primary_image_url)}
@@ -84,17 +83,13 @@ export default function SavedListingCard({
           )}
 
           {/* Location */}
-          {listing.city && (
-            <p className="text-xs text-gray-500 truncate">📍 {listing.city}</p>
-          )}
+          {listing.city && <p className="text-xs text-gray-500 truncate">📍 {listing.city}</p>}
         </CardHeader>
 
         <CardContent className="space-y-3 pt-0">
           {/* Description preview */}
           {listing.description && (
-            <p className="text-xs text-gray-600 line-clamp-2">
-              {listing.description}
-            </p>
+            <p className="text-xs text-gray-600 line-clamp-2">{listing.description}</p>
           )}
 
           {/* Flow type badge */}
@@ -110,9 +105,7 @@ export default function SavedListingCard({
               asChild
               className="flex-1 bg-emerald-600 hover:bg-emerald-700"
             >
-              <Link href={`/${locale}/marketplace/${listing.id}`}>
-                View details
-              </Link>
+              <Link href="/marketplace/${listing.id}">View details</Link>
             </Button>
             <Button
               variant="ghost"

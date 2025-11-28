@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Sparkles, Users, Leaf, ArrowRight } from "lucide-react"
 import { EksploroCTA } from "./cta"
 import { getTranslations } from "next-intl/server"

@@ -1,8 +1,8 @@
 "use client"
 
-import Link from "next/link"
 import { useState, useEffect } from "react"
-import { useLocale, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { Menu, X, User } from "lucide-react"
 import { useAuth } from "@/lib/auth-provider"
@@ -21,14 +21,13 @@ export default function HeaderClient({
   userRole,
 }: HeaderClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const locale = useLocale()
   const t = useTranslations("navigation")
   const { user, isLoading } = useAuth()
   const derivedName =
     user?.email?.split("@")[0] || fallbackUserName || fallbackUserEmail?.split("@")[0]
   const isAuthenticated = Boolean(user || fallbackUserEmail)
 
-  const dashboardLink = userRole === "Admin" ? `/${locale}/admin` : `/${locale}/my`
+  const dashboardLink = userRole === "Admin" ? "/admin" : "/my"
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -47,7 +46,7 @@ export default function HeaderClient({
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm">
       <div className="container flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href={`/${locale}/marketplace`} className="flex items-center gap-3 group">
+        <Link href="/marketplace" className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-xl eco-gradient flex items-center justify-center text-white font-bold text-lg">
             E
           </div>
@@ -58,28 +57,28 @@ export default function HeaderClient({
 
         <nav className="hidden md:flex gap-8">
           <Link
-            href={`/${locale}/marketplace`}
+            href="/marketplace"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             {t("marketplace")}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
-            href={`/${locale}/partners`}
+            href="/partners"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             {t("partners")}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
-            href={`/${locale}/how-it-works`}
+            href="/how-it-works"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             {t("howItWorks")}
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
-            href={`/${locale}/about-us`}
+            href="/about-us"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
             {t("about")}
@@ -109,13 +108,13 @@ export default function HeaderClient({
                 </Button>
                 <div className="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-200 hidden group-hover:block z-50">
                   <Link
-                    href={`/${locale}/my`}
+                    href="/my"
                     className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] first:rounded-t-xl transition-colors"
                   >
                     {t("myOrganization")}
                   </Link>
                   <Link
-                    href={`/${locale}/my/saved-listings`}
+                    href="/my/saved-listings"
                     className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] transition-colors"
                   >
                     {t("savedListings")}
@@ -143,13 +142,13 @@ export default function HeaderClient({
                 asChild
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
               >
-                <Link href={`/${locale}/login`}>{t("signIn")}</Link>
+                <Link href="/login">{t("signIn")}</Link>
               </Button>
               <Button
                 className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105"
                 asChild
               >
-                <Link href={`/${locale}/register`}>{t("getStarted")}</Link>
+                <Link href="/register">{t("getStarted")}</Link>
               </Button>
             </>
           )}
@@ -177,28 +176,28 @@ export default function HeaderClient({
           <div className="fixed top-20 left-4 right-4 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 md:hidden max-h-[60vh] overflow-y-auto">
             <nav className="p-4 space-y-1">
               <Link
-                href={`/${locale}/marketplace`}
+                href="/marketplace"
                 className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t("marketplace")}
               </Link>
               <Link
-                href={`/${locale}/partners`}
+                href="/partners"
                 className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t("partners")}
               </Link>
               <Link
-                href={`/${locale}/how-it-works`}
+                href="/how-it-works"
                 className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t("howItWorks")}
               </Link>
               <Link
-                href={`/${locale}/about-us`}
+                href="/about-us"
                 className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -225,7 +224,7 @@ export default function HeaderClient({
                       className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
                       asChild
                     >
-                      <Link href={`/${locale}/my`} onClick={() => setIsMenuOpen(false)}>
+                      <Link href="/my" onClick={() => setIsMenuOpen(false)}>
                         {t("myOrganization")}
                       </Link>
                     </Button>
@@ -233,10 +232,7 @@ export default function HeaderClient({
                       className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
                       asChild
                     >
-                      <Link
-                        href={`/${locale}/my/saved-listings`}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
+                      <Link href="/my/saved-listings" onClick={() => setIsMenuOpen(false)}>
                         {t("savedListings")}
                       </Link>
                     </Button>
@@ -266,7 +262,7 @@ export default function HeaderClient({
                       className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
                       asChild
                     >
-                      <Link href={`/${locale}/login`} onClick={() => setIsMenuOpen(false)}>
+                      <Link href="/login" onClick={() => setIsMenuOpen(false)}>
                         {t("signIn")}
                       </Link>
                     </Button>
@@ -274,7 +270,7 @@ export default function HeaderClient({
                       className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
                       asChild
                     >
-                      <Link href={`/${locale}/register`} onClick={() => setIsMenuOpen(false)}>
+                      <Link href="/register" onClick={() => setIsMenuOpen(false)}>
                         {t("getStarted")}
                       </Link>
                     </Button>

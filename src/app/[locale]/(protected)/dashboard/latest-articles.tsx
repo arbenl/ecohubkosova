@@ -2,12 +2,13 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { ArrowRight } from "lucide-react"
 import { useLatestArticlesSection } from "@/hooks/use-dashboard-sections"
 
 export function LatestArticles({ latestArticles }: { latestArticles: any[] }) {
-  const { items, hasItems, ctaHref, ctaLabel, emptyMessage } = useLatestArticlesSection(latestArticles)
+  const { items, hasItems, ctaHref, ctaLabel, emptyMessage } =
+    useLatestArticlesSection(latestArticles)
 
   return (
     <Card className="glass-card">
@@ -32,7 +33,12 @@ export function LatestArticles({ latestArticles }: { latestArticles: any[] }) {
               </div>
             ))}
             <div className="pt-2">
-              <Button variant="outline" size="sm" className="w-full rounded-xl bg-transparent" asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full rounded-xl bg-transparent"
+                asChild
+              >
                 <Link href={ctaHref}>{ctaLabel}</Link>
               </Button>
             </div>

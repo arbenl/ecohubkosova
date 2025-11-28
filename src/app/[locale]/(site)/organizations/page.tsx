@@ -1,9 +1,15 @@
 import { Suspense } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Building, MapPin, Users, Search, Filter } from "lucide-react"
 import { getLocale } from "next-intl/server"
 import OrganizationsClientPage from "./organizations-client-page"
@@ -30,9 +36,7 @@ export default async function OrganizationsPage({ searchParams }: OrganizationsP
   const initialType = params.type ?? "all"
 
   // Get unique organization types for filter
-  const organizationTypes = Array.from(
-    new Set(initialOrganizations.map(org => org.type))
-  ).sort()
+  const organizationTypes = Array.from(new Set(initialOrganizations.map((org) => org.type))).sort()
 
   if (error) {
     console.error("Error fetching organizations:", error)
@@ -82,7 +86,7 @@ export default async function OrganizationsPage({ searchParams }: OrganizationsP
             <CardContent className="pt-4">
               <MapPin className="h-8 w-8 text-purple-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-purple-700">
-                {Array.from(new Set(initialOrganizations.map(org => org.location))).length}
+                {Array.from(new Set(initialOrganizations.map((org) => org.location))).length}
               </div>
               <p className="text-sm text-gray-600">Qytete të Mbuluara</p>
             </CardContent>

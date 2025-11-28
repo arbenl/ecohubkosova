@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import { getTranslations } from "next-intl/server"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { User, FileText, Building2, Heart } from "lucide-react"
 import { DashboardSkeleton } from "./components/DashboardSkeleton"
 
@@ -32,7 +32,7 @@ export default async function MyPage({ params }: { params: Promise<{ locale: str
                 asChild
                 className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
               >
-                <Link href={`/${locale}/my/profile`}>{t("profile.edit")}</Link>
+                <Link href="/my/profile">{t("profile.edit")}</Link>
               </Button>
             </CardContent>
           </Card>
@@ -51,7 +51,7 @@ export default async function MyPage({ params }: { params: Promise<{ locale: str
                 variant="outline"
                 className="rounded-full border border-emerald-200 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
               >
-                <Link href={`/${locale}/my/saved-listings`}>{t("listings.view")}</Link>
+                <Link href="/my/saved-listings">{t("listings.view")}</Link>
               </Button>
             </CardContent>
           </Card>
@@ -69,7 +69,7 @@ export default async function MyPage({ params }: { params: Promise<{ locale: str
                 asChild
                 className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
               >
-                <Link href={`/${locale}/my/organization`}>{t("organization.manage")}</Link>
+                <Link href="/my/organization">{t("organization.manage")}</Link>
               </Button>
             </CardContent>
           </Card>
@@ -88,7 +88,7 @@ export default async function MyPage({ params }: { params: Promise<{ locale: str
                 variant="outline"
                 className="rounded-full border border-emerald-200 hover:bg-emerald-50 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
               >
-                <Link href={`/${locale}/partners`}>{t("partners.explore")}</Link>
+                <Link href="/partners">{t("partners.explore")}</Link>
               </Button>
             </CardContent>
           </Card>

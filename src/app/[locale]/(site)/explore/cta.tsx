@@ -2,7 +2,7 @@
 import { useLocale, useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Users, ArrowRight } from "lucide-react"
 import { useAuth } from "@/lib/auth-provider"
 
@@ -39,7 +39,7 @@ export function EksploroCTA() {
           size="lg"
           className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
         >
-          <Link href={`/${locale}/dashboard`}>
+          <Link href="/dashboard">
             <ArrowRight className="mr-2 h-5 w-5" />
             {t("dashboard")}
           </Link>
@@ -51,7 +51,7 @@ export function EksploroCTA() {
             size="lg"
             className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
           >
-            <Link href={`/${locale}/register`}>
+            <Link href="/register">
               <Users className="mr-2 h-5 w-5" />
               {t("register")}
             </Link>
@@ -62,7 +62,7 @@ export function EksploroCTA() {
             size="lg"
             className="rounded-2xl px-8 py-4 text-lg font-semibold border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all duration-300 hover:scale-105 bg-transparent"
           >
-            <Link href={`/${locale}/login`}>
+            <Link href="/login">
               <ArrowRight className="mr-2 h-5 w-5" />
               {t("login")}
             </Link>

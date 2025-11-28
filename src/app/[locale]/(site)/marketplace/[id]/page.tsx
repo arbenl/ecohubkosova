@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -40,11 +40,9 @@ export default async function ListingDetailPage({
             <div className="container px-4 md:px-6">
               <div className="text-center py-12">
                 <h1 className="text-2xl font-bold mb-4">{t("detail.notFoundTitle")}</h1>
-                <p className="text-gray-600 mb-6">
-                  {error || t("detail.notFoundDescription")}
-                </p>
+                <p className="text-gray-600 mb-6">{error || t("detail.notFoundDescription")}</p>
                 <Button asChild>
-                  <Link href={`/${locale}/marketplace`}>
+                  <Link href="/marketplace">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     {t("pagination.previous")}
                   </Link>
@@ -70,7 +68,7 @@ export default async function ListingDetailPage({
           <div className="container px-4 md:px-6 max-w-4xl">
             <div className="mb-6">
               <Button variant="ghost" asChild>
-                <Link href={`/${locale}/marketplace`}>
+                <Link href="/marketplace">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   {t("pagination.previous")}
                 </Link>
@@ -146,7 +144,9 @@ export default async function ListingDetailPage({
                       <div className="flex items-center gap-2">
                         <Calendar className="h-5 w-5 text-gray-500" />
                         <div>
-                          <span className="font-medium">{t("detail.postedOn", { date: formatDate(listing.created_at) })}</span>
+                          <span className="font-medium">
+                            {t("detail.postedOn", { date: formatDate(listing.created_at) })}
+                          </span>
                           <p>{formatDate(listing.created_at)}</p>
                         </div>
                       </div>
@@ -158,7 +158,10 @@ export default async function ListingDetailPage({
               {/* Sidebar */}
               <div className="space-y-6">
                 {/* Contact Information */}
-                <ContactCardV2 listing={listing} listingUrl={`/${locale}/marketplace/${listing.id}`} />
+                <ContactCardV2
+                  listing={listing}
+                  listingUrl={`/${locale}/marketplace/${listing.id}`}
+                />
                 <ContactListingButton listing={listing} user={user} />
 
                 {/* Quick Info */}
@@ -169,9 +172,7 @@ export default async function ListingDetailPage({
                   <CardContent className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-600">{t("detail.condition")}:</span>
-                      <span className="font-medium">
-                        {flowTypeLabel}
-                      </span>
+                      <span className="font-medium">{flowTypeLabel}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">{t("form.category")}:</span>
@@ -192,7 +193,7 @@ export default async function ListingDetailPage({
 
             <div className="mt-8 text-center">
               <Button asChild variant="outline">
-                <Link href={`/${locale}/marketplace`}>{t("browseListings")}</Link>
+                <Link href="/marketplace">{t("browseListings")}</Link>
               </Button>
             </div>
           </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { ShoppingCart, Users, BookOpen, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -36,13 +36,13 @@ const QUICK_ACTIONS = [
 
 export function QuickActionsCard() {
   const locale = useLocale()
-  const t = useTranslations('dashboard')
+  const t = useTranslations("dashboard")
 
   return (
     <Card className="glass-card">
       <CardHeader>
-        <CardTitle className="text-gray-900">{t('quickActions')}</CardTitle>
-        <CardDescription>{t('quickActionsDesc')}</CardDescription>
+        <CardTitle className="text-gray-900">{t("quickActions")}</CardTitle>
+        <CardDescription>{t("quickActionsDesc")}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { useRouter } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
@@ -523,7 +523,7 @@ export default function RegjistrohuPage() {
             <div className="text-sm text-center text-gray-600">
               {t("alreadyHaveAccount")}{" "}
               <Link
-                href={`/${locale}/login`}
+                href="/login"
                 className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors"
               >
                 {t("loginHere")}

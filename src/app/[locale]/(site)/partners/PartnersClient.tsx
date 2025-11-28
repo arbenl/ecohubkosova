@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { useRouter, usePathname, useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
 import clsx from "clsx"
@@ -158,7 +158,7 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
               {t("hero.ctaBecomePartner")}
             </Link>
             <Link
-              href={`/${locale}/marketplace`}
+              href="/marketplace"
               className="rounded-full border border-white/70 px-5 py-2 text-sm font-semibold text-white hover:bg-white/10 transition"
             >
               {t("hero.ctaViewMarketplace")}
@@ -299,7 +299,7 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
 
                 <div className="mt-auto flex items-center justify-between gap-3">
                   <Link
-                    href={`/${locale}/partners/${partnerId}`}
+                    href="/partners/${partnerId}"
                     className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700"
                   >
                     {t("card.viewProfile")}
@@ -327,7 +327,7 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
           <p className="text-sm text-emerald-800">{t("cta.body")}</p>
         </div>
         <Link
-          href={`/${locale}/dashboard`}
+          href="/dashboard"
           className="rounded-full bg-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 transition"
         >
           {t("cta.button")}

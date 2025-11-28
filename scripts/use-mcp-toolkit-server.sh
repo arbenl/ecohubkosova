@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+export DOTENV_CONFIG_QUIET=true
 
 if [[ $# -lt 1 ]]; then
   echo "Usage: $0 <server-name>" >&2

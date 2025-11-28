@@ -4,7 +4,7 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useLocale } from "next-intl"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -170,7 +170,7 @@ export default function AddListingClientPage({ cities }: AddListingClientPagePro
             </CardContent>
             <CardFooter>
               <Button asChild>
-                <Link href={`/${locale}/marketplace`}>Kthehu në treg</Link>
+                <Link href="/marketplace">Kthehu në treg</Link>
               </Button>
             </CardFooter>
           </Card>

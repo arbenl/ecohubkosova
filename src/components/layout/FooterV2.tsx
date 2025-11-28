@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { useLocale, useTranslations } from "next-intl"
 import { Facebook, Instagram, Linkedin } from "lucide-react"
 
@@ -39,7 +39,9 @@ export function FooterV2() {
               </div>
               <div className="space-y-1">
                 <p className="text-lg font-semibold text-slate-900">EcoHub Kosova</p>
-                <p className="text-xs uppercase tracking-wide text-emerald-700">Circular marketplace</p>
+                <p className="text-xs uppercase tracking-wide text-emerald-700">
+                  Circular marketplace
+                </p>
               </div>
             </div>
             <p className="max-w-2xl text-sm leading-relaxed text-slate-700">{t("tagline")}</p>
@@ -51,10 +53,7 @@ export function FooterV2() {
               <ul className="space-y-2 text-sm text-slate-700">
                 {aboutLinks.map((link) => (
                   <li key={link.key}>
-                    <Link
-                      href={`/${locale}/${link.href}`}
-                      className="transition hover:text-emerald-700"
-                    >
+                    <Link href={`/${link.href}`} className="transition hover:text-emerald-700">
                       {t(link.key)}
                     </Link>
                   </li>
@@ -67,10 +66,7 @@ export function FooterV2() {
               <ul className="space-y-2 text-sm text-slate-700">
                 {exploreLinks.map((link) => (
                   <li key={link.key}>
-                    <Link
-                      href={`/${locale}/${link.href}`}
-                      className="transition hover:text-emerald-700"
-                    >
+                    <Link href={`/${link.href}`} className="transition hover:text-emerald-700">
                       {t(link.key)}
                     </Link>
                   </li>
@@ -83,10 +79,7 @@ export function FooterV2() {
               <ul className="space-y-2 text-sm text-slate-700">
                 {helpLinks.map((link) => (
                   <li key={link.key}>
-                    <Link
-                      href={`/${locale}/${link.href}`}
-                      className="transition hover:text-emerald-700"
-                    >
+                    <Link href={`/${link.href}`} className="transition hover:text-emerald-700">
                       {t(link.key)}
                     </Link>
                   </li>
@@ -112,7 +105,7 @@ export function FooterV2() {
                   href="#"
                   className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-500 shadow-sm transition hover:text-emerald-700 hover:shadow-md"
                   aria-label={t(social.key)}
-                // TODO: replace # with real social URLs
+                  // TODO: replace # with real social URLs
                 >
                   <Icon className="h-4 w-4" />
                 </Link>

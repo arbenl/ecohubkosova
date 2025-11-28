@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { ArrowRight } from "lucide-react"
 import { useLocale } from "next-intl"
 import { adminArticleUpdateSchema } from "@/validation/admin"
@@ -45,10 +45,14 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
                   <td className="px-4 py-3">{article.title}</td>
                   <td className="px-4 py-3">{article.category}</td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      article.external_url ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
-                    }`}>
-                      {article.external_url ? 'Jashtëm' : 'Lokal'}
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs ${
+                        article.external_url
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-green-100 text-green-800"
+                      }`}
+                    >
+                      {article.external_url ? "Jashtëm" : "Lokal"}
                     </span>
                   </td>
                   <td className="px-4 py-3">{article.is_published ? "Po" : "Jo"}</td>
@@ -65,7 +69,10 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
                     >
                       Fshi
                     </button>
-                    <Link href={`/${locale}/knowledge/articles/${article.id}`} className="text-sm text-gray-600">
+                    <Link
+                      href="/knowledge/articles/${article.id}"
+                      className="text-sm text-gray-600"
+                    >
                       Shiko <ArrowRight className="inline h-4 w-4" />
                     </Link>
                   </td>
@@ -158,9 +165,7 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
                 original_language: (formData.get("original_language") as string) || null,
                 category: formData.get("category") as string,
                 is_published: formData.get("is_published") === "on",
-                tags: (formData.get("tags") as string)
-                  ?.split(",")
-                  .map((tag) => tag.trim()),
+                tags: (formData.get("tags") as string)?.split(",").map((tag) => tag.trim()),
                 featured_image: (formData.get("featured_image") as string) || null,
               }
 
@@ -181,19 +186,19 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
             />
             <textarea
               name="content"
-              defaultValue={editingArticle.content || ''}
+              defaultValue={editingArticle.content || ""}
               rows={4}
               className="w-full rounded-md border px-3 py-2"
             />
             <input
               name="external_url"
-              defaultValue={editingArticle.external_url || ''}
+              defaultValue={editingArticle.external_url || ""}
               placeholder="URL e jashtme"
               className="w-full rounded-md border px-3 py-2"
             />
             <input
               name="original_language"
-              defaultValue={editingArticle.original_language || ''}
+              defaultValue={editingArticle.original_language || ""}
               placeholder="Gjuha origjinale"
               className="w-full rounded-md border px-3 py-2"
             />

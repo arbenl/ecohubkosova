@@ -2,7 +2,7 @@
 import { useLocale } from "next-intl"
 
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { useAuth } from "@/lib/auth-provider"
 
 export function NdhimeCTA() {
@@ -12,11 +12,11 @@ export function NdhimeCTA() {
 
   return isAuthenticated ? (
     <Button asChild className="w-full mt-4" size="sm">
-      <Link href={`/${locale}/dashboard`}>Shko në EcoHub</Link>
+      <Link href="/dashboard">Shko në EcoHub</Link>
     </Button>
   ) : (
     <Button asChild className="w-full mt-4" size="sm">
-      <Link href={`/${locale}/register`}>Regjistrohu tani</Link>
+      <Link href="/register">Regjistrohu tani</Link>
     </Button>
   )
 }

@@ -1,1 +1,6 @@
-[MCP] TODO: markitdown not implemented – pipx install markitdown-mcp (optional extras: markitdown[all])
+[MCP] Starting markitdown -> /Users/arbenlila/.local/bin/markitdown-mcp --http --port 3001
+INFO:     Started server process [81659]
+INFO:     Waiting for application startup.
+StreamableHTTP session manager started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:3001 (Press CTRL+C to quit)

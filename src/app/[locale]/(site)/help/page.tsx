@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { BookOpen, MessageCircle, Video, Download, ExternalLink } from "lucide-react"
 import { getLocale } from "next-intl/server"
 import { NdhimeCTA } from "./cta"
@@ -117,7 +117,7 @@ export default async function NdihmePage() {
                     <li>• Aktivizoni njoftimet</li>
                   </ul>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
-                    <Link href={`/${locale}/profile`}>Shiko profilin</Link>
+                    <Link href="/profile">Shiko profilin</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -137,7 +137,7 @@ export default async function NdihmePage() {
                     <li>• Kontaktoni partnerët</li>
                   </ul>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
-                    <Link href={`/${locale}/explore`}>Eksploro tani</Link>
+                    <Link href="/explore">Eksploro tani</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -239,7 +239,7 @@ export default async function NdihmePage() {
                     </div>
                   </div>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
-                    <Link href={`/${locale}/knowledge`}>Shiko artikujt</Link>
+                    <Link href="/knowledge">Shiko artikujt</Link>
                   </Button>
                 </CardContent>
               </Card>

@@ -1,1 +1,48 @@
-/Users/arbenlila/.config/mcp/vscode-tasks.json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "eco:mcp-proxies",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "./scripts/start-mcp-http.sh"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "group": "build"
+    },
+    {
+      "label": "eco:mcp-health-check",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "MCP_HTTP=1 MCP_HOST=127.0.0.1 MCP_CONTEXT_PORT=7337 MCP_QA_PORT=7338 ./scripts/check-mcp-health.sh"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "eco:next-dev",
+      "type": "shell",
+      "command": "pnpm dev",
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": "$tsc-watch",
+      "group": "build"
+    },
+    {
+      "label": "eco:dev-all",
+      "dependsOn": ["eco:mcp-proxies", "eco:mcp-health-check", "eco:next-dev"],
+      "dependsOrder": "sequence",
+      "runOptions": { "runOn": "folderOpen" },
+      "problemMatcher": [],
+      "group": "build"
+    }
+  ]
+}

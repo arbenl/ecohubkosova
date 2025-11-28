@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { CheckCircle } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 import { PublicPageHero } from "@/components/layout/PublicPageHero"
@@ -19,10 +19,10 @@ export default async function AboutUsPage({ params }: { params: Promise<{ locale
         actions={
           <>
             <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 rounded-full">
-              <Link href={`/${locale}/marketplace`}>{t("hero.cta.primary")}</Link>
+              <Link href="/marketplace">{t("hero.cta.primary")}</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-full">
-              <Link href={`/${locale}/partners`}>{t("hero.cta.secondary")}</Link>
+              <Link href="/partners">{t("hero.cta.secondary")}</Link>
             </Button>
           </>
         }
@@ -104,12 +104,20 @@ export default async function AboutUsPage({ params }: { params: Promise<{ locale
           <div className="text-center">
             <p className="text-gray-700 mb-4 text-sm">
               <span className="font-semibold">{t("actions.inlineCta")}</span>{" "}
-              <Button asChild variant="link" className="px-0 text-emerald-600 hover:text-emerald-700">
-                <Link href={`/${locale}/marketplace`}>{t("actions.browse")}</Link>
+              <Button
+                asChild
+                variant="link"
+                className="px-0 text-emerald-600 hover:text-emerald-700"
+              >
+                <Link href="/marketplace">{t("actions.browse")}</Link>
               </Button>
               {" or "}
-              <Button asChild variant="link" className="px-0 text-emerald-600 hover:text-emerald-700">
-                <Link href={`/${locale}/partners`}>{t("actions.organizations")}</Link>
+              <Button
+                asChild
+                variant="link"
+                className="px-0 text-emerald-600 hover:text-emerald-700"
+              >
+                <Link href="/partners">{t("actions.organizations")}</Link>
               </Button>
             </p>
           </div>
@@ -137,7 +145,7 @@ export default async function AboutUsPage({ params }: { params: Promise<{ locale
             <div className="rounded-2xl bg-emerald-50 border border-emerald-100 p-6">
               <p className="text-gray-900 font-semibold mb-4">{t("who.cta")}</p>
               <Button asChild className="bg-emerald-600 hover:bg-emerald-700 rounded-full">
-                <Link href={`/${locale}/contact`}>{t("who.ctaLink")}</Link>
+                <Link href="/contact">{t("who.ctaLink")}</Link>
               </Button>
             </div>
           </div>

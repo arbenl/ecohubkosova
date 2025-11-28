@@ -9,7 +9,10 @@ const __dirname = dirname(__filename);
 const projectRoot = resolve(__dirname, "..");
 const logPath = resolve(projectRoot, "logs", "mcp-health.json");
 const modeArg = process.argv.find((arg) => arg.startsWith("--mode="));
-const normalizedMode = modeArg?.split("=")[1] === "ci" ? "ci" : "local";
+const requestedMode = modeArg?.split("=")[1] ?? "local";
+const normalizedMode =
+  requestedMode === "ci" ? "ci" : requestedMode === "http" ? "http" : "local";
+const interactiveMode = normalizedMode !== "ci";
 
 const preferToolkit = process.env.USE_MCP_TOOLKIT === "1";
 const toolkitPath = process.env.MCP_TOOLKIT_PATH
@@ -48,27 +51,73 @@ const report = {
   timestamp: new Date().toISOString(),
   mode: normalizedMode,
   contractVersion: null,
-  overallStatus: "ok",
+  overallStatus: "pending",
   servers: {},
   errors: [],
+  warnings: [],
 };
 
 const aliasMap = new Map();
+let hasFailure = false;
+let hasWarning = false;
+
+function normalizeToolSpec(entry) {
+  if (typeof entry === "string" && entry.trim().length > 0) {
+    const normalized = entry.trim();
+    return { logical: normalized, patterns: [normalized] };
+  }
+
+  if (entry && typeof entry === "object") {
+    const logicalValue =
+      typeof entry.logical === "string" && entry.logical.trim().length > 0
+        ? entry.logical.trim()
+        : null;
+
+    const patterns = Array.isArray(entry.anyOf)
+      ? entry.anyOf.filter((candidate) => typeof candidate === "string" && candidate.trim().length > 0)
+      : [];
+
+    const logical = logicalValue ?? patterns[0] ?? null;
+    if (!logical) {
+      return null;
+    }
+
+    if (patterns.length === 0) {
+      patterns.push(logical);
+    }
+
+    return { logical, patterns };
+  }
+
+  return null;
+}
+
+function normalizeToolSpecs(entries) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+  const normalized = [];
+  for (const entry of entries) {
+    const spec = normalizeToolSpec(entry);
+    if (spec) {
+      normalized.push(spec);
+    }
+  }
+  return normalized;
+}
 
 function markWarn(message) {
   if (message) {
-    report.errors.push(message);
+    report.warnings.push(message);
   }
-  if (report.overallStatus === "ok") {
-    report.overallStatus = "warn";
-  }
+  hasWarning = true;
 }
 
 function markFail(message) {
   if (message) {
     report.errors.push(message);
   }
-  report.overallStatus = "fail";
+  hasFailure = true;
 }
 
 function recordIssue(message, optional) {
@@ -84,7 +133,9 @@ function escapeRegex(value) {
 }
 
 function matchesPattern(pattern, candidates) {
-  if (!pattern) return false;
+  if (typeof pattern !== "string" || pattern.length === 0) {
+    return false;
+  }
   if (pattern.includes("*")) {
     const regex = new RegExp(`^${escapeRegex(pattern).replace(/\\\*/g, ".*")}$`);
     return candidates.some((tool) => regex.test(tool));
@@ -92,9 +143,14 @@ function matchesPattern(pattern, candidates) {
   return candidates.includes(pattern);
 }
 
-function toolSatisfied(tool, candidates) {
-  const aliases = aliasMap.get(tool) ?? [];
-  const patterns = [tool, ...aliases];
+function toolSatisfied(spec, candidates) {
+  if (!spec || !spec.logical) {
+    return false;
+  }
+  const aliases = aliasMap.get(spec.logical) ?? [];
+  const patterns = [...spec.patterns, ...aliases].filter(
+    (value) => typeof value === "string" && value.length > 0
+  );
   return patterns.some((pattern) => matchesPattern(pattern, candidates));
 }
 
@@ -102,15 +158,15 @@ function evaluateContract(requiredTools, optionalTools, candidates) {
   const missingRequired = [];
   const missingOptional = [];
 
-  for (const tool of requiredTools) {
-    if (!toolSatisfied(tool, candidates)) {
-      missingRequired.push(tool);
+  for (const spec of requiredTools) {
+    if (!toolSatisfied(spec, candidates)) {
+      missingRequired.push(spec.logical);
     }
   }
 
-  for (const tool of optionalTools) {
-    if (!toolSatisfied(tool, candidates)) {
-      missingOptional.push(tool);
+  for (const spec of optionalTools) {
+    if (!toolSatisfied(spec, candidates)) {
+      missingOptional.push(spec.logical);
     }
   }
 
@@ -125,6 +181,13 @@ function evaluateContract(requiredTools, optionalTools, candidates) {
 }
 
 async function ensureLogWritten() {
+  if (hasFailure) {
+    report.overallStatus = "fail";
+  } else if (report.mode === "ci") {
+    report.overallStatus = "skipped";
+  } else {
+    report.overallStatus = "healthy";
+  }
   await mkdir(dirname(logPath), { recursive: true });
   await writeFile(logPath, JSON.stringify(report, null, 2));
 }
@@ -208,8 +271,10 @@ async function main() {
     }
 
     for (const [serverName, entry] of Object.entries(contract.servers)) {
-      const requiredTools = Array.isArray(entry.requiredTools) ? entry.requiredTools : [];
-      const optionalTools = Array.isArray(entry.optionalTools) ? entry.optionalTools : [];
+      const requiredToolSpecs = normalizeToolSpecs(entry.requiredTools);
+      const optionalToolSpecs = normalizeToolSpecs(entry.optionalTools);
+      const requiredToolNames = requiredToolSpecs.map((spec) => spec.logical);
+      const optionalToolNames = optionalToolSpecs.map((spec) => spec.logical);
       const serverConfig = serverConfigs[serverName];
       const optionalServer = entry?.optional === true;
 
@@ -223,8 +288,8 @@ async function main() {
         handshake: normalizedMode === "local" ? "pending" : "skipped",
         discoveredTools: [],
         contract: {
-          required: requiredTools,
-          optional: optionalTools,
+          required: requiredToolNames,
+          optional: optionalToolNames,
           missingRequired: [],
           missingOptional: [],
           status: normalizedMode === "local" ? "pending" : "skipped",
@@ -238,27 +303,35 @@ async function main() {
         serverReport.reachable = false;
         serverReport.contract.status = optionalServer ? "warn" : "fail";
         const message = `Missing server configuration for ${serverName}.`;
-        serverReport.errors.push(message);
+        if (optionalServer) {
+          serverReport.warnings.push(message);
+        } else {
+          serverReport.errors.push(message);
+        }
         recordIssue(message, optionalServer);
         report.servers[serverName] = serverReport;
         continue;
       }
 
-      if (normalizedMode === "local") {
+      if (interactiveMode) {
         try {
           const tools = await listToolsForServer(serverName, serverConfig);
           serverReport.discoveredTools = tools;
           serverReport.reachable = true;
           serverReport.handshake = "ok";
 
-          const evaluation = evaluateContract(requiredTools, optionalTools, tools);
+          const evaluation = evaluateContract(requiredToolSpecs, optionalToolSpecs, tools);
           serverReport.contract.missingRequired = evaluation.missingRequired;
           serverReport.contract.missingOptional = evaluation.missingOptional;
           serverReport.contract.status = optionalServer && evaluation.status === "fail" ? "warn" : evaluation.status;
 
           if (evaluation.missingRequired.length > 0) {
             const message = `Server ${serverName} is missing required tools: ${evaluation.missingRequired.join(", ")}`;
-            serverReport.errors.push(message);
+            if (optionalServer) {
+              serverReport.warnings.push(message);
+            } else {
+              serverReport.errors.push(message);
+            }
             recordIssue(message, optionalServer);
           } else if (evaluation.missingOptional.length > 0) {
             const message = `Server ${serverName} is missing optional tools: ${evaluation.missingOptional.join(", ")}`;
@@ -271,7 +344,11 @@ async function main() {
           const message = `Failed to query server ${serverName}: ${error instanceof Error ? error.message : String(error)}`;
           serverReport.reachable = false;
           serverReport.handshake = "fail";
-          serverReport.errors.push(message);
+          if (optionalServer) {
+            serverReport.warnings.push(message);
+          } else {
+            serverReport.errors.push(message);
+          }
           recordIssue(message, optionalServer);
         }
       } else {

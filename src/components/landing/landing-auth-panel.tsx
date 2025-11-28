@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Loader2, UserPlus, LogIn, ArrowRight } from "lucide-react"
 import { useLocale } from "next-intl"
 import { Button } from "@/components/ui/button"
@@ -29,7 +29,7 @@ export function LandingAuthPanel() {
             asChild
             className="flex-1 eco-gradient text-white rounded-xl font-semibold hover:shadow-xl hover:shadow-[#00C896]/25"
           >
-            <Link href={`/${locale}/dashboard`}>
+            <Link href="/dashboard">
               Shko te Dashboardi
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
@@ -39,7 +39,7 @@ export function LandingAuthPanel() {
             asChild
             className="flex-1 rounded-xl border-emerald-200 text-emerald-700 hover:bg-emerald-50 font-semibold"
           >
-            <Link href={`/${locale}/profile`}>Menaxho Profilin</Link>
+            <Link href="/profile">Menaxho Profilin</Link>
           </Button>
         </div>
       </div>
@@ -59,7 +59,7 @@ export function LandingAuthPanel() {
           asChild
           className="flex-1 eco-gradient text-white rounded-xl font-semibold hover:shadow-xl hover:shadow-[#00C896]/25"
         >
-          <Link href={`/${locale}/login`}>
+          <Link href="/login">
             <LogIn className="mr-2 h-4 w-4" />
             Kyçu
           </Link>
@@ -69,7 +69,7 @@ export function LandingAuthPanel() {
           asChild
           className="flex-1 rounded-xl border-gray-200 font-semibold text-gray-800 hover:bg-gray-50"
         >
-          <Link href={`/${locale}/register`}>
+          <Link href="/register">
             <UserPlus className="mr-2 h-4 w-4" />
             Krijo llogari
           </Link>

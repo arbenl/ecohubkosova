@@ -15,7 +15,7 @@ import {
   RefreshCw,
   Activity,
 } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { getAdminStats } from "./actions"
 import type { AdminStats } from "@/services/admin/stats"
 import { AdminDashboardSkeleton } from "./components/AdminDashboardSkeleton"
@@ -87,7 +87,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
               </div>
               <div className="flex items-center justify-between">
                 <Link
-                  href={`/${locale}/admin/users`}
+                  href="/admin/users"
                   className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 focus:text-emerald-700 focus:outline-none group-hover:underline font-medium"
                   aria-label={t("stats.usersAriaLabel")}
                 >
@@ -118,7 +118,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
               </div>
               <div className="flex items-center justify-between">
                 <Link
-                  href={`/${locale}/admin/organizations`}
+                  href="/admin/organizations"
                   className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 focus:text-emerald-700 focus:outline-none group-hover:underline font-medium"
                   aria-label={t("stats.organizationsAriaLabel")}
                 >
@@ -154,7 +154,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
               </div>
               <div className="flex items-center justify-between">
                 <Link
-                  href={`/${locale}/admin/articles`}
+                  href="admin/articles"
                   className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 focus:text-emerald-700 focus:outline-none group-hover:underline font-medium"
                   aria-label={t("stats.articlesAriaLabel")}
                 >
@@ -190,7 +190,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
               </div>
               <div className="flex items-center justify-between">
                 <Link
-                  href={`/${locale}/admin/listings`}
+                  href="/admin/listings"
                   className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 focus:text-emerald-700 focus:outline-none group-hover:underline font-medium"
                   aria-label={t("stats.listingsAriaLabel")}
                 >
@@ -216,7 +216,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
             <Link
-              href={`/${locale}/admin/users`}
+              href="/admin/users"
               className="block p-6 focus:outline-none h-full"
               aria-label={t("quickActions.usersAriaLabel")}
             >
@@ -236,7 +236,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
 
           <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
             <Link
-              href={`/${locale}/admin/organizations`}
+              href="/admin/organizations"
               className="block p-6 focus:outline-none h-full"
               aria-label={t("quickActions.organizationsAriaLabel")}
             >
@@ -256,7 +256,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
 
           <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
             <Link
-              href={`/${locale}/admin/articles`}
+              href="admin/articles"
               className="block p-6 focus:outline-none h-full"
               aria-label={t("quickActions.articlesAriaLabel")}
             >
@@ -276,7 +276,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
 
           <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
             <Link
-              href={`/${locale}/admin/organization-members`}
+              href="admin/organization-members"
               className="block p-6 focus:outline-none h-full"
               aria-label={t("quickActions.membersAriaLabel")}
             >
@@ -296,7 +296,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
 
           <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
             <Link
-              href={`/${locale}/admin/audits`}
+              href="/admin/audits"
               className="block p-6 focus:outline-none h-full"
               aria-label={t("quickActions.auditsAriaLabel")}
             >
