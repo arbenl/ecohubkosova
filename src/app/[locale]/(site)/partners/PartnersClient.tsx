@@ -299,7 +299,7 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
 
                 <div className="mt-auto flex items-center justify-between gap-3">
                   <Link
-                    href="/partners/${partnerId}"
+                    href={`/partners/${partnerId}`}
                     className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700"
                   >
                     {t("card.viewProfile")}

@@ -77,7 +77,7 @@ export function ListingCardV2({ listing, locale }: ListingCardV2Props) {
 
   return (
     <Link
-      href="/marketplace/${listing.id}"
+      href={`/marketplace/${listing.id}`}
       className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 rounded-lg"
       aria-label={listing.title}
     >

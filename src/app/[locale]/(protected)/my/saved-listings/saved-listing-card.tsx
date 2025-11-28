@@ -42,8 +42,12 @@ export default function SavedListingCard({ listing, onRemove }: SavedListingCard
   }
 
   return (
-    <Link href="/marketplace/${listing.id}">
-      <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
+    <Link
+      href={`/marketplace/${listing.id}`}
+      className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 rounded-lg"
+      aria-label={listing.title}
+    >
+      <Card className="group h-full overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
         {/* Image Section */}
         {listing.metadata &&
         typeof listing.metadata === "object" &&
@@ -105,7 +109,7 @@ export default function SavedListingCard({ listing, onRemove }: SavedListingCard
               asChild
               className="flex-1 bg-emerald-600 hover:bg-emerald-700"
             >
-              <Link href="/marketplace/${listing.id}">View details</Link>
+              <Link href={`/marketplace/${listing.id}`}>View details</Link>
             </Button>
             <Button
               variant="ghost"

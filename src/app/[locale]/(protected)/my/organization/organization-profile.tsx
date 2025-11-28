@@ -134,7 +134,7 @@ export default function OrganizationProfile({
         <div className="mt-6 flex flex-wrap gap-3">
           {organization.eco_org_id ? (
             <Link
-              href="/partners/${organization.eco_org_id}"
+              href={`/partners/${organization.eco_org_id}`}
               className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 hover:bg-gray-50"
             >
               <ExternalLink className="h-4 w-4" />
@@ -194,7 +194,7 @@ export default function OrganizationProfile({
                 {listings.map((listing) => (
                   <TableRow key={listing.id}>
                     <TableCell className="font-medium">
-                      <Link href="/marketplace/${listing.id}" className="hover:underline">
+                      <Link href={`/marketplace/${listing.id}`} className="hover:underline">
                         {listing.title}
                       </Link>
                     </TableCell>
@@ -205,7 +205,7 @@ export default function OrganizationProfile({
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
                         <Link
-                          href="/marketplace/${listing.id}"
+                          href={`/marketplace/${listing.id}`}
                           className="p-2 text-gray-400 hover:text-gray-600"
                           title={t("workspace.listings.actions.view")}
                         >

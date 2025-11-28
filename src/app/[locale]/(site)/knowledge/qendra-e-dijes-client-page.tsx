@@ -182,7 +182,7 @@ export default function QendraEDijesClientPage({
                   </span>
                 </div>
                 <Button size="sm" asChild>
-                  <Link href="/knowledge/articles/${article.id}">Lexo më shumë</Link>
+                  <Link href={`/knowledge/articles/${article.id}`}>Lexo më shumë</Link>
                 </Button>
               </CardFooter>
             </Card>

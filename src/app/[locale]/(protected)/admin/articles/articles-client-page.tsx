@@ -70,7 +70,7 @@ export default function ArticlesClientPage({ initialArticles }: ArticlesClientPa
                       Fshi
                     </button>
                     <Link
-                      href="/knowledge/articles/${article.id}"
+                      href={`/knowledge/articles/${article.id}`}
                       className="text-sm text-gray-600"
                     >
                       Shiko <ArrowRight className="inline h-4 w-4" />

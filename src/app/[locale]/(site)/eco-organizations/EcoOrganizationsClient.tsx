@@ -227,7 +227,7 @@ function EcoOrganizationCard({ organization, t, locale }: CardProps) {
       {/* Footer Actions */}
       <div className="bg-gray-50 px-4 py-3 border-t border-gray-200 flex gap-2">
         <Link
-          href="/eco-organizations/${organization.organization_id}"
+          href={`/eco-organizations/${organization.organization_id}`}
           className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white border border-green-300 text-green-700 rounded-md text-sm font-medium hover:bg-green-50 transition-colors"
         >
           {t("cardViewOrganization")}

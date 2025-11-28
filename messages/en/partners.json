@@ -36,6 +36,7 @@
       "NGO": "NGO",
       "SOCIAL_ENTERPRISE": "Social enterprise",
       "COLLECTOR": "Collector",
+      "PRODUCER": "Producer",
       "PUBLIC_INSTITUTION": "Public institution",
       "OTHER": "Partner"
     }

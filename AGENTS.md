@@ -28,3 +28,17 @@ NEVER use grep for project-wide searches (slow, ignores .gitignore). ALWAYS use 
 - Use `jq` for JSON instead of regex
 
 <!-- END FAST-TOOLS PROMPT v1 | codex-mastery -->
+
+## MCP Servers (HTTP)
+
+The following MCP servers are available for Grok and Codex agents:
+
+- **mcp-context-server** → `http://127.0.0.1:7337/sse`
+  - Tools: `project_map`, `read_files`, `git_status`, `git_diff`, `code_search`
+- **ecohub-qa** → `http://127.0.0.1:7338/sse`
+  - Tools: `build_health`, `navigation_audit`, `i18n_audit`, `supabase_health`, `test_runner`
+- **context7** → `http://127.0.0.1:7339/sse` _(optional)_
+- **playwright** → `http://127.0.0.1:7340/sse` _(optional)_
+
+These servers should be queried using `/mcp run <server> <tool> [args]`.
+If unavailable, fallback to CLI commands is permitted.
