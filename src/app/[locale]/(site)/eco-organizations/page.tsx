@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 
 export default async function EcoOrganizationsRedirectPage({
   params,
@@ -8,5 +8,5 @@ export default async function EcoOrganizationsRedirectPage({
   const { locale } = await params
   // Redirect to canonical Partners directory
   // Partners page has all eco-organization functionality with role filters
-  redirect(`/${locale}/partners`)
+  redirect({ href: "/partners", locale })
 }

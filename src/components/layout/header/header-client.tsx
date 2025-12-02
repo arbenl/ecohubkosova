@@ -27,8 +27,6 @@ export default function HeaderClient({
     user?.email?.split("@")[0] || fallbackUserName || fallbackUserEmail?.split("@")[0]
   const isAuthenticated = Boolean(user || fallbackUserEmail)
 
-  const dashboardLink = userRole === "Admin" ? "/admin" : "/my"
-
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMenuOpen) {
@@ -103,12 +101,12 @@ export default function HeaderClient({
                 </span>
               </div>
               <div className="relative group">
-                <Button className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105">
+                <Button className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-2 font-medium transition-all duration-300 hover:scale-105 interactive-press">
                   {t("myEcoHub")} ▼
                 </Button>
                 <div className="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-200 hidden group-hover:block z-50">
                   <Link
-                    href="/my"
+                    href="/my/organization"
                     className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] first:rounded-t-xl transition-colors"
                   >
                     {t("myOrganization")}
@@ -120,11 +118,17 @@ export default function HeaderClient({
                     {t("savedListings")}
                   </Link>
                   <Link
-                    href={dashboardLink}
+                    href={userRole === "Admin" ? "/admin" : "/my/listings"}
                     className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] transition-colors"
                     prefetch={false}
                   >
-                    {t("dashboard")}
+                    {userRole === "Admin" ? t("administration") : t("myListings")}
+                  </Link>
+                  <Link
+                    href="/marketplace/add"
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#00C896] transition-colors"
+                  >
+                    {t("createListing")}
                   </Link>
                   <div className="border-t border-gray-200"></div>
                   <SignOutButton
@@ -221,7 +225,7 @@ export default function HeaderClient({
                       {t("welcome")}, {derivedName}
                     </div>
                     <Button
-                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm interactive-press"
                       asChild
                     >
                       <Link href="/my" onClick={() => setIsMenuOpen(false)}>
@@ -229,7 +233,7 @@ export default function HeaderClient({
                       </Link>
                     </Button>
                     <Button
-                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm interactive-press"
                       asChild
                     >
                       <Link href="/my/saved-listings" onClick={() => setIsMenuOpen(false)}>
@@ -237,15 +241,19 @@ export default function HeaderClient({
                       </Link>
                     </Button>
                     <Button
-                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm interactive-press"
                       asChild
                     >
-                      <Link
-                        href={dashboardLink}
-                        onClick={() => setIsMenuOpen(false)}
-                        prefetch={false}
-                      >
-                        {t("dashboard")}
+                      <Link href="/my/listings" onClick={() => setIsMenuOpen(false)}>
+                        {t("myListings")}
+                      </Link>
+                    </Button>
+                    <Button
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm interactive-press"
+                      asChild
+                    >
+                      <Link href="/marketplace/add" onClick={() => setIsMenuOpen(false)}>
+                        {t("createListing")}
                       </Link>
                     </Button>
                     <SignOutButton
@@ -259,7 +267,7 @@ export default function HeaderClient({
                 ) : (
                   <>
                     <Button
-                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm interactive-press"
                       asChild
                     >
                       <Link href="/login" onClick={() => setIsMenuOpen(false)}>
@@ -267,7 +275,7 @@ export default function HeaderClient({
                       </Link>
                     </Button>
                     <Button
-                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm"
+                      className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm interactive-press"
                       asChild
                     >
                       <Link href="/register" onClick={() => setIsMenuOpen(false)}>

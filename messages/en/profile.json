@@ -1,28 +1,70 @@
 {
-    "myProfile": "My Profile",
-    "manageProfileDescription": "Manage your profile information on ECO HUB KOSOVA",
-    "manageOrgDescription": "Manage organization details.",
-    "personalProfile": "Personal Profile",
-    "orgProfile": "Organization Profile",
-    "noOrgToUpdate": "No organization to update.",
-    "changePassword": "Change Password",
-    "changePasswordDescription": "Replace your existing password with a new one.",
-    "changePasswordPlaceholder": "Password change form will be added here.",
-    "save": "Save",
-    "saving": "Saving...",
-    "cancel": "Cancel",
-    "saveChanges": "Save Changes",
-    "profileUpdatedSuccess": "Profile updated successfully!",
-    "orgProfileUpdatedSuccess": "Organization profile updated successfully!",
-    "updateError": "Error updating profile.",
-    "unknownError": "Unknown error.",
-    "dbError": "Database connection error.",
-    "loadError": "Error loading profile",
-    "dbUnavailable": "Database unavailable",
-    "checkFields": "Check the highlighted fields and try again.",
-    "tabs": {
-        "personal": "Personal Details",
-        "organization": "Organization Details",
-        "settings": "Settings"
+  "title": "Profile",
+  "subtitle": "Manage personal details and organization info",
+  "myProfile": "My Profile",
+  "manageProfileDescription": "Manage your profile information on ECO HUB KOSOVA",
+  "manageOrgDescription": "Manage organization details.",
+  "personalProfile": "Personal Profile",
+  "orgProfile": "Organization Profile",
+  "noOrgToUpdate": "No organization to update.",
+  "changePassword": "Change Password",
+  "changePasswordDescription": "Replace your existing password with a new one.",
+  "changePasswordPlaceholder": "Password change form will be added here.",
+  "save": "Save",
+  "saving": "Saving...",
+  "cancel": "Cancel",
+  "saveChanges": "Save Changes",
+  "profileUpdatedSuccess": "Profile updated successfully!",
+  "orgProfileUpdatedSuccess": "Organization profile updated successfully!",
+  "updateError": "Error updating profile.",
+  "unknownError": "Unknown error.",
+  "dbError": "Database connection error.",
+  "loadError": "Error loading profile",
+  "dbUnavailable": "Database unavailable",
+  "checkFields": "Check the highlighted fields and try again.",
+  "tabs": {
+    "personal": "Personal Details",
+    "organization": "Organization Details",
+    "settings": "Settings"
+  },
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
     }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
+  }
 }

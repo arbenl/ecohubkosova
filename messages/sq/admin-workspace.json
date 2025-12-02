@@ -3,6 +3,8 @@
   "subtitle": "Monitoro aktivitetin, partnerët dhe listimet në EcoHub",
   "stats": {
     "title": "Statistikat e Platformës",
+    "savedListings": "Listime të ruajtura",
+    "myListings": "Listimet e mia",
     "viewDetails": "Shiko Detajet",
     "users": "Përdorues",
     "usersDescription": "Përdorues të regjistruar në platformë",
@@ -16,14 +18,27 @@
     "articlesAriaLabel": "Shiko detajet e menaxhimit të artikujve",
     "articlesPending": "Në pritje të publikimit",
     "listings": "Listime në treg",
-    "listingsDescription": "Listime në tregun e platformës",
+    "listingsDescription": "Listime që presin moderim",
     "listingsAriaLabel": "Shiko detajet e menaxhimit të listimeve",
-    "listingsPending": "Listime draft",
+    "listingsPending": "Listime në pritje",
     "pending": "në pritje"
   },
   "quickActions": {
     "title": "Veprime të shpejta",
+    "title": "Veprime të shpejta",
     "description": "Hyr shpejt në flukset kryesore të administrimit",
+    "profile": {
+      "title": "Profili",
+      "description": "Përditëso të dhënat personale"
+    },
+    "organization": {
+      "title": "Organizata",
+      "description": "Menaxho të dhënat e organizatës"
+    },
+    "addListing": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    },
     "users": "Menaxho përdoruesit",
     "usersDescription": "Shiko dhe menaxho përdoruesit e platformës",
     "usersAriaLabel": "Shko te menaxhimi i përdoruesve",
@@ -34,12 +49,28 @@
     "articlesDescription": "Rishiko dhe publiko artikujt",
     "articlesAriaLabel": "Shko te menaxhimi i artikujve",
     "listings": "Rishiko listimet",
+    "listingsDescription": "Rishiko dhe aprovo listimet e tregut",
     "members": "Anëtarët e organizatave",
     "membersDescription": "Menaxho marrëdhëniet e anëtarëve të organizatave",
     "membersAriaLabel": "Shko te menaxhimi i anëtarëve",
     "audits": "Auditimet e sistemit",
     "auditsDescription": "Shiko logjet e aktivitetit të sistemit",
-    "auditsAriaLabel": "Shko te auditimet e sistemit"
+    "auditsAriaLabel": "Shko te auditimet e sistemit",
+    "go": "Hap"
+  },
+  "alerts": {
+    "title": "Njoftimet",
+    "description": "Kontrollo këtu për përditësime të rëndësishme.",
+    "noNewAlerts": "Asnjë njoftim i ri"
+  },
+  "myListingsPage": {
+    "title": "Listimet e mia",
+    "createNew": "Krijo listim të ri",
+    "empty": {
+      "title": "Nuk keni krijuar ende asnjë listim.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "cta": "Krijo Listim"
+    }
   },
   "activity": {
     "title": "Aktiviteti i fundit",
@@ -50,6 +81,17 @@
     "comingSoon": "Vjen së shpejti",
     "setupDescription": "Konfigurimi i aktiviteteve do të jetë i disponueshëm së shpejti.",
     "setup": "Konfiguro aktivitetet"
+  },
+  "pendingSection": {
+    "orgsTitle": "Organizata në pritje",
+    "review": "Rishiko",
+    "empty": "Asnjë organizatë nuk pret aprovimin.",
+    "listingsTitle": "Listime në pritje",
+    "articlesTitle": "Artikuj në pritje",
+    "emptyListings": "Asnjë listim nuk pret shqyrtim.",
+    "emptyArticles": "Asnjë artikull nuk pret shqyrtim.",
+    "approve": "Aprovo",
+    "reject": "Refuzo"
   },
   "welcome": "Mirë se vini! Sot është {date}",
   "refresh": "Rifresko",

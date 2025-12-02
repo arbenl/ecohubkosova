@@ -40,13 +40,6 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
 
         <nav className="hidden md:flex gap-8">
           <Link
-            href="/explore"
-            className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
-          >
-            {t("navigation.explore")}
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00C896] transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link
             href="/partners"
             className="text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 relative group"
           >
@@ -127,13 +120,6 @@ export default function HeaderClient({ fallbackUserName, fallbackUserEmail }: He
 
       <div className="md:hidden border-t border-white/20 bg-white/95 backdrop-blur-md">
         <nav className="container px-4 py-6 space-y-4">
-          <Link
-            href="/explore"
-            className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            {t("navigation.explore")}
-          </Link>
           <Link
             href="/partners"
             className="block text-sm font-medium text-gray-700 hover:text-[#00C896] transition-colors duration-300 py-3 px-4 rounded-xl hover:bg-gray-50"

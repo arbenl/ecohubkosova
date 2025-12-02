@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -55,7 +55,7 @@ export default function OrganizationsClientPage({
     if (type !== "all") params.set("type", type)
 
     const query = params.toString()
-    router.push(`/${locale}/organizations${query ? `?${query}` : ""}`)
+    router.push(`/organizations${query ? `?${query}` : ""}`)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -178,7 +178,7 @@ export default function OrganizationsClientPage({
       {/* Back to Home */}
       <div className="text-center mt-12">
         <Button variant="outline" asChild>
-          <Link href={`/${locale}`}>
+          <Link href="/">
             <ExternalLink className="h-4 w-4 mr-2" />
             Kthehu në fillim
           </Link>

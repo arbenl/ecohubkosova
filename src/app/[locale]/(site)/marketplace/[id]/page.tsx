@@ -3,25 +3,38 @@ import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Calendar, MapPin, Package, Euro } from "lucide-react"
+import { ArrowLeft, Calendar, MapPin, Package, Euro, ShieldAlert } from "lucide-react"
 import { getServerUser } from "@/lib/supabase/server"
 import ContactListingButton from "./contact-listing-button"
 import { ContactCardV2 } from "@/components/marketplace-v2/ContactCardV2"
-import { fetchListingById } from "@/services/listings"
+import { fetchListingById, fetchListingByIdForOwner } from "@/services/listings"
 import type { Listing } from "@/types"
 import { getLocale, getTranslations } from "next-intl/server"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { OwnerListingActions } from "./owner-listing-actions"
 
 export default async function ListingDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string; id: string }>
+  searchParams?: Promise<Record<string, string | string[] | undefined>>
 }) {
   const { id } = await params
   const locale = await getLocale()
+  const resolvedSearchParams = searchParams ? await searchParams : {}
   const t = await getTranslations("marketplace-v2")
   const { user } = await getServerUser()
 
-  const { data: listing, error } = await fetchListingById(id)
+  const ownerListing = user?.id ? await fetchListingByIdForOwner(id, user.id) : null
+  const { data: publicListing, error } = await fetchListingById(id)
+  const listing = publicListing || ownerListing?.data
+  const isOwner = Boolean(ownerListing?.data && user?.id && ownerListing.data.user_id === user.id)
+  const isArchived = listing?.status === "ARCHIVED" || listing?.visibility === "PRIVATE"
+  const successMessage =
+    typeof resolvedSearchParams?.message === "string"
+      ? decodeURIComponent(resolvedSearchParams.message)
+      : undefined
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -32,7 +45,7 @@ export default async function ListingDetailPage({
     })
   }
 
-  if (error || !listing) {
+  if (!listing && error) {
     return (
       <div className="flex min-h-screen flex-col">
         <>
@@ -51,6 +64,27 @@ export default async function ListingDetailPage({
             </div>
           </main>
         </>
+      </div>
+    )
+  }
+
+  if (!listing) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <main className="flex-1 py-12">
+          <div className="container px-4 md:px-6">
+            <div className="text-center py-12">
+              <h1 className="text-2xl font-bold mb-4">{t("detail.notFoundTitle")}</h1>
+              <p className="text-gray-600 mb-6">{t("detail.notFoundDescription")}</p>
+              <Button asChild>
+                <Link href="/marketplace">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  {t("pagination.previous")}
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </main>
       </div>
     )
   }
@@ -74,6 +108,21 @@ export default async function ListingDetailPage({
                 </Link>
               </Button>
             </div>
+
+            {successMessage ? (
+              <Alert className="mb-6 border-emerald-200 bg-emerald-50 text-emerald-900">
+                <AlertTitle>{t("updateSuccess")}</AlertTitle>
+                <AlertDescription>{successMessage}</AlertDescription>
+              </Alert>
+            ) : null}
+
+            {isOwner && isArchived ? (
+              <Alert className="mb-6 border-amber-200 bg-amber-50 text-amber-900">
+                <ShieldAlert className="h-4 w-4" />
+                <AlertTitle>{t("detail.notFoundTitle")}</AlertTitle>
+                <AlertDescription>{t("detail.notFoundDescription")}</AlertDescription>
+              </Alert>
+            ) : null}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Main Content */}
@@ -158,11 +207,15 @@ export default async function ListingDetailPage({
               {/* Sidebar */}
               <div className="space-y-6">
                 {/* Contact Information */}
-                <ContactCardV2
-                  listing={listing}
-                  listingUrl={`/${locale}/marketplace/${listing.id}`}
-                />
+                <ContactCardV2 listing={listing} listingUrl={`/marketplace/${listing.id}`} />
                 <ContactListingButton listing={listing} user={user} />
+                {isOwner ? (
+                  <OwnerListingActions
+                    listingId={listing.id}
+                    locale={locale}
+                    isArchived={isArchived}
+                  />
+                ) : null}
 
                 {/* Quick Info */}
                 <Card>

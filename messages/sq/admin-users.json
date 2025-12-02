@@ -1,4 +1,46 @@
 {
+  "title": "Menaxhimi i përdoruesve",
+  "subtitle": "Menaxho përdoruesit e platformës",
+  "stats": {
+    "title": "Përmbledhje",
+    "savedListings": "Listime të ruajtura",
+    "organizations": "Organizata",
+    "myListings": "Listimet e mia",
+    "viewDetails": "Shiko detaje"
+  },
+  "quickActions": {
+    "title": "Veprime të shpejta",
+    "profile": {
+      "title": "Profili",
+      "description": "Përditëso të dhënat personale"
+    },
+    "organization": {
+      "title": "Organizata",
+      "description": "Menaxho të dhënat e organizatës"
+    },
+    "listings": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    },
+    "addListing": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    }
+  },
+  "alerts": {
+    "title": "Njoftimet",
+    "description": "Kontrollo këtu për përditësime të rëndësishme.",
+    "noNewAlerts": "Asnjë njoftim i ri"
+  },
+  "myListingsPage": {
+    "title": "Listimet e mia",
+    "createNew": "Krijo listim të ri",
+    "empty": {
+      "title": "Nuk keni krijuar ende asnjë listim.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "cta": "Krijo Listim"
+    }
+  },
   "users": {
     "title": "Përdoruesit",
     "subtitle": "Menaxho përdoruesit e platformës",
@@ -7,8 +49,15 @@
       "placeholder": "Kërko përdorues..."
     },
     "filters": {
+      "role": "Roli",
       "roleAll": "Të gjitha rolet",
-      "statusAll": "Të gjitha statuset"
+      "roleAdmin": "Admin",
+      "roleUser": "Përdorues",
+      "roleModerator": "Moderator",
+      "status": "Statusi",
+      "statusAll": "Të gjitha statuset",
+      "statusApproved": "Aprovuar",
+      "statusPending": "Në pritje"
     },
     "table": {
       "headers": {
@@ -17,9 +66,42 @@
         "location": "Vendndodhja",
         "role": "Roli",
         "status": "Statusi",
-        "joined": "Regjistruar",
+        "created": "Krijuar",
         "actions": "Veprime"
-      }
+      },
+      "empty": "Nuk u gjetën përdorues"
+    },
+    "roles": {
+      "admin": "Admin",
+      "user": "Përdorues",
+      "moderator": "Moderator"
+    },
+    "status": {
+      "approved": "Aprovuar",
+      "pending": "Në pritje"
+    },
+    "actions": {
+      "openMenu": "Hap menunë",
+      "edit": "Ndrysho përdoruesin",
+      "delete": "Fshij përdoruesin"
+    },
+    "empty": {
+      "noUsers": {
+        "title": "Ende nuk ka përdorues",
+        "description": "Përdoruesit do të shfaqen sapo të regjistrohen në platformë."
+      },
+      "filtered": {
+        "title": "Asnjë përdorues nuk përputhet me filtrat",
+        "description": "Provo të ndryshosh kërkimin ose filtrat."
+      },
+      "clearFilters": "Pastro filtrat"
+    },
+    "error": {
+      "title": "Dështoi ngarkimi i përdoruesve",
+      "retry": "Provo përsëri"
     }
+  },
+  "error": {
+    "generic": "Diçka shkoi keq gjatë ngarkimit të përdoruesve."
   }
 }

@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import { useLocale, useTranslations } from 'next-intl'
-import { useRouter, usePathname } from 'next/navigation'
-import type { Locale } from '@/lib/locales'
-import { locales } from '@/lib/locales'
+import { useLocale, useTranslations } from "next-intl"
+import { useRouter, usePathname } from "@/i18n/routing"
+import type { Locale } from "@/lib/locales"
+import { locales } from "@/lib/locales"
 
 export function LanguageSwitcher() {
   const locale = useLocale()
@@ -12,11 +12,7 @@ export function LanguageSwitcher() {
   const t = useTranslations()
 
   const handleLocaleChange = (newLocale: Locale) => {
-    // Replace the locale prefix in the pathname
-    const segments = pathname.split('/')
-    segments[1] = newLocale
-    const newPathname = segments.join('/')
-    router.push(newPathname)
+    router.replace(pathname, { locale: newLocale })
   }
 
   return (
@@ -27,10 +23,10 @@ export function LanguageSwitcher() {
           onClick={() => handleLocaleChange(loc)}
           className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
             locale === loc
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-muted text-muted-foreground hover:bg-muted-foreground/10'
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted text-muted-foreground hover:bg-muted-foreground/10"
           }`}
-          aria-current={locale === loc ? 'page' : undefined}
+          aria-current={locale === loc ? "page" : undefined}
         >
           {loc.toUpperCase()}
         </button>

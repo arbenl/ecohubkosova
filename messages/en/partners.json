@@ -1,4 +1,6 @@
 {
+  "title": "EcoHub partners",
+  "subtitle": "Discover organizations collaborating for a circular Kosovo.",
   "page": {
     "title": "EcoHub Partners & Ecosystem",
     "subtitle": "Businesses, recyclers, NGOs and institutions working together for a circular Kosovo."
@@ -95,5 +97,54 @@
     "title": "Bring your organization into EcoHub",
     "body": "Join the verified network of recyclers, service providers, NGOs, and institutions driving the circular economy.",
     "button": "Start partner onboarding"
+  },
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
+  },
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "cities": "cities",
+    "roles": "roles",
+    "myListings": "My listings",
+    "viewDetails": "View details"
   }
 }

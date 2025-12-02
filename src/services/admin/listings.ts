@@ -31,7 +31,9 @@ type AdminListingRow = {
 }
 
 const toError = (error: unknown) =>
-  error instanceof Error ? error : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
+  error instanceof Error
+    ? error
+    : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
 
 const warnIfV2FlagDisabled = () => {
   if (!isMarketplaceV2WritesEnabled()) {
@@ -41,7 +43,8 @@ const warnIfV2FlagDisabled = () => {
   }
 }
 
-const mapFlowType = (listingType: string) => (listingType === "shes" ? "OFFER_MATERIAL" : "REQUEST_MATERIAL")
+const mapFlowType = (listingType: string) =>
+  listingType === "shes" ? "OFFER_MATERIAL" : "REQUEST_MATERIAL"
 
 const mapListingType = (flowType?: string | null) =>
   flowType && flowType.toString().startsWith("OFFER") ? "shes" : "blej"
@@ -78,11 +81,15 @@ const resolveCategoryId = async (categoryInput: string | null | undefined) => {
 
 const formatAdminListing = (row: AdminListingRow): AdminListing => {
   const quantityValue =
-    row.listing.quantity !== null && row.listing.quantity !== undefined ? row.listing.quantity.toString() : ""
+    row.listing.quantity !== null && row.listing.quantity !== undefined
+      ? row.listing.quantity.toString()
+      : ""
   const priceValue =
     row.listing.price !== null && row.listing.price !== undefined ? Number(row.listing.price) : 0
   const listingType = mapListingType(row.listing.flow_type)
-  const locationParts = [row.listing.city, row.listing.region, row.listing.location_details].filter(Boolean)
+  const locationParts = [row.listing.city, row.listing.region, row.listing.location_details].filter(
+    Boolean
+  )
 
   return {
     id: row.listing.id,
@@ -143,6 +150,54 @@ export async function deleteListingRecord(listingId: string) {
     return { error: null }
   } catch (error) {
     console.error("[services/admin/listings] Failed to delete listing:", error)
+    return { error: toError(error) }
+  }
+}
+
+export async function fetchPendingAdminListings(limit = 5) {
+  try {
+    const rows = await db
+      .get()
+      .select({
+        listing: ecoListings,
+        category_name_sq: ecoCategories.name_sq,
+        category_name_en: ecoCategories.name_en,
+      })
+      .from(ecoListings)
+      .leftJoin(ecoCategories, eq(ecoListings.category_id, ecoCategories.id))
+      .where(inArray(ecoListings.status, ["DRAFT", "ARCHIVED"] as any[]))
+      .orderBy(desc(ecoListings.updated_at ?? ecoListings.created_at))
+      .limit(limit)
+
+    return { data: rows.map(formatAdminListing), error: null }
+  } catch (error) {
+    console.error("[services/admin/listings] Failed to fetch pending listings:", error)
+    return { data: null, error: toError(error) }
+  }
+}
+
+export async function approveListingRecord(listingId: string) {
+  try {
+    await db
+      .get()
+      .update(ecoListings)
+      .set({ status: "ACTIVE", visibility: "PUBLIC", updated_at: new Date() })
+      .where(eq(ecoListings.id, listingId))
+    return { error: null }
+  } catch (error) {
+    return { error: toError(error) }
+  }
+}
+
+export async function rejectListingRecord(listingId: string) {
+  try {
+    await db
+      .get()
+      .update(ecoListings)
+      .set({ status: "REJECTED" as any, visibility: "PRIVATE", updated_at: new Date() })
+      .where(eq(ecoListings.id, listingId))
+    return { error: null }
+  } catch (error) {
     return { error: toError(error) }
   }
 }

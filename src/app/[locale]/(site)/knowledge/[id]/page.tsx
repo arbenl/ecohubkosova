@@ -1,5 +1,5 @@
 import { getLocale } from "next-intl/server"
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 
 interface ArticleDetailPageProps {
   params: Promise<{
@@ -10,7 +10,7 @@ interface ArticleDetailPageProps {
 export default async function ArticleDetailPage({ params }: ArticleDetailPageProps) {
   const locale = await getLocale()
   const resolvedParams = await params
-  
+
   // Redirect to the correct articles route
-  redirect(`/${locale}/knowledge/articles/${resolvedParams.id}`)
+  redirect({ href: `/knowledge/articles/${resolvedParams.id}`, locale })
 }

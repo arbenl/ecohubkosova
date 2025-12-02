@@ -2,7 +2,7 @@ const DEFAULT_IMAGE_DOMAINS = ["images.unsplash.com", "placehold.co"]
 
 import createNextIntlPlugin from 'next-intl/plugin'
 
-const withNextIntl = createNextIntlPlugin('./src/lib/i18n.ts')
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const parseCsvList = (value) =>
   value
@@ -133,6 +133,20 @@ const nextConfig = {
   },
   typescript: {
     ignoreBuildErrors: true,
+  },
+  async redirects() {
+    return [
+      {
+        source: "/qendra-e-dijes",
+        destination: "/knowledge",
+        permanent: true,
+      },
+      {
+        source: "/:locale/qendra-e-dijes",
+        destination: "/:locale/knowledge",
+        permanent: true,
+      },
+    ]
   },
 }
 

@@ -1,13 +1,16 @@
-"use client"
-
 import { Link } from "@/i18n/routing"
-import { useLocale, useTranslations } from "next-intl"
+import { getLocale, getTranslations } from "next-intl/server"
 import { Facebook, Instagram, Linkedin } from "lucide-react"
 
-export function FooterV2() {
-  const localeFromHook = useLocale()
-  const locale = localeFromHook || "sq" // Fallback to Albanian if locale is undefined
-  const t = useTranslations("footer")
+type FooterV2Props = {
+  locale?: string
+}
+
+export async function FooterV2({ locale }: FooterV2Props = {}) {
+  // Prefer an explicitly provided locale (from the layout params) to avoid
+  // falling back to the default locale if the request context is missing.
+  const resolvedLocale = locale ?? (await getLocale())
+  const t = await getTranslations({ locale: resolvedLocale, namespace: "footer" })
   const year = new Date().getFullYear()
 
   const aboutLinks = [{ key: "linkHowItWorks", href: "how-it-works" }]
@@ -53,7 +56,10 @@ export function FooterV2() {
               <ul className="space-y-2 text-sm text-slate-700">
                 {aboutLinks.map((link) => (
                   <li key={link.key}>
-                    <Link href={`/${link.href}`} className="transition hover:text-emerald-700">
+                    <Link
+                      href={link.href.startsWith("/") ? link.href : `/${link.href}`}
+                      className="transition hover:text-emerald-700"
+                    >
                       {t(link.key)}
                     </Link>
                   </li>
@@ -66,7 +72,10 @@ export function FooterV2() {
               <ul className="space-y-2 text-sm text-slate-700">
                 {exploreLinks.map((link) => (
                   <li key={link.key}>
-                    <Link href={`/${link.href}`} className="transition hover:text-emerald-700">
+                    <Link
+                      href={link.href.startsWith("/") ? link.href : `/${link.href}`}
+                      className="transition hover:text-emerald-700"
+                    >
                       {t(link.key)}
                     </Link>
                   </li>
@@ -79,7 +88,10 @@ export function FooterV2() {
               <ul className="space-y-2 text-sm text-slate-700">
                 {helpLinks.map((link) => (
                   <li key={link.key}>
-                    <Link href={`/${link.href}`} className="transition hover:text-emerald-700">
+                    <Link
+                      href={link.href.startsWith("/") ? link.href : `/${link.href}`}
+                      className="transition hover:text-emerald-700"
+                    >
                       {t(link.key)}
                     </Link>
                   </li>

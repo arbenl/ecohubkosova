@@ -1,5 +1,6 @@
 {
   "title": "Dashboard",
+  "subtitle": "Your EcoHub overview",
   "myListings": "My Listings",
   "myOrders": "My Orders",
   "myProfile": "My Profile",
@@ -27,5 +28,64 @@
   "knowledgeCenter": "Knowledge Center",
   "knowledgeCenterDesc": "Read latest articles",
   "updateProfile": "Update profile",
-  "updateProfileDesc": "Adjust your information"
+  "updateProfileDesc": "Adjust your information",
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActionsBlock": {
+    "title": "Quick Actions",
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
+  }
 }

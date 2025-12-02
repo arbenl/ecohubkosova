@@ -1,4 +1,6 @@
 {
+  "title": "Partnerët e EcoHub",
+  "subtitle": "Zbuloni organizatat që bashkëpunojnë për një Kosovë rrethore.",
   "page": {
     "title": "Partnerët & Ekosistemi i EcoHub",
     "subtitle": "Biznese, riciklues, OJQ dhe institucione që punojnë së bashku për një Kosovë rrethore."
@@ -95,5 +97,54 @@
     "title": "Sillni organizatën tuaj në EcoHub",
     "body": "Bëhuni pjesë e rrjetit të verifikuar të ricikluesve, ofruesve të shërbimeve, OJQ-ve dhe institucioneve që shtyjnë përpara ekonominë qarkulluese.",
     "button": "Fillo regjistrimin si partner"
+  },
+  "stats": {
+    "title": "Përmbledhje",
+    "savedListings": "Listime të ruajtura",
+    "organizations": "Organizata",
+    "myListings": "Listimet e mia",
+    "viewDetails": "Shiko detaje"
+  },
+  "quickActions": {
+    "title": "Veprime të shpejta",
+    "profile": {
+      "title": "Profili",
+      "description": "Përditëso të dhënat personale"
+    },
+    "organization": {
+      "title": "Organizata",
+      "description": "Menaxho të dhënat e organizatës"
+    },
+    "listings": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    },
+    "addListing": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    }
+  },
+  "alerts": {
+    "title": "Njoftimet",
+    "description": "Kontrollo këtu për përditësime të rëndësishme.",
+    "noNewAlerts": "Asnjë njoftim i ri"
+  },
+  "myListingsPage": {
+    "title": "Listimet e mia",
+    "createNew": "Krijo listim të ri",
+    "empty": {
+      "title": "Nuk keni krijuar ende asnjë listim.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "cta": "Krijo Listim"
+    }
+  },
+  "stats": {
+    "title": "Përmbledhje",
+    "savedListings": "Listime të ruajtura",
+    "organizations": "Organizata",
+    "cities": "qytete",
+    "roles": "role",
+    "myListings": "Listimet e mia",
+    "viewDetails": "Shiko detaje"
   }
 }

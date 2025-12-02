@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import fs from "fs";
 import path from "path";
-import glob from "glob";
+import { sync as globSync } from "glob";
 
 const pattern = "src/**/*.{ts,tsx,js,jsx}";
-const files = glob.sync(pattern, { absolute: true });
+const files = globSync(pattern, { absolute: true });
 
 for (const file of files) {
     let code = fs.readFileSync(file, "utf8");

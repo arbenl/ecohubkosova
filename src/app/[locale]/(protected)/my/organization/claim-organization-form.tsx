@@ -2,7 +2,7 @@
 
 import { useTransition, useState } from "react"
 import { useTranslations } from "next-intl"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { ArrowLeft, Search } from "lucide-react"
 import { claimOrganizationAction, searchOrganizationsAction } from "./actions"
 import type { Organization } from "@/types"
@@ -57,7 +57,7 @@ export default function ClaimOrganizationForm({
         setClaimingOrgId(null)
       } else if (result.success) {
         router.refresh()
-        router.push(`/${locale}/my/organization`)
+        router.push("/my/organization")
       }
     })
   }
@@ -101,9 +101,7 @@ export default function ClaimOrganizationForm({
       {/* Results */}
       <div className="space-y-4">
         {organizations.length === 0 && searchTerm && !isSearching && (
-          <div className="rounded-lg bg-yellow-50 p-4 text-yellow-700">
-            {t("claim.noResults")}
-          </div>
+          <div className="rounded-lg bg-yellow-50 p-4 text-yellow-700">{t("claim.noResults")}</div>
         )}
 
         {organizations.map((org) => (

@@ -1,18 +1,73 @@
 {
-  "tagline": "EcoHub Kosova është tregu digjital dhe rrjeti i partnerëve të gjelbër që lidh biznese, riciklues e OJQ për zgjidhje konkrete të ekonomisë qarkulluese.",
+  "description": "EcoHub Kosova është tregu digjital dhe rrjeti i partnerëve të gjelbër që lidh biznese, riciklues e OJQ për zgjidhje konkrete të ekonomisë qarkulluese.",
+  "links": "Lidhje",
+  "support": "Mbështetje",
+  "marketplace": "Tregu",
+  "organizations": "Organizata",
+  "partners": "Partnerët",
+  "workspace": "Organizata Ime",
+  "contact": "Kontakti",
+  "faq": "Pyetje të shpeshta",
+  "help": "Ndihmë",
+  "terms": "Kushtet e përdorimit",
+  "copyright": "Të gjitha të drejtat e rezervuara.",
+  "supportedBy": "Mbështetur nga REC Kosova dhe partnerët",
+  "tagline": "EcoHub Kosova është tregu digjital dhe rrjeti i partnerëve të gjelbër që lidh biznese, riciklues dhe OJQ për zgjidhje konkrete të ekonomisë qarkulluese.",
   "columnAboutTitle": "Rreth EcoHub",
+  "linkHowItWorks": "Si funksionon",
   "columnExploreTitle": "Eksploro",
-  "columnHelpTitle": "Ndihma & kontakte",
-  "columnSocialTitle": "Na ndiqni",
   "linkMarketplace": "Tregu i qarkullueshëm",
   "linkPartners": "Partnerët & ekosistemi",
   "linkEcoOrganizations": "Ricikluesit & shërbimet",
-  "linkHowItWorks": "Si funksionon",
+  "columnHelpTitle": "Ndihmë & kontakte",
   "linkFAQ": "Pyetje të shpeshta",
   "linkContact": "Kontakti",
   "linkSupport": "Mbështetja",
+  "columnSocialTitle": "Na ndiqni",
   "socialFacebook": "Facebook",
   "socialInstagram": "Instagram",
   "socialLinkedIn": "LinkedIn",
-  "legalCopyright": "© {year} EcoHub Kosova. Të gjitha të drejtat e rezervuara."
+  "legalCopyright": "© {year} EcoHub Kosova. Të gjitha të drejtat e rezervuara.",
+  "title": "Navigimi në fundfaqe",
+  "subtitle": "Lidhjet kryesore të EcoHub dhe mbështetja",
+  "stats": {
+    "title": "Përmbledhje",
+    "savedListings": "Listime të ruajtura",
+    "organizations": "Organizata",
+    "myListings": "Listimet e mia",
+    "viewDetails": "Shiko detaje"
+  },
+  "quickActions": {
+    "title": "Veprime të shpejta",
+    "profile": {
+      "title": "Profili",
+      "description": "Përditëso të dhënat personale"
+    },
+    "organization": {
+      "title": "Organizata",
+      "description": "Menaxho të dhënat e organizatës"
+    },
+    "listings": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    },
+    "addListing": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    }
+  },
+  "alerts": {
+    "title": "Njoftimet",
+    "description": "Kontrollo këtu për përditësime të rëndësishme.",
+    "noNewAlerts": "Asnjë njoftim i ri"
+  },
+  "myListingsPage": {
+    "title": "Listimet e mia",
+    "createNew": "Krijo listim të ri",
+    "empty": {
+      "title": "Nuk keni krijuar ende asnjë listim.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "cta": "Krijo Listim"
+    }
+  }
 }

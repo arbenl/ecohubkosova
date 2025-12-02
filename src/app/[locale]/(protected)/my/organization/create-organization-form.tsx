@@ -2,7 +2,7 @@
 
 import { useTransition } from "react"
 import { useTranslations } from "next-intl"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeft } from "lucide-react"
@@ -41,7 +41,7 @@ export default function CreateOrganizationForm({
         alert(result.error)
       } else if (result.success) {
         router.refresh()
-        router.push(`/${locale}/my/organization`)
+        router.push("/my/organization")
       }
     })
   }
@@ -61,7 +61,10 @@ export default function CreateOrganizationForm({
         <p className="mt-2 text-gray-600">{t("create.subtitle")}</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 rounded-lg border border-gray-200 bg-white p-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-6 rounded-lg border border-gray-200 bg-white p-6"
+      >
         {/* Name */}
         <div>
           <label className="block text-sm font-medium text-gray-700">{t("create.form.name")}</label>
@@ -71,12 +74,16 @@ export default function CreateOrganizationForm({
             placeholder={t("create.form.namePlaceholder")}
             className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 placeholder-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
           />
-          {errors.name && <p className="mt-1 text-sm text-red-500">{String(errors.name.message)}</p>}
+          {errors.name && (
+            <p className="mt-1 text-sm text-red-500">{String(errors.name.message)}</p>
+          )}
         </div>
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">{t("create.form.description")}</label>
+          <label className="block text-sm font-medium text-gray-700">
+            {t("create.form.description")}
+          </label>
           <textarea
             {...register("description")}
             placeholder={t("create.form.descriptionPlaceholder")}
@@ -100,7 +107,9 @@ export default function CreateOrganizationForm({
             <option value="Ndërmarrje Sociale">{t("create.form.typeCompany")}</option>
             <option value="Kompani">{t("create.form.typeEnterprise")}</option>
           </select>
-          {errors.type && <p className="mt-1 text-sm text-red-500">{String(errors.type.message)}</p>}
+          {errors.type && (
+            <p className="mt-1 text-sm text-red-500">{String(errors.type.message)}</p>
+          )}
         </div>
 
         {/* Primary Interest */}
@@ -153,14 +162,18 @@ export default function CreateOrganizationForm({
 
         {/* Location */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">{t("create.form.location")}</label>
+          <label className="block text-sm font-medium text-gray-700">
+            {t("create.form.location")}
+          </label>
           <input
             {...register("location")}
             type="text"
             placeholder={t("create.form.locationPlaceholder")}
             className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 placeholder-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
           />
-          {errors.location && <p className="mt-1 text-sm text-red-500">{String(errors.location.message)}</p>}
+          {errors.location && (
+            <p className="mt-1 text-sm text-red-500">{String(errors.location.message)}</p>
+          )}
         </div>
 
         {/* Buttons */}

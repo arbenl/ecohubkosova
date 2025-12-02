@@ -2,8 +2,8 @@
 
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
-import { getTranslations } from "next-intl/server"
+import { redirect } from "@/i18n/routing"
+import { getTranslations, getLocale } from "next-intl/server"
 import {
   ensureUserOrganizationMembership,
   fetchCurrentUserProfile,
@@ -30,6 +30,7 @@ export async function getProfileData(): Promise<ProfileResult> {
 export type UserProfileUpdate = UserProfileUpdateInput
 
 export async function updateUserProfile(formData: UserProfileUpdateInput) {
+  const locale = await getLocale()
   const t = await getTranslations("profile")
   const tCommon = await getTranslations("common")
   const supabase = await createServerSupabaseClient()
@@ -39,7 +40,11 @@ export async function updateUserProfile(formData: UserProfileUpdateInput) {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect(`/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+    redirect({
+      href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`,
+      locale,
+    })
+    return { error: "Unauthorized" }
   }
 
   const parsed = userProfileUpdateSchema.safeParse(formData)
@@ -69,6 +74,7 @@ export async function updateOrganizationProfile(
   organizationId: string,
   formData: OrganizationProfileUpdateInput
 ) {
+  const locale = await getLocale()
   const t = await getTranslations("profile")
   const tCommon = await getTranslations("common")
   const supabase = await createServerSupabaseClient()
@@ -78,7 +84,11 @@ export async function updateOrganizationProfile(
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect(`/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+    redirect({
+      href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`,
+      locale,
+    })
+    return { error: "Unauthorized" }
   }
 
   const parsed = organizationProfileUpdateSchema.safeParse(formData)

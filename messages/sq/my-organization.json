@@ -1,4 +1,6 @@
 {
+  "title": "Hapësira e organizatës",
+  "subtitle": "Menaxho profilin, listimet dhe ekipin e organizatës",
   "workspace": {
     "title": "Organizata Ime",
     "subtitle": "Menaxho profilin e organizatës dhe ofertat",
@@ -15,6 +17,7 @@
       "memberRoleEditor": "Redaktor",
       "memberRoleViewer": "Vëzhgues",
       "memberRole": "Roli juaj",
+      "statusApproved": "E aprovuar",
       "statusPending": "Në pritje të aprovimit",
       "verification": {
         "verified": "E verifikuar",
@@ -37,6 +40,9 @@
         "title": "Titulli",
         "status": "Statusi",
         "location": "Vendndodhja"
+      },
+      "table": {
+        "actions": "Veprimet"
       },
       "actions": {
         "view": "Shiko",
@@ -68,7 +74,7 @@
   },
   "create": {
     "title": "Krijoni profilin e organizatës suaj",
-    "subtitle": "Shtoni të dhënat bazë në mënyrë që të tjerët t’ju gjejnë dhe kontaktojnë përmes EcoHub.",
+    "subtitle": "Shtoni të dhënat bazë në mënyrë që të tjerët t'ju gjejnë dhe kontaktojnë përmes EcoHub.",
     "form": {
       "name": "Emri i organizatës",
       "namePlaceholder": "p.sh. REC-KOS Sh.p.k.",
@@ -137,6 +143,46 @@
     },
     "confirmations": {
       "removeDescription": "Jeni i sigurt që dëshironi të hiqni {name} nga kjo organizatë?"
+    }
+  },
+  "stats": {
+    "title": "Përmbledhje",
+    "savedListings": "Listime të ruajtura",
+    "organizations": "Organizata",
+    "myListings": "Listimet e mia",
+    "viewDetails": "Shiko detaje"
+  },
+  "quickActions": {
+    "title": "Veprime të shpejta",
+    "profile": {
+      "title": "Profili",
+      "description": "Përditëso të dhënat personale"
+    },
+    "organization": {
+      "title": "Organizata",
+      "description": "Menaxho të dhënat e organizatës"
+    },
+    "listings": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    },
+    "addListing": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    }
+  },
+  "alerts": {
+    "title": "Njoftimet",
+    "description": "Kontrollo këtu për përditësime të rëndësishme.",
+    "noNewAlerts": "Asnjë njoftim i ri"
+  },
+  "myListingsPage": {
+    "title": "Listimet e mia",
+    "createNew": "Krijo listim të ri",
+    "empty": {
+      "title": "Nuk keni krijuar ende asnjë listim.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "cta": "Krijo Listim"
     }
   }
 }

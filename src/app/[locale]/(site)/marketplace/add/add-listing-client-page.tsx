@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { useLocale } from "next-intl"
 import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
@@ -113,7 +113,7 @@ export default function AddListingClientPage({ cities }: AddListingClientPagePro
 
       // Redirect after 3 seconds
       setTimeout(() => {
-        router.push(`/${locale}/marketplace`)
+        router.push(`/marketplace`)
       }, 3000)
     }
     setLoading(false)

@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useMemo, useState, useTransition, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "@/i18n/routing"
 import type { Listing } from "@/types"
 
 type SortOrder = "newest" | "oldest"
@@ -21,29 +21,27 @@ interface UseMarketplaceFiltersArgs {
   listings: Listing[]
 }
 
-export function useMarketplaceFilters({
-  initialFilters,
-  listings,
-}: UseMarketplaceFiltersArgs) {
+export function useMarketplaceFilters({ initialFilters, listings }: UseMarketplaceFiltersArgs) {
   const router = useRouter()
+  const pathname = usePathname()
   const [filters, setFilters] = useState<MarketplaceFilters>(initialFilters)
   const [isPending, startTransition] = useTransition()
 
-  const updateFilter = useCallback(<K extends keyof MarketplaceFilters>(
-    key: K,
-    value: MarketplaceFilters[K]
-  ) => {
-    setFilters(prev => {
-      const newFilters = { ...prev, [key]: value }
+  const updateFilter = useCallback(
+    <K extends keyof MarketplaceFilters>(key: K, value: MarketplaceFilters[K]) => {
+      setFilters((prev) => {
+        const newFilters = { ...prev, [key]: value }
 
-      // Reset page when changing filters (except page itself)
-      if (key !== "page") {
-        newFilters.page = 1
-      }
+        // Reset page when changing filters (except page itself)
+        if (key !== "page") {
+          newFilters.page = 1
+        }
 
-      return newFilters
-    })
-  }, [])
+        return newFilters
+      })
+    },
+    []
+  )
 
   // Handle navigation when filters change
   useEffect(() => {
@@ -78,9 +76,9 @@ export function useMarketplaceFilters({
     }
 
     startTransition(() => {
-      router.push(params.toString() ? `?${params.toString()}` : "?")
+      router.push(`${pathname}?${params.toString()}`)
     })
-  }, [filters, router])
+  }, [filters, router, pathname])
 
   const conditionOptions = useMemo(() => {
     const values = new Set<string>()

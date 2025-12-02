@@ -81,7 +81,7 @@ export function ListingCardV2({ listing, locale }: ListingCardV2Props) {
       className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 rounded-lg"
       aria-label={listing.title}
     >
-      <Card className="group h-full overflow-hidden transition-all hover:shadow-lg hover:border-green-300 border-2">
+      <Card className="group h-full overflow-hidden transition-all hover:shadow-lg hover:border-green-300 border-2 card-lift">
         <CardHeader className="pb-3">
           {/* Flow Type Badge */}
           <div className="flex items-center gap-2 mb-2">

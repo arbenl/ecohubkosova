@@ -22,7 +22,9 @@ export interface AdminArticle {
 }
 
 const toError = (error: unknown) =>
-  error instanceof Error ? error : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
+  error instanceof Error
+    ? error
+    : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
 
 const serializeArticle = (article: AdminArticleRow): AdminArticle => ({
   ...article,
@@ -88,6 +90,49 @@ export async function updateArticleRecord(articleId: string, data: AdminArticleU
     return { error: null }
   } catch (error) {
     console.error("[services/admin/articles] Failed to update article:", error)
+    return { error: toError(error) }
+  }
+}
+
+export async function fetchPendingArticles(limit = 5) {
+  try {
+    const rows = await db
+      .get()
+      .select()
+      .from(articles)
+      .where(eq(articles.is_published, false))
+      .orderBy(articles.created_at)
+      .limit(limit)
+
+    return { data: rows.map(serializeArticle), error: null }
+  } catch (error) {
+    console.error("[services/admin/articles] Failed to fetch pending articles:", error)
+    return { data: null, error: toError(error) }
+  }
+}
+
+export async function approveArticleRecord(articleId: string) {
+  try {
+    await db
+      .get()
+      .update(articles)
+      .set({ is_published: true, updated_at: new Date() })
+      .where(eq(articles.id, articleId))
+    return { error: null }
+  } catch (error) {
+    return { error: toError(error) }
+  }
+}
+
+export async function rejectArticleRecord(articleId: string) {
+  try {
+    await db
+      .get()
+      .update(articles)
+      .set({ is_published: false, updated_at: new Date() })
+      .where(eq(articles.id, articleId))
+    return { error: null }
+  } catch (error) {
     return { error: toError(error) }
   }
 }

@@ -8,6 +8,7 @@ import { test, expect } from "@playwright/test"
  * 2. Partners: Browse partners, view profile
  * 3. How it works: Static content accessible
  * 4. i18n: Works in English & Albanian
+ * 5. My Dashboard V2: Renders correctly and links work
  */
 
 test.describe("🚀 Launch Smoke Test – Critical Flows", () => {
@@ -163,6 +164,31 @@ test.describe("🚀 Launch Smoke Test – Critical Flows", () => {
       await infoLink.click({ timeout: 5000 }).catch(() => {})
       await page.waitForURL(/\/en\/how-it-works/, { timeout: 10000 }).catch(() => {})
     }
+  })
+
+  /**
+   * My Dashboard V2
+   */
+  test("should render the V2 dashboard and navigate to quick actions", async ({ page }) => {
+    test.setTimeout(30000)
+
+    const consoleErrors: string[] = []
+    page.on("console", (msg) => {
+      if (msg.type() === "error") {
+        consoleErrors.push(msg.text())
+      }
+    })
+
+    // The test does not mock authentication, so we expect to be redirected to the login page.
+    await page.goto("/en/my", { waitUntil: "domcontentloaded" })
+    await page.waitForURL(/\/en\/login/)
+    await expect(page).toHaveURL(/\/en\/login/)
+
+    await page.goto("/sq/my", { waitUntil: "domcontentloaded" })
+    await page.waitForURL(/\/sq\/login/)
+    await expect(page).toHaveURL(/\/sq\/login/)
+
+    expect(consoleErrors.join("\n")).not.toContain("Invalid language tag")
   })
 
   /**

@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react"
 import { Link } from "@/i18n/routing"
-import { useRouter, usePathname, useSearchParams } from "next/navigation"
+import { useRouter, usePathname } from "@/i18n/routing"
+import { useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
 import clsx from "clsx"
 import type { Partner } from "@/services/partners"
@@ -95,10 +96,10 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
     setSelectedCity(city)
   }
 
-  const CTA_TARGET_FALLBACK = `/${locale}/dashboard`
+  const CTA_TARGET_FALLBACK = "/dashboard"
   const ctaHref = user?.id
     ? CTA_TARGET_FALLBACK
-    : `/${locale}/login?next=${encodeURIComponent(CTA_TARGET_FALLBACK)}`
+    : `/login?next=${encodeURIComponent(CTA_TARGET_FALLBACK)}`
 
   const stats = useMemo(() => {
     const totalOrgs = partners.length

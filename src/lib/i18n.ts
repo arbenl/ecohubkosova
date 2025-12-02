@@ -1,7 +1,10 @@
 import { getRequestConfig } from "next-intl/server"
 
-export default getRequestConfig(async ({ locale }) => {
-  // Validate and default to 'sq' if locale is invalid
+export default getRequestConfig(async ({ requestLocale }) => {
+  // Await and validate locale
+  const locale = await requestLocale
+
+  // Default to 'sq' if locale is invalid or undefined
   const validLocale = locale && ["sq", "en"].includes(locale) ? locale : "sq"
 
   // Load all translation files individually
@@ -9,7 +12,7 @@ export default getRequestConfig(async ({ locale }) => {
   const [
     navigation,
     cta,
-    explore,
+
     about,
     contact,
     footer,
@@ -34,10 +37,14 @@ export default getRequestConfig(async ({ locale }) => {
     howItWorks,
     myOrganizationProfile,
     adminUsers,
+    DashboardV2,
+    myProfile,
+    faq,
+    adminProfile,
   ] = await Promise.all([
     import(`../../messages/${validLocale}/navigation.json`),
     import(`../../messages/${validLocale}/cta.json`),
-    import(`../../messages/${validLocale}/explore.json`),
+
     import(`../../messages/${validLocale}/about.json`),
     import(`../../messages/${validLocale}/contact.json`),
     import(`../../messages/${validLocale}/footer.json`),
@@ -62,6 +69,10 @@ export default getRequestConfig(async ({ locale }) => {
     import(`../../messages/${validLocale}/how-it-works.json`),
     import(`../../messages/${validLocale}/my-organization-profile.json`),
     import(`../../messages/${validLocale}/admin-users.json`),
+    import(`../../messages/${validLocale}/DashboardV2.json`),
+    import(`../../messages/${validLocale}/my-profile.json`),
+    import(`../../messages/${validLocale}/faq.json`),
+    import(`../../messages/${validLocale}/admin-profile.json`),
   ])
 
   return {
@@ -69,7 +80,7 @@ export default getRequestConfig(async ({ locale }) => {
     messages: {
       navigation: navigation.default,
       cta: cta.default,
-      explore: explore.default,
+
       about: about.default,
       contact: contact.default,
       footer: footer.default,
@@ -94,6 +105,10 @@ export default getRequestConfig(async ({ locale }) => {
       "how-it-works": howItWorks.default,
       "my-organization-profile": myOrganizationProfile.default,
       "admin-users": adminUsers.default,
+      DashboardV2: DashboardV2.default,
+      "my-profile": myProfile.default,
+      faq: faq.default,
+      "admin-profile": adminProfile.default,
     },
   }
 })

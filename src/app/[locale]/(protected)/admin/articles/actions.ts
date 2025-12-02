@@ -38,13 +38,15 @@ export async function getArticles(): Promise<GetArticlesResult> {
     console.error("Server Action Error (getArticles):", error)
     return {
       data: null,
-      error: error instanceof Error ? error.message : "Gabim i panjohur gjatë marrjes së artikujve.",
+      error:
+        error instanceof Error ? error.message : "Gabim i panjohur gjatë marrjes së artikujve.",
     }
   }
 }
 
 export async function createArticle(formData: ArticleCreateData) {
   const { user } = await requireAdminRole()
+  if (!user) return { error: "Unauthorized" }
 
   const parsed = adminArticleCreateSchema.safeParse(formData)
   if (!parsed.success) {

@@ -107,7 +107,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                     className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 hover:shadow-xl hover:shadow-blue-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href="/explore">
+                    <Link href="/marketplace">
                       <UserPlus className="mr-2 h-4 w-4" />
                       {t("howItWorks.step1Cta")}
                     </Link>

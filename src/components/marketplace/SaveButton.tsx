@@ -5,7 +5,7 @@ import { Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTranslations } from "next-intl"
 import { useAuth } from "@/lib/auth-provider"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { useLocale } from "next-intl"
 
 interface SaveButtonProps {
@@ -55,7 +55,7 @@ export default function SaveButton({
     e.stopPropagation()
 
     if (!user?.id) {
-      router.push(`/${locale}/login?message=Please login to save listings`)
+      router.push(`/login?message=Please login to save listings`)
       return
     }
 
@@ -94,11 +94,7 @@ export default function SaveButton({
         disabled={isLoading_save}
         title={isSaved ? t("actions.unsave") : t("actions.save")}
       >
-        <Heart
-          className={`h-5 w-5 ${
-            isSaved ? "fill-red-500 text-red-500" : "text-gray-400"
-          }`}
-        />
+        <Heart className={`h-5 w-5 ${isSaved ? "fill-red-500 text-red-500" : "text-gray-400"}`} />
       </Button>
     )
   }
@@ -111,9 +107,7 @@ export default function SaveButton({
       onClick={handleToggleSave}
       disabled={isLoading_save}
     >
-      <Heart
-        className={`mr-2 h-4 w-4 ${isSaved ? "fill-current" : ""}`}
-      />
+      <Heart className={`mr-2 h-4 w-4 ${isSaved ? "fill-current" : ""}`} />
       {isSaved ? t("actions.saved") : t("actions.save")}
     </Button>
   )

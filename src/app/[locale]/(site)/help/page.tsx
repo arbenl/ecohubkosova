@@ -137,7 +137,7 @@ export default async function NdihmePage() {
                     <li>• Kontaktoni partnerët</li>
                   </ul>
                   <Button asChild className="w-full mt-4" size="sm" variant="outline">
-                    <Link href="/explore">Eksploro tani</Link>
+                    <Link href="/marketplace">Eksploro tani</Link>
                   </Button>
                 </CardContent>
               </Card>

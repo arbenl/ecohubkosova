@@ -1,9 +1,9 @@
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 
 export default async function MissionPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   // Redirect to canonical About Us page
-  redirect(`/${locale}/about-us`)
+  redirect({ href: "/about-us", locale })
 
   return null
 }

@@ -1,0 +1,126 @@
+{
+  "title": "Pyetje të Shpeshta",
+  "subtitle": "Gjeni përgjigjet për pyetjet më të shpeshta rreth ECO HUB KOSOVA",
+  "sections": {
+    "general": {
+      "title": "Pyetje të Përgjithshme",
+      "description": "Pyetjet më të shpeshta rreth platformës dhe shërbimeve tona",
+      "questions": {
+        "whatIsEcoHub": {
+          "question": "Çfarë është ECO HUB KOSOVA?",
+          "answer": "ECO HUB KOSOVA është platforma e parë e ekonomisë qarkulluese në Kosovë që lidh organizatat, bizneset dhe individët për të promovuar bashkëpunimin dhe qëndrueshmërinë. Ne ofrojmë një hapësirë digjitale ku partnerët mund të gjejnë njëri-tjetrin, të shkëmbejnë burime dhe të realizojnë projekte të përbashkëta."
+        },
+        "howToRegister": {
+          "question": "Si mund të regjistrohem në platformë?",
+          "answer": "Regjistrimi është i thjeshtë dhe falas. Klikoni butonin \"Bashkohu në Rrjet\" në faqen kryesore dhe plotësoni formularin e regjistrimit. Nëse jeni individ, profili juaj do të aktivizohet menjëherë. Nëse përfaqësoni një organizatë, profili do të shqyrtohet nga ekipi ynë përpara aktivizimit."
+        },
+        "isFree": {
+          "question": "A është platforma falas për përdorim?",
+          "answer": "Po, ECO HUB KOSOVA është plotësisht falas për të gjithë përdoruesit. Ne besojmë se qasja në informacion dhe mundësitë e bashkëpunimit duhet të jenë të hapura për të gjithë ata që dëshirojnë të kontribuojnë në ekonominë qarkulluese."
+        },
+        "whoCanJoin": {
+          "question": "Kush mund të bëhet anëtar i platformës?",
+          "answer": "Platforma është e hapur për individë, organizata joqeveritare, ndërmarrje sociale, kompani dhe çdo entitet tjetër që është i angazhuar për ekonominë qarkulluese dhe qëndrueshmërinë. Ne mirëpresim të gjithë ata që dëshirojnë të kontribuojnë pozitivisht në mjedisin dhe shoqërinë."
+        }
+      }
+    },
+    "marketplace": {
+      "title": "Rreth Tregut",
+      "description": "Pyetje rreth tregut të ekonomisë qarkulluese",
+      "questions": {
+        "howMarketplaceWorks": {
+          "question": "Si funksionon tregu në platformë?",
+          "answer": "Tregu është një hapësirë ku anëtarët mund të publikojnë listime për materiale, produkte ose shërbime që dëshirojnë të shesin ose të blejnë. Çdo listim shqyrtohet nga ekipi ynë përpara publikimit për të siguruar cilësinë dhe përshtatshmërinë me parimet e ekonomisë qarkulluese."
+        },
+        "transactionFees": {
+          "question": "A ka komisione për transaksionet?",
+          "answer": "Jo, ECO HUB KOSOVA nuk merr komisione për transaksionet që bëhen përmes platformës. Ne vetëm lehtësojmë lidhjen midis blerësve dhe shitësve. Çmimet dhe kushtet e pagesës vendosen drejtpërdrejt midis palëve."
+        },
+        "whatCanBeSold": {
+          "question": "Çfarë lloj materialesh mund të shiten në treg?",
+          "answer": "Në treg mund të shiten materiale të riciklueshme, produkte të qëndrueshme, shërbime mjedisore, pajisje për energji të ripërtëritshme dhe çdo gjë tjetër që kontribuon në ekonominë qarkulluese. Nuk lejohen materiale të dëmshme për mjedisin ose që shkelin ligjet në fuqi."
+        }
+      }
+    },
+    "partnership": {
+      "title": "Bashkëpunimi dhe Partneriteti",
+      "description": "Pyetje rreth mundësive të bashkëpunimit",
+      "questions": {
+        "findPartners": {
+          "question": "Si mund të gjej partnerë për projekte?",
+          "answer": "Mund të përdorni Drejtorinë e Organizatave për të kërkuar partnerë potencialë bazuar në interesat, vendndodhjen dhe llojin e organizatës. Gjithashtu mund të publikoni në treg nëse kërkoni shërbime specifike ose të kontaktoni drejtpërdrejt organizatat që ju interesojnë."
+        },
+        "projectSupport": {
+          "question": "A ofron platforma mbështetje për projekte?",
+          "answer": "Po, ne ofrojmë mbështetje në forma të ndryshme: konsulencë për zhvillimin e projekteve, lidhje me financuesit potencialë, promovim përmes kanaleve tona të komunikimit dhe qasje në rrjetin tonë të ekspertëve. Kontaktoni ekipin tonë për më shumë detaje."
+        },
+        "organizeEvent": {
+          "question": "Si mund të organizoj një event përmes platformës?",
+          "answer": "Anëtarët mund të propozojnë evente që janë në përputhje me misionin tonë. Dërgoni një propozim te ekipi ynë me detajet e eventit, objektivat dhe grupin e synuar. Ne do të ndihmojmë në promovimin dhe organizimin e eventeve që kontribuojnë në ekonominë qarkulluese."
+        }
+      }
+    },
+    "technical": {
+      "title": "Mbështetje Teknike",
+      "description": "Pyetje rreth përdorimit të platformës",
+      "questions": {
+        "forgotPassword": {
+          "question": "Kam harruar fjalëkalimin, si mund ta rikuperoj?",
+          "answer": "Për çështje të sigurisë, ne nuk ofrojmë opsionin e rikuperimit automatik të fjalëkalimit. Ju lutemi kontaktoni ekipin tonë të mbështetjes në info@ecohubkosova.com dhe ne do t'ju ndihmojmë të rivendosni qasjen në llogarinë tuaj."
+        },
+        "updateProfile": {
+          "question": "Si mund të përditësoj profilin tim?",
+          "answer": "Pas kyçjes në platformë, shkoni te \"Profili im\" në menunë e dashboardit. Atje mund të përditësoni të gjitha informacionet tuaja personale dhe të organizatës. Ndryshimet do të ruhen automatikisht."
+        },
+        "isSafe": {
+          "question": "A është platforma e sigurt për përdorim?",
+          "answer": "Po, ne përdorim teknologjitë më të fundit të sigurisë për të mbrojtur të dhënat tuaja. Të gjitha komunikimet janë të enkriptuara dhe ne ndjekim praktikat më të mira të sigurisë së të dhënave. Gjithashtu, ne nuk ndajmë informacionet tuaja personale me palë të treta."
+        },
+        "deleteAccount": {
+          "question": "Si mund të fshij llogarinë time?",
+          "answer": "Nëse dëshironi të fshini llogarinë tuaj, ju lutemi kontaktoni ekipin tonë të mbështetjes. Ne do të procesojmë kërkesën tuaj dhe do të fshijmë të gjitha të dhënat personale në përputhje me politikën tonë të privatësisë."
+        }
+      }
+    }
+  },
+  "stats": {
+    "title": "Përmbledhje",
+    "savedListings": "Listime të ruajtura",
+    "organizations": "Organizata",
+    "myListings": "Listimet e mia",
+    "viewDetails": "Shiko detaje"
+  },
+  "quickActions": {
+    "title": "Veprime të shpejta",
+    "profile": {
+      "title": "Profili",
+      "description": "Përditëso të dhënat personale"
+    },
+    "organization": {
+      "title": "Organizata",
+      "description": "Menaxho të dhënat e organizatës"
+    },
+    "listings": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    },
+    "addListing": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    }
+  },
+  "alerts": {
+    "title": "Njoftimet",
+    "description": "Kontrollo këtu për përditësime të rëndësishme.",
+    "noNewAlerts": "Asnjë njoftim i ri"
+  },
+  "myListingsPage": {
+    "title": "Listimet e mia",
+    "createNew": "Krijo listim të ri",
+    "empty": {
+      "title": "Nuk keni krijuar ende asnjë listim.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "cta": "Krijo Listim"
+    }
+  }
+}

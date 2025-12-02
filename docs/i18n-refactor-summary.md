@@ -46,6 +46,9 @@ Removed all manual locale prefixing from href attributes:
 9. `src/components/marketplace-v2/ListingCardV2.tsx`
 10. `src/components/layout/FooterV2.tsx`
 11. `src/components/landing/landing-auth-panel.tsx`
+12. `src/components/sidebars/about-sidebar.tsx`
+13. `src/components/sidebars/legal-sidebar.tsx`
+14. `src/components/sidebars/knowledge-sidebar.tsx`
 
 ### Auth Pages
 

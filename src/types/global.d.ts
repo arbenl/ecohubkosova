@@ -1,6 +1,6 @@
 import navigation from "../../messages/en/navigation.json"
 import cta from "../../messages/en/cta.json"
-import explore from "../../messages/en/explore.json"
+
 import about from "../../messages/en/about.json"
 import contact from "../../messages/en/contact.json"
 import footer from "../../messages/en/footer.json"
@@ -19,7 +19,7 @@ import metadata from "../../messages/en/metadata.json"
 type Messages = {
   navigation: typeof navigation
   cta: typeof cta
-  explore: typeof explore
+
   about: typeof about
   contact: typeof contact
   footer: typeof footer

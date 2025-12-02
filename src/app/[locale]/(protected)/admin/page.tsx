@@ -14,13 +14,92 @@ import {
   ArrowUpRight,
   RefreshCw,
   Activity,
+  CheckIcon,
 } from "lucide-react"
+import { revalidatePath } from "next/cache"
 import { Link } from "@/i18n/routing"
 import { getAdminStats } from "./actions"
 import type { AdminStats } from "@/services/admin/stats"
 import { AdminDashboardSkeleton } from "./components/AdminDashboardSkeleton"
 import { AdminDashboardHeader } from "./components/AdminDashboardHeader"
 import { AdminActivitySection } from "./components/AdminActivitySection"
+import { AdminPending } from "./components/AdminPending"
+import { AdminQuickActions } from "./components/AdminQuickActions"
+import { fetchPendingOrganizations } from "@/services/admin/organizations"
+import {
+  fetchPendingAdminListings,
+  approveListingRecord,
+  rejectListingRecord,
+} from "@/services/admin/listings"
+import {
+  fetchPendingArticles,
+  approveArticleRecord,
+  rejectArticleRecord,
+} from "@/services/admin/articles"
+
+async function approveListingAction(formData: FormData) {
+  "use server"
+
+  const listingId = formData.get("id")
+  if (typeof listingId !== "string" || !listingId) return
+
+  const { error } = await approveListingRecord(listingId)
+  if (error) {
+    console.error("[admin] Failed to approve listing", error)
+    return
+  }
+
+  revalidatePath("/admin")
+  revalidatePath("/admin/listings")
+}
+
+async function rejectListingAction(formData: FormData) {
+  "use server"
+
+  const listingId = formData.get("id")
+  if (typeof listingId !== "string" || !listingId) return
+
+  const { error } = await rejectListingRecord(listingId)
+  if (error) {
+    console.error("[admin] Failed to reject listing", error)
+    return
+  }
+
+  revalidatePath("/admin")
+  revalidatePath("/admin/listings")
+}
+
+async function approveArticleAction(formData: FormData) {
+  "use server"
+
+  const articleId = formData.get("id")
+  if (typeof articleId !== "string" || !articleId) return
+
+  const { error } = await approveArticleRecord(articleId)
+  if (error) {
+    console.error("[admin] Failed to approve article", error)
+    return
+  }
+
+  revalidatePath("/admin")
+  revalidatePath("/admin/articles")
+}
+
+async function rejectArticleAction(formData: FormData) {
+  "use server"
+
+  const articleId = formData.get("id")
+  if (typeof articleId !== "string" || !articleId) return
+
+  const { error } = await rejectArticleRecord(articleId)
+  if (error) {
+    console.error("[admin] Failed to reject article", error)
+    return
+  }
+
+  revalidatePath("/admin")
+  revalidatePath("/admin/articles")
+}
 
 export default async function AdminDashboardPage({
   params,
@@ -58,6 +137,10 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
   if (error) {
     console.error("Error fetching admin stats:", error)
   }
+
+  const pendingOrgsResult = await fetchPendingOrganizations(5)
+  const pendingListings = await fetchPendingAdminListings(5)
+  const pendingArticles = await fetchPendingArticles(5)
 
   return (
     <div className="space-y-8">
@@ -256,7 +339,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
 
           <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
             <Link
-              href="admin/articles"
+              href="/admin/articles"
               className="block p-6 focus:outline-none h-full"
               aria-label={t("quickActions.articlesAriaLabel")}
             >
@@ -316,7 +399,214 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
         </div>
       </section>
 
+      <AdminPending
+        cards={[
+          {
+            title: t("stats.organizationsPending"),
+            count: stats.pendingOrganizations,
+            href: "/admin/organizations",
+            icon: <UserCheck className="h-5 w-5 text-emerald-600" />,
+          },
+          {
+            title: t("stats.articlesPending"),
+            count: stats.pendingArticles,
+            href: "/admin/articles",
+            icon: <FileText className="h-5 w-5 text-emerald-600" />,
+          },
+          {
+            title: t("stats.listingsPending"),
+            count: stats.pendingListings,
+            href: "/admin/listings",
+            icon: <ShoppingCart className="h-5 w-5 text-emerald-600" />,
+          },
+        ]}
+        locale={locale}
+      />
+
+      {pendingOrgsResult.data && pendingOrgsResult.data.length > 0 ? (
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-900">{t("pendingSection.orgsTitle")}</h2>
+            <Link
+              href="/admin/organizations"
+              className="text-sm text-emerald-700 hover:text-emerald-800"
+              prefetch={false}
+            >
+              {t("stats.viewDetails")}
+            </Link>
+          </div>
+          <div className="overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm">
+            <div className="divide-y divide-gray-100">
+              {pendingOrgsResult.data.map((org) => (
+                <div key={org.id} className="flex items-center justify-between p-4">
+                  <div>
+                    <div className="font-semibold text-gray-900">{org.name}</div>
+                    <div className="text-sm text-gray-600">{org.contact_email}</div>
+                  </div>
+                  <Link
+                    href={`/admin/organizations`}
+                    className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700"
+                    prefetch={false}
+                  >
+                    {t("pendingSection.review")}
+                    <ArrowUpRight className="h-3 w-3" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="space-y-3">
+          <h2 className="text-xl font-semibold text-gray-900">{t("pendingSection.orgsTitle")}</h2>
+          <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm">
+            <CardContent className="p-5 text-sm text-gray-600">
+              {t("pendingSection.empty")}
+            </CardContent>
+          </Card>
+        </section>
+      )}
+
+      <PendingList
+        title={t("pendingSection.listingsTitle")}
+        emptyLabel={t("pendingSection.emptyListings")}
+        href="/admin/listings"
+        approveLabel={t("pendingSection.approve")}
+        rejectLabel={t("pendingSection.reject")}
+        rows={(pendingListings.data ?? []).map((listing) => ({
+          id: listing.id,
+          title: listing.title,
+          meta: listing.category,
+          createdAt: listing.created_at,
+        }))}
+        reviewLabel={t("pendingSection.review")}
+        onApprove={approveListingAction}
+        onReject={rejectListingAction}
+      />
+
+      <PendingList
+        title={t("pendingSection.articlesTitle")}
+        emptyLabel={t("pendingSection.emptyArticles")}
+        href="/admin/articles"
+        approveLabel={t("pendingSection.approve")}
+        rejectLabel={t("pendingSection.reject")}
+        rows={(pendingArticles.data ?? []).map((article) => ({
+          id: article.id,
+          title: article.title,
+          meta: article.original_language ?? undefined,
+          createdAt: article.created_at,
+        }))}
+        reviewLabel={t("pendingSection.review")}
+        onApprove={approveArticleAction}
+        onReject={rejectArticleAction}
+      />
+
+      <AdminQuickActions locale={locale} />
+
       <AdminActivitySection />
     </div>
+  )
+}
+
+type PendingListRow = {
+  id: string
+  title: string
+  meta?: string | null
+  createdAt?: string | null
+}
+
+function PendingList({
+  title,
+  emptyLabel,
+  rows,
+  href,
+  approveLabel,
+  rejectLabel,
+  reviewLabel,
+  onApprove,
+  onReject,
+}: {
+  title: string
+  emptyLabel: string
+  rows: PendingListRow[]
+  href?: string
+  approveLabel: string
+  rejectLabel: string
+  reviewLabel?: string
+  onApprove?: (formData: FormData) => Promise<void>
+  onReject?: (formData: FormData) => Promise<void>
+}) {
+  const hasRows = rows.length > 0
+  return (
+    <section className="space-y-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+        {href ? (
+          <Link
+            href={href}
+            className="text-sm text-emerald-700 hover:text-emerald-800"
+            prefetch={false}
+          >
+            {reviewLabel}
+          </Link>
+        ) : null}
+      </div>
+
+      {hasRows ? (
+        <div className="overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm">
+          <div className="divide-y divide-gray-100">
+            {rows.map((row) => (
+              <div
+                key={row.id}
+                className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div>
+                  <div className="font-semibold text-gray-900">{row.title}</div>
+                  <div className="text-sm text-gray-600">
+                    {[row.meta, row.createdAt ? new Date(row.createdAt).toLocaleDateString() : null]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  {href ? (
+                    <Link
+                      href={href}
+                      className="text-sm text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1"
+                      prefetch={false}
+                    >
+                      <span>{reviewLabel}</span>
+                      <ArrowUpRight className="h-3 w-3" />
+                    </Link>
+                  ) : null}
+                  {onReject ? (
+                    <form action={onReject}>
+                      <input type="hidden" name="id" value={row.id} />
+                      <Button type="submit" variant="outline" size="sm">
+                        <Shield className="h-4 w-4" />
+                        {rejectLabel}
+                      </Button>
+                    </form>
+                  ) : null}
+                  {onApprove ? (
+                    <form action={onApprove}>
+                      <input type="hidden" name="id" value={row.id} />
+                      <Button type="submit" size="sm">
+                        <CheckIcon />
+                        {approveLabel}
+                      </Button>
+                    </form>
+                  ) : null}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm">
+          <CardContent className="p-5 text-sm text-gray-600">{emptyLabel}</CardContent>
+        </Card>
+      )}
+    </section>
   )
 }

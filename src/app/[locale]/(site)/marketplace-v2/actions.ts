@@ -2,7 +2,7 @@
 
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 import { getTranslations } from "next-intl/server"
 import { listingFormSchema, type ListingFormInput } from "@/validation/listings"
 import { db } from "@/lib/drizzle"
@@ -31,7 +31,11 @@ export async function createListingAction(formData: ListingFormInput, locale: st
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+    redirect({
+      href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`,
+      locale,
+    })
+    return { error: "Unauthorized" }
   }
 
   const parsed = listingFormSchema.safeParse(formData)
@@ -68,6 +72,7 @@ export async function createListingAction(formData: ListingFormInput, locale: st
         category_id: payload.category_id,
         created_by_user_id: user.id,
         status: "DRAFT" as any,
+        visibility: "PRIVATE",
       })
       .returning({ id: ecoListings.id })
 
@@ -94,8 +99,15 @@ export async function createListingAction(formData: ListingFormInput, locale: st
         )
     }
 
-    revalidatePath("/marketplace-v2")
-    redirect(`/${locale}/marketplace-v2?message=${encodeURIComponent(t("createSuccess"))}`)
+    revalidatePath("/marketplace")
+    revalidatePath("/my/listings")
+    if (listingId) {
+      redirect({
+        href: `/marketplace/${listingId}/edit?created=1&message=${encodeURIComponent(t("createSuccess"))}`,
+        locale,
+      })
+    }
+    redirect({ href: `/marketplace?message=${encodeURIComponent(t("createSuccess"))}`, locale })
   } catch (error: any) {
     console.error("Server Action Error (createListingAction):", error)
     return { error: error.message || t("createError") }
@@ -119,7 +131,11 @@ export async function updateListingAction(
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+    redirect({
+      href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`,
+      locale,
+    })
+    return { error: "Unauthorized" }
   }
 
   const parsed = listingFormSchema.safeParse(formData)
@@ -135,7 +151,11 @@ export async function updateListingAction(
     // Verify ownership
     const existingListing = await db
       .get()
-      .select({ created_by_user_id: ecoListings.created_by_user_id })
+      .select({
+        created_by_user_id: ecoListings.created_by_user_id,
+        status: ecoListings.status,
+        visibility: ecoListings.visibility,
+      })
       .from(ecoListings)
       .where(eq(ecoListings.id, listingId))
       .limit(1)
@@ -143,6 +163,8 @@ export async function updateListingAction(
     if (!existingListing.length || existingListing[0].created_by_user_id !== user.id) {
       return { error: tCommon("accessDenied") }
     }
+
+    const isArchived = existingListing[0].status === "ARCHIVED"
 
     await db
       .get()
@@ -167,16 +189,15 @@ export async function updateListingAction(
         tags: payload.tags.length > 0 ? payload.tags : [],
         category_id: payload.category_id,
         updated_at: new Date(),
+        status: isArchived ? "ARCHIVED" : "ACTIVE",
+        visibility: isArchived ? (existingListing[0].visibility ?? "PRIVATE") : "PUBLIC",
       })
       .where(eq(ecoListings.id, listingId))
 
     // Update media: delete old ones and insert new ones
     if (payload.media && payload.media.length > 0) {
       // Delete existing media
-      await db
-        .get()
-        .delete(ecoListingMedia)
-        .where(eq(ecoListingMedia.listing_id, listingId))
+      await db.get().delete(ecoListingMedia).where(eq(ecoListingMedia.listing_id, listingId))
 
       // Insert new media
       await db
@@ -198,9 +219,13 @@ export async function updateListingAction(
         )
     }
 
-    revalidatePath(`/marketplace-v2/${listingId}`)
-    revalidatePath("/marketplace-v2")
-    redirect(`/${locale}/marketplace-v2/${listingId}?message=${encodeURIComponent(t("updateSuccess"))}`)
+    revalidatePath(`/marketplace/${listingId}`)
+    revalidatePath("/marketplace")
+    revalidatePath("/my/listings")
+    redirect({
+      href: `/marketplace/${listingId}?message=${encodeURIComponent(t("updateSuccess"))}`,
+      locale,
+    })
   } catch (error: any) {
     console.error("Server Action Error (updateListingAction):", error)
     return { error: error.message || t("updateError") }

@@ -1,21 +1,27 @@
 export const dynamic = "force-dynamic"
 
-import { redirect } from "next/navigation"
-import { getTranslations, getLocale } from "next-intl/server"
+import { redirect } from "@/i18n/routing"
+import { getTranslations, getLocale, setRequestLocale } from "next-intl/server"
 import { getServerUser } from "@/lib/supabase/server"
 import { WorkspaceLayout } from "@/components/workspace/workspace-layout"
 import { UserProfileEditForm } from "./user-profile-edit-form"
 import { getProfileData } from "@/app/[locale]/(protected)/profile/actions"
 
-export default async function MyProfileEditPage() {
-  const locale = await getLocale()
-  const t = await getTranslations("my-profile")
-  const tCommon = await getTranslations("common")
+export default async function MyProfileEditPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  setRequestLocale(locale)
+  const t = await getTranslations({ locale, namespace: "my-profile" })
+  const tCommon = await getTranslations({ locale, namespace: "common" })
 
   const { user } = await getServerUser()
 
   if (!user?.id) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+    redirect({ href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`, locale })
+    return null
   }
 
   const { userProfile, error } = await getProfileData()

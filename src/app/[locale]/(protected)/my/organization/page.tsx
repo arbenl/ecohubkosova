@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { getTranslations } from "next-intl/server"
 import { fetchUserOrganizations } from "@/services/organization-onboarding"
@@ -33,7 +33,8 @@ export default async function MyOrganizationPage({ params }: PageProps) {
   } = await supabase.auth.getUser()
 
   if (!user?.id) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+    redirect({ href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`, locale })
+    return null
   }
 
   // Fetch user's organizations

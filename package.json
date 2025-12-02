@@ -1,6 +1,6 @@
 {
   "name": "my-v0-project",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,6 +10,7 @@
     "check:src-structure": "node scripts/check-src-structure.mjs",
     "lint": "node scripts/check-src-structure.mjs",
     "lint:structure": "node scripts/check-src-structure.mjs",
+    "check:regression": "./scripts/regression-guards.sh",
     "lint:eslint": "eslint .",
     "test": "NODE_OPTIONS='--max-old-space-size=2048' vitest run",
     "test:coverage": "NODE_OPTIONS='--max-old-space-size=2048' vitest run --coverage",
@@ -32,6 +33,7 @@
     "start": "next start",
     "dev:orchestrator": "tsx scripts/dev-orchestrator.ts",
     "dev:all": "bash scripts/dev-all.sh",
+    "flow:gemini": "tsx scripts/run-gemini-flow.ts",
     "drizzle:generate": "drizzle-kit generate",
     "db:sync": "SUPABASE_DB_URL=${SUPABASE_DB_URL} pnpm dlx supabase db diff --file auto-update --db-url \"$SUPABASE_DB_URL\" && SUPABASE_DB_URL=${SUPABASE_DB_URL} pnpm dlx supabase db push --db-url \"$SUPABASE_DB_URL\" && pnpm drizzle:generate",
     "format": "prettier --write .",
@@ -39,6 +41,7 @@
   },
   "dependencies": {
     "@genkit-ai/google-genai": "1.24.0",
+    "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "5.2.2",
     "@radix-ui/react-accordion": "1.2.12",
     "@radix-ui/react-alert-dialog": "1.1.15",
@@ -71,6 +74,7 @@
     "@supabase/ssr": "0.7.0",
     "@supabase/supabase-js": "2.81.1",
     "autoprefixer": "10.4.22",
+    "axios": "^1.13.2",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "cmdk": "1.1.1",
@@ -78,6 +82,7 @@
     "drizzle-orm": "0.44.7",
     "embla-carousel-react": "8.6.0",
     "genkit": "1.24.0",
+    "google-auth-library": "^10.5.0",
     "import-in-the-middle": "^2.0.0",
     "input-otp": "1.4.2",
     "lucide-react": "0.554.0",

@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useLocale } from 'next-intl'
-import { cn } from '@/lib/utils'
+import { Link } from "@/i18n/routing"
+import { usePathname } from "next/navigation"
+import { useLocale } from "next-intl"
+import { cn } from "@/lib/utils"
 
 const legalLinks = [
-  { href: '/legal', label: 'Ligjore' },
-  { href: '/legal/terms', label: 'Termat e Shërbimit' },
+  { href: "/legal", label: "Ligjore" },
+  { href: "/legal/terms", label: "Termat e Shërbimit" },
 ]
 
 export function LegalSidebar() {
@@ -17,17 +17,15 @@ export function LegalSidebar() {
   return (
     <nav className="space-y-2">
       {legalLinks.map((link) => {
-        const href = `/${locale}${link.href}`
+        const href = link.href
         const isActive = pathname === href
         return (
           <Link
             key={link.href}
             href={href}
             className={cn(
-              'block px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200',
-              isActive
-                ? 'bg-[#00C896] text-white'
-                : 'text-gray-700 hover:bg-gray-100'
+              "block px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
+              isActive ? "bg-[#00C896] text-white" : "text-gray-700 hover:bg-gray-100"
             )}
           >
             {link.label}

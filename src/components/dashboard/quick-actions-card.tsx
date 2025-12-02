@@ -53,7 +53,7 @@ export function QuickActionsCard() {
               className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
               asChild
             >
-              <Link href={`/${locale}${href}`}>
+              <Link href={href}>
                 <Icon className="h-8 w-8 text-emerald-600" />
                 <span className="text-sm font-medium text-center">{t(titleKey)}</span>
                 <span className="text-xs text-gray-500 text-center">{t(descriptionKey)}</span>

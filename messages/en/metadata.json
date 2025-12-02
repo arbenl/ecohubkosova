@@ -1,5 +1,46 @@
 {
   "title": "ECO HUB KOSOVA | Connect. Collaborate. Create Circulation.",
+  "subtitle": "Kosovo's first circular economy platform.",
   "description": "Kosovo's first circular economy platform. Connect with partners, discover opportunities, and create sustainable circulation.",
-  "keywords": "circular economy, Kosovo, sustainability, networking, marketplace, collaboration"
+  "keywords": "circular economy, Kosovo, sustainability, networking, marketplace, collaboration",
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
+  }
 }

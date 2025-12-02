@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { getTranslations } from "next-intl/server"
 import {
@@ -62,8 +62,14 @@ export async function createOrganizationAction(
   const supabase = await createServerSupabaseClient()
 
   const { data: authData } = await supabase.auth.getUser()
-  if (!authData.user?.id) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+  const user = authData.user
+
+  if (!user?.id) {
+    redirect({
+      href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`,
+      locale,
+    })
+    return { error: "Unauthorized" }
   }
 
   // Validate input
@@ -72,7 +78,7 @@ export async function createOrganizationAction(
     return { error: parsed.error.errors[0]?.message ?? t("form.createError") }
   }
 
-  const result = await createOrganizationForUser(authData.user.id, parsed.data)
+  const result = await createOrganizationForUser(user.id, parsed.data)
 
   if (result.error) {
     return { error: result.error }
@@ -82,7 +88,9 @@ export async function createOrganizationAction(
     return { error: t("form.createError") }
   }
 
-  revalidatePath(`/${locale}/my/organization`)
+  // Revalidate both locale versions of the path
+  revalidatePath("/sq/my/organization")
+  revalidatePath("/en/my/organization")
 
   return {
     success: true,
@@ -102,21 +110,29 @@ export async function claimOrganizationAction(
   const supabase = await createServerSupabaseClient()
 
   const { data: authData } = await supabase.auth.getUser()
-  if (!authData.user?.id) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+  const user = authData.user
+
+  if (!user?.id) {
+    redirect({
+      href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`,
+      locale,
+    })
+    return { error: "Unauthorized" }
   }
 
   if (!organizationId?.trim()) {
     return { error: t("form.invalidOrg") }
   }
 
-  const result = await claimOrganizationForUser(authData.user.id, organizationId)
+  const result = await claimOrganizationForUser(user.id, organizationId)
 
   if (result.error) {
     return { error: result.error }
   }
 
-  revalidatePath(`/${locale}/my/organization`)
+  // Revalidate both locale versions of the path
+  revalidatePath("/sq/my/organization")
+  revalidatePath("/en/my/organization")
 
   return { success: true }
 }
