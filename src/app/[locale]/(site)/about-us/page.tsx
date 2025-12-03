@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Link } from "@/i18n/routing"
 import { CheckCircle } from "lucide-react"
+import Image from "next/image"
 import { getTranslations } from "next-intl/server"
 import { PublicPageHero } from "@/components/layout/PublicPageHero"
 
@@ -151,6 +152,53 @@ export default async function AboutUsPage({ params }: { params: Promise<{ locale
           </div>
         </div>
       </div>
+
+      {/* Project Support & Logos */}
+      <section className="py-12 md:py-16 bg-emerald-50/60 border-t border-emerald-100">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
+              {t("grant.title")}
+            </p>
+            <p className="text-sm md:text-base text-gray-700 leading-relaxed">
+              {t("grant.description")}
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-8">
+            <div className="h-14 md:h-16 flex items-center">
+              <Image
+                src="/logos/PODRSKA EICEE Obavezni logoi.png"
+                alt={t("grant.fundersAlt")}
+                width={10799}
+                height={1188}
+                className="h-full w-auto object-contain"
+              />
+            </div>
+            <div className="flex flex-wrap md:flex-nowrap items-center gap-6">
+              <div className="h-14 md:h-16 flex items-center">
+                <Image
+                  src="/logos/LOGO PROJEKTA EICEE.png"
+                  alt={t("grant.eiceeAlt")}
+                  width={2828}
+                  height={2953}
+                  className="h-full w-auto object-contain"
+                />
+              </div>
+              <div className="h-14 md:h-16 flex items-center">
+                <Image
+                  src="/logos/KADC-Logo_HQ.png"
+                  alt={t("grant.kadcAlt")}
+                  width={1443}
+                  height={603}
+                  className="h-full w-auto object-contain"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   )
 }

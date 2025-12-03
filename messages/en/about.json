@@ -95,5 +95,12 @@
       "description": "Create your first listing and contribute to the circular economy.",
       "cta": "Create Listing"
     }
+  },
+  "grant": {
+    "title": "Project support",
+    "description": "The Project “Fostering Circular Economy Ecosystem in Prishtina: Empowering Youth and Building Sustainability” is sub-granted through the EICEE project, co-funded by the European Union and the Government of Montenegro.",
+    "kadcAlt": "KADC logo",
+    "eiceeAlt": "EICEE project logo",
+    "fundersAlt": "Funded by the European Union and co-funded by the Government of Montenegro"
   }
 }
