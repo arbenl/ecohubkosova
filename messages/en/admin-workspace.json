@@ -3,6 +3,8 @@
   "subtitle": "Monitor EcoHub activity, partners, and listings",
   "stats": {
     "title": "Platform Statistics",
+    "savedListings": "Saved listings",
+    "myListings": "My listings",
     "viewDetails": "View Details",
     "users": "Users",
     "usersDescription": "Registered users on the platform",
@@ -16,14 +18,27 @@
     "articlesAriaLabel": "View article management details",
     "articlesPending": "Pending publication",
     "listings": "Marketplace listings",
-    "listingsDescription": "Listings in the marketplace",
+    "listingsDescription": "Listings awaiting moderation or review",
     "listingsAriaLabel": "View listing management details",
-    "listingsPending": "Draft listings",
+    "listingsPending": "Listings awaiting review",
     "pending": "pending"
   },
   "quickActions": {
+    "title": "Quick Actions",
     "title": "Quick actions",
     "description": "Jump into common admin workflows",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
     "users": "Manage users",
     "usersDescription": "View and manage platform users",
     "usersAriaLabel": "Go to user management",
@@ -34,12 +49,28 @@
     "articlesDescription": "Review and publish articles",
     "articlesAriaLabel": "Go to article management",
     "listings": "Review listings",
+    "listingsDescription": "Review and approve marketplace listings",
     "members": "Organization members",
     "membersDescription": "Manage organization member relationships",
     "membersAriaLabel": "Go to organization members management",
     "audits": "System audits",
     "auditsDescription": "View system activity logs",
-    "auditsAriaLabel": "Go to system audits"
+    "auditsAriaLabel": "Go to system audits",
+    "go": "Go"
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
   },
   "activity": {
     "title": "Recent activity",
@@ -50,6 +81,17 @@
     "comingSoon": "Coming soon",
     "setupDescription": "Activity setup will be available soon.",
     "setup": "Setup activity"
+  },
+  "pendingSection": {
+    "orgsTitle": "Pending organizations",
+    "review": "Review",
+    "empty": "No organizations waiting for approval.",
+    "listingsTitle": "Pending listings",
+    "articlesTitle": "Pending articles",
+    "emptyListings": "No listings waiting for review.",
+    "emptyArticles": "No articles waiting for review.",
+    "approve": "Approve",
+    "reject": "Reject"
   },
   "welcome": "Welcome back! Today is {date}",
   "refresh": "Refresh",

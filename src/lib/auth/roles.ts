@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 import { headers } from "next/headers"
 import { eq } from "drizzle-orm"
 import { getServerUser } from "@/lib/supabase/server"
@@ -29,18 +29,18 @@ export async function requireAdminRole() {
   const locale = await getCurrentLocale()
 
   if (authError || !user) {
-    redirect(`/${locale}/login?message=Ju duhet të kyçeni për të vazhduar.`)
+    redirect({ href: `/login?message=Ju duhet të kyçeni për të vazhduar.`, locale })
   }
 
-  const records = await db.get().select().from(users).where(eq(users.id, user.id)).limit(1)
+  const records = await db.get().select().from(users).where(eq(users.id, user!.id)).limit(1)
   const userRecord = records[0]
 
   if (!userRecord) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`)
+    redirect({ href: `/login?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`, locale })
   }
 
   if (userRecord.role !== "Admin") {
-    redirect(`/${locale}/login?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`)
+    redirect({ href: `/login?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`, locale })
   }
 
   return { user, role: userRecord.role }

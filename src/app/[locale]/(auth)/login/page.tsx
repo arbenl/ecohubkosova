@@ -3,9 +3,9 @@
 /* global HTMLFormElement, FormData */
 
 import { useEffect, useRef, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
+import { useRouter, Link } from "@/i18n/routing"
 import { useLocale, useTranslations } from "next-intl"
-import Link from "next/link"
 import { Alert, AlertCircle, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -138,7 +138,7 @@ export default function KycuPage() {
           /* ignore */
         }
 
-        router.push(`/${locale}/my`)
+        router.push("/my")
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : t("loginError"))
@@ -219,7 +219,7 @@ export default function KycuPage() {
           <p className="text-gray-600">
             {t("noAccountQuestion")}{" "}
             <Link
-              href={`/${locale}/register`}
+              href="/register"
               className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors"
             >
               {t("registerHere")}

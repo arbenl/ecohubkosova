@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { useTranslations } from "next-intl"
 import { BookmarkIcon, Plus } from "lucide-react"
 import type { UserOrganization } from "@/services/organization-onboarding"
@@ -88,14 +88,13 @@ export default function MyOrganizationClient({
     const listings = listingSummaries?.[org.id] || []
 
     return (
-
       <WorkspaceLayout
         badge={t("workspace.title")}
         title={org.name}
         subtitle=""
         actions={
           <Link
-            href={`/${locale}/marketplace/add`}
+            href="/marketplace/add"
             className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
           >
             <Plus className="h-5 w-5" />
@@ -103,34 +102,36 @@ export default function MyOrganizationClient({
           </Link>
         }
       >
-
         {/* Tabs */}
         <div className="border-b border-gray-200">
           <div className="flex gap-4">
             <button
               onClick={() => setActiveTab("profile")}
-              className={`px-4 py-2 font-medium transition-colors ${activeTab === "profile"
-                ? "border-b-2 border-emerald-600 text-emerald-600"
-                : "text-gray-600 hover:text-gray-900"
-                }`}
+              className={`px-4 py-2 font-medium transition-colors ${
+                activeTab === "profile"
+                  ? "border-b-2 border-emerald-600 text-emerald-600"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
             >
               {t("workspace.section.profile")}
             </button>
             <button
               onClick={() => setActiveTab("analytics")}
-              className={`px-4 py-2 font-medium transition-colors ${activeTab === "analytics"
-                ? "border-b-2 border-emerald-600 text-emerald-600"
-                : "text-gray-600 hover:text-gray-900"
-                }`}
+              className={`px-4 py-2 font-medium transition-colors ${
+                activeTab === "analytics"
+                  ? "border-b-2 border-emerald-600 text-emerald-600"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
             >
               {t("analytics.tabs.analytics")}
             </button>
             <button
               onClick={() => setActiveTab("members")}
-              className={`px-4 py-2 font-medium transition-colors ${activeTab === "members"
-                ? "border-b-2 border-emerald-600 text-emerald-600"
-                : "text-gray-600 hover:text-gray-900"
-                }`}
+              className={`px-4 py-2 font-medium transition-colors ${
+                activeTab === "members"
+                  ? "border-b-2 border-emerald-600 text-emerald-600"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
             >
               {t("members.tabs.members")}
             </button>
@@ -138,7 +139,9 @@ export default function MyOrganizationClient({
         </div>
 
         {/* Tab Content */}
-        {activeTab === "profile" && <OrganizationProfile locale={locale} organization={org} listings={listings} />}
+        {activeTab === "profile" && (
+          <OrganizationProfile locale={locale} organization={org} listings={listings} />
+        )}
         {activeTab === "analytics" && (
           <AnalyticsTab
             organizationId={org.id}
@@ -160,14 +163,13 @@ export default function MyOrganizationClient({
   const activeListings = activeOrgId ? listingSummaries?.[activeOrgId] || [] : []
 
   return (
-
     <WorkspaceLayout
       badge={t("workspace.title")}
       title={t("onboarding.subtitle")}
       subtitle=""
       actions={
         <Link
-          href={`/${locale}/marketplace/add`}
+          href="/marketplace/add"
           className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
         >
           <Plus className="h-5 w-5" />
@@ -175,7 +177,6 @@ export default function MyOrganizationClient({
         </Link>
       }
     >
-
       {/* Organization Switcher */}
       <div className="flex items-center gap-3 bg-white rounded-lg border border-gray-200 p-4">
         <label htmlFor="org-select" className="font-medium text-gray-700">
@@ -204,28 +205,31 @@ export default function MyOrganizationClient({
           <div className="flex gap-4">
             <button
               onClick={() => setActiveTab("profile")}
-              className={`px-4 py-2 font-medium transition-colors ${activeTab === "profile"
-                ? "border-b-2 border-emerald-600 text-emerald-600"
-                : "text-gray-600 hover:text-gray-900"
-                }`}
+              className={`px-4 py-2 font-medium transition-colors ${
+                activeTab === "profile"
+                  ? "border-b-2 border-emerald-600 text-emerald-600"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
             >
               {t("workspace.section.profile")}
             </button>
             <button
               onClick={() => setActiveTab("analytics")}
-              className={`px-4 py-2 font-medium transition-colors ${activeTab === "analytics"
-                ? "border-b-2 border-emerald-600 text-emerald-600"
-                : "text-gray-600 hover:text-gray-900"
-                }`}
+              className={`px-4 py-2 font-medium transition-colors ${
+                activeTab === "analytics"
+                  ? "border-b-2 border-emerald-600 text-emerald-600"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
             >
               {t("analytics.tabs.analytics")}
             </button>
             <button
               onClick={() => setActiveTab("members")}
-              className={`px-4 py-2 font-medium transition-colors ${activeTab === "members"
-                ? "border-b-2 border-emerald-600 text-emerald-600"
-                : "text-gray-600 hover:text-gray-900"
-                }`}
+              className={`px-4 py-2 font-medium transition-colors ${
+                activeTab === "members"
+                  ? "border-b-2 border-emerald-600 text-emerald-600"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
             >
               {t("members.tabs.members")}
             </button>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { Card } from "@/components/ui/card"
 import type React from "react"
 

@@ -1,0 +1,95 @@
+{
+  "title": "Paneli Im",
+  "subtitle": "Mirë se u ktheve, {name}",
+  "nav": {
+    "overview": "Përmbledhje",
+    "overviewDesc": "Statistikat dhe hyrjet e shpejta",
+    "listings": "Listimet e mia",
+    "listingsDesc": "Krijo, përditëso dhe arkivo",
+    "saved": "Të ruajtura",
+    "savedDesc": "Listimet që ke shënuar",
+    "profile": "Profili",
+    "profileDesc": "Përditëso të dhënat e tua",
+    "organization": "Organizata",
+    "organizationDesc": "Menaxho profilin e organizatës",
+    "addListing": "Krijo listim",
+    "workspace": "Hapësira ime"
+  },
+  "stats": {
+    "title": "Aktiviteti Juaj",
+    "savedListings": "Listimet e Ruajtura",
+    "organizations": "Organizatat",
+    "myListings": "Listimet e Mia",
+    "viewDetails": "Shiko Detajet"
+  },
+  "quickActions": {
+    "title": "Veprime të Shpejta",
+    "profile": {
+      "title": "Redakto Profilin",
+      "description": "Përditëso informacionin tënd personal"
+    },
+    "organization": {
+      "title": "Menaxho Organizatën",
+      "description": "Administro profilin e organizatës tënde"
+    },
+    "addListing": {
+      "title": "Krijo Listim të Ri",
+      "description": "Shto një artikull të ri në treg"
+    }
+  },
+  "alerts": {
+    "title": "Njoftimet",
+    "description": "Kontrollo këtu për përditësime të rëndësishme.",
+    "noNewAlerts": "Asnjë njoftim i ri"
+  },
+  "myListingsPage": {
+    "label": "Hapësira e tregut",
+    "title": "Listimet e Mia",
+    "subtitle": "Krijo, përditëso dhe arkivo listimet e tua.",
+    "createNew": "Krijo listim të ri",
+    "successTitle": "Ndryshimet u ruajtën",
+    "table": {
+      "searchPlaceholder": "Kërko listime sipas titullit...",
+      "tabs": {
+        "active": "Aktive",
+        "draft": "Draft",
+        "archived": "Arkivuara"
+      },
+      "columns": {
+        "title": "Titulli",
+        "status": "Statusi",
+        "visibility": "Dukshmëria",
+        "updated": "Përditësuar",
+        "price": "Çmimi",
+        "actions": "Veprimet"
+      },
+      "statuses": {
+        "active": "Aktive",
+        "draft": "Draft",
+        "archived": "Arkivuar"
+      },
+      "visibilities": {
+        "public": "Publike",
+        "private": "Private"
+      },
+      "actions": {
+        "view": "Shiko",
+        "edit": "Përditëso",
+        "archive": "Arkivo"
+      },
+      "archive": {
+        "title": "Ta arkivojmë listimin?",
+        "description": "Ky listim do të fshihet nga tregu dhe do të kalojë në skedën Arkivuar.",
+        "confirm": "Konfirmo arkivimin",
+        "cancel": "Anulo",
+        "success": "Listimi u arkivua",
+        "error": "Listimi nuk u arkivua"
+      }
+    },
+    "empty": {
+      "title": "Ju nuk keni krijuar ende asnjë listim.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "cta": "Krijo Listim"
+    }
+  }
+}

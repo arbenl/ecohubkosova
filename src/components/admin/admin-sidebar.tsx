@@ -1,19 +1,25 @@
 "use client"
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useLocale } from "next-intl"
-import { useTranslations } from "next-intl"
-import { cn } from "@/lib/utils"
-import { Users, Building, BookOpen, ShoppingCart, LayoutDashboard, Menu, X, User } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
+import { Link, usePathname } from "@/i18n/routing"
+import { cn } from "@/lib/utils"
+import {
+  Users,
+  Building,
+  BookOpen,
+  ShoppingCart,
+  LayoutDashboard,
+  Menu,
+  X,
+  User,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { SignOutButton } from "@/components/sign-out-button"
 
 export function AdminSidebar() {
   const pathname = usePathname()
-  const locale = useLocale()
-  const t = useTranslations('admin')
+  const t = useTranslations("admin")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const handleBeforeSignOut = () => setIsMobileMenuOpen(false)
 
@@ -47,38 +53,38 @@ export function AdminSidebar() {
     {
       label: t("panel"),
       icon: LayoutDashboard,
-      href: `/${locale}/admin`,
-      active: pathname === `/${locale}/admin`,
+      href: "/admin",
+      active: pathname === "/admin",
     },
     {
       label: "Profili",
       icon: User,
-      href: `/${locale}/profile`,
-      active: pathname === `/${locale}/profile`,
+      href: "/profile",
+      active: pathname === "/profile",
     },
     {
       label: t("users"),
       icon: Users,
-      href: `/${locale}/admin/users`,
-      active: pathname === `/${locale}/admin/users`,
+      href: "/admin/users",
+      active: pathname === "/admin/users",
     },
     {
       label: t("organizations"),
       icon: Building,
-      href: `/${locale}/admin/organizations`,
-      active: pathname === `/${locale}/admin/organizations`,
+      href: "/admin/organizations",
+      active: pathname === "/admin/organizations",
     },
     {
       label: t("articles"),
       icon: BookOpen,
-      href: `/${locale}/admin/articles`,
-      active: pathname === `/${locale}/admin/articles`,
+      href: "/admin/articles",
+      active: pathname === "/admin/articles",
     },
     {
       label: t("listings"),
       icon: ShoppingCart,
-      href: `/${locale}/admin/listings`,
-      active: pathname === `/${locale}/admin/listings`,
+      href: "/admin/listings",
+      active: pathname === "/admin/listings",
     },
   ]
 
@@ -95,7 +101,7 @@ export function AdminSidebar() {
         >
           {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
-        <Link href={`/${locale}/admin`} className="flex items-center gap-2">
+        <Link href="/admin" className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg eco-gradient flex items-center justify-center text-white font-bold text-xs">
             A
           </div>
@@ -114,12 +120,12 @@ export function AdminSidebar() {
         id="admin-mobile-sidebar"
         className={cn(
           "fixed top-0 left-0 h-full w-64 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 md:hidden",
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full",
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Mobile Sidebar Header */}
         <div className="p-4 border-b border-gray-200">
-          <Link href={`/${locale}/admin`} className="flex items-center gap-2">
+          <Link href="/admin" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg eco-gradient flex items-center justify-center text-white font-bold text-sm">
               A
             </div>
@@ -140,7 +146,7 @@ export function AdminSidebar() {
                   "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 active:scale-95",
                   route.active
                     ? "bg-gradient-to-r from-[#00C896] to-[#00A07E] text-white shadow-lg"
-                    : "text-gray-700 hover:bg-gray-100 active:bg-gray-200",
+                    : "text-gray-700 hover:bg-gray-100 active:bg-gray-200"
                 )}
               >
                 <route.icon className="h-5 w-5 flex-shrink-0" />
@@ -164,7 +170,7 @@ export function AdminSidebar() {
       <div className="hidden md:flex md:flex-col md:w-72 md:bg-white md:border-r md:border-gray-200 md:h-screen md:sticky md:top-0">
         {/* Desktop Header */}
         <div className="p-6 border-b border-gray-200">
-          <Link href={`/${locale}/admin`} className="flex items-center gap-3">
+          <Link href="/admin" className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl eco-gradient flex items-center justify-center text-white font-bold text-lg">
               A
             </div>
@@ -185,7 +191,7 @@ export function AdminSidebar() {
                   "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300",
                   route.active
                     ? "bg-gradient-to-r from-[#00C896] to-[#00A07E] text-white shadow-lg"
-                    : "text-gray-600 hover:text-[#00C896] hover:bg-gray-50",
+                    : "text-gray-600 hover:text-[#00C896] hover:bg-gray-50"
                 )}
               >
                 <route.icon className="h-5 w-5" />

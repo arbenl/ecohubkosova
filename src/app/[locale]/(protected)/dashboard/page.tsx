@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { db } from "@/lib/drizzle"
 import { users } from "@/db/schema"
@@ -14,17 +14,17 @@ interface PageProps {
  * It renders NO UI to prevent V1 flicker.
  */
 export default async function DashboardRedirectPage({ params }: PageProps) {
-  const { locale: localeParam } = await params
-  const locale = localeParam || "sq"
+  const { locale } = await params
 
   const supabase = await createServerSupabaseClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Not logged in - redirect to login
+  // Not logged in - redirect to login (locale-aware)
   if (!user?.id) {
-    redirect(`/${locale}/login`)
+    redirect({ href: "/login", locale })
+    return null
   }
 
   // Fetch role from DB
@@ -41,8 +41,9 @@ export default async function DashboardRedirectPage({ params }: PageProps) {
     console.error("[dashboard redirect] failed to load user role", error)
   }
 
-  // Redirect based on role
-  const destination = role?.toLowerCase() === "admin" ? `/${locale}/admin` : `/${locale}/my`
+  // Redirect based on role (locale-aware)
+  const destination = role?.toLowerCase() === "admin" ? "/admin" : "/my"
 
-  redirect(destination)
+  redirect({ href: destination, locale })
+  return null
 }

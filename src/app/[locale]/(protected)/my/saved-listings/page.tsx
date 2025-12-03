@@ -1,5 +1,5 @@
 import { getServerUser } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 import { getLocale, getTranslations } from "next-intl/server"
 import { getSavedListings } from "@/services/marketplace/interactions-service"
 import SavedListingsClient from "./saved-listings-client"
@@ -19,7 +19,8 @@ export default async function SavedListingsPage() {
 
   // Redirect to login if not authenticated
   if (!user?.id) {
-    redirect(`/${locale}/login?message=Please login to view saved listings`)
+    redirect({ href: `/login?message=Please login to view saved listings`, locale })
+    return null
   }
 
   const { listings, total } = await getSavedListings(user.id)
@@ -29,20 +30,12 @@ export default async function SavedListingsPage() {
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h1 className="text-4xl font-bold text-emerald-900 mb-2">
-            {t("savedListings.title")}
-          </h1>
-          <p className="text-lg text-emerald-700">
-            {t("savedListings.subtitle")}
-          </p>
+          <h1 className="text-4xl font-bold text-emerald-900 mb-2">{t("savedListings.title")}</h1>
+          <p className="text-lg text-emerald-700">{t("savedListings.subtitle")}</p>
         </div>
 
         {/* Content */}
-        <SavedListingsClient
-          initialListings={listings}
-          total={total}
-          locale={locale}
-        />
+        <SavedListingsClient initialListings={listings} total={total} locale={locale} />
       </div>
     </div>
   )

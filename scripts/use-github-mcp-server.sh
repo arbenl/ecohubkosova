@@ -1,5 +1,6 @@
 #!/bin/bash
 # GitHub MCP Server Wrapper
+echo "DEBUG: Script started at $(date)" >> /tmp/mcp_debug.log
 # Launches GitHub MCP server via Docker with token authentication
 
 set -e
@@ -17,8 +18,7 @@ if [ -z "$GITHUB_TOKEN" ]; then
   exit 1
 fi
 
-# Launch GitHub MCP server via Docker
-# Uses official GitHub MCP server image with stdin/stdout transport
-exec docker run --rm -i \
-  -e GITHUB_TOKEN="$GITHUB_TOKEN" \
-  ghcr.io/modelcontextprotocol/server-github:latest
+# Launch GitHub MCP server via npx
+# Uses official GitHub MCP server package with stdin/stdout transport
+export GITHUB_PERSONAL_ACCESS_TOKEN="$GITHUB_TOKEN"
+exec /opt/homebrew/bin/npx -y @modelcontextprotocol/server-github

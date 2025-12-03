@@ -1,4 +1,6 @@
 {
+  "title": "EcoHub Kosova",
+  "subtitle": "Connect, collaborate, and create sustainable circulation together.",
   "hero": {
     "supportedBy": "Supported by the Circular Economy Coalition",
     "titleStart": "Connect. Collaborate.",
@@ -31,5 +33,45 @@
     "wantedTitle": "Wanted to Buy",
     "wantedBody": "Discover requests for materials, products, and services from network partners for joint projects.",
     "wantedCta": "View Requests"
+  },
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
   }
 }

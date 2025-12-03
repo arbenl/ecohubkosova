@@ -2,9 +2,9 @@
 
 import type React from "react"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { useLocale } from "next-intl"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -113,7 +113,7 @@ export default function AddListingClientPage({ cities }: AddListingClientPagePro
 
       // Redirect after 3 seconds
       setTimeout(() => {
-        router.push(`/${locale}/marketplace`)
+        router.push(`/marketplace`)
       }, 3000)
     }
     setLoading(false)
@@ -170,7 +170,7 @@ export default function AddListingClientPage({ cities }: AddListingClientPagePro
             </CardContent>
             <CardFooter>
               <Button asChild>
-                <Link href={`/${locale}/marketplace`}>Kthehu në treg</Link>
+                <Link href="/marketplace">Kthehu në treg</Link>
               </Button>
             </CardFooter>
           </Card>

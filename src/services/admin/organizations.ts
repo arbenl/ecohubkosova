@@ -21,7 +21,9 @@ export interface AdminOrganization {
 }
 
 const toError = (error: unknown) =>
-  error instanceof Error ? error : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
+  error instanceof Error
+    ? error
+    : new Error(typeof error === "string" ? error : "Gabim i panjohur.")
 
 export async function fetchAdminOrganizations() {
   try {
@@ -66,5 +68,27 @@ export async function updateOrganizationRecord(
   } catch (error) {
     console.error("[services/admin/organizations] Failed to update organization:", error)
     return { error: toError(error) }
+  }
+}
+
+export async function fetchPendingOrganizations(limit = 5) {
+  try {
+    const rows = await db
+      .get()
+      .select()
+      .from(organizations)
+      .where(eq(organizations.is_approved, false))
+      .limit(limit)
+
+    const data: AdminOrganization[] = rows.map((org) => ({
+      ...org,
+      created_at: org.created_at.toISOString(),
+      updated_at: org.updated_at ? org.updated_at.toISOString() : null,
+    }))
+
+    return { data, error: null }
+  } catch (error) {
+    console.error("[services/admin/organizations] Failed to fetch pending organizations:", error)
+    return { data: null, error: toError(error) }
   }
 }

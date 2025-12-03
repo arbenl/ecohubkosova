@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -48,7 +48,7 @@ export function UserProfileEditForm({
       setSuccess(true)
       setIsSubmitting(false)
       setTimeout(() => {
-        router.push(`/${locale}/my`)
+        router.push("/my")
       }, 1500)
     }
   }

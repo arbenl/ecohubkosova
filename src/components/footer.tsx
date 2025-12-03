@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { useLocale, useTranslations } from "next-intl"
 
 const footerLinks = [
@@ -43,7 +43,7 @@ export function Footer() {
               {footerLinks.map((link) => (
                 <li key={link.key}>
                   <Link
-                    href={`/${locale}/${link.href}`}
+                    href={link.href.startsWith("/") ? link.href : `/${link.href}`}
                     className="text-sm text-gray-700 hover:text-emerald-700 transition-colors"
                   >
                     {t(link.key)}
@@ -59,7 +59,7 @@ export function Footer() {
               {supportLinks.map((link) => (
                 <li key={link.key}>
                   <Link
-                    href={`/${locale}/${link.href}`}
+                    href={link.href.startsWith("/") ? link.href : `/${link.href}`}
                     className="text-sm text-gray-700 hover:text-emerald-700 transition-colors"
                   >
                     {t(link.key)}

@@ -37,8 +37,10 @@ export interface Listing {
   price: number | null
   currency: string | null
   category: string
+  category_id?: string
   condition: string
   location: string
+  location_details?: string | null
   contact: string // The contact information for the listing
   created_at: string
   user_id: string
@@ -48,9 +50,11 @@ export interface Listing {
   pricing_type?: string | null
   visibility?: string | null
   status?: string | null
+  updated_at?: string | null
   city?: string | null
   region?: string | null
   eco_labels?: string[] | null
+  eco_score?: number | null
   tags?: string[] | null
   category_name_en?: string | null
   category_name_sq?: string | null

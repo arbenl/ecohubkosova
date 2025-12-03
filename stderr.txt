@@ -1,0 +1,2 @@
+[EcoHub QA] Server started successfully
+[EcoHub QA] Available tools: auth_audit, navigation_audit, build_health, runtime_log_scan, supabase_health, performance_audit, dependency_audit, accessibility_audit, i18n_audit, csp_audit, env_audit, tests_orchestrator, coverage_audit, test_runner

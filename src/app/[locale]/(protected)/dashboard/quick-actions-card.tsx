@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { ShoppingCart, Users, BookOpen, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -51,7 +51,7 @@ export function QuickActionsCard() {
               className="h-auto py-6 flex flex-col items-center justify-center gap-3 rounded-xl hover-lift bg-transparent"
               asChild
             >
-              <Link href={`/${locale}${href}`}>
+              <Link href={href}>
                 <Icon className="h-8 w-8 text-emerald-600" />
                 <span className="text-sm font-medium text-center">{title}</span>
                 <span className="text-xs text-gray-500 text-center">{description}</span>

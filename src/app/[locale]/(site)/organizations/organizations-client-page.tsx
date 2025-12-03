@@ -1,12 +1,18 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
+import { useRouter } from "@/i18n/routing"
+import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Building, MapPin, Users, Search, Filter, Mail, ExternalLink } from "lucide-react"
 import type { PublicOrganization } from "@/services/public/organizations"
 
@@ -31,7 +37,8 @@ export default function OrganizationsClientPage({
 
   const filteredOrganizations = useMemo(() => {
     return initialOrganizations.filter((org) => {
-      const matchesSearch = !search ||
+      const matchesSearch =
+        !search ||
         org.name.toLowerCase().includes(search.toLowerCase()) ||
         org.description.toLowerCase().includes(search.toLowerCase()) ||
         org.primary_interest.toLowerCase().includes(search.toLowerCase())
@@ -48,7 +55,7 @@ export default function OrganizationsClientPage({
     if (type !== "all") params.set("type", type)
 
     const query = params.toString()
-    router.push(`/${locale}/organizations${query ? `?${query}` : ""}`)
+    router.push(`/organizations${query ? `?${query}` : ""}`)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -104,12 +111,8 @@ export default function OrganizationsClientPage({
       {filteredOrganizations.length === 0 ? (
         <div className="text-center py-12">
           <Building className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-600 mb-2">
-            Nuk u gjetën organizata
-          </h3>
-          <p className="text-gray-500">
-            Provoni të ndryshoni kriteret e kërkimit
-          </p>
+          <h3 className="text-xl font-semibold text-gray-600 mb-2">Nuk u gjetën organizata</h3>
+          <p className="text-gray-500">Provoni të ndryshoni kriteret e kërkimit</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -134,9 +137,7 @@ export default function OrganizationsClientPage({
               </CardHeader>
 
               <CardContent className="space-y-4">
-                <p className="text-sm text-gray-600 line-clamp-3">
-                  {org.description}
-                </p>
+                <p className="text-sm text-gray-600 line-clamp-3">{org.description}</p>
 
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -177,7 +178,7 @@ export default function OrganizationsClientPage({
       {/* Back to Home */}
       <div className="text-center mt-12">
         <Button variant="outline" asChild>
-          <Link href={`/${locale}`}>
+          <Link href="/">
             <ExternalLink className="h-4 w-4 mr-2" />
             Kthehu në fillim
           </Link>

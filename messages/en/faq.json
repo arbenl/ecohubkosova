@@ -1,0 +1,126 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Find answers to the most common questions about ECO HUB KOSOVA",
+  "sections": {
+    "general": {
+      "title": "General Questions",
+      "description": "The most common questions about our platform and services",
+      "questions": {
+        "whatIsEcoHub": {
+          "question": "What is ECO HUB KOSOVA?",
+          "answer": "ECO HUB KOSOVA is the first circular economy platform in Kosovo that connects organizations, businesses and individuals to promote collaboration and sustainability. We provide a digital space where partners can find each other, exchange resources and implement joint projects."
+        },
+        "howToRegister": {
+          "question": "How can I register on the platform?",
+          "answer": "Registration is simple and free. Click the \"Join the Network\" button on the homepage and complete the registration form. If you are an individual, your profile will be activated immediately. If you represent an organization, the profile will be reviewed by our team before activation."
+        },
+        "isFree": {
+          "question": "Is the platform free to use?",
+          "answer": "Yes, ECO HUB KOSOVA is completely free for all users. We believe that access to information and collaboration opportunities should be open to everyone who wants to contribute to the circular economy."
+        },
+        "whoCanJoin": {
+          "question": "Who can become a member of the platform?",
+          "answer": "The platform is open to individuals, non-governmental organizations, social enterprises, companies and any other entity committed to the circular economy and sustainability. We welcome everyone who wants to contribute positively to the environment and society."
+        }
+      }
+    },
+    "marketplace": {
+      "title": "About the Marketplace",
+      "description": "Questions about the circular economy marketplace",
+      "questions": {
+        "howMarketplaceWorks": {
+          "question": "How does the marketplace work on the platform?",
+          "answer": "The marketplace is a space where members can post listings for materials, products or services they want to sell or buy. Each listing is reviewed by our team before publication to ensure quality and compliance with circular economy principles."
+        },
+        "transactionFees": {
+          "question": "Are there fees for transactions?",
+          "answer": "No, ECO HUB KOSOVA does not charge fees for transactions made through the platform. We only facilitate the connection between buyers and sellers. Prices and payment terms are agreed directly between the parties."
+        },
+        "whatCanBeSold": {
+          "question": "What types of materials can be sold in the marketplace?",
+          "answer": "The marketplace can sell recyclable materials, sustainable products, environmental services, renewable energy equipment and anything else that contributes to the circular economy. Materials harmful to the environment or that violate applicable laws are not allowed."
+        }
+      }
+    },
+    "partnership": {
+      "title": "Collaboration and Partnership",
+      "description": "Questions about collaboration opportunities",
+      "questions": {
+        "findPartners": {
+          "question": "How can I find partners for projects?",
+          "answer": "You can use the Organization Directory to search for potential partners based on interests, location and type of organization. You can also post in the marketplace if you are looking for specific services or contact organizations you are interested in directly."
+        },
+        "projectSupport": {
+          "question": "Does the platform offer support for projects?",
+          "answer": "Yes, we offer support in various forms: consulting for project development, connections with potential funders, promotion through our communication channels and access to our network of experts. Contact our team for more details."
+        },
+        "organizeEvent": {
+          "question": "How can I organize an event through the platform?",
+          "answer": "Members can propose events that align with our mission. Send a proposal to our team with event details, objectives and target audience. We will help promote and organize events that contribute to the circular economy."
+        }
+      }
+    },
+    "technical": {
+      "title": "Technical Support",
+      "description": "Questions about using the platform",
+      "questions": {
+        "forgotPassword": {
+          "question": "I forgot my password, how can I recover it?",
+          "answer": "For security reasons, we do not offer automatic password recovery. Please contact our support team at info@ecohubkosova.com and we will help you restore access to your account."
+        },
+        "updateProfile": {
+          "question": "How can I update my profile?",
+          "answer": "After logging into the platform, go to \"My Profile\" in the dashboard menu. There you can update all your personal and organization information. Changes will be saved automatically."
+        },
+        "isSafe": {
+          "question": "Is the platform safe to use?",
+          "answer": "Yes, we use the latest security technologies to protect your data. All communications are encrypted and we follow best practices for data security. We also do not share your personal information with third parties."
+        },
+        "deleteAccount": {
+          "question": "How can I delete my account?",
+          "answer": "If you wish to delete your account, please contact our support team. We will process your request and delete all personal data in accordance with our privacy policy."
+        }
+      }
+    }
+  },
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
+  }
+}

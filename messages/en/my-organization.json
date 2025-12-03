@@ -1,4 +1,6 @@
 {
+  "title": "My organization workspace",
+  "subtitle": "Manage your organization profile, listings, and team",
   "workspace": {
     "title": "My Organization",
     "subtitle": "Manage your organization profile and listings",
@@ -15,6 +17,7 @@
       "memberRoleEditor": "Editor",
       "memberRoleViewer": "Viewer",
       "memberRole": "Your role",
+      "statusApproved": "Approved",
       "statusPending": "Pending approval",
       "verification": {
         "verified": "Verified",
@@ -38,6 +41,9 @@
         "status": "Status",
         "location": "Location"
       },
+      "table": {
+        "actions": "Actions"
+      },
       "actions": {
         "view": "View",
         "archive": "Archive"
@@ -47,7 +53,7 @@
   "onboarding": {
     "title": "Connect your organization",
     "subtitle": "Manage your organization profile and listings",
-    "noOrgDescription": "You don’t have an organization connected to EcoHub yet. You can either create a new profile or connect to an existing organization.",
+    "noOrgDescription": "You don't have an organization connected to EcoHub yet. You can either create a new profile or connect to an existing organization.",
     "createNew": "Create a new organization",
     "searchExisting": "Connect to an existing organization",
     "createDescription": "Create a profile for your business or organization.",
@@ -137,6 +143,46 @@
     },
     "confirmations": {
       "removeDescription": "Are you sure you want to remove {name} from this organization?"
+    }
+  },
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
     }
   }
 }

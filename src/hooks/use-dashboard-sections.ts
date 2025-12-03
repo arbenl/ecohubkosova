@@ -24,7 +24,7 @@ export function useLatestArticlesSection(latestArticles: Article[] = []) {
         id: article.id,
         title: article.title,
         author: article.users?.full_name || "Autor i panjohur",
-        href: `/${locale}/knowledge/articles/${article.id}`,
+        href: `/knowledge/articles/${article.id}`,
       })),
     [latestArticles, locale]
   )
@@ -32,7 +32,7 @@ export function useLatestArticlesSection(latestArticles: Article[] = []) {
   return {
     items,
     hasItems: items.length > 0,
-    ctaHref: `/${locale}/knowledge`,
+    ctaHref: `/knowledge`,
     ctaLabel: "Shiko të gjithë artikujt",
     emptyMessage: "Nuk ka artikuj të disponueshëm aktualisht.",
   }
@@ -46,7 +46,7 @@ export function useKeyPartnersSection(keyPartners: Partner[] = []) {
         id: partner.id,
         name: partner.name,
         meta: `${partner.type} • ${partner.location}`,
-        href: `/${locale}/partners/${partner.id}`,
+        href: `/partners/${partner.id}`,
       })),
     [keyPartners, locale]
   )
@@ -54,7 +54,7 @@ export function useKeyPartnersSection(keyPartners: Partner[] = []) {
   return {
     items,
     hasItems: items.length > 0,
-    ctaHref: `/${locale}/partners`,
+    ctaHref: `/partners`,
     ctaLabel: "Shiko të gjithë partnerët",
     emptyMessage: "Nuk ka partnerë të disponueshëm aktualisht.",
   }

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Leaf, Droplet, Zap, Recycle, Award, Lightbulb } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 
@@ -49,7 +49,7 @@ export default async function SustainabilityPage({
               <p className="text-lg text-gray-700 leading-relaxed mb-6">{t("mission.body")}</p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild className="bg-green-600 hover:bg-green-700">
-                  <Link href={`/${locale}/about-us`}>{t("mission.cta")}</Link>
+                  <Link href="/about-us">{t("mission.cta")}</Link>
                 </Button>
               </div>
             </div>
@@ -139,7 +139,7 @@ export default async function SustainabilityPage({
                 ))}
               </ul>
               <Button asChild className="bg-teal-600 hover:bg-teal-700">
-                <Link href={`/${locale}/partners`}>{t("certification.cta")}</Link>
+                <Link href="/partners">{t("certification.cta")}</Link>
               </Button>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default async function SustainabilityPage({
           <p className="text-lg text-green-50 max-w-2xl mx-auto mb-8">{t("cta.subtitle")}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-white text-green-600 hover:bg-gray-100">
-              <Link href={`/${locale}/marketplace`}>{t("cta.browse")}</Link>
+              <Link href="/marketplace">{t("cta.browse")}</Link>
             </Button>
             <Button
               asChild
@@ -185,7 +185,7 @@ export default async function SustainabilityPage({
               variant="outline"
               className="border-white text-white hover:bg-white/10"
             >
-              <Link href={`/${locale}/contact`}>{t("cta.partner")}</Link>
+              <Link href="/contact">{t("cta.partner")}</Link>
             </Button>
           </div>
         </div>

@@ -161,6 +161,17 @@
   "createError": "Error creating listing. Please try again.",
   "updateSuccess": "Your listing has been updated successfully!",
   "updateError": "Error updating listing. Please try again.",
+  "owner": {
+    "title": "Owner controls",
+    "edit": "Edit listing",
+    "archive": "Archive",
+    "archiveTitle": "Archive this listing?",
+    "archiveDescription": "Archived listings are hidden from the marketplace and moved to your Archived tab.",
+    "confirm": "Confirm archive",
+    "cancel": "Cancel",
+    "archiveSuccess": "Listing archived",
+    "archiveError": "Unable to archive listing"
+  },
   "actions": {
     "save": "Save for later",
     "saved": "Saved",
@@ -191,5 +202,45 @@
     "browseCTA": "Browse marketplace",
     "count": "{count, plural, =0 {0 saved} one {1 saved} other {# saved}}",
     "removedFromSaved": "Removed from saved listings"
+  },
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
   }
 }

@@ -1,7 +1,7 @@
 {
   "hero": {
     "title": "Rreth EcoHub Kosova",
-    "subtitle": "EcoHub Kosova është një platformë dygjuhëshe që lidh materialet e riciklueshme, ricikluesit dhe shërbimet e gjelbra – duke e kthyer avokimin për ekonominë rrethore në bashkëpunim të përditshëm mes bizneseve, komunave dhe qytetarëve.",
+    "subtitle": "EcoHub Kosova është një platformë dygjuhëshe që lidh materialet e riciklueshme, ricikluesit dhe shërbimet e gjelbra – duke e kthyer avokimin për ekonominë qarkore në bashkëpunim të përditshëm mes bizneseve, komunave dhe qytetarëve.",
     "cta": {
       "primary": "Shfleto tregun",
       "primaryHref": "marketplace",
@@ -11,7 +11,7 @@
   },
   "advocacy": {
     "heading": "Nga faqe fushate në infrastrukturë të gjelbër",
-    "body": "EcoHub filloi si nismë avokuese e Qendrës për Avokim dhe Zhvillim (KADC) për të rritur ndërgjegjësimin për mbeturinat, ndotjen e ajrit dhe nevojën për ekonomi rrethore. Me rritjen e ekosistemit, u bë e qartë se palët e interesit nuk kishin nevojë vetëm për informata – ata kishin nevojë për një vend të përbashkët ku të gjejnë njëri-tjetrin dhe të bashkëpunojnë.\n\nEcoHub Kosova V2 është pikërisht ky vend: një treg neutral me interes publik ku materialet e riciklueshme, shërbimet e grumbullimit, kompanitë e riciklimit dhe zgjidhjet e gjelbra mund të publikohen, të zbulohen dhe të lidhen mes vete."
+    "body": "EcoHub filloi si nismë avokuese e Qendrës për Avokim dhe Zhvillim (KADC) për të rritur ndërgjegjësimin për mbeturinat, ndotjen e ajrit dhe nevojën për ekonomi qarkore. Me rritjen e ekosistemit, u bë e qartë se palët e interesit nuk kishin nevojë vetëm për informata – ata kishin nevojë për një vend të përbashkët ku të gjejnë njëri-tjetrin dhe të bashkëpunojnë.\n\nEcoHub Kosova V2 është pikërisht ky vend: një treg neutral me interes publik ku materialet e riciklueshme, shërbimet e grumbullimit, kompanitë e riciklimit dhe zgjidhjet e gjelbra mund të publikohen, të zbulohen dhe të lidhen mes vete."
   },
   "actions": {
     "heading": "Çfarë mund të bëni në EcoHub",
@@ -19,7 +19,7 @@
       "title": "Për biznese dhe riciklues",
       "items": [
         "Publikoni materiale të riciklueshme, produkte të ricikluara ose shërbime të gjelbra",
-        "Gjeni furnitorë dhe klientë të rinj në ekonominë rrethore në Kosovë",
+        "Gjeni furnitorë dhe klientë të rinj në ekonominë qarkore në Kosovë",
         "Ndiqni statistikat bazike sa shpesh shihen dhe kontaktohen listimet tuaja"
       ]
     },
@@ -53,5 +53,54 @@
     ],
     "cta": "Dëshironi ta paraqisni organizatën tuaj ose të bëheni partner?",
     "ctaLink": "Na kontaktoni"
+  },
+  "title": "Rreth EcoHub",
+  "subtitle": "Mëso si EcoHub lidh aktorët e ekonomisë qarkore në Kosovë.",
+  "stats": {
+    "title": "Përmbledhje",
+    "savedListings": "Listime të ruajtura",
+    "organizations": "Organizata",
+    "myListings": "Listimet e mia",
+    "viewDetails": "Shiko detaje"
+  },
+  "quickActions": {
+    "title": "Veprime të shpejta",
+    "profile": {
+      "title": "Profili",
+      "description": "Përditëso të dhënat personale"
+    },
+    "organization": {
+      "title": "Organizata",
+      "description": "Menaxho të dhënat e organizatës"
+    },
+    "listings": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    },
+    "addListing": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    }
+  },
+  "alerts": {
+    "title": "Njoftimet",
+    "description": "Kontrollo këtu për përditësime të rëndësishme.",
+    "noNewAlerts": "Asnjë njoftim i ri"
+  },
+  "myListingsPage": {
+    "title": "Listimet e mia",
+    "createNew": "Krijo listim të ri",
+    "empty": {
+      "title": "Nuk keni krijuar ende asnjë listim.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkore.",
+      "cta": "Krijo Listim"
+    }
+  },
+  "grant": {
+    "title": "Mbështetja e projektit",
+    "description": "Projekti “Nxitja e Ekosistemit të Ekonomisë Qarkore në Prishtinë: Fuqizimi i të Rinjve dhe Ngritja e Qëndrueshmërisë” është nën-grantuar përmes projektit EICEE, bashkë-financuar nga Bashkimi Evropian dhe Qeveria e Malit të Zi.",
+    "kadcAlt": "Logo KADC",
+    "eiceeAlt": "Logo e projektit EICEE",
+    "fundersAlt": "Financuar nga Bashkimi Evropian dhe bashkë-financuar nga Qeveria e Malit të Zi"
   }
 }

@@ -161,6 +161,17 @@
   "createError": "Gabim gjatë krijimit të ofertës. Provo përsëri.",
   "updateSuccess": "Oferta juaj u përditësua me sukses!",
   "updateError": "Gabim gjatë përditësimit të ofertës. Provo përsëri.",
+  "owner": {
+    "title": "Kontrolle të pronarit",
+    "edit": "Përditëso listimin",
+    "archive": "Arkivo",
+    "archiveTitle": "Ta arkivojmë këtë listim?",
+    "archiveDescription": "Listimet e arkivuara fshihen nga tregu dhe shfaqen në skedën Arkivuar.",
+    "confirm": "Konfirmo arkivimin",
+    "cancel": "Anulo",
+    "archiveSuccess": "Listimi u arkivua",
+    "archiveError": "Listimi nuk u arkivua"
+  },
   "actions": {
     "save": "Ruaj për më vonë",
     "saved": "U rua",
@@ -191,5 +202,45 @@
     "browseCTA": "Shfleto tregun",
     "count": "{count, plural, =0 {0 të ruajtur} one {1 e ruajtur} other {# të ruajtur}}",
     "removedFromSaved": "U hequr nga ofertat e ruajtura"
+  },
+  "stats": {
+    "title": "Përmbledhje",
+    "savedListings": "Listime të ruajtura",
+    "organizations": "Organizata",
+    "myListings": "Listimet e mia",
+    "viewDetails": "Shiko detaje"
+  },
+  "quickActions": {
+    "title": "Veprime të shpejta",
+    "profile": {
+      "title": "Profili",
+      "description": "Përditëso të dhënat personale"
+    },
+    "organization": {
+      "title": "Organizata",
+      "description": "Menaxho të dhënat e organizatës"
+    },
+    "listings": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    },
+    "addListing": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    }
+  },
+  "alerts": {
+    "title": "Njoftimet",
+    "description": "Kontrollo këtu për përditësime të rëndësishme.",
+    "noNewAlerts": "Asnjë njoftim i ri"
+  },
+  "myListingsPage": {
+    "title": "Listimet e mia",
+    "createNew": "Krijo listim të ri",
+    "empty": {
+      "title": "Nuk keni krijuar ende asnjë listim.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "cta": "Krijo Listim"
+    }
   }
 }

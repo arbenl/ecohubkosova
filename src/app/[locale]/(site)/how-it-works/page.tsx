@@ -1,13 +1,9 @@
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { getTranslations } from "next-intl/server"
 import { ArrowRight, CheckCircle2 } from "lucide-react"
 import { PublicPageHero } from "@/components/layout/PublicPageHero"
 
-export default async function HowItWorksPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
+export default async function HowItWorksPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const t = await getTranslations("how-it-works")
 
@@ -48,14 +44,14 @@ export default async function HowItWorksPage({
         actions={
           <>
             <Link
-              href={`/${locale}/marketplace`}
+              href="/marketplace"
               className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-emerald-700 shadow-sm transition hover:bg-emerald-50"
             >
               {t("heroCtaPrimary")}
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href={`/${locale}/partners`}
+              href="/partners"
               className="inline-flex items-center gap-2 rounded-full border border-white/70 px-5 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               {t("heroCtaSecondary")}
@@ -87,9 +83,7 @@ export default async function HowItWorksPage({
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
             {t("stepsTitle")}
           </p>
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
-            {t("stepsTitle")}
-          </h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">{t("stepsTitle")}</h2>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {steps.map((step) => (
@@ -112,9 +106,7 @@ export default async function HowItWorksPage({
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
             {t("audiencesTitle")}
           </p>
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
-            {t("audiencesTitle")}
-          </h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">{t("audiencesTitle")}</h2>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           {audiences.map((audience) => (

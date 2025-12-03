@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { useTranslations } from "next-intl"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Bookmark } from "lucide-react"
 import type { EcoListing } from "@/db/schema"
@@ -38,13 +38,13 @@ export default function SavedListingsClient({
           title={t("savedListings.emptyTitle")}
           description={t("savedListings.emptyBody")}
           actionLabel={t("savedListings.browseCTA")}
-          actionHref={`/${locale}/marketplace`}
+          actionHref="/marketplace"
           className="mb-8"
         />
 
         <div className="mt-8 text-center">
           <Button variant="ghost" asChild>
-            <Link href={`/${locale}/my/organization`}>
+            <Link href="/my">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to dashboard
             </Link>
@@ -63,7 +63,7 @@ export default function SavedListingsClient({
         className="rounded-xl"
       >
         <Button variant="ghost" asChild>
-          <Link href={`/${locale}/marketplace`}>Browse more</Link>
+          <Link href="/marketplace">Browse more</Link>
         </Button>
       </PageHeader>
 
@@ -77,7 +77,7 @@ export default function SavedListingsClient({
       {/* Footer Navigation */}
       <div className="mt-12 text-center">
         <Button variant="ghost" asChild>
-          <Link href={`/${locale}/my/organization`}>
+          <Link href="/my">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to dashboard
           </Link>

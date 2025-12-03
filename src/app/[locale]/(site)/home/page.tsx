@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import {
   UserPlus,
   Search,
@@ -47,7 +47,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                   className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
                   asChild
                 >
-                  <Link href={`/${locale}/register`}>
+                  <Link href="/register">
                     <UserPlus className="mr-2 h-5 w-5" />
                     {t("hero.ctaRegister")}
                   </Link>
@@ -58,7 +58,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                   className="rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105 border-2 border-[#00C896] text-[#00C896] hover:bg-[#00C896] hover:text-white"
                   asChild
                 >
-                  <Link href={`/${locale}/marketplace`}>
+                  <Link href="/marketplace">
                     <Search className="mr-2 h-5 w-5" />
                     {t("hero.ctaMarketplace")}
                   </Link>
@@ -73,7 +73,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                   className="text-[#00C896] hover:text-[#00A07E] p-0 h-auto font-semibold"
                   asChild
                 >
-                  <Link href={`/${locale}/login`}>
+                  <Link href="/login">
                     <LogIn className="mr-1 h-4 w-4" />
                     {t("hero.signIn")}
                   </Link>
@@ -107,7 +107,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                     className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 hover:shadow-xl hover:shadow-blue-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href={`/${locale}/explore`}>
+                    <Link href="/marketplace">
                       <UserPlus className="mr-2 h-4 w-4" />
                       {t("howItWorks.step1Cta")}
                     </Link>
@@ -126,7 +126,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                     className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 hover:shadow-xl hover:shadow-purple-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href={`/${locale}/partners`}>
+                    <Link href="/partners">
                       <Search className="mr-2 h-4 w-4" />
                       {t("howItWorks.step2Cta")}
                     </Link>
@@ -145,7 +145,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href={`/${locale}/marketplace`}>
+                    <Link href="/marketplace">
                       <MessageCircle className="mr-2 h-4 w-4" />
                       {t("howItWorks.step3Cta")}
                     </Link>
@@ -184,7 +184,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href={`/${locale}/marketplace?lloji=shes`}>
+                    <Link href="/marketplace?lloji=shes">
                       <Leaf className="mr-2 h-4 w-4" />
                       {t("marketplace.forSaleCta")}
                     </Link>
@@ -207,7 +207,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                     className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
                     asChild
                   >
-                    <Link href={`/${locale}/marketplace?lloji=blej`}>
+                    <Link href="/marketplace?lloji=blej">
                       <Search className="mr-2 h-4 w-4" />
                       {t("marketplace.wantedCta")}
                     </Link>

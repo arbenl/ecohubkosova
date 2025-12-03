@@ -4,5 +4,85 @@
   "organizations": "Organizations",
   "articles": "Articles",
   "listings": "Marketplace",
-  "adminPanel": "Admin Panel"
+  "adminPanel": "Admin Panel",
+  "title": "Admin workspace",
+  "subtitle": "Monitor and manage platform activity.",
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
+  },
+  "articlesAdmin": {
+    "tableTitle": "Articles list",
+    "headers": {
+      "title": "Title",
+      "category": "Category",
+      "type": "Type",
+      "published": "Published",
+      "actions": "Actions"
+    },
+    "type": {
+      "external": "External",
+      "local": "Local"
+    },
+    "published": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View"
+    },
+    "createTitle": "Create new article",
+    "editTitle": "Edit article",
+    "placeholders": {
+      "title": "Title",
+      "content": "Content (leave blank for external articles)",
+      "externalUrl": "External URL (for external sources)",
+      "originalLanguage": "Original language (e.g., 'en', 'sq')",
+      "category": "Category",
+      "tags": "Tags (separate with commas)",
+      "featuredImage": "Featured image URL"
+    },
+    "publishNow": "Publish immediately",
+    "submitCreate": "Create article",
+    "save": "Save",
+    "cancel": "Cancel"
+  }
 }

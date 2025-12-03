@@ -1,0 +1,95 @@
+{
+  "title": "My Dashboard",
+  "subtitle": "Welcome back, {name}",
+  "nav": {
+    "overview": "Overview",
+    "overviewDesc": "Your stats and quick entry points",
+    "listings": "My listings",
+    "listingsDesc": "Create, edit and archive",
+    "saved": "Saved",
+    "savedDesc": "Listings you bookmarked",
+    "profile": "Profile",
+    "profileDesc": "Update your details",
+    "organization": "Organization",
+    "organizationDesc": "Manage your team profile",
+    "addListing": "Create listing",
+    "workspace": "My workspace"
+  },
+  "stats": {
+    "title": "Your Activity",
+    "savedListings": "Saved Listings",
+    "organizations": "Organizations",
+    "myListings": "My Listings",
+    "viewDetails": "View Details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Edit Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Manage Organization",
+      "description": "Administer your organization's profile"
+    },
+    "addListing": {
+      "title": "Create New Listing",
+      "description": "Add a new item to the marketplace"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "label": "Marketplace workspace",
+    "title": "My Listings",
+    "subtitle": "Create, edit, and archive your marketplace posts.",
+    "createNew": "Create new listing",
+    "successTitle": "Update saved",
+    "table": {
+      "searchPlaceholder": "Search listings by title...",
+      "tabs": {
+        "active": "Active",
+        "draft": "Drafts",
+        "archived": "Archived"
+      },
+      "columns": {
+        "title": "Title",
+        "status": "Status",
+        "visibility": "Visibility",
+        "updated": "Last updated",
+        "price": "Price",
+        "actions": "Actions"
+      },
+      "statuses": {
+        "active": "Active",
+        "draft": "Draft",
+        "archived": "Archived"
+      },
+      "visibilities": {
+        "public": "Public",
+        "private": "Private"
+      },
+      "actions": {
+        "view": "View",
+        "edit": "Edit",
+        "archive": "Archive"
+      },
+      "archive": {
+        "title": "Archive listing?",
+        "description": "This listing will be hidden from the marketplace and moved to your Archived tab.",
+        "confirm": "Confirm archive",
+        "cancel": "Cancel",
+        "success": "Listing archived",
+        "error": "Unable to archive listing"
+      }
+    },
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
+  }
+}

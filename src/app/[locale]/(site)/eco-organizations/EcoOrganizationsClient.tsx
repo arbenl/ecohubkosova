@@ -1,10 +1,11 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { useState, useMemo } from "react"
 import { ChevronRight, Building2 } from "lucide-react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { EmptyStateBlock } from "@/components/shared/empty-state-block"
 
 interface Organization {
@@ -77,7 +78,7 @@ export default function EcoOrganizationsClient({
     if (city !== "all") params.set("city", city)
 
     const query = params.toString()
-    router.push(`/${locale}/eco-organizations${query ? `?${query}` : ""}`)
+    router.push(`/eco-organizations${query ? `?${query}` : ""}`)
   }
 
   return (
@@ -97,7 +98,7 @@ export default function EcoOrganizationsClient({
               <option value="all">{t("allRoles")}</option>
               {ORG_ROLES.map((role) => (
                 <option key={role} value={role}>
-                  {t(`roleLabels.${role}`)}
+                  {t(`roleLabels.${role} `)}
                 </option>
               ))}
             </select>
@@ -161,7 +162,7 @@ function EcoOrganizationCard({ organization, t, locale }: CardProps) {
             <p className="text-sm text-gray-600">{city}</p>
           </div>
           <span className="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full whitespace-nowrap">
-            {t(`roleLabels.${organization.org_role}`)}
+            {t(`roleLabels.${organization.org_role} `)}
           </span>
         </div>
       </div>
@@ -214,7 +215,7 @@ function EcoOrganizationCard({ organization, t, locale }: CardProps) {
           <p className="text-xs text-gray-600">
             {organization.contact_email && (
               <a
-                href={`mailto:${organization.contact_email}`}
+                href={`mailto:${organization.contact_email} `}
                 className="text-green-600 hover:text-green-700 font-medium"
               >
                 {organization.contact_email}
@@ -227,7 +228,7 @@ function EcoOrganizationCard({ organization, t, locale }: CardProps) {
       {/* Footer Actions */}
       <div className="bg-gray-50 px-4 py-3 border-t border-gray-200 flex gap-2">
         <Link
-          href={`/${locale}/eco-organizations/${organization.organization_id}`}
+          href={`/ eco - organizations / ${organization.organization_id} `}
           className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white border border-green-300 text-green-700 rounded-md text-sm font-medium hover:bg-green-50 transition-colors"
         >
           {t("cardViewOrganization")}

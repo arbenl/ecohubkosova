@@ -1,29 +1,51 @@
 export const dynamic = "force-dynamic"
 
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 import { getTranslations, getLocale } from "next-intl/server"
 import { getServerUser } from "@/lib/supabase/server"
 import { WorkspaceLayout } from "@/components/workspace/workspace-layout"
 import { AdminProfileEditForm } from "./admin-profile-edit-form"
 import { getProfileData } from "@/app/[locale]/(protected)/profile/actions"
 
-export default async function AdminProfileEditPage() {
-  const locale = await getLocale()
+export default async function AdminProfileEditPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
   const t = await getTranslations("admin-profile")
   const tCommon = await getTranslations("common")
 
   const { user } = await getServerUser()
 
   if (!user?.id) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+    redirect({
+      href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`,
+      locale: locale,
+    })
+    return // Add return here
   }
 
   const { userProfile, error } = await getProfileData()
 
-  // Check if user is admin
-  if (!userProfile || userProfile.role !== "Admin") {
-    redirect(`/${locale}/my`)
+  // Handle case where userProfile is null
+  if (!userProfile) {
+    // Redirect to login if userProfile is null
+    redirect({
+      href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`,
+      locale: locale,
+    })
+    return // Add return here
   }
+
+  // Handle case where userProfile exists but is not an Admin
+  if (userProfile.role !== "Admin") {
+    redirect({ href: "/my", locale: locale })
+    return // Add return here
+  }
+
+  // At this point, userProfile is guaranteed to be non-null and role is Admin
+  // No need for a separate `adminProfile` variable, as `userProfile` is now safely narrowed.
 
   if (error) {
     return (

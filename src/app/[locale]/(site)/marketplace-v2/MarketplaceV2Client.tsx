@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
+import { useRouter, usePathname } from "@/i18n/routing"
 import { ListingCardV2, ListingCardSkeleton } from "@/components/marketplace-v2/ListingCardV2"
 import { EmptyState } from "@/components/marketplace-v2/EmptyState"
 import { FiltersV2 } from "@/components/marketplace-v2/FiltersV2"
@@ -32,6 +33,7 @@ const parseLimitParam = (value: string | null): number => {
 
 export default function MarketplaceV2Client({ locale, user }: MarketplaceV2ClientProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const [listings, setListings] = useState<Listing[]>([])
   const [pagination, setPagination] = useState({
@@ -44,8 +46,14 @@ export default function MarketplaceV2Client({ locale, user }: MarketplaceV2Clien
   const [error, setError] = useState<string | null>(null)
 
   const searchParamsString = useMemo(() => searchParams.toString(), [searchParams])
-  const requestedPage = useMemo(() => parsePageParam(searchParams.get("page")), [searchParamsString])
-  const requestedLimit = useMemo(() => parseLimitParam(searchParams.get("limit")), [searchParamsString])
+  const requestedPage = useMemo(
+    () => parsePageParam(searchParams.get("page")),
+    [searchParamsString]
+  )
+  const requestedLimit = useMemo(
+    () => parseLimitParam(searchParams.get("limit")),
+    [searchParamsString]
+  )
 
   useEffect(() => {
     const controller = new AbortController()
@@ -105,7 +113,7 @@ export default function MarketplaceV2Client({ locale, user }: MarketplaceV2Clien
             const normalizedParams = new URLSearchParams(searchParamsString)
             normalizedParams.set("page", data.page.toString())
             normalizedParams.set("limit", data.limit.toString())
-            router.replace(`?${normalizedParams.toString()}`, { scroll: false })
+            router.replace(`${pathname}?${normalizedParams.toString()}`, { scroll: false })
           }
         } else {
           throw new Error(data.error || data.message || "Failed to fetch listings")
@@ -126,7 +134,7 @@ export default function MarketplaceV2Client({ locale, user }: MarketplaceV2Clien
       clearTimeout(timeoutId)
       controller.abort()
     }
-  }, [searchParamsString, locale, router, requestedPage, requestedLimit])
+  }, [searchParamsString, locale, router, pathname, requestedPage, requestedLimit])
 
   const handlePageChange = (page: number) => {
     const nextPage = Math.max(1, page)
@@ -134,7 +142,7 @@ export default function MarketplaceV2Client({ locale, user }: MarketplaceV2Clien
     params.set("page", nextPage.toString())
     params.set("limit", pagination.limit.toString())
 
-    router.push(`?${params.toString()}`, { scroll: true })
+    router.push(`${pathname}?${params.toString()}`, { scroll: true })
   }
 
   // Loading state

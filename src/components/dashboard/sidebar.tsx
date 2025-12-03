@@ -1,9 +1,8 @@
 "use client"
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useLocale } from "next-intl"
+import { useState, useEffect } from "react"
 import { useTranslations } from "next-intl"
+import { Link, usePathname } from "@/i18n/routing"
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
@@ -16,7 +15,6 @@ import {
   X,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState, useEffect } from "react"
 import { SignOutButton } from "@/components/sign-out-button"
 
 interface SidebarProps {
@@ -25,7 +23,6 @@ interface SidebarProps {
 
 export function Sidebar({ userRole }: SidebarProps) {
   const pathname = usePathname()
-  const locale = useLocale()
   const t = useTranslations("navigation")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const handleBeforeSignOut = () => setIsMobileMenuOpen(false)
@@ -60,35 +57,32 @@ export function Sidebar({ userRole }: SidebarProps) {
     {
       label: t("dashboard"),
       icon: LayoutDashboard,
-      href: `/${locale}/dashboard`,
-      active:
-        pathname === `/${locale}/dashboard` ||
-        pathname === `/${locale}/my` ||
-        pathname === `/${locale}/admin`,
+      href: "/dashboard",
+      active: pathname === "/dashboard" || pathname === "/my" || pathname === "/admin",
     },
     {
       label: t("knowledge"),
       icon: BookOpen,
-      href: `/${locale}/knowledge`,
-      active: pathname === `/${locale}/knowledge`,
+      href: "/knowledge",
+      active: pathname === "/knowledge",
     },
     {
       label: t("directory"),
       icon: Users,
-      href: `/${locale}/partners`,
-      active: pathname === `/${locale}/partners`,
+      href: "/partners",
+      active: pathname === "/partners",
     },
     {
       label: t("marketplace"),
       icon: ShoppingCart,
-      href: `/${locale}/marketplace`,
-      active: pathname === `/${locale}/marketplace`,
+      href: "/marketplace",
+      active: pathname === "/marketplace",
     },
     {
       label: t("profile"),
       icon: User,
-      href: `/${locale}/profile`,
-      active: pathname === `/${locale}/profile`,
+      href: "/profile",
+      active: pathname === "/profile",
     },
   ]
 
@@ -97,8 +91,8 @@ export function Sidebar({ userRole }: SidebarProps) {
     routes.push({
       label: t("administration"),
       icon: Settings,
-      href: `/${locale}/admin`,
-      active: pathname.startsWith(`/${locale}/admin`),
+      href: "/admin",
+      active: pathname.startsWith("/admin"),
     })
   }
 
@@ -133,7 +127,7 @@ export function Sidebar({ userRole }: SidebarProps) {
       >
         {/* Mobile Sidebar Header */}
         <div className="p-4 border-b border-gray-200">
-          <Link href={`/${locale}/home`} className="flex items-center gap-2">
+          <Link href="/home" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg eco-gradient flex items-center justify-center">
               <span className="text-white font-bold text-sm">E</span>
             </div>

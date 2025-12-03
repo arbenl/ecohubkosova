@@ -1,4 +1,46 @@
 {
+  "title": "User management",
+  "subtitle": "Manage platform users",
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
+  },
   "users": {
     "title": "Users",
     "subtitle": "Manage platform users",
@@ -7,8 +49,15 @@
       "placeholder": "Search users..."
     },
     "filters": {
-      "roleAll": "All Roles",
-      "statusAll": "All Statuses"
+      "role": "Role",
+      "roleAll": "All roles",
+      "roleAdmin": "Admin",
+      "roleUser": "User",
+      "roleModerator": "Moderator",
+      "status": "Status",
+      "statusAll": "All statuses",
+      "statusApproved": "Approved",
+      "statusPending": "Pending"
     },
     "table": {
       "headers": {
@@ -17,9 +66,42 @@
         "location": "Location",
         "role": "Role",
         "status": "Status",
-        "joined": "Joined",
+        "created": "Created",
         "actions": "Actions"
-      }
+      },
+      "empty": "No users found"
+    },
+    "roles": {
+      "admin": "Admin",
+      "user": "User",
+      "moderator": "Moderator"
+    },
+    "status": {
+      "approved": "Approved",
+      "pending": "Pending"
+    },
+    "actions": {
+      "openMenu": "Open menu",
+      "edit": "Edit user",
+      "delete": "Delete user"
+    },
+    "empty": {
+      "noUsers": {
+        "title": "No users yet",
+        "description": "Users will appear here once they register on the platform."
+      },
+      "filtered": {
+        "title": "No users match your filters",
+        "description": "Try adjusting your search or filter criteria."
+      },
+      "clearFilters": "Clear filters"
+    },
+    "error": {
+      "title": "Failed to load users",
+      "retry": "Try again"
     }
+  },
+  "error": {
+    "generic": "Something went wrong while loading users."
   }
 }

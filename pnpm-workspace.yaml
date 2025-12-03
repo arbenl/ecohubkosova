@@ -1,0 +1,12 @@
+ignoredBuiltDependencies:
+  - '@firebase/util'
+  - '@scarf/scarf'
+  - core-js-pure
+  - protobufjs
+  - unrs-resolver
+
+onlyBuiltDependencies:
+  - '@sentry/cli'
+  - '@swc/core'
+  - esbuild
+  - sharp

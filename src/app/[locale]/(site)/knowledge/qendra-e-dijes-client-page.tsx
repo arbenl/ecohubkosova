@@ -1,12 +1,25 @@
 "use client"
 
 import { useEffect, useMemo, useState, useTransition, type FormEvent } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
+import { useRouter } from "@/i18n/routing"
+import { Link } from "@/i18n/routing"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { BookOpen, Calendar, Search, User } from "lucide-react"
 import { useLocale } from "next-intl"
 import type { ArticleRecord } from "@/services/articles"
@@ -64,7 +77,7 @@ export default function QendraEDijesClientPage({
     const query = buildQuery(
       overrides?.search ?? searchQuery,
       overrides?.category ?? selectedCategory,
-      overrides?.page ?? 1,
+      overrides?.page ?? 1
     )
 
     startTransition(() => {
@@ -101,7 +114,10 @@ export default function QendraEDijesClientPage({
     <>
       <form className="flex flex-col md:flex-row gap-4 mb-8" onSubmit={handleSubmit}>
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+          <Search
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={18}
+          />
           <Input
             placeholder="Kërko artikuj..."
             className="pl-10"
@@ -151,8 +167,7 @@ export default function QendraEDijesClientPage({
                     ? truncateText(article.content, 180)
                     : article.external_url
                       ? "Kliko për të lexuar artikullin e plotë nga burimi origjinal"
-                      : "Përmbajtja nuk është e disponueshme"
-                  }
+                      : "Përmbajtja nuk është e disponueshme"}
                 </CardDescription>
               </CardContent>
               <CardFooter className="pt-2 flex justify-between items-center border-t text-xs text-gray-500">
@@ -167,7 +182,7 @@ export default function QendraEDijesClientPage({
                   </span>
                 </div>
                 <Button size="sm" asChild>
-                  <Link href={`/${locale}/knowledge/articles/${article.id}`}>Lexo më shumë</Link>
+                  <Link href={`/knowledge/articles/${article.id}`}>Lexo më shumë</Link>
                 </Button>
               </CardFooter>
             </Card>
@@ -177,7 +192,9 @@ export default function QendraEDijesClientPage({
         <div className="text-center py-12">
           <BookOpen className="h-12 w-12 text-gray-400 mb-4" />
           <h3 className="text-lg font-medium">Nuk u gjetën artikuj</h3>
-          <p className="text-gray-500 mt-1">Provoni të ndryshoni filtrat ose të kontrolloni më vonë.</p>
+          <p className="text-gray-500 mt-1">
+            Provoni të ndryshoni filtrat ose të kontrolloni më vonë.
+          </p>
         </div>
       )}
 
@@ -193,7 +210,11 @@ export default function QendraEDijesClientPage({
           Faqja {initialPage}
           {isPending && <span className="ml-2 italic">Duke u ngarkuar...</span>}
         </div>
-        <Button variant="outline" disabled={!hasMoreInitial || isPending} onClick={() => handlePageChange(initialPage + 1)}>
+        <Button
+          variant="outline"
+          disabled={!hasMoreInitial || isPending}
+          onClick={() => handlePageChange(initialPage + 1)}
+        >
           Më pas
         </Button>
       </div>

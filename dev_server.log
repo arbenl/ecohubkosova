@@ -1,0 +1,182 @@
+
+> my-v0-project@0.1.0 dev
+> next dev
+
+   ▲ Next.js 16.0.3 (Turbopack)
+   - Local:         http://localhost:3000
+   - Network:       http://10.53.4.196:3000
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · clientTraceMetadata
+
+ ✓ Starting...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Sentry Logger [log]: Initializing SDK...
+Sentry Logger [log]: Initializing Sentry: process: 28008, thread: main.
+Sentry Logger [log]: Cleared AI provider skip registrations
+Sentry Logger [log]: Integration installed: InboundFilters
+Sentry Logger [log]: Integration installed: FunctionToString
+Sentry Logger [log]: Integration installed: LinkedErrors
+Sentry Logger [log]: Integration installed: RequestData
+Sentry Logger [log]: Integration installed: NodeSystemError
+Sentry Logger [log]: Integration installed: Console
+Sentry Logger [log]: Integration installed: OnUncaughtException
+Sentry Logger [log]: Integration installed: OnUnhandledRejection
+Sentry Logger [log]: Integration installed: ContextLines
+Sentry Logger [log]: Integration installed: LocalVariablesAsync
+Sentry Logger [log]: Integration installed: Context
+Sentry Logger [log]: Integration installed: ChildProcess
+Sentry Logger [log]: Integration installed: ProcessSession
+Sentry Logger [log]: Integration installed: Modules
+Sentry Logger [log]: Integration installed: NodeFetch
+Sentry Logger [log]: Integration installed: Express
+Sentry Logger [log]: Integration installed: Fastify
+Sentry Logger [log]: Integration installed: Graphql
+Sentry Logger [log]: Integration installed: Hono
+Sentry Logger [log]: Integration installed: Mongo
+Sentry Logger [log]: Integration installed: Mongoose
+Sentry Logger [log]: Integration installed: Mysql
+Sentry Logger [log]: Integration installed: Mysql2
+Sentry Logger [log]: Integration installed: Redis
+Sentry Logger [log]: Integration installed: Postgres
+Sentry Logger [log]: Integration installed: Prisma
+Sentry Logger [log]: Integration installed: Hapi
+Sentry Logger [log]: Integration installed: Koa
+Sentry Logger [log]: Integration installed: Connect
+Sentry Logger [log]: Integration installed: Tedious
+Sentry Logger [log]: Integration installed: GenericPool
+Sentry Logger [log]: Integration installed: Kafka
+Sentry Logger [log]: Integration installed: Amqplib
+Sentry Logger [log]: Integration installed: LruMemoizer
+Sentry Logger [log]: Integration installed: LangChain
+Sentry Logger [log]: Integration installed: LangGraph
+Sentry Logger [log]: Integration installed: VercelAI
+Sentry Logger [log]: Integration installed: OpenAI
+Sentry Logger [log]: Integration installed: Anthropic_AI
+Sentry Logger [log]: Integration installed: Google_GenAI
+Sentry Logger [log]: Integration installed: PostgresJs
+Sentry Logger [log]: Integration installed: Firebase
+Sentry Logger [log]: Integration installed: Http
+Sentry Logger [log]: Integration installed: DistDirRewriteFrames
+Sentry Logger [log]: SDK initialized from CommonJS
+Sentry Logger [log]: @opentelemetry/api: Registered a global for diag v1.9.0.
+Sentry Logger [log]: @opentelemetry/api: Registered a global for trace v1.9.0.
+Sentry Logger [log]: @opentelemetry/api: Registered a global for propagation v1.9.0.
+Sentry Logger [log]: @opentelemetry/api: Registered a global for context v1.9.0.
+Sentry Logger [log]: SDK successfully initialized
+ ✓ Ready in 1208ms
+Sentry Logger [log]: Http.Server Handling incoming request
+Sentry Logger [log]: Http.Server Patching request.on
+Sentry Logger [log]: [Tracing] Starting sampled root span
+  op: < unknown op >
+  name: GET
+  ID: 7e71d0f9e7b55d33
+Sentry Logger [log]: [Tracing] Inheriting parent's sampled decision for resolve page components: true
+Sentry Logger [log]: [Tracing] Starting sampled span
+  op: < unknown op >
+  name: resolve page components
+  ID: e03964923596322e
+  parent ID: 7e71d0f9e7b55d33
+  root ID: 7e71d0f9e7b55d33
+  root description: GET
+Sentry Logger [log]: [Tracing] Finishing "< unknown op >" span "resolve page components" with ID e03964923596322e
+Sentry Logger [log]: [Tracing] Inheriting parent's sampled decision for render route (app) /[locale]/home: true
+Sentry Logger [log]: [Tracing] Starting sampled span
+  op: < unknown op >
+  name: render route (app) /[locale]/home
+  ID: ed100b9b33936c11
+  parent ID: 7e71d0f9e7b55d33
+  root ID: 7e71d0f9e7b55d33
+  root description: /[locale]/home
+Sentry Logger [log]: [Tracing] Inheriting parent's sampled decision for build component tree: true
+Sentry Logger [log]: [Tracing] Starting sampled span
+  op: < unknown op >
+  name: build component tree
+  ID: b15727fa97d781ab
+  parent ID: ed100b9b33936c11
+  root ID: 7e71d0f9e7b55d33
+  root description: /[locale]/home
+Sentry Logger [log]: [Tracing] Inheriting parent's sampled decision for resolve segment modules: true
+Sentry Logger [log]: [Tracing] Starting sampled span
+  op: < unknown op >
+  name: resolve segment modules
+  ID: 033c44a83cd060ce
+  parent ID: b15727fa97d781ab
+  root ID: 7e71d0f9e7b55d33
+  root description: /[locale]/home
+Sentry Logger [log]: [Tracing] Finishing "< unknown op >" span "resolve segment modules" with ID 033c44a83cd060ce
+Sentry Logger [log]: [Tracing] Inheriting parent's sampled decision for resolve segment modules: true
+Sentry Logger [log]: [Tracing] Starting sampled span
+  op: < unknown op >
+  name: resolve segment modules
+  ID: ce6a973cf0633e13
+  parent ID: b15727fa97d781ab
+  root ID: 7e71d0f9e7b55d33
+  root description: /[locale]/home
+Sentry Logger [log]: [Tracing] Finishing "< unknown op >" span "resolve segment modules" with ID ce6a973cf0633e13
+Sentry Logger [log]: [Tracing] Inheriting parent's sampled decision for resolve segment modules: true
+Sentry Logger [log]: [Tracing] Starting sampled span
+  op: < unknown op >
+  name: resolve segment modules
+  ID: a75eeb3a5940bb88
+  parent ID: b15727fa97d781ab
+  root ID: 7e71d0f9e7b55d33
+  root description: /[locale]/home
+Sentry Logger [log]: [Tracing] Finishing "< unknown op >" span "resolve segment modules" with ID a75eeb3a5940bb88
+Sentry Logger [log]: [Tracing] Inheriting parent's sampled decision for resolve segment modules: true
+Sentry Logger [log]: [Tracing] Starting sampled span
+  op: < unknown op >
+  name: resolve segment modules
+  ID: 94d25e12c9d0a22a
+  parent ID: b15727fa97d781ab
+  root ID: 7e71d0f9e7b55d33
+  root description: /[locale]/home
+Sentry Logger [log]: [Tracing] Finishing "< unknown op >" span "resolve segment modules" with ID 94d25e12c9d0a22a
+Sentry Logger [log]: [Tracing] Finishing "< unknown op >" span "build component tree" with ID b15727fa97d781ab
+[i18n] requestLocale: en
+[DEBUG] LocaleLayout: locale=en
+[DEBUG] Footer tagline: EcoHub Kosova is a digital marketplace and green partner network connecting businesses, recyclers, and NGOs for practical circular economy solutions.
+Sentry Logger [log]: @sentry/instrumentation-http Applying instrumentation patch for nodejs core module on require hook { module: 'http' }
+Sentry Logger [log]: @opentelemetry_sentry-patched/instrumentation-http Applying instrumentation patch for nodejs core module on require hook { module: 'http' }
+Sentry Logger [log]: @sentry/instrumentation-http Applying instrumentation patch for nodejs core module on require hook { module: 'https' }
+Sentry Logger [log]: @opentelemetry_sentry-patched/instrumentation-http Applying instrumentation patch for nodejs core module on require hook { module: 'https' }
+[i18n] requestLocale: undefined
+[i18n] requestLocale: sq
+Sentry Logger [log]: [Tracing] Finishing "< unknown op >" span "render route (app) /[locale]/home" with ID ed100b9b33936c11
+Sentry Logger [log]: [Tracing] Inheriting parent's sampled decision for start response: true
+Sentry Logger [log]: [Tracing] Starting sampled span
+  op: < unknown op >
+  name: start response
+  ID: 7fa46dd29f2dd849
+  parent ID: ed100b9b33936c11
+  root ID: 7e71d0f9e7b55d33
+  root description: /[locale]/home
+Sentry Logger [log]: [Tracing] Finishing "< unknown op >" span "start response" with ID 7fa46dd29f2dd849
+Sentry Logger [log]: Recorded request session with status: ok
+Sentry Logger [log]: Opened new request session aggregate.
+ GET /en/home 200 in 2.6s (compile: 2.3s, render: 370ms)
+Sentry Logger [log]: [Tracing] Inheriting parent's sampled decision for NextNodeServer.clientComponentLoading: true
+Sentry Logger [log]: [Tracing] Starting sampled span
+  op: < unknown op >
+  name: NextNodeServer.clientComponentLoading
+  ID: eeec99ad0966e681
+  parent ID: 7e71d0f9e7b55d33
+  root ID: 7e71d0f9e7b55d33
+  root description: /[locale]/home
+Sentry Logger [warn]: Inconsistent start and end time, startTime > endTime. Setting span duration to 0ms. [ 1764699706, 338812136 ] [ 13, 555753176 ]
+Sentry Logger [log]: [Tracing] Finishing "< unknown op >" span "NextNodeServer.clientComponentLoading" with ID eeec99ad0966e681
+Sentry Logger [log]: [Tracing] Finishing "< unknown op >" root span "GET /[locale]/home" with ID 7e71d0f9e7b55d33
+Sentry Logger [log]: SpanExporter exported 10 spans, 0 spans are waiting for their parent spans to finish
+Sentry Logger [log]: Instrumentation suppressed, returning Noop Span
+Sentry Logger [log]: [Tracing] Not injecting trace data for url because tracing is suppressed.
+Sentry Logger [log]: @opentelemetry_sentry-patched/instrumentation-http https instrumentation outgoingRequest
+Sentry Logger [log]: @opentelemetry_sentry-patched/instrumentation-http http.ClientRequest return request
+(node:28008) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Sentry Logger [log]: @sentry/instrumentation-http Handling finished outgoing request
+Sentry Logger [log]: @opentelemetry_sentry-patched/instrumentation-http outgoingRequest on response()
+Sentry Logger [log]: @opentelemetry_sentry-patched/instrumentation-http outgoingRequest on end()
+Sentry Logger [log]: @opentelemetry_sentry-patched/instrumentation-http outgoingRequest on request close()
+[Shutdown] Received SIGTERM, closing gracefully...
+[Shutdown] Database connections closed
+[?25h

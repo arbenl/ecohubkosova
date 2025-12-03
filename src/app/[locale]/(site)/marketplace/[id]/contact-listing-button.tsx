@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { useLocale } from "next-intl"
 import { Button } from "@/components/ui/button"
 import type { User } from "@supabase/supabase-js"
@@ -38,7 +38,7 @@ export default function ContactListingButton({ listing, user }: ContactListingBu
           if (user) {
             setShowContactModal(true)
           } else {
-            router.push(`/${locale}/login?message=Ju duhet të kyçeni për të kontaktuar shitësin`)
+            router.push(`/login?message=Ju duhet të kyçeni për të kontaktuar shitësin`)
           }
         }}
       >
@@ -58,7 +58,9 @@ export default function ContactListingButton({ listing, user }: ContactListingBu
                 <div>
                   <span className="font-medium text-gray-700">Email:</span>
                   {user ? (
-                    <p className="text-lg text-emerald-600">{listing.organizations.contact_email}</p>
+                    <p className="text-lg text-emerald-600">
+                      {listing.organizations.contact_email}
+                    </p>
                   ) : (
                     <p className="italic text-gray-400">Kyçu për ta parë emailin</p>
                   )}
@@ -81,14 +83,18 @@ export default function ContactListingButton({ listing, user }: ContactListingBu
               </div>
             )}
             <div className="flex gap-3 mt-6">
-              <Button variant="outline" onClick={() => setShowContactModal(false)} className="flex-1">
+              <Button
+                variant="outline"
+                onClick={() => setShowContactModal(false)}
+                className="flex-1"
+              >
                 Mbyll
               </Button>
               <Button
                 onClick={() => {
-                  const email = listing.organizations?.contact_email || listing.users?.email;
+                  const email = listing.organizations?.contact_email || listing.users?.email
                   if (email) {
-                    window.location.href = `mailto:${email}?subject=Interesim për: ${listing.title}`;
+                    window.location.href = `mailto:${email}?subject=Interesim për: ${listing.title}`
                   }
                 }}
                 className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
@@ -100,5 +106,5 @@ export default function ContactListingButton({ listing, user }: ContactListingBu
         </div>
       )}
     </>
-  );
+  )
 }

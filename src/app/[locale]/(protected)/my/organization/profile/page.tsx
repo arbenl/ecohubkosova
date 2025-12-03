@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic"
 
-import { redirect } from "next/navigation"
+import { redirect } from "@/i18n/routing"
 import { getTranslations, getLocale } from "next-intl/server"
 import { getServerUser } from "@/lib/supabase/server"
 import { WorkspaceLayout } from "@/components/workspace/workspace-layout"
@@ -15,7 +15,8 @@ export default async function MyOrganizationProfileEditPage() {
   const { user } = await getServerUser()
 
   if (!user?.id) {
-    redirect(`/${locale}/login?message=${encodeURIComponent(tCommon("loginRequired"))}`)
+    redirect({ href: `/login?message=${encodeURIComponent(tCommon("loginRequired"))}`, locale })
+    return null
   }
 
   const { data: organizations, error } = await fetchUserOrganizations(user.id)

@@ -4,5 +4,85 @@
   "organizations": "Organizatat",
   "articles": "Artikujt",
   "listings": "Tregu",
-  "adminPanel": "Admin Panel"
+  "adminPanel": "Admin Panel",
+  "title": "Paneli i administratorit",
+  "subtitle": "Monitoro dhe menaxho aktivitetin e platformës.",
+  "stats": {
+    "title": "Përmbledhje",
+    "savedListings": "Listime të ruajtura",
+    "organizations": "Organizata",
+    "myListings": "Listimet e mia",
+    "viewDetails": "Shiko detaje"
+  },
+  "quickActions": {
+    "title": "Veprime të shpejta",
+    "profile": {
+      "title": "Profili",
+      "description": "Përditëso të dhënat personale"
+    },
+    "organization": {
+      "title": "Organizata",
+      "description": "Menaxho të dhënat e organizatës"
+    },
+    "listings": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    },
+    "addListing": {
+      "title": "Listimet",
+      "description": "Krijo, përditëso dhe menaxho listimet"
+    }
+  },
+  "alerts": {
+    "title": "Njoftimet",
+    "description": "Kontrollo këtu për përditësime të rëndësishme.",
+    "noNewAlerts": "Asnjë njoftim i ri"
+  },
+  "myListingsPage": {
+    "title": "Listimet e mia",
+    "createNew": "Krijo listim të ri",
+    "empty": {
+      "title": "Nuk keni krijuar ende asnjë listim.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "cta": "Krijo Listim"
+    }
+  },
+  "articlesAdmin": {
+    "tableTitle": "Lista e artikujve",
+    "headers": {
+      "title": "Titulli",
+      "category": "Kategoria",
+      "type": "Lloji",
+      "published": "Publikuar",
+      "actions": "Veprimet"
+    },
+    "type": {
+      "external": "Jashtëm",
+      "local": "Lokal"
+    },
+    "published": {
+      "yes": "Po",
+      "no": "Jo"
+    },
+    "actions": {
+      "edit": "Përditëso",
+      "delete": "Fshi",
+      "view": "Shiko"
+    },
+    "createTitle": "Krijo artikull të ri",
+    "editTitle": "Përditëso artikullin",
+    "placeholders": {
+      "title": "Titulli",
+      "content": "Përmbajtja (lëre bosh për artikuj të jashtëm)",
+      "externalUrl": "URL e jashtme (për burime të jashtme)",
+      "originalLanguage": "Gjuha origjinale (p.sh. 'en', 'sq')",
+      "category": "Kategoria",
+      "tags": "Tags (ndarë me presje)",
+      "featuredImage": "URL e fotos kryesore"
+    },
+    "publishNow": "Publiko menjëherë",
+    "submitCreate": "Krijo artikull",
+    "save": "Ruaj",
+    "cancel": "Anulo"
+  }
 }

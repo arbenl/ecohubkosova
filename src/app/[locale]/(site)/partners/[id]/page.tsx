@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { getTranslations } from "next-intl/server"
 import clsx from "clsx"
 import { ArrowLeft, ArrowUpRight, Globe, Mail, MapPin, Phone, ShieldCheck } from "lucide-react"
@@ -25,12 +25,12 @@ export default async function PartnerDetailPage({ params }: PageProps) {
           </div>
           <h1 className="text-3xl font-bold text-slate-900">{t("detail.notFoundTitle")}</h1>
           <p className="text-slate-600">{t("detail.notFoundBody")}</p>
-          {process.env.NODE_ENV === 'development' && (
+          {process.env.NODE_ENV === "development" && (
             <p className="text-xs text-gray-500 font-mono">Debug: Searched for ID {id}</p>
           )}
           <div className="mt-4 flex justify-center">
             <Link
-              href={`/${locale}/partners`}
+              href="/partners"
               className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -44,12 +44,12 @@ export default async function PartnerDetailPage({ params }: PageProps) {
 
   const roleLabel = partner.org_role
     ? (() => {
-      try {
-        return t(`card.roleLabels.${partner.org_role}`)
-      } catch {
-        return partner.org_role
-      }
-    })()
+        try {
+          return t(`card.roleLabels.${partner.org_role}`)
+        } catch {
+          return partner.org_role
+        }
+      })()
     : null
 
   const mailSubject = encodeURIComponent(`Partneritet EcoHub – ${partner.name}`)
@@ -103,7 +103,7 @@ export default async function PartnerDetailPage({ params }: PageProps) {
               </div>
               <div className="flex items-center gap-3">
                 <Link
-                  href={`/${locale}/partners`}
+                  href="/partners"
                   className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/25"
                 >
                   <ArrowLeft className="h-4 w-4" />
@@ -192,7 +192,10 @@ export default async function PartnerDetailPage({ params }: PageProps) {
               {partner.contact_email && (
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4 text-emerald-500" />
-                  <a href={`mailto:${partner.contact_email}`} className="text-emerald-700 hover:underline">
+                  <a
+                    href={`mailto:${partner.contact_email}`}
+                    className="text-emerald-700 hover:underline"
+                  >
                     {partner.contact_email}
                   </a>
                 </div>

@@ -47,7 +47,7 @@ export function useAuthForm() {
 
         if (result?.success !== false) {
           redirectInProgressRef.current = true
-          router.push(`/${locale}/auth/success`)
+          router.push(`/auth/success`)
         }
       } catch (err) {
         const errorMessage =

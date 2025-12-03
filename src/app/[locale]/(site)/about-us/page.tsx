@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { CheckCircle } from "lucide-react"
+import Image from "next/image"
 import { getTranslations } from "next-intl/server"
 import { PublicPageHero } from "@/components/layout/PublicPageHero"
 
@@ -19,10 +20,10 @@ export default async function AboutUsPage({ params }: { params: Promise<{ locale
         actions={
           <>
             <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 rounded-full">
-              <Link href={`/${locale}/marketplace`}>{t("hero.cta.primary")}</Link>
+              <Link href="/marketplace">{t("hero.cta.primary")}</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-full">
-              <Link href={`/${locale}/partners`}>{t("hero.cta.secondary")}</Link>
+              <Link href="/partners">{t("hero.cta.secondary")}</Link>
             </Button>
           </>
         }
@@ -104,12 +105,20 @@ export default async function AboutUsPage({ params }: { params: Promise<{ locale
           <div className="text-center">
             <p className="text-gray-700 mb-4 text-sm">
               <span className="font-semibold">{t("actions.inlineCta")}</span>{" "}
-              <Button asChild variant="link" className="px-0 text-emerald-600 hover:text-emerald-700">
-                <Link href={`/${locale}/marketplace`}>{t("actions.browse")}</Link>
+              <Button
+                asChild
+                variant="link"
+                className="px-0 text-emerald-600 hover:text-emerald-700"
+              >
+                <Link href="/marketplace">{t("actions.browse")}</Link>
               </Button>
               {" or "}
-              <Button asChild variant="link" className="px-0 text-emerald-600 hover:text-emerald-700">
-                <Link href={`/${locale}/partners`}>{t("actions.organizations")}</Link>
+              <Button
+                asChild
+                variant="link"
+                className="px-0 text-emerald-600 hover:text-emerald-700"
+              >
+                <Link href="/partners">{t("actions.organizations")}</Link>
               </Button>
             </p>
           </div>
@@ -137,12 +146,59 @@ export default async function AboutUsPage({ params }: { params: Promise<{ locale
             <div className="rounded-2xl bg-emerald-50 border border-emerald-100 p-6">
               <p className="text-gray-900 font-semibold mb-4">{t("who.cta")}</p>
               <Button asChild className="bg-emerald-600 hover:bg-emerald-700 rounded-full">
-                <Link href={`/${locale}/contact`}>{t("who.ctaLink")}</Link>
+                <Link href="/contact">{t("who.ctaLink")}</Link>
               </Button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Project Support & Logos */}
+      <section className="py-12 md:py-16 bg-emerald-50/60 border-t border-emerald-100">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
+              {t("grant.title")}
+            </p>
+            <p className="text-sm md:text-base text-gray-700 leading-relaxed">
+              {t("grant.description")}
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-8">
+            <div className="h-14 md:h-16 flex items-center">
+              <Image
+                src="/logos/PODRSKA EICEE Obavezni logoi.png"
+                alt={t("grant.fundersAlt")}
+                width={10799}
+                height={1188}
+                className="h-full w-auto object-contain"
+              />
+            </div>
+            <div className="flex flex-wrap md:flex-nowrap items-center gap-6">
+              <div className="h-14 md:h-16 flex items-center">
+                <Image
+                  src="/logos/LOGO PROJEKTA EICEE.png"
+                  alt={t("grant.eiceeAlt")}
+                  width={2828}
+                  height={2953}
+                  className="h-full w-auto object-contain"
+                />
+              </div>
+              <div className="h-14 md:h-16 flex items-center">
+                <Image
+                  src="/logos/KADC-Logo_HQ.png"
+                  alt={t("grant.kadcAlt")}
+                  width={1443}
+                  height={603}
+                  className="h-full w-auto object-contain"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   )
 }

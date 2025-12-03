@@ -53,5 +53,54 @@
     ],
     "cta": "Want to feature your organization or become a partner?",
     "ctaLink": "Contact us"
+  },
+  "title": "About EcoHub",
+  "subtitle": "Learn how EcoHub connects circular economy actors in Kosovo.",
+  "stats": {
+    "title": "Overview",
+    "savedListings": "Saved listings",
+    "organizations": "Organizations",
+    "myListings": "My listings",
+    "viewDetails": "View details"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "profile": {
+      "title": "Profile",
+      "description": "Update your personal information"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Manage organization details"
+    },
+    "listings": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    },
+    "addListing": {
+      "title": "Listings",
+      "description": "Create, edit and manage listings"
+    }
+  },
+  "alerts": {
+    "title": "Notifications",
+    "description": "Check back here for important updates.",
+    "noNewAlerts": "No new notifications"
+  },
+  "myListingsPage": {
+    "title": "My listings",
+    "createNew": "Create new listing",
+    "empty": {
+      "title": "You haven't created any listings yet.",
+      "description": "Create your first listing and contribute to the circular economy.",
+      "cta": "Create Listing"
+    }
+  },
+  "grant": {
+    "title": "Project support",
+    "description": "The Project “Fostering Circular Economy Ecosystem in Prishtina: Empowering Youth and Building Sustainability” is sub-granted through the EICEE project, co-funded by the European Union and the Government of Montenegro.",
+    "kadcAlt": "KADC logo",
+    "eiceeAlt": "EICEE project logo",
+    "fundersAlt": "Funded by the European Union and co-funded by the Government of Montenegro"
   }
 }

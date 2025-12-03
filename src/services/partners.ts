@@ -35,7 +35,11 @@ type PartnerFilters = {
   limit?: number
 }
 
-export async function fetchPartners({ roles, verifiedOnly = false, limit }: PartnerFilters = {}): Promise<Partner[]> {
+export async function fetchPartners({
+  roles,
+  verifiedOnly = false,
+  limit,
+}: PartnerFilters = {}): Promise<Partner[]> {
   noStore()
 
   try {
@@ -64,7 +68,6 @@ export async function fetchPartners({ roles, verifiedOnly = false, limit }: Part
     const rows = await db
       .get()
       .select({
-        id: ecoOrganizations.id,
         eco_org_id: ecoOrganizations.id,
         organization_id: ecoOrganizations.organization_id,
         name: organizations.name,
@@ -86,7 +89,7 @@ export async function fetchPartners({ roles, verifiedOnly = false, limit }: Part
 
     console.log(`[fetchPartners] Returned ${rows.length} partners`)
     if (rows.length === 0) {
-      console.warn('[fetchPartners] No partners found - check eco_organizations table has entries')
+      console.warn("[fetchPartners] No partners found - check eco_organizations table has entries")
     }
 
     // Normalize city from location
@@ -123,7 +126,6 @@ export async function fetchPartnerById(ecoOrganizationId: string): Promise<Partn
     const row = await db
       .get()
       .select({
-        id: ecoOrganizations.id,
         eco_org_id: ecoOrganizations.id,
         organization_id: ecoOrganizations.organization_id,
         name: organizations.name,
