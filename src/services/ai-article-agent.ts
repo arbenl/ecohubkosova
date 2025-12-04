@@ -35,30 +35,33 @@ export async function findCircularEconomyArticles(): Promise<ArticleSuggestion[]
     {
       title: "Circular Economy in the Balkans: Kosovo's Green Transition",
       url: "https://example.com/circular-economy-balkans-kosovo",
-      summary: "Analysis of circular economy implementation in Kosovo and the Balkans, focusing on green transition initiatives.",
-      category: "Ekonomi qarkulluese",
-      tags: ["ekonomi qarkulluese", "zhvillim i gjelbër", "ballkan", "kosovë"],
-      relevanceScore: 0.95
+      summary:
+        "Analysis of circular economy implementation in Kosovo and the Balkans, focusing on green transition initiatives.",
+      category: "Ekonomi qarkore",
+      tags: ["ekonomi qarkore", "zhvillim i gjelbër", "ballkan", "kosovë"],
+      relevanceScore: 0.95,
     },
     {
       title: "Sustainable Waste Management: Kosovo's Path to Zero Waste",
       url: "https://example.com/sustainable-waste-kosovo",
-      summary: "Comprehensive guide to waste management strategies in Kosovo, emphasizing circular economy principles.",
+      summary:
+        "Comprehensive guide to waste management strategies in Kosovo, emphasizing circular economy principles.",
       category: "Riciklim",
       tags: ["menaxhim i mbetjeve", "zero waste", "riciklim", "qëndrueshmëri"],
-      relevanceScore: 0.88
+      relevanceScore: 0.88,
     },
     {
       title: "Renewable Energy Integration in Kosovo's Circular Economy",
       url: "https://example.com/renewable-energy-kosovo-circular",
-      summary: "How renewable energy projects in Kosovo contribute to circular economy goals and sustainable development.",
+      summary:
+        "How renewable energy projects in Kosovo contribute to circular economy goals and sustainable development.",
       category: "Energji e ripërtëritshme",
-      tags: ["energji e ripërtëritshme", "ekonomi qarkulluese", "zhvillim i qëndrueshëm"],
-      relevanceScore: 0.92
-    }
+      tags: ["energji e ripërtëritshme", "ekonomi qarkore", "zhvillim i qëndrueshëm"],
+      relevanceScore: 0.92,
+    },
   ]
 
-  return mockSuggestions.filter(article => article.relevanceScore > 0.8)
+  return mockSuggestions.filter((article) => article.relevanceScore > 0.8)
 }
 
 // Create an external article (without local content)
@@ -84,7 +87,7 @@ export async function createExternalArticle(data: CreateExternalArticleData) {
     console.error("Error creating external article:", error)
     return {
       data: null,
-      error: error instanceof Error ? error.message : "Failed to create article"
+      error: error instanceof Error ? error.message : "Failed to create article",
     }
   }
 }
@@ -107,9 +110,10 @@ export async function analyzeArticleForKosovoAudience(url: string): Promise<{
   return {
     isRelevant: true,
     relevanceScore: 0.85,
-    suggestedCategory: "Ekonomi qarkulluese",
-    suggestedTags: ["kosovë", "ekonomi qarkulluese", "zhvillim i gjelbër"],
-    summary: "This article discusses circular economy principles with relevance to Kosovo's development context."
+    suggestedCategory: "Ekonomi qarkore",
+    suggestedTags: ["kosovë", "ekonomi qarkore", "zhvillim i gjelbër"],
+    summary:
+      "This article discusses circular economy principles with relevance to Kosovo's development context.",
   }
 }
 
@@ -132,14 +136,14 @@ export async function processAIFoundArticles(suggestions: ArticleSuggestion[], a
         suggestion,
         success: !result.error,
         error: result.error,
-        articleId: result.data?.id
+        articleId: result.data?.id,
       })
     } catch (error) {
       results.push({
         suggestion,
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
-        articleId: null
+        articleId: null,
       })
     }
   }

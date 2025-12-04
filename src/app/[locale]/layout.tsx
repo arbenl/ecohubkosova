@@ -24,7 +24,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   // Provide intl context for client components
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider key={locale} locale={locale} messages={messages}>
       <LocaleLangSync />
       <AuthProvider initialUser={null}>{children}</AuthProvider>
     </NextIntlClientProvider>

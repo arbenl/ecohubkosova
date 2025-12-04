@@ -22,13 +22,13 @@ describe("HomePage", () => {
 
   it("displays the main tagline", async () => {
     render(await HomePage())
-    const tagline = screen.getByText(/Mbështetur nga Koalicioni i Ekonomisë Qarkulluese/i)
+    const tagline = screen.getByText(/Mbështetur nga Koalicioni i Ekonomisë Qarkore/i)
     expect(tagline).toBeInTheDocument()
   })
 
   it("displays the description about circular economy", async () => {
     render(await HomePage())
-    const description = screen.getByText(/Platforma e parë e ekonomisë qarkulluese në Kosovë/i)
+    const description = screen.getByText(/Platforma e parë e ekonomisë qarkore në Kosovë/i)
     expect(description).toBeInTheDocument()
   })
 

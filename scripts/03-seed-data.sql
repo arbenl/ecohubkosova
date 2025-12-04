@@ -1,6 +1,6 @@
 -- Insert sample organizations (approved)
 INSERT INTO organizations (emri, pershkrimi, interesi_primar, person_kontakti, email_kontakti, vendndodhja, lloji, eshte_aprovuar) VALUES
-('Qendra për Ekonomi Qarkulluese', 'Organizatë që promovon ekonominë qarkulluese në Kosovë', 'Ekonomi qarkulluese', 'Arben Krasniqi', 'info@ceq.org', 'Prishtinë, Kosovë', 'OJQ', true),
+('Qendra për Ekonomi Qarkore', 'Organizatë që promovon ekonominë qarkore në Kosovë', 'Ekonomi qarkore', 'Arben Krasniqi', 'info@ceq.org', 'Prishtinë, Kosovë', 'OJQ', true),
 ('EcoTech Solutions', 'Kompani që ofron zgjidhje teknologjike për qëndrueshmëri', 'Teknologji e gjelbër', 'Blerta Hoxha', 'contact@ecotech.co', 'Prizren, Kosovë', 'Kompani', true),
 ('Green Future Kosovo', 'Ndërmarrje sociale për projekte të gjelbra', 'Energji e ripërtëritshme', 'Driton Berisha', 'hello@greenfuture.org', 'Pejë, Kosovë', 'Ndërmarrje Sociale', true),
 ('Reciklimi Plus', 'Kompani për riciklim dhe menaxhim mbetjesh', 'Riciklim', 'Fatmire Gashi', 'info@reciklimi.com', 'Gjilan, Kosovë', 'Kompani', true),
@@ -8,7 +8,7 @@ INSERT INTO organizations (emri, pershkrimi, interesi_primar, person_kontakti, e
 
 -- Insert sample articles (published)
 INSERT INTO artikuj (titulli, permbajtja, autori_id, eshte_publikuar, kategori, tags) VALUES
-('Hyrje në Ekonominë Qarkulluese', 'Ekonomia qarkulluese është një model ekonomik që synon eliminimin e mbetjeve dhe përdorimin e vazhdueshëm të burimeve. Ky artikull shpjegon parimet bazë të ekonomisë qarkulluese dhe përfitimet e saj për mjedisin dhe ekonominë.', (SELECT id FROM users WHERE roli = 'Admin' LIMIT 1), true, 'Ekonomi qarkulluese', ARRAY['ekonomi', 'qëndrueshmëri', 'mjedis']),
+('Hyrje në Ekonominë Qarkore', 'Ekonomia qarkore është një model ekonomik që synon eliminimin e mbetjeve dhe përdorimin e vazhdueshëm të burimeve. Ky artikull shpjegon parimet bazë të ekonomisë qarkore dhe përfitimet e saj për mjedisin dhe ekonominë.', (SELECT id FROM users WHERE roli = 'Admin' LIMIT 1), true, 'Ekonomi qarkore', ARRAY['ekonomi', 'qëndrueshmëri', 'mjedis']),
 ('Riciklimi në Kosovë: Sfidat dhe Mundësitë', 'Analiza e gjendjes aktuale të riciklimit në Kosovë, sfidat kryesore dhe mundësitë për përmirësim. Artikulli përfshin rekomandime për politikëbërësit dhe qytetarët.', (SELECT id FROM users WHERE roli = 'Admin' LIMIT 1), true, 'Riciklim', ARRAY['riciklim', 'Kosovë', 'politika']),
 ('Energjia e Ripërtëritshme: E Ardhmja e Kosovës', 'Potenciali i Kosovës për energji të ripërtëritshme, duke përfshirë energjinë diellore, erën dhe hidro. Diskutohen investimet e nevojshme dhe përfitimet ekonomike.', (SELECT id FROM users WHERE roli = 'Admin' LIMIT 1), true, 'Energji e ripërtëritshme', ARRAY['energji', 'diell', 'erë']);
 

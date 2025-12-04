@@ -31,10 +31,12 @@ export default function MarketplaceClientPage({
   locale,
   initialSearchParams,
   showHero = true,
-  heroTitle = "The Marketplace for Circular Economy",
+  heroTitle: heroTitleProp,
   hideSearchBar = false,
 }: MarketplaceClientPageProps) {
   const t = useTranslations("marketplace")
+  const landingT = useTranslations("marketplace-landing")
+  const heroTitle = heroTitleProp ?? landingT("hero.title")
   const [listings, setListings] = useState<Listing[]>([])
   const [hasMore, setHasMore] = useState(false)
   const [isLoading, setIsLoading] = useState(true)

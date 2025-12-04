@@ -311,7 +311,7 @@ export default async function NdihmePage() {
                     <Video className="h-12 w-12 text-gray-400" />
                   </div>
                   <p className="text-sm text-gray-600 mb-4">
-                    Si të publikoni dhe të kërkoni në tregun e ekonomisë qarkulluese
+                    Si të publikoni dhe të kërkoni në tregun e ekonomisë qarkore
                   </p>
                   <Button size="sm" variant="outline" className="w-full">
                     <ExternalLink className="h-4 w-4 mr-2" />
@@ -367,7 +367,7 @@ export default async function NdihmePage() {
                       </Button>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Udhëzues për ekonomi qarkulluese</span>
+                      <span className="text-sm">Udhëzues për ekonomi qarkore</span>
                       <Button size="sm" variant="outline">
                         <Download className="h-4 w-4 mr-2" />
                         Shkarko

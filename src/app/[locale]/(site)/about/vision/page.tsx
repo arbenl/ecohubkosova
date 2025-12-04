@@ -9,7 +9,9 @@ export default function KushJemiPage() {
             <h1 className="text-4xl font-bold tracking-tighter mb-4">
               Kush <span className="text-emerald-600">Jemi Ne</span>
             </h1>
-            <p className="text-xl text-gray-600">Njihuni me historinë, vlerat dhe njerëzit pas ECO HUB KOSOVA</p>
+            <p className="text-xl text-gray-600">
+              Njihuni me historinë, vlerat dhe njerëzit pas ECO HUB KOSOVA
+            </p>
           </div>
 
           <div className="space-y-8">
@@ -19,15 +21,16 @@ export default function KushJemiPage() {
               </CardHeader>
               <CardContent className="prose prose-gray max-w-none">
                 <p>
-                  ECO HUB KOSOVA u themelua në vitin 2024 si përgjigje ndaj nevojës së ngutshme për një platformë që të
-                  lehtësojë tranzicionin drejt ekonomisë qarkulluese në Kosovë. Ideja lindi nga një grup ekspertësh
-                  mjedisore, liderësh të biznesit dhe aktivistësh socialë që panë potencialin e madh të vendit tonë për
-                  të adoptuar praktikat e qëndrueshme.
+                  ECO HUB KOSOVA u themelua në vitin 2024 si përgjigje ndaj nevojës së ngutshme për
+                  një platformë që të lehtësojë tranzicionin drejt ekonomisë qarkore në Kosovë.
+                  Ideja lindi nga një grup ekspertësh mjedisore, liderësh të biznesit dhe
+                  aktivistësh socialë që panë potencialin e madh të vendit tonë për të adoptuar
+                  praktikat e qëndrueshme.
                 </p>
                 <p>
-                  Pas muajsh hulumtimi dhe konsultimesh me palët e interesit, ne krijuam një platformë që jo vetëm që
-                  lidh organizatat dhe individët, por gjithashtu ofron mjetet e nevojshme për të realizuar projekte
-                  konkrete të ekonomisë qarkulluese.
+                  Pas muajsh hulumtimi dhe konsultimesh me palët e interesit, ne krijuam një
+                  platformë që jo vetëm që lidh organizatat dhe individët, por gjithashtu ofron
+                  mjetet e nevojshme për të realizuar projekte konkrete të ekonomisë qarkore.
                 </p>
               </CardContent>
             </Card>
@@ -38,11 +41,13 @@ export default function KushJemiPage() {
               </CardHeader>
               <CardContent className="prose prose-gray max-w-none">
                 <p>
-                  Ne besojmë se Kosova ka potencialin të bëhet lider rajonal në ekonominë qarkulluese. Qëllimi ynë është
-                  të krijojmë një ekosistem ku:
+                  Ne besojmë se Kosova ka potencialin të bëhet lider rajonal në ekonominë qarkore.
+                  Qëllimi ynë është të krijojmë një ekosistem ku:
                 </p>
                 <ul>
-                  <li>Organizatat mund të gjejnë partnerë të përshtatshëm për projekte të përbashkëta</li>
+                  <li>
+                    Organizatat mund të gjejnë partnerë të përshtatshëm për projekte të përbashkëta
+                  </li>
                   <li>Bizneset mund të shkëmbejnë burime dhe të reduktojnë mbetjet</li>
                   <li>Individët mund të kontribuojnë në një ekonomi më të qëndrueshme</li>
                   <li>Njohuritë dhe ekspertiza ndahen lirshëm për të përshpejtuar inovacionin</li>
@@ -65,13 +70,15 @@ export default function KushJemiPage() {
                   <div>
                     <h3 className="font-semibold text-emerald-600 mb-2">Inkluziviteti</h3>
                     <p className="text-sm text-gray-600">
-                      Platforma jonë është e hapur për të gjithë, pavarësisht madhësisë apo sektorit.
+                      Platforma jonë është e hapur për të gjithë, pavarësisht madhësisë apo
+                      sektorit.
                     </p>
                   </div>
                   <div>
                     <h3 className="font-semibold text-emerald-600 mb-2">Transparenca</h3>
                     <p className="text-sm text-gray-600">
-                      Operojmë me transparencë të plotë dhe raportojmë rregullisht për progresin tonë.
+                      Operojmë me transparencë të plotë dhe raportojmë rregullisht për progresin
+                      tonë.
                     </p>
                   </div>
                   <div>

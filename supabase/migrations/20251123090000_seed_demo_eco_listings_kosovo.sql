@@ -253,7 +253,7 @@ SELECT
    WHERE o.name ILIKE '%POWERPACK%' LIMIT 1),
   (SELECT id FROM eco_categories WHERE slug = 'wood-pallets' LIMIT 1),
   'Shërbim Riparimi dhe Blerje e Paletave - Prishtinë / Pallet repair & buy-back - Prishtina',
-  'POWERPACK ofron shërbim profesional të riparimit dhe programin e blerjes së paletave druri nga magazinat logjistike. Pranojmë paleta të dëmtuara për riparim ose blerje. Çmim konkurrues, shërbim i shpejtë. Kontriboni në ekonominë qarkulluese duke ripërdorur paletat tuaja.'
+  'POWERPACK ofron shërbim profesional të riparimit dhe programin e blerjes së paletave druri nga magazinat logjistike. Pranojmë paleta të dëmtuara për riparim ose blerje. Çmim konkurrues, shërbim i shpejtë. Kontriboni në ekonominë qarkore duke ripërdorur paletat tuaja.'
     || E'\n\nEnglish: POWERPACK repairs and buys back wooden pallets from logistics warehouses. Competitive pricing and fast service to keep pallets in circular use.',
   'SERVICE_REPAIR'::flow_type,
   'USED_REPAIRABLE'::condition,

@@ -264,7 +264,13 @@
           },
           "category": {
             "type": "string",
-            "enum": ["ekonomi-qarkulluese", "zhvillim-i-qendrueshem", "inovacion", "politikë", "studime-rasti"],
+            "enum": [
+              "ekonomi-qarkore",
+              "zhvillim-i-qendrueshem",
+              "inovacion",
+              "politikë",
+              "studime-rasti"
+            ],
             "description": "Article category"
           },
           "tags": {
@@ -568,10 +574,7 @@
         "summary": "Create a new listing",
         "description": "Create a new marketplace listing (requires authentication)",
         "tags": ["Listings"],
-        "security": [
-          {"bearerAuth": []},
-          {"cookieAuth": []}
-        ],
+        "security": [{ "bearerAuth": [] }, { "cookieAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -587,7 +590,7 @@
                     "description": "Ofertojmë materiale ndërtimi të ricikluara me cilësi të lartë për projekte të qëndrueshme.",
                     "category": "materiale",
                     "type": "shes",
-                    "price": 150.00,
+                    "price": 150.0,
                     "unit": "kg",
                     "quantity": 500,
                     "location": "Prishtinë",
@@ -598,11 +601,11 @@
                 "service_listing": {
                   "summary": "Create a service listing",
                   "value": {
-                    "title": "Konsultim për ekonomi qarkulluese",
-                    "description": "Ofroj shërbime konsultimi për bizneset që duan të kalojnë në ekonomi qarkulluese.",
+                    "title": "Konsultim për ekonomi qarkore",
+                    "description": "Ofroj shërbime konsultimi për bizneset që duan të kalojnë në ekonomi qarkore.",
                     "category": "konsultim",
                     "type": "shes",
-                    "price": 100.00,
+                    "price": 100.0,
                     "unit": "orë",
                     "quantity": 20,
                     "location": "Prishtinë"
@@ -710,10 +713,7 @@
         "summary": "Update listing",
         "description": "Update an existing listing (requires ownership or admin privileges)",
         "tags": ["Listings"],
-        "security": [
-          {"bearerAuth": []},
-          {"cookieAuth": []}
-        ],
+        "security": [{ "bearerAuth": [] }, { "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -803,10 +803,7 @@
         "summary": "Delete listing",
         "description": "Delete a listing (requires ownership or admin privileges)",
         "tags": ["Listings"],
-        "security": [
-          {"bearerAuth": []},
-          {"cookieAuth": []}
-        ],
+        "security": [{ "bearerAuth": [] }, { "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -965,10 +962,7 @@
         "summary": "Create organization",
         "description": "Create a new organization (requires authentication)",
         "tags": ["Organizations"],
-        "security": [
-          {"bearerAuth": []},
-          {"cookieAuth": []}
-        ],
+        "security": [{ "bearerAuth": [] }, { "cookieAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
@@ -1095,10 +1089,7 @@
         "summary": "Update organization",
         "description": "Update an existing organization (requires ownership or admin privileges)",
         "tags": ["Organizations"],
-        "security": [
-          {"bearerAuth": []},
-          {"cookieAuth": []}
-        ],
+        "security": [{ "bearerAuth": [] }, { "cookieAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -1217,7 +1208,13 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": ["ekonomi-qarkulluese", "zhvillim-i-qendrueshem", "inovacion", "politikë", "studime-rasti"]
+              "enum": [
+                "ekonomi-qarkore",
+                "zhvillim-i-qendrueshem",
+                "inovacion",
+                "politikë",
+                "studime-rasti"
+              ]
             },
             "description": "Filter by category"
           },

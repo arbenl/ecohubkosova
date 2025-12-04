@@ -1,12 +1,12 @@
 {
   "title": "Partnerët e EcoHub",
-  "subtitle": "Zbuloni organizatat që bashkëpunojnë për një Kosovë rrethore.",
+  "subtitle": "Zbuloni organizatat që bashkëpunojnë për një Kosovë qarkore.",
   "page": {
     "title": "Partnerët & Ekosistemi i EcoHub",
-    "subtitle": "Biznese, riciklues, OJQ dhe institucione që punojnë së bashku për një Kosovë rrethore."
+    "subtitle": "Biznese, riciklues, OJQ dhe institucione që punojnë së bashku për një Kosovë qarkore."
   },
   "pageTitle": "Partnerët & Ekosistemi i EcoHub",
-  "pageSubtitle": "Biznese, riciklues, OJQ dhe institucione që punojnë së bashku për një Kosovë rrethore.",
+  "pageSubtitle": "Biznese, riciklues, OJQ dhe institucione që punojnë së bashku për një Kosovë qarkore.",
   "hero": {
     "ctaBecomePartner": "Bëhu partner",
     "ctaViewMarketplace": "Shiko tregun"
@@ -71,7 +71,7 @@
     },
     "join": {
       "title": "Bëhu pjesë e ekosistemit EcoHub",
-      "description": "Krijoni ose kërkoni profilin e organizatës suaj, publikoni oferta dhe kërkesa, dhe bashkohuni në nismat e ekonomisë rrethore në Kosovë."
+      "description": "Krijoni ose kërkoni profilin e organizatës suaj, publikoni oferta dhe kërkesa, dhe bashkohuni në nismat e ekonomisë qarkore në Kosovë."
     }
   },
   "cards": {
@@ -95,7 +95,7 @@
     "browseOrgs": "Shfleto organizatat e gjelbra",
     "joinEcoHub": "Krijo ose kërko organizatën tënde",
     "title": "Sillni organizatën tuaj në EcoHub",
-    "body": "Bëhuni pjesë e rrjetit të verifikuar të ricikluesve, ofruesve të shërbimeve, OJQ-ve dhe institucioneve që shtyjnë përpara ekonominë qarkulluese.",
+    "body": "Bëhuni pjesë e rrjetit të verifikuar të ricikluesve, ofruesve të shërbimeve, OJQ-ve dhe institucioneve që shtyjnë përpara ekonominë qarkore.",
     "button": "Fillo regjistrimin si partner"
   },
   "stats": {
@@ -134,7 +134,7 @@
     "createNew": "Krijo listim të ri",
     "empty": {
       "title": "Nuk keni krijuar ende asnjë listim.",
-      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkore.",
       "cta": "Krijo Listim"
     }
   },
