@@ -1,5 +1,3 @@
-
-
 import QendraEDijesClientPage from "./qendra-e-dijes-client-page" // Will create this client component later
 import { getArticlesData } from "./actions"
 
@@ -25,7 +23,7 @@ export default async function QendraEDijesPage({ searchParams }: QendraEDijesPag
   }
 
   const categories = [
-    "Ekonomi qarkulluese",
+    "Ekonomi qarkore",
     "Riciklim",
     "Energji e ripërtëritshme",
     "Qëndrueshmëri",
@@ -38,25 +36,27 @@ export default async function QendraEDijesPage({ searchParams }: QendraEDijesPag
   return (
     <div className="flex min-h-screen flex-col">
       <>
-      <main className="flex-1 py-12">
-        <div className="container px-4 md:px-6">
-          <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
-            <div>
-              <h1 className="text-3xl font-bold">Qendra e Dijes</h1>
-              <p className="text-gray-600 mt-1">Artikuj, studime dhe informacione për ekonominë qarkulluese</p>
+        <main className="flex-1 py-12">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
+              <div>
+                <h1 className="text-3xl font-bold">Qendra e Dijes</h1>
+                <p className="text-gray-600 mt-1">
+                  Artikuj, studime dhe informacione për ekonominë qarkore
+                </p>
+              </div>
             </div>
-          </div>
 
-          <QendraEDijesClientPage
-            initialArticles={initialArticles}
-            hasMoreInitial={hasMoreInitial}
-            initialSearchQuery={initialSearchQuery}
-            initialSelectedCategory={initialSelectedCategory}
-            initialPage={Number.isNaN(initialPage) ? 1 : initialPage}
-            categories={categories}
-          />
-        </div>
-      </main>
+            <QendraEDijesClientPage
+              initialArticles={initialArticles}
+              hasMoreInitial={hasMoreInitial}
+              initialSearchQuery={initialSearchQuery}
+              initialSelectedCategory={initialSelectedCategory}
+              initialPage={Number.isNaN(initialPage) ? 1 : initialPage}
+              categories={categories}
+            />
+          </div>
+        </main>
       </>
     </div>
   )

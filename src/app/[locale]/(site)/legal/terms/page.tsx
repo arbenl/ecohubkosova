@@ -9,7 +9,9 @@ export default function KushtetEPerdorimitPage() {
             <h1 className="text-4xl font-bold tracking-tighter mb-4">
               Kushtet e <span className="text-emerald-600">Përdorimit</span>
             </h1>
-            <p className="text-xl text-gray-600">Kushtet dhe rregullat për përdorimin e platformës ECO HUB KOSOVA</p>
+            <p className="text-xl text-gray-600">
+              Kushtet dhe rregullat për përdorimin e platformës ECO HUB KOSOVA
+            </p>
             <p className="text-sm text-gray-500 mt-2">Përditësuar më: 15 Dhjetor 2024</p>
           </div>
 
@@ -20,13 +22,14 @@ export default function KushtetEPerdorimitPage() {
               </CardHeader>
               <CardContent className="prose prose-gray max-w-none">
                 <p>
-                  Duke përdorur platformën ECO HUB KOSOVA ("Platforma"), ju pranoni të jeni të lidhur nga këto Kushte të
-                  Përdorimit. Nëse nuk pajtoheni me këto kushte, ju lutemi mos e përdorni Platformën.
+                  Duke përdorur platformën ECO HUB KOSOVA ("Platforma"), ju pranoni të jeni të
+                  lidhur nga këto Kushte të Përdorimit. Nëse nuk pajtoheni me këto kushte, ju lutemi
+                  mos e përdorni Platformën.
                 </p>
                 <p>
-                  Ne rezervojmë të drejtën të ndryshojmë këto kushte në çdo kohë. Ndryshimet do të hyjnë në fuqi
-                  menjëherë pas publikimit në Platformë. Përdorimi i vazhdueshëm i Platformës pas ndryshimeve
-                  konsiderohet si pranim i kushteve të reja.
+                  Ne rezervojmë të drejtën të ndryshojmë këto kushte në çdo kohë. Ndryshimet do të
+                  hyjnë në fuqi menjëherë pas publikimit në Platformë. Përdorimi i vazhdueshëm i
+                  Platformës pas ndryshimeve konsiderohet si pranim i kushteve të reja.
                 </p>
               </CardContent>
             </Card>
@@ -37,8 +40,9 @@ export default function KushtetEPerdorimitPage() {
               </CardHeader>
               <CardContent className="prose prose-gray max-w-none">
                 <p>
-                  ECO HUB KOSOVA është një platformë digjitale që lehtëson bashkëpunimin midis organizatave, bizneseve
-                  dhe individëve në fushën e ekonomisë qarkulluese në Kosovë. Platforma ofron:
+                  ECO HUB KOSOVA është një platformë digjitale që lehtëson bashkëpunimin midis
+                  organizatave, bizneseve dhe individëve në fushën e ekonomisë qarkore në Kosovë.
+                  Platforma ofron:
                 </p>
                 <ul>
                   <li>Drejtori të organizatave dhe bizneseve</li>
@@ -55,7 +59,8 @@ export default function KushtetEPerdorimitPage() {
               </CardHeader>
               <CardContent className="prose prose-gray max-w-none">
                 <p>
-                  Për të përdorur disa funksione të Platformës, ju duhet të krijoni një llogari. Ju jeni përgjegjës për:
+                  Për të përdorur disa funksione të Platformës, ju duhet të krijoni një llogari. Ju
+                  jeni përgjegjës për:
                 </p>
                 <ul>
                   <li>Sigurimin e saktësisë së informacioneve që jepni</li>
@@ -64,7 +69,8 @@ export default function KushtetEPerdorimitPage() {
                   <li>Njoftimin e menjëhershëm për çdo përdorim të paautorizuar</li>
                 </ul>
                 <p>
-                  Ne rezervojmë të drejtën të refuzojmë regjistrimin ose të pezullojmë llogaritë që shkelin këto kushte.
+                  Ne rezervojmë të drejtën të refuzojmë regjistrimin ose të pezullojmë llogaritë që
+                  shkelin këto kushte.
                 </p>
               </CardContent>
             </Card>
@@ -92,8 +98,9 @@ export default function KushtetEPerdorimitPage() {
               </CardHeader>
               <CardContent className="prose prose-gray max-w-none">
                 <p>
-                  Ju mbani të drejtat e pronësisë për përmbajtjen që publikoni në Platformë, por na jep një kopje të
-                  tëra të drejtave të pronësisë intelektuale për të gjithë përmbajtjen që publikoni në Platformë.
+                  Ju mbani të drejtat e pronësisë për përmbajtjen që publikoni në Platformë, por na
+                  jep një kopje të tëra të drejtave të pronësisë intelektuale për të gjithë
+                  përmbajtjen që publikoni në Platformë.
                 </p>
               </CardContent>
             </Card>

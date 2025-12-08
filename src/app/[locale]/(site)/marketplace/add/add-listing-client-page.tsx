@@ -153,7 +153,7 @@ export default function AddListingClientPage({ cities }: AddListingClientPagePro
           <h1 className="text-3xl font-bold">Shto listim të ri në treg</h1>
           <p className="text-gray-600 mt-1">
             Plotësoni formularin më poshtë për të shtuar një listim të ri në tregun e ekonomisë
-            qarkulluese
+            qarkore
           </p>
         </div>
 

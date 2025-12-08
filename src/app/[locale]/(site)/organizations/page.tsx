@@ -60,7 +60,7 @@ export default async function OrganizationsPage({ searchParams }: OrganizationsP
           </h1>
 
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Zbulo organizatat që janë pjesë e rrjetit tonë të ekonomisë qarkulluese në Kosovë
+            Zbulo organizatat që janë pjesë e rrjetit tonë të ekonomisë qarkore në Kosovë
           </p>
         </div>
 

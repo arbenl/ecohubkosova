@@ -8,10 +8,11 @@ export default function KoalicioniPage() {
         <div className="container px-4 md:px-6 max-w-4xl">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold tracking-tighter mb-4">
-              Koalicioni i <span className="text-emerald-600">Ekonomisë Qarkulluese</span>
+              Koalicioni i <span className="text-emerald-600">Ekonomisë Qarkore</span>
             </h1>
             <p className="text-xl text-gray-600">
-              Një aleancë e organizatave, bizneseve dhe ekspertëve të angazhuar për ekonominë qarkulluese në Kosovë
+              Një aleancë e organizatave, bizneseve dhe ekspertëve të angazhuar për ekonominë
+              qarkore në Kosovë
             </p>
           </div>
 
@@ -22,14 +23,15 @@ export default function KoalicioniPage() {
               </CardHeader>
               <CardContent className="prose prose-gray max-w-none">
                 <p>
-                  Koalicioni i Ekonomisë Qarkulluese është një aleancë strategjike e organizatave joqeveritare,
-                  ndërmarrjeve sociale, kompanive dhe ekspertëve individualë që punojnë së bashku për të promovuar dhe
-                  implementuar parimet e ekonomisë qarkulluese në Kosovë.
+                  Koalicioni i Ekonomisë Qarkore është një aleancë strategjike e organizatave
+                  joqeveritare, ndërmarrjeve sociale, kompanive dhe ekspertëve individualë që
+                  punojnë së bashku për të promovuar dhe implementuar parimet e ekonomisë qarkore në
+                  Kosovë.
                 </p>
                 <p>
-                  I themeluar në vitin 2023, koalicioni ka për qëllim të krijojë një zë të unifikuar për ekonominë
-                  qarkulluese dhe të koordinojë përpjekjet për një tranzicion të suksesshëm drejt një modeli ekonomik më
-                  të qëndrueshëm.
+                  I themeluar në vitin 2023, koalicioni ka për qëllim të krijojë një zë të unifikuar
+                  për ekonominë qarkore dhe të koordinojë përpjekjet për një tranzicion të
+                  suksesshëm drejt një modeli ekonomik më të qëndrueshëm.
                 </p>
               </CardContent>
             </Card>
@@ -42,7 +44,8 @@ export default function KoalicioniPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4">
-                    Koalicioni përbëhet nga më shumë se 30 organizata dhe ekspertë nga sektorë të ndryshëm:
+                    Koalicioni përbëhet nga më shumë se 30 organizata dhe ekspertë nga sektorë të
+                    ndryshëm:
                   </p>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li>• 15 Organizata Joqeveritare</li>
@@ -60,7 +63,9 @@ export default function KoalicioniPage() {
                   <CardTitle>Struktura</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 mb-4">Koalicioni është organizuar në grupe pune tematike:</p>
+                  <p className="text-gray-600 mb-4">
+                    Koalicioni është organizuar në grupe pune tematike:
+                  </p>
                   <ul className="space-y-2 text-sm text-gray-600">
                     <li>• Grupi i Punës për Politika</li>
                     <li>• Grupi i Punës për Edukimin</li>
@@ -83,38 +88,51 @@ export default function KoalicioniPage() {
                     <div>
                       <h3 className="font-semibold text-emerald-600 mb-2">Advokimi për Politika</h3>
                       <p className="text-sm text-gray-600">
-                        Punojmë me institucionet qeveritare për të krijuar një kornizë ligjore që mbështet ekonominë
-                        qarkulluese.
+                        Punojmë me institucionet qeveritare për të krijuar një kornizë ligjore që
+                        mbështet ekonominë qarkore.
                       </p>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-emerald-600 mb-2">Ndërtimi i Kapaciteteve</h3>
+                      <h3 className="font-semibold text-emerald-600 mb-2">
+                        Ndërtimi i Kapaciteteve
+                      </h3>
                       <p className="text-sm text-gray-600">
-                        Organizojmë trajnime dhe workshop-e për të rritur kapacitetet e anëtarëve dhe komunitetit.
+                        Organizojmë trajnime dhe workshop-e për të rritur kapacitetet e anëtarëve
+                        dhe komunitetit.
                       </p>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-emerald-600 mb-2">Hulumtimi dhe Zhvillimi</h3>
+                      <h3 className="font-semibold text-emerald-600 mb-2">
+                        Hulumtimi dhe Zhvillimi
+                      </h3>
                       <p className="text-sm text-gray-600">
-                        Kryejmë hulumtime për të identifikuar mundësitë dhe sfidat e ekonomisë qarkulluese në Kosovë.
+                        Kryejmë hulumtime për të identifikuar mundësitë dhe sfidat e ekonomisë
+                        qarkore në Kosovë.
                       </p>
                     </div>
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <h3 className="font-semibold text-emerald-600 mb-2">Rrjetëzimi dhe Bashkëpunimi</h3>
+                      <h3 className="font-semibold text-emerald-600 mb-2">
+                        Rrjetëzimi dhe Bashkëpunimi
+                      </h3>
                       <p className="text-sm text-gray-600">
-                        Lehtësojmë bashkëpunimin midis anëtarëve dhe krijojmë sinergji për projekte të përbashkëta.
+                        Lehtësojmë bashkëpunimin midis anëtarëve dhe krijojmë sinergji për projekte
+                        të përbashkëta.
                       </p>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-emerald-600 mb-2">Sensibilizimi i Publikut</h3>
+                      <h3 className="font-semibold text-emerald-600 mb-2">
+                        Sensibilizimi i Publikut
+                      </h3>
                       <p className="text-sm text-gray-600">
-                        Rrisim ndërgjegjësimin e publikut për rëndësinë e ekonomisë qarkulluese.
+                        Rrisim ndërgjegjësimin e publikut për rëndësinë e ekonomisë qarkore.
                       </p>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-emerald-600 mb-2">Bashkëpunimi Ndërkombëtar</h3>
+                      <h3 className="font-semibold text-emerald-600 mb-2">
+                        Bashkëpunimi Ndërkombëtar
+                      </h3>
                       <p className="text-sm text-gray-600">
                         Krijojmë lidhje me rrjete të ngjashme në rajon dhe në Evropë.
                       </p>
@@ -132,19 +150,27 @@ export default function KoalicioniPage() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <div className="text-center p-4 border rounded-lg">
-                    <h3 className="font-semibold text-emerald-600 mb-2">Qendra për Ekonomi Qarkulluese</h3>
+                    <h3 className="font-semibold text-emerald-600 mb-2">
+                      Qendra për Ekonomi Qarkore
+                    </h3>
                     <p className="text-xs text-gray-600">OJQ - Prishtinë</p>
-                    <p className="text-sm text-gray-600 mt-2">Lider në promovimin e ekonomisë qarkulluese</p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      Lider në promovimin e ekonomisë qarkore
+                    </p>
                   </div>
                   <div className="text-center p-4 border rounded-lg">
                     <h3 className="font-semibold text-emerald-600 mb-2">EcoTech Solutions</h3>
                     <p className="text-xs text-gray-600">Kompani - Prizren</p>
-                    <p className="text-sm text-gray-600 mt-2">Zgjidhje teknologjike për qëndrueshmëri</p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      Zgjidhje teknologjike për qëndrueshmëri
+                    </p>
                   </div>
                   <div className="text-center p-4 border rounded-lg">
                     <h3 className="font-semibold text-emerald-600 mb-2">Green Future Kosovo</h3>
                     <p className="text-xs text-gray-600">Ndërmarrje Sociale - Pejë</p>
-                    <p className="text-sm text-gray-600 mt-2">Projekte të gjelbra dhe energji e ripërtëritshme</p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      Projekte të gjelbra dhe energji e ripërtëritshme
+                    </p>
                   </div>
                   <div className="text-center p-4 border rounded-lg">
                     <h3 className="font-semibold text-emerald-600 mb-2">Reciklimi Plus</h3>
@@ -157,7 +183,9 @@ export default function KoalicioniPage() {
                     <p className="text-sm text-gray-600 mt-2">Promovimi i bujqësisë organike</p>
                   </div>
                   <div className="text-center p-4 border rounded-lg">
-                    <h3 className="font-semibold text-emerald-600 mb-2">Universiteti i Prishtinës</h3>
+                    <h3 className="font-semibold text-emerald-600 mb-2">
+                      Universiteti i Prishtinës
+                    </h3>
                     <p className="text-xs text-gray-600">Institucion Akademik</p>
                     <p className="text-sm text-gray-600 mt-2">Hulumtime dhe zhvillim</p>
                   </div>
@@ -210,15 +238,15 @@ export default function KoalicioniPage() {
                     </li>
                     <li className="flex items-start space-x-2">
                       <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                      <span>Krijimi i fondit për projekte të ekonomisë qarkulluese</span>
+                      <span>Krijimi i fondit për projekte të ekonomisë qarkore</span>
                     </li>
                     <li className="flex items-start space-x-2">
                       <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                      <span>Zhvillimi i certifikimit për ekonomi qarkulluese</span>
+                      <span>Zhvillimi i certifikimit për ekonomi qarkore</span>
                     </li>
                     <li className="flex items-start space-x-2">
                       <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                      <span>Krijimi i rrjetit rajonal të ekonomisë qarkulluese</span>
+                      <span>Krijimi i rrjetit rajonal të ekonomisë qarkore</span>
                     </li>
                     <li className="flex items-start space-x-2">
                       <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
@@ -260,7 +288,8 @@ export default function KoalicioniPage() {
                     </div>
                     <h3 className="font-semibold mb-2">Bashkohu</h3>
                     <p className="text-sm text-gray-600">
-                      Pas aprovimit, do të ftohesh në takimin e radhës dhe do të bëhesh anëtar i plotë.
+                      Pas aprovimit, do të ftohesh në takimin e radhës dhe do të bëhesh anëtar i
+                      plotë.
                     </p>
                   </div>
                 </div>

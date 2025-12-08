@@ -8,7 +8,7 @@
       "questions": {
         "whatIsEcoHub": {
           "question": "Çfarë është ECO HUB KOSOVA?",
-          "answer": "ECO HUB KOSOVA është platforma e parë e ekonomisë qarkulluese në Kosovë që lidh organizatat, bizneset dhe individët për të promovuar bashkëpunimin dhe qëndrueshmërinë. Ne ofrojmë një hapësirë digjitale ku partnerët mund të gjejnë njëri-tjetrin, të shkëmbejnë burime dhe të realizojnë projekte të përbashkëta."
+          "answer": "ECO HUB KOSOVA është platforma e parë e ekonomisë qarkore në Kosovë që lidh organizatat, bizneset dhe individët për të promovuar bashkëpunimin dhe qëndrueshmërinë. Ne ofrojmë një hapësirë digjitale ku partnerët mund të gjejnë njëri-tjetrin, të shkëmbejnë burime dhe të realizojnë projekte të përbashkëta."
         },
         "howToRegister": {
           "question": "Si mund të regjistrohem në platformë?",
@@ -16,21 +16,21 @@
         },
         "isFree": {
           "question": "A është platforma falas për përdorim?",
-          "answer": "Po, ECO HUB KOSOVA është plotësisht falas për të gjithë përdoruesit. Ne besojmë se qasja në informacion dhe mundësitë e bashkëpunimit duhet të jenë të hapura për të gjithë ata që dëshirojnë të kontribuojnë në ekonominë qarkulluese."
+          "answer": "Po, ECO HUB KOSOVA është plotësisht falas për të gjithë përdoruesit. Ne besojmë se qasja në informacion dhe mundësitë e bashkëpunimit duhet të jenë të hapura për të gjithë ata që dëshirojnë të kontribuojnë në ekonominë qarkore."
         },
         "whoCanJoin": {
           "question": "Kush mund të bëhet anëtar i platformës?",
-          "answer": "Platforma është e hapur për individë, organizata joqeveritare, ndërmarrje sociale, kompani dhe çdo entitet tjetër që është i angazhuar për ekonominë qarkulluese dhe qëndrueshmërinë. Ne mirëpresim të gjithë ata që dëshirojnë të kontribuojnë pozitivisht në mjedisin dhe shoqërinë."
+          "answer": "Platforma është e hapur për individë, organizata joqeveritare, ndërmarrje sociale, kompani dhe çdo entitet tjetër që është i angazhuar për ekonominë qarkore dhe qëndrueshmërinë. Ne mirëpresim të gjithë ata që dëshirojnë të kontribuojnë pozitivisht në mjedisin dhe shoqërinë."
         }
       }
     },
     "marketplace": {
       "title": "Rreth Tregut",
-      "description": "Pyetje rreth tregut të ekonomisë qarkulluese",
+      "description": "Pyetje rreth tregut të ekonomisë qarkore",
       "questions": {
         "howMarketplaceWorks": {
           "question": "Si funksionon tregu në platformë?",
-          "answer": "Tregu është një hapësirë ku anëtarët mund të publikojnë listime për materiale, produkte ose shërbime që dëshirojnë të shesin ose të blejnë. Çdo listim shqyrtohet nga ekipi ynë përpara publikimit për të siguruar cilësinë dhe përshtatshmërinë me parimet e ekonomisë qarkulluese."
+          "answer": "Tregu është një hapësirë ku anëtarët mund të publikojnë listime për materiale, produkte ose shërbime që dëshirojnë të shesin ose të blejnë. Çdo listim shqyrtohet nga ekipi ynë përpara publikimit për të siguruar cilësinë dhe përshtatshmërinë me parimet e ekonomisë qarkore."
         },
         "transactionFees": {
           "question": "A ka komisione për transaksionet?",
@@ -38,7 +38,7 @@
         },
         "whatCanBeSold": {
           "question": "Çfarë lloj materialesh mund të shiten në treg?",
-          "answer": "Në treg mund të shiten materiale të riciklueshme, produkte të qëndrueshme, shërbime mjedisore, pajisje për energji të ripërtëritshme dhe çdo gjë tjetër që kontribuon në ekonominë qarkulluese. Nuk lejohen materiale të dëmshme për mjedisin ose që shkelin ligjet në fuqi."
+          "answer": "Në treg mund të shiten materiale të riciklueshme, produkte të qëndrueshme, shërbime mjedisore, pajisje për energji të ripërtëritshme dhe çdo gjë tjetër që kontribuon në ekonominë qarkore. Nuk lejohen materiale të dëmshme për mjedisin ose që shkelin ligjet në fuqi."
         }
       }
     },
@@ -56,7 +56,7 @@
         },
         "organizeEvent": {
           "question": "Si mund të organizoj një event përmes platformës?",
-          "answer": "Anëtarët mund të propozojnë evente që janë në përputhje me misionin tonë. Dërgoni një propozim te ekipi ynë me detajet e eventit, objektivat dhe grupin e synuar. Ne do të ndihmojmë në promovimin dhe organizimin e eventeve që kontribuojnë në ekonominë qarkulluese."
+          "answer": "Anëtarët mund të propozojnë evente që janë në përputhje me misionin tonë. Dërgoni një propozim te ekipi ynë me detajet e eventit, objektivat dhe grupin e synuar. Ne do të ndihmojmë në promovimin dhe organizimin e eventeve që kontribuojnë në ekonominë qarkore."
         }
       }
     },
@@ -119,7 +119,7 @@
     "createNew": "Krijo listim të ri",
     "empty": {
       "title": "Nuk keni krijuar ende asnjë listim.",
-      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkulluese.",
+      "description": "Krijo listimin tënd të parë dhe kontribuo në ekonominë qarkore.",
       "cta": "Krijo Listim"
     }
   }

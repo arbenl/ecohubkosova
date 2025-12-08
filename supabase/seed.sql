@@ -2,14 +2,14 @@
 -- Run automatically when executing `supabase db reset`.
 
 insert into organizations (name, description, primary_interest, contact_person, contact_email, location, type, is_approved) values
-('Qendra për Ekonomi Qarkulluese', 'Organizatë që promovon ekonominë qarkulluese në Kosovë', 'Ekonomi qarkulluese', 'Arben Krasniqi', 'info@ceq.org', 'Prishtinë, Kosovë', 'OJQ', true),
+('Qendra për Ekonomi Qarkore', 'Organizatë që promovon ekonominë qarkore në Kosovë', 'Ekonomi qarkore', 'Arben Krasniqi', 'info@ceq.org', 'Prishtinë, Kosovë', 'OJQ', true),
 ('EcoTech Solutions', 'Kompani që ofron zgjidhje teknologjike për qëndrueshmëri', 'Teknologji e gjelbër', 'Blerta Hoxha', 'contact@ecotech.co', 'Prizren, Kosovë', 'Kompani', true),
 ('Green Future Kosovo', 'Ndërmarrje sociale për projekte të gjelbra', 'Energji e ripërtëritshme', 'Driton Berisha', 'hello@greenfuture.org', 'Pejë, Kosovë', 'Ndërmarrje Sociale', true),
 ('Reciklimi Plus', 'Kompani për riciklim dhe menaxhim mbetjesh', 'Riciklim', 'Fatmire Gashi', 'info@reciklimi.com', 'Gjilan, Kosovë', 'Kompani', true),
 ('Bujqësia e Qëndrueshme', 'OJQ për promovimin e bujqësisë organike', 'Bujqësi e qëndrueshme', 'Mentor Kelmendi', 'contact@bujqesia.org', 'Ferizaj, Kosovë', 'OJQ', true);
 
 insert into artikuj (title, content, author_id, is_published, category, tags) values
-('Hyrje në Ekonominë Qarkulluese', 'Ekonomia qarkulluese është një model ekonomik që synon eliminimin e mbetjeve dhe përdorimin e vazhdueshëm të burimeve. Ky artikull shpjegon parimet bazë të ekonomisë qarkulluese dhe përfitimet e saj për mjedisin dhe ekonominë.', (select id from users where role = 'Admin' limit 1), true, 'Ekonomi qarkulluese', array['ekonomi', 'qëndrueshmëri', 'mjedis']),
+('Hyrje në Ekonominë Qarkore', 'Ekonomia qarkore është një model ekonomik që synon eliminimin e mbetjeve dhe përdorimin e vazhdueshëm të burimeve. Ky artikull shpjegon parimet bazë të ekonomisë qarkore dhe përfitimet e saj për mjedisin dhe ekonominë.', (select id from users where role = 'Admin' limit 1), true, 'Ekonomi qarkore', array['ekonomi', 'qëndrueshmëri', 'mjedis']),
 ('Riciklimi në Kosovë: Sfidat dhe Mundësitë', 'Analiza e gjendjes aktuale të riciklimit në Kosovë, sfidat kryesore dhe mundësitë për përmirësim. Artikulli përfshin rekomandime për politikëbërësit dhe qytetarët.', (select id from users where role = 'Admin' limit 1), true, 'Riciklim', array['riciklim', 'Kosovë', 'politika']),
 ('Energjia e Ripërtëritshme: E Ardhmja e Kosovës', 'Potenciali i Kosovës për energji të ripërtëritshme, duke përfshirë energjinë diellore, erën dhe hidro. Diskutohen investimet e nevojshme dhe përfitimet ekonomike.', (select id from users where role = 'Admin' limit 1), true, 'Energji e ripërtëritshme', array['energji', 'diell', 'erë']),
 ('Biodiversiteti i Kosovës dhe Konservimi', 'Kosova është shtëpia e një biodiversiteti të pasur me mbi 1800 lloje bimësh dhe 300 lloje shtazësh. Ky artikull eksploron zonat e mbrojtura, sfidat e biodiversitetit dhe iniciativat për konservimin e natyrës.', (select id from users where role = 'Admin' limit 1), true, 'Biodiversitet', array['biodiversitet', 'konservim', 'natyrë']),
@@ -38,7 +38,7 @@ insert into tregu_listime (created_by_user_id, title, description, category, pri
 ((select id from users where role = 'Admin' limit 1), 'Kompjuterë të Riciklurar për Shkolla', 'Laptop dhe desktop të rinovuar, perfekt për programe edukative dhe trajnime digjitale.', 'Elektronikë', 200.00, 'copë', 'Prishtinë, Kosovë', '20-40 copë', 'shes', true),
 ((select id from users where role = 'Admin' limit 1), 'Produkte Kosmetike Natyrale', 'Kremra dhe shpëlarës të prodhuar nga përbërës natyrorë vendas, pa kimikate sintetike.', 'Produkte të qëndrueshme', 12.00, 'flakon', 'Gjilan, Kosovë', '100-200 flakon', 'shes', true),
 ((select id from users where role = 'Admin' limit 1), 'Pellumba për Energji Diellore', 'Pellumba diellore efikase për ngrohje të ujit, ideale për shtëpi dhe biznese të vogla.', 'Energji e ripërtëritshme', 180.00, 'sistem', 'Ferizaj, Kosovë', '8-15 sisteme', 'shes', true),
-((select id from users where role = 'Admin' limit 1), 'Shërbime Konsultimi për Ekonomi Qarkulluese', 'Konsultime ekspertësh për implementimin e praktikave të ekonomisë qarkulluese në biznese.', 'Shërbime', 100.00, 'orë', 'Prishtinë, Kosovë', '20-50 orë', 'shes', true),
+((select id from users where role = 'Admin' limit 1), 'Shërbime Konsultimi për Ekonomi Qarkore', 'Konsultime ekspertësh për implementimin e praktikave të ekonomisë qarkore në biznese.', 'Shërbime', 100.00, 'orë', 'Prishtinë, Kosovë', '20-50 orë', 'shes', true),
 
 -- 10 listings for buying (blej)
 ((select id from users where role = 'Admin' limit 1), 'Kërkoj Metale të Ricikluara', 'Nevojë për metale të ricikluara: bakër, aluminiun dhe çelik për projekte industriale.', 'Materiale të riciklueshme', 3.00, 'kg', 'Prishtinë, Kosovë', '1000-2000 kg', 'blej', true),

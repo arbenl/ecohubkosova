@@ -12,13 +12,13 @@ const inter = { className: "font-sans" }
 export const metadata: Metadata = {
   title: "ECO HUB KOSOVA | Lidhu. Bashkëpuno. Krijo Qarkullim.",
   description:
-    "Platforma e parë e ekonomisë qarkulluese në Kosovë. Lidhu me partnerë, zbulo mundësi dhe krijo qarkullim të qëndrueshëm.",
-  keywords: ["ekonomi qarkulluese", "Kosovë", "qëndrueshmëri", "rrjetëzim", "treg", "bashkëpunim"],
-  authors: [{ name: "Koalicioni i Ekonomisë Qarkulluese" }],
+    "Platforma e parë e ekonomisë qarkore në Kosovë. Lidhu me partnerë, zbulo mundësi dhe krijo qarkullim të qëndrueshëm.",
+  keywords: ["ekonomi qarkore", "Kosovë", "qëndrueshmëri", "rrjetëzim", "treg", "bashkëpunim"],
+  authors: [{ name: "Koalicioni i Ekonomisë Qarkore" }],
   openGraph: {
     title: "ECO HUB KOSOVA | Lidhu. Bashkëpuno. Krijo Qarkullim.",
     description:
-      "Platforma e parë e ekonomisë qarkulluese në Kosovë. Lidhu me partnerë, zbulo mundësi dhe krijo qarkullim të qëndrueshëm.",
+      "Platforma e parë e ekonomisë qarkore në Kosovë. Lidhu me partnerë, zbulo mundësi dhe krijo qarkullim të qëndrueshëm.",
     url: "https://ecohubkosova.com",
     siteName: "ECO HUB KOSOVA",
     locale: "sq-XK",
