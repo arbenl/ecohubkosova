@@ -1,6 +1,6 @@
 "use client"
 
-import { Link } from "@/i18n/routing"
+import { Link, useRouter } from "@/i18n/routing"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { MapPin, Leaf } from "lucide-react"
@@ -58,6 +58,7 @@ const FLOW_TYPE_COLORS: Record<string, string> = {
 
 export function ListingCardV2({ listing, locale }: ListingCardV2Props) {
   const t = useTranslations("marketplace-v2")
+  const router = useRouter()
 
   // Normalize data (V1 -> V2 mapping)
   const flowType =
@@ -75,22 +76,57 @@ export function ListingCardV2({ listing, locale }: ListingCardV2Props) {
       ? listing.category_name_sq || listing.category_name_en || listing.category || ""
       : listing.category_name_en || listing.category || ""
 
+  // Get filter type from flow type
+  const getFilterType = (flowType: string) => {
+    if (flowType.startsWith("OFFER_")) return "shes"
+    if (flowType.startsWith("REQUEST_")) return "blej"
+    if (flowType.startsWith("SERVICE_")) return "sherbime"
+    return "te-gjitha"
+  }
+
   return (
-    <Link
-      href={`/marketplace/${listing.id}`}
-      className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 rounded-lg"
-      aria-label={listing.title}
-    >
-      <Card className="group h-full overflow-hidden transition-all hover:shadow-lg hover:border-green-300 border-2 card-lift">
-        <CardHeader className="pb-3">
-          {/* Flow Type Badge */}
-          <div className="flex items-center gap-2 mb-2">
-            <Badge variant="outline" className={`${flowTypeColor} font-medium text-xs`}>
+    <Card className="group h-full overflow-hidden transition-all hover:shadow-lg hover:border-green-300 border-2 card-lift flex flex-col">
+      {/* Flow Type & Category Badges - OUTSIDE Link for click handling */}
+      <div className="px-6 pt-4 pb-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={() => {
+              router.push(`/marketplace?type=${getFilterType(flowType)}`)
+            }}
+            className="inline-flex"
+          >
+            <Badge
+              variant="outline"
+              className={`${flowTypeColor} font-medium text-xs hover:opacity-80 transition-opacity cursor-pointer`}
+            >
               {flowTypeLabel}
             </Badge>
-            {categoryName && <span className="text-xs text-muted-foreground">{categoryName}</span>}
-          </div>
+          </button>
+          {categoryName && (
+            <button
+              type="button"
+              onClick={() => {
+                router.push(
+                  `/marketplace?category=${encodeURIComponent(categoryName.toLowerCase())}`
+                )
+              }}
+              className="inline-flex"
+            >
+              <span className="text-xs text-muted-foreground hover:text-green-600 transition-colors cursor-pointer">
+                {categoryName}
+              </span>
+            </button>
+          )}
+        </div>
+      </div>
 
+      <Link
+        href={`/marketplace/${listing.id}`}
+        className="block flex-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2"
+        aria-label={listing.title}
+      >
+        <CardHeader className="pb-3 pt-0">
           {/* Title */}
           <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-green-700 transition-colors">
             {listing.title}
@@ -123,37 +159,56 @@ export function ListingCardV2({ listing, locale }: ListingCardV2Props) {
               {locale === "sq" ? "Falas" : "Free"}
             </div>
           )}
+        </CardContent>
+      </Link>
 
-          {/* Location */}
+      {/* Location & Eco Labels - OUTSIDE Link for click handling */}
+      {(city || (listing.eco_labels && listing.eco_labels.length > 0)) && (
+        <div className="px-6 pb-4 pt-2 border-t mt-auto space-y-2">
+          {/* Clickable Location */}
           {city && (
-            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <button
+              type="button"
+              onClick={() => {
+                router.push(`/marketplace?location=${encodeURIComponent(city)}`)
+              }}
+              className="flex items-center gap-1 text-sm text-muted-foreground hover:text-green-600 transition-colors cursor-pointer"
+            >
               <MapPin className="h-4 w-4" />
               <span>{city}</span>
-            </div>
+            </button>
           )}
 
           {/* Eco Labels */}
           {listing.eco_labels && listing.eco_labels.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-2 border-t">
+            <div className="flex flex-wrap gap-1.5">
               {listing.eco_labels.slice(0, 3).map((label) => {
                 const displayLabel = t(`ecoLabels.${label.toLowerCase()}`)
 
                 return (
-                  <Badge
+                  <button
                     key={label}
-                    variant="secondary"
-                    className="bg-green-50 text-green-700 border-green-200 text-xs gap-1"
+                    type="button"
+                    onClick={() => {
+                      router.push(`/marketplace?tag=${encodeURIComponent(label.toLowerCase())}`)
+                    }}
+                    className="inline-flex"
                   >
-                    <Leaf className="h-3 w-3" />
-                    {displayLabel}
-                  </Badge>
+                    <Badge
+                      variant="secondary"
+                      className="bg-green-50 text-green-700 border-green-200 text-xs gap-1 hover:bg-green-100 hover:border-green-300 transition-colors cursor-pointer"
+                    >
+                      <Leaf className="h-3 w-3" />
+                      {displayLabel}
+                    </Badge>
+                  </button>
                 )
               })}
             </div>
           )}
-        </CardContent>
-      </Card>
-    </Link>
+        </div>
+      )}
+    </Card>
   )
 }
 

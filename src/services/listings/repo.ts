@@ -105,6 +105,7 @@ export async function fetchListings({
   pageSize = ITEMS_PER_PAGE,
   condition = "",
   location = "",
+  tag = "",
   sort = "newest",
   locale,
 }: ListingListOptions): Promise<ListingsQueryResult> {
@@ -172,6 +173,12 @@ export async function fetchListings({
       if (locationFilter) {
         filters.push(locationFilter)
       }
+    }
+
+    // Filter by eco_label tag (checks if tag is contained in eco_labels array)
+    if (tag.trim()) {
+      // PostgreSQL array contains operator: eco_labels @> ARRAY['tag']
+      filters.push(sql`${ecoListings.eco_labels} @> ARRAY[${tag.trim().toUpperCase()}]::text[]`)
     }
 
     const whereClause = filters.length === 1 ? filters[0] : and(...filters)

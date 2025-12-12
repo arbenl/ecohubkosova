@@ -1,106 +1,67 @@
 import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import KycuPage from "./page"
-import { NextIntlClientProvider } from "next-intl"
-import { AuthProvider } from "@/lib/auth-provider"
+import { signIn } from "./actions"
 
-// Mock Next.js
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    replace: vi.fn(),
-    back: vi.fn()
-  }),
-  usePathname: () => "/",
-  useSearchParams: () => new URLSearchParams()
-}))
-vi.mock("next/link", () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}))
-
-// Mock external dependencies
+// Mock translations and hooks
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
   useLocale: () => "en",
-  NextIntlClientProvider: ({ children, ...props }: any) => <div {...props}>{children}</div>
 }))
 
-vi.mock("@/hooks/use-supabase", () => ({
+vi.mock("@/i18n/routing", () => ({
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }),
+  Link: ({ children, href }: any) => <a href={href}>{children}</a>,
+}))
+
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => ({ get: () => null }),
+}))
+
+// Mock Supabase hook
+vi.mock("@/lib/auth-provider", () => ({
   useSupabase: () => ({
-    supabase: {
-      auth: {
-        signInWithPassword: vi.fn(),
-        signUp: vi.fn(),
-        signOut: vi.fn(),
-      }
-    }
-  })
+    auth: { setSession: vi.fn() },
+  }),
 }))
 
-vi.mock("@/lib/supabase", () => ({
-  createClientSupabaseClient: () => ({
-    auth: {
-      onAuthStateChange: vi.fn(() => ({ data: { subscription: { unsubscribe: vi.fn() } } })),
-      getUser: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
-      signOut: vi.fn(() => Promise.resolve({ error: null })),
-    },
-    from: vi.fn(() => ({
-      select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          single: vi.fn(() => Promise.resolve({ data: null, error: null }))
-        }))
-      }))
-    }))
-  })
+// Mock Server Action
+vi.mock("./actions", () => ({
+  signIn: vi.fn(),
+  signInWithGoogle: vi.fn(),
 }))
 
-const messages = {
-  "auth.login.title": "Login",
-  "auth.login.email": "Email",
-  "auth.login.password": "Password",
-  "auth.login.submit": "Login",
-}
-
-const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <NextIntlClientProvider locale="en" messages={messages}>
-    <AuthProvider initialUser={null}>
-      {children}
-    </AuthProvider>
-  </NextIntlClientProvider>
-)
-
-vi.mock("@/hooks/use-supabase", () => ({
-  useSupabase: () => ({
-    supabase: {
-      auth: {
-        signInWithPassword: vi.fn(),
-        signUp: vi.fn(),
-        signOut: vi.fn(),
-      }
-    }
-  })
-}))
-
-describe("KycuPage component", () => {
-  it("renders without crashing", () => {
-    expect(() => render(
-      <TestWrapper>
-        <KycuPage />
-      </TestWrapper>
-    )).not.toThrow()
+describe("KycuPage", () => {
+  it("renders login form", () => {
+    render(<KycuPage />)
+    expect(screen.getByTestId("login-email-input")).toBeInTheDocument()
+    expect(screen.getByTestId("login-password-input")).toBeInTheDocument()
+    expect(screen.getByTestId("login-submit-button")).toBeInTheDocument()
   })
 
-  it("renders with basic structure", () => {
-    const { container } = render(
-      <TestWrapper>
-        <KycuPage />
-      </TestWrapper>
-    )
-    expect(container).toBeInTheDocument()
+  it("submits form with credentials", async () => {
+    const mockSignIn = vi.mocked(signIn)
+    mockSignIn.mockResolvedValue({ success: true })
+
+    render(<KycuPage />)
+
+    fireEvent.change(screen.getByTestId("login-email-input"), {
+      target: { value: "test@example.com" },
+    })
+    fireEvent.change(screen.getByTestId("login-password-input"), { target: { value: "password" } })
+
+    const submitBtn = screen.getByTestId("login-submit-button")
+    expect(submitBtn).not.toBeDisabled()
+
+    // Note: Form submission in jsdom might not trigger standard onSubmit if not wrapped in <form> properly
+    // or if the button type="submit" isn't handled by fireEvent.click alone sometimes.
+    // simpler to fire submit on the form if we can find it, or click button.
+
+    fireEvent.click(submitBtn)
+
+    await waitFor(() => {
+      expect(mockSignIn).toHaveBeenCalled()
+    })
   })
 })

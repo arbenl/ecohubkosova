@@ -10,6 +10,11 @@
       "args": ["ecohub-qa"],
       "cwd": "/Users/arbenlila/development/ecohubkosova"
     },
+    "hyperexecute-qa": {
+      "command": "./scripts/use-mcp-toolkit-server.sh",
+      "args": ["hyperexecute-qa"],
+      "cwd": "/Users/arbenlila/development/ecohubkosova"
+    },
     "context7": {
       "command": "npx",
       "args": ["context7-mcp"],

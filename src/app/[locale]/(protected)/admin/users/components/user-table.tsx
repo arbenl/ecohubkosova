@@ -54,7 +54,7 @@ export function UserTable({
   return (
     <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full min-w-[800px]">
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50">
               <th className="text-left text-sm font-semibold text-gray-900 px-6 py-4">

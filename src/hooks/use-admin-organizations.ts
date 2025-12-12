@@ -1,7 +1,11 @@
 "use client"
 
 import { useCallback, useState } from "react"
-import { deleteOrganization, updateOrganization } from "@/app/[locale]/(protected)/admin/organizations/actions"
+import {
+  deleteOrganization,
+  updateOrganization,
+  approveOrganization,
+} from "@/app/[locale]/(protected)/admin/organizations/actions"
 import type { AdminOrganizationUpdateInput } from "@/validation/admin"
 
 export interface AdminOrganization {
@@ -56,11 +60,21 @@ export function useAdminOrganizations(initialOrganizations: AdminOrganization[])
     []
   )
 
+  const handleApprove = useCallback(async (id: string) => {
+    const result = await approveOrganization(id)
+    if (result.error) return { error: result.error }
+    setOrganizations((prev) =>
+      prev.map((org) => (org.id === id ? { ...org, is_approved: true } : org))
+    )
+    return {}
+  }, [])
+
   return {
     organizations,
     editingOrganization,
     setEditingOrganization,
     handleDelete,
     handleUpdate,
+    handleApprove,
   }
 }

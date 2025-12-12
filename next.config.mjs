@@ -134,22 +134,11 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24, // 24 hours
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  /* typescript: {
+    ignoreBuildErrors: false,
+  }, */
   async redirects() {
-    return [
-      {
-        source: "/qendra-e-dijes",
-        destination: "/knowledge",
-        permanent: true,
-      },
-      {
-        source: "/:locale/qendra-e-dijes",
-        destination: "/:locale/knowledge",
-        permanent: true,
-      },
-    ]
+    return []
   },
 }
 

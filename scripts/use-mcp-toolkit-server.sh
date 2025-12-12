@@ -37,6 +37,15 @@ case "$SERVER" in
     fi
     exec node "$ROOT_DIR/tools/ecohub-qa/dist/index.js"
     ;;
+  hyperexecute-qa)
+    if [[ "$USE_TOOLKIT" == "1" ]]; then
+      CANDIDATE="$TOOLKIT_PATH/servers/hyperexecute-qa-server/src/index.mjs"
+      if [[ -f "$CANDIDATE" ]]; then
+        exec node "$CANDIDATE"
+      fi
+    fi
+    exec node "$ROOT_DIR/tools/hyperexecute-qa/dist/index.js"
+    ;;
   *)
     echo "Unknown server $SERVER" >&2
     exit 1

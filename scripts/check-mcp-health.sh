@@ -58,8 +58,10 @@ if [[ "${HTTP_MODE}" == "1" ]]; then
   HOST="${MCP_HOST:-127.0.0.1}"
   CTX_PORT="${MCP_CONTEXT_PORT:-7337}"
   QA_PORT="${MCP_QA_PORT:-7338}"
+  HYPEREXECUTE_PORT="${MCP_HYPEREXECUTE_PORT:-7341}"
   probe_sse "context" "http://${HOST}:${CTX_PORT}/sse"
   probe_sse "ecohub-qa" "http://${HOST}:${QA_PORT}/sse"
+  probe_sse "hyperexecute-qa" "http://${HOST}:${HYPEREXECUTE_PORT}/sse"
 fi
 
 node scripts/check-mcp-health.mjs --mode="${MODE}"

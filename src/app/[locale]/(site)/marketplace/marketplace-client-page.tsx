@@ -2,6 +2,7 @@
 import { useTranslations } from "next-intl"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import {
   Select,
   SelectContent,
@@ -11,8 +12,9 @@ import {
 } from "@/components/ui/select"
 import { ListingCardV2 } from "@/components/marketplace-v2/ListingCardV2"
 import type { Listing } from "@/types"
-import { Search, SlidersHorizontal } from "lucide-react"
+import { Search, SlidersHorizontal, X, MapPin, Tag, Leaf } from "lucide-react"
 import { useEffect, useState, useCallback, useMemo } from "react"
+import { useSearchParams } from "next/navigation"
 
 type MarketplaceApiResponse = {
   listings: Listing[]
@@ -42,25 +44,50 @@ export default function MarketplaceClientPage({
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Parse initial filters from search params
-  const initialFilters = {
-    type:
-      (initialSearchParams.type as string) === "blej"
-        ? "blej"
-        : (initialSearchParams.type as string) === "shes"
-          ? "shes"
-          : (initialSearchParams.type as string) === "sherbime"
-            ? "sherbime"
-            : "te-gjitha",
-    search: (initialSearchParams.search as string) || "",
-    category: (initialSearchParams.category as string) || "all",
-    page: Math.max(1, Number.parseInt((initialSearchParams.page as string) || "1")),
-    condition: (initialSearchParams.condition as string) || "",
-    location: (initialSearchParams.location as string) || "",
-    sort: ((initialSearchParams.sort as string) === "oldest" ? "oldest" : "newest") as
-      | "newest"
-      | "oldest",
-  }
+  // Hook to read current URL search params
+  const searchParams = useSearchParams()
+
+  // Parse filters from current search params (reactive to URL changes)
+  const parseFiltersFromParams = useCallback((params: URLSearchParams) => {
+    return {
+      type:
+        params.get("type") === "blej"
+          ? "blej"
+          : params.get("type") === "shes"
+            ? "shes"
+            : params.get("type") === "sherbime"
+              ? "sherbime"
+              : "te-gjitha",
+      search: params.get("search") || "",
+      category: params.get("category") || "all",
+      page: Math.max(1, Number.parseInt(params.get("page") || "1")),
+      condition: params.get("condition") || "",
+      location: params.get("location") || "",
+      tag: params.get("tag") || "",
+      sort: (params.get("sort") === "oldest" ? "oldest" : "newest") as "newest" | "oldest",
+    }
+  }, [])
+
+  // Initialize filters from URL
+  const [filters, setFilters] = useState(() =>
+    parseFiltersFromParams(
+      new URLSearchParams(
+        Object.entries(initialSearchParams).reduce(
+          (acc, [key, value]) => {
+            if (typeof value === "string") acc[key] = value
+            return acc
+          },
+          {} as Record<string, string>
+        )
+      )
+    )
+  )
+
+  // Sync filters when URL changes (e.g., from tag clicks)
+  useEffect(() => {
+    const newFilters = parseFiltersFromParams(searchParams)
+    setFilters(newFilters)
+  }, [searchParams, parseFiltersFromParams])
 
   // Map dropdown options to the V2 category slugs stored in eco_categories.slug
   const categories = [
@@ -95,11 +122,8 @@ export default function MarketplaceClientPage({
     "Skopje (maqedonas)",
   ]
 
-  // Simple filter state management without navigation
-  const [filters, setFilters] = useState(initialFilters)
-
   const updateFilter = useCallback(
-    <K extends keyof typeof initialFilters>(key: K, value: (typeof initialFilters)[K]) => {
+    <K extends keyof typeof filters>(key: K, value: (typeof filters)[K]) => {
       setFilters((prev) => {
         const newFilters = { ...prev, [key]: value }
 
@@ -166,6 +190,10 @@ export default function MarketplaceClientPage({
           params.set("sort", filters.sort)
         }
 
+        if (filters.tag.trim()) {
+          params.set("tag", filters.tag.trim())
+        }
+
         const response = await fetch(`/api/marketplace/listings?${params.toString()}`, {
           method: "GET",
         })
@@ -193,15 +221,19 @@ export default function MarketplaceClientPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-8">
-      {/* Hero Section (optional) */}
+      {/* Hero Section (optional) with emerald accent */}
       {showHero && (
         <div className="text-center mb-8">
+          {/* Emerald section accent */}
+          <div className="mx-auto w-20 h-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 mb-6" />
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{heroTitle}</h2>
         </div>
       )}
 
-      {/* Filter Section */}
-      <div className="bg-[hsl(var(--surface))] rounded-2xl border border-[hsl(var(--border))] shadow-sm p-5 md:p-6 space-y-4 md:sticky md:top-4 md:z-10 md:backdrop-blur-sm">
+      {/* Filter Section with emerald top accent */}
+      <div className="relative bg-[hsl(var(--surface))] rounded-2xl border border-[hsl(var(--border))] shadow-sm p-5 md:p-6 space-y-4 md:sticky md:top-4 md:z-10 md:backdrop-blur-sm overflow-hidden">
+        {/* Emerald accent bar */}
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-emerald-500 to-teal-500" />
         {/* Tab Selection */}
         <div className="flex flex-wrap gap-3 justify-center">
           <Button
@@ -382,6 +414,90 @@ export default function MarketplaceClientPage({
           </Select>
         </div>
       </div>
+
+      {/* Active Filters Display */}
+      {(filters.tag || filters.location || filters.category !== "all" || filters.search) && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-muted-foreground">{t("activeFilters")}:</span>
+
+          {filters.tag && (
+            <Badge
+              variant="secondary"
+              className="bg-green-50 text-green-700 border-green-200 gap-1 pr-1"
+            >
+              <Leaf className="h-3 w-3" />
+              {filters.tag}
+              <button
+                onClick={() => updateFilter("tag", "")}
+                className="ml-1 p-0.5 hover:bg-green-200 rounded-full"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          )}
+
+          {filters.location && filters.location !== "all" && (
+            <Badge
+              variant="secondary"
+              className="bg-blue-50 text-blue-700 border-blue-200 gap-1 pr-1"
+            >
+              <MapPin className="h-3 w-3" />
+              {filters.location}
+              <button
+                onClick={() => updateFilter("location", "")}
+                className="ml-1 p-0.5 hover:bg-blue-200 rounded-full"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          )}
+
+          {filters.category && filters.category !== "all" && (
+            <Badge
+              variant="secondary"
+              className="bg-purple-50 text-purple-700 border-purple-200 gap-1 pr-1"
+            >
+              <Tag className="h-3 w-3" />
+              {filters.category}
+              <button
+                onClick={() => updateFilter("category", "all")}
+                className="ml-1 p-0.5 hover:bg-purple-200 rounded-full"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          )}
+
+          {filters.search && (
+            <Badge
+              variant="secondary"
+              className="bg-gray-50 text-gray-700 border-gray-200 gap-1 pr-1"
+            >
+              <Search className="h-3 w-3" />"{filters.search}"
+              <button
+                onClick={() => updateFilter("search", "")}
+                className="ml-1 p-0.5 hover:bg-gray-200 rounded-full"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          )}
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              updateFilter("tag", "")
+              updateFilter("location", "")
+              updateFilter("category", "all")
+              updateFilter("search", "")
+            }}
+            className="text-xs text-muted-foreground hover:text-foreground"
+          >
+            {t("clearAll")}
+          </Button>
+        </div>
+      )}
 
       {/* Listings Grid or Empty State */}
       {isLoading ? (

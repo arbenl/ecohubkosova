@@ -156,5 +156,13 @@
       "retry": "Try again",
       "generic": "Something went wrong while loading users."
     }
+  },
+  "audits": {
+    "title": "System Audits",
+    "subtitle": "View and monitor platform activity logs",
+    "cardTitle": "Audit History",
+    "cardDescription": "This functionality will be available soon.",
+    "comingSoon": "Coming soon",
+    "noRecords": "No audit records yet"
   }
 }

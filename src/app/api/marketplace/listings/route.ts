@@ -15,6 +15,7 @@ export async function GET(request: Request) {
   const category = searchParams.get("category") || "all"
   const condition = searchParams.get("condition") || ""
   const location = searchParams.get("location") || ""
+  const tag = searchParams.get("tag") || ""
   const sort = searchParams.get("sort") === "oldest" ? "oldest" : "newest"
   const locale = searchParams.get("locale") || undefined
 
@@ -27,6 +28,7 @@ export async function GET(request: Request) {
     pageSize: Number.isFinite(pageSize) && pageSize > 0 ? pageSize : 12,
     condition,
     location,
+    tag,
     sort,
     locale,
   })

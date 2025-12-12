@@ -74,7 +74,15 @@
     "roles": {
       "admin": "Admin",
       "user": "Përdorues",
-      "moderator": "Moderator"
+      "moderator": "Moderator",
+      "Individ": "Individ",
+      "Organizata": "Organizatë",
+      "Kompani": "Kompani",
+      "OJQ": "OJQ",
+      "Ndërmarrje Sociale": "Ndërmarrje Sociale",
+      "ORG_ADMIN_AUTO": "Admin Organizate (Auto)",
+      "Admin": "Admin",
+      "User": "Përdorues"
     },
     "status": {
       "approved": "Aprovuar",

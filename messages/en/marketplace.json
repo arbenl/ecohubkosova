@@ -47,6 +47,8 @@
   "loading": "Loading...",
   "previous": "← Previous",
   "next": "Next →",
+  "activeFilters": "Active filters",
+  "clearAll": "Clear all",
   "categoryList": {
     "recyclable_materials": "Recyclable Materials",
     "sustainable_products": "Sustainable Products",

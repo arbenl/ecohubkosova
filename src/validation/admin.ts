@@ -78,7 +78,7 @@ export const adminListingUpdateSchema = z.object({
   price: z.number().min(0, "Çmimi duhet të jetë së paku 0."),
   unit: trimmedString(1, 50),
   location: trimmedString(2, 150),
-  quantity: trimmedString(1, 80),
+  quantity: z.string().trim().max(80),
   listing_type: z.enum(["shes", "blej"], {
     message: "Zgjidhni një lloj të vlefshëm listimi.",
   }),

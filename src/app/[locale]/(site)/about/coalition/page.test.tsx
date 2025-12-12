@@ -1,7 +1,7 @@
 import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import { function } from "page"
+import KoalicioniPage from "./page"
 
 // Mock icons
 vi.mock("lucide-react", () => ({
@@ -11,17 +11,26 @@ vi.mock("lucide-react", () => ({
   Globe: () => <div data-testid="globe-icon" />,
 }))
 
-describe("function component", () => {
-  it("renders without crashing", () => {
-    expect(() => render(
-      <function />
-    )).not.toThrow()
+// Mock UI components
+vi.mock("@/components/ui/card", () => ({
+  Card: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  CardHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  CardTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  CardDescription: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  CardContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}))
+
+describe("KoalicioniPage", () => {
+  it("renders the main heading", () => {
+    render(<KoalicioniPage />)
+    expect(screen.getByText("Koalicioni i")).toBeInTheDocument()
+    expect(screen.getByText("Ekonomisë Qarkore")).toBeInTheDocument()
   })
 
-  it("renders with basic structure", () => {
-    const { container } = render(
-      <function />
-    )
-    expect(container).toBeInTheDocument()
+  it("renders section cards", () => {
+    render(<KoalicioniPage />)
+    expect(screen.getByText("Rreth Koalicionit")).toBeInTheDocument()
+    expect(screen.getByText("Anëtarësia")).toBeInTheDocument()
+    expect(screen.getByText("Struktura")).toBeInTheDocument()
   })
 })

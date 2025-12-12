@@ -1,38 +1,58 @@
-import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import { async } from "page"
+import DashboardRedirectPage from "./page"
+import { redirect } from "@/i18n/routing"
 
-// Mock Next.js
-vi.mock("next/link", () => ({
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
+const mockGetServerUser = vi.fn()
+vi.mock("@/lib/supabase/server", () => ({
+  createServerSupabaseClient: () => ({
+    auth: { getUser: mockGetServerUser },
+  }),
 }))
 
-// Mock icons
-vi.mock("lucide-react", () => ({
-  BookOpen: () => <div data-testid="bookopen-icon" />,
-  Users: () => <div data-testid="users-icon" />,
-  ShoppingCart: () => <div data-testid="shoppingcart-icon" />,
-  User: () => <div data-testid="user-icon" />,
+const mockDbSelect = vi.fn()
+vi.mock("@/lib/drizzle", () => ({
+  db: {
+    get: () => ({
+      select: () => ({
+        from: () => ({ where: () => ({ limit: mockDbSelect }) }),
+      }),
+    }),
+  },
 }))
 
-// Mock external dependencies
+vi.mock("@/db/schema", () => ({ users: { role: "role", id: "id" } }))
 
-describe("async component", () => {
-  it("renders without crashing", () => {
-    expect(() => render(
-      <async />
-    )).not.toThrow()
+vi.mock("drizzle-orm", () => ({ eq: vi.fn() }))
+
+vi.mock("@/i18n/routing", () => ({
+  redirect: vi.fn(),
+}))
+
+describe("DashboardRedirectPage", () => {
+  it("redirects to login if no user", async () => {
+    mockGetServerUser.mockResolvedValue({ data: { user: null } })
+    await DashboardRedirectPage({ params: Promise.resolve({ locale: "en" }) })
+    expect(redirect).toHaveBeenCalledWith({ href: "/login", locale: "en" })
   })
 
-  it("renders with basic structure", () => {
-    const { container } = render(
-      <async />
-    )
-    expect(container).toBeInTheDocument()
+  it("redirects to admin if role is Admin", async () => {
+    mockGetServerUser.mockResolvedValue({ data: { user: { id: "1" } } })
+    mockDbSelect.mockResolvedValue([{ role: "Admin" }])
+    await DashboardRedirectPage({ params: Promise.resolve({ locale: "en" }) })
+    expect(redirect).toHaveBeenCalledWith({ href: "/admin", locale: "en" })
+  })
+
+  it("redirects to user dashboard if role is User", async () => {
+    mockGetServerUser.mockResolvedValue({ data: { user: { id: "1" } } })
+    mockDbSelect.mockResolvedValue([{ role: "User" }])
+    await DashboardRedirectPage({ params: Promise.resolve({ locale: "en" }) })
+    expect(redirect).toHaveBeenCalledWith({ href: "/my", locale: "en" })
+  })
+
+  it("redirects to user dashboard if role is missing/guest", async () => {
+    mockGetServerUser.mockResolvedValue({ data: { user: { id: "1" } } })
+    mockDbSelect.mockResolvedValue([])
+    await DashboardRedirectPage({ params: Promise.resolve({ locale: "en" }) })
+    expect(redirect).toHaveBeenCalledWith({ href: "/my", locale: "en" })
   })
 })

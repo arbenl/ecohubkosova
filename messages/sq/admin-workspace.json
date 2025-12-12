@@ -156,5 +156,13 @@
       "retry": "Provo përsëri",
       "generic": "Diçka shkoi keq gjatë ngarkimit të përdoruesve."
     }
+  },
+  "audits": {
+    "title": "Auditimet e Sistemit",
+    "subtitle": "Shiko dhe monitoro logjet e aktivitetit të platformës",
+    "cardTitle": "Historia e Auditimit",
+    "cardDescription": "Kjo funksionalitet do të jetë e disponueshme së shpejti.",
+    "comingSoon": "Vjen së shpejti",
+    "noRecords": "Nuk ka regjistrime auditimi ende"
   }
 }

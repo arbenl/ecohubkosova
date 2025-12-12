@@ -134,12 +134,29 @@ export const cities = pgTable("cities", {
     .notNull(),
 })
 
+// Audit logs for tracking admin actions
+export const auditLogs = pgTable("audit_logs", {
+  id: uuid("id").primaryKey().defaultRandom().notNull(),
+  actor_id: uuid("actor_id").references(() => users.id, { onDelete: "set null" }),
+  actor_email: text("actor_email"), // Stored separately in case user is deleted
+  action: text("action").notNull(), // e.g., "LISTING_APPROVED", "USER_DELETED"
+  entity_type: text("entity_type").notNull(), // e.g., "listing", "user", "organization"
+  entity_id: text("entity_id"), // ID of the affected entity
+  entity_name: text("entity_name"), // Human-readable name (e.g., listing title)
+  details: text("details"), // JSON string with additional context
+  ip_address: text("ip_address"),
+  created_at: timestamp("created_at", { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+})
+
 export type User = typeof users.$inferSelect
 export type Organization = typeof organizations.$inferSelect
 export type OrganizationMember = typeof organizationMembers.$inferSelect
 export type Article = typeof articles.$inferSelect
 export type MarketplaceListing = typeof marketplaceListings.$inferSelect
 export type City = typeof cities.$inferSelect
+export type AuditLog = typeof auditLogs.$inferSelect
 
 // Marketplace V2 - Eco-First Circular Economy
 export * from "./schema/enums"

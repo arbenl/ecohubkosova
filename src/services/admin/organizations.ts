@@ -71,6 +71,19 @@ export async function updateOrganizationRecord(
   }
 }
 
+export async function approveOrganizationRecord(organizationId: string) {
+  try {
+    await db
+      .get()
+      .update(organizations)
+      .set({ is_approved: true, updated_at: new Date() })
+      .where(eq(organizations.id, organizationId))
+    return { error: null }
+  } catch (error) {
+    return { error: toError(error) }
+  }
+}
+
 export async function fetchPendingOrganizations(limit = 5) {
   try {
     const rows = await db

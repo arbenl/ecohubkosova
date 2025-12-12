@@ -37,6 +37,8 @@ The following MCP servers are available for Grok and Codex agents:
   - Tools: `project_map`, `read_files`, `git_status`, `git_diff`, `code_search`
 - **ecohub-qa** → `http://127.0.0.1:7338/sse`
   - Tools: `build_health`, `navigation_audit`, `i18n_audit`, `supabase_health`, `test_runner`
+- **hyperexecute-qa** → `http://127.0.0.1:7341/sse` _(optional)_
+  - Tools: `run_test_suite`, `get_test_report`, `cache_results`
 - **context7** → `http://127.0.0.1:7339/sse` _(optional)_
 - **playwright** → `http://127.0.0.1:7340/sse` _(optional)_
 

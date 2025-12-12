@@ -43,5 +43,11 @@ export async function requireAdminRole() {
     redirect({ href: `/login?message=${encodeURIComponent(UNAUTHORIZED_MESSAGE)}`, locale })
   }
 
-  return { user, role: userRecord.role }
+  return {
+    user,
+    role: userRecord.role,
+    id: userRecord.id,
+    email: userRecord.email,
+    fullName: userRecord.full_name,
+  }
 }

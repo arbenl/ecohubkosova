@@ -47,6 +47,8 @@
   "loading": "Duke u ngarkuar...",
   "previous": "← Më parë",
   "next": "Më pas →",
+  "activeFilters": "Filtrat aktive",
+  "clearAll": "Pastro të gjitha",
   "categoryList": {
     "recyclable_materials": "Materiale të riciklueshme",
     "sustainable_products": "Produkte të qëndrueshme",

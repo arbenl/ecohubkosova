@@ -6,6 +6,7 @@ HOST="${MCP_HOST:-127.0.0.1}"
 ALLOW_ORIGIN="${MCP_ALLOW_ORIGIN:-*}"
 DEFAULT_CTX_PORT="${MCP_CONTEXT_PORT:-7337}"
 DEFAULT_QA_PORT="${MCP_QA_PORT:-7338}"
+DEFAULT_HYPEREXECUTE_PORT="${MCP_HYPEREXECUTE_PORT:-7341}"
 MCP_PROXY_BIN="${MCP_PROXY_BIN:-mcp-proxy}"
 
 if ! command -v "$MCP_PROXY_BIN" >/dev/null 2>&1; then
@@ -95,11 +96,14 @@ allocate_port() {
 
 CTX_PORT=$(sanitize_port "$DEFAULT_CTX_PORT" 7337)
 QA_PORT=$(sanitize_port "$DEFAULT_QA_PORT" 7338)
+HYPEREXECUTE_PORT=$(sanitize_port "$DEFAULT_HYPEREXECUTE_PORT" 7341)
 CTX_PORT=$(allocate_port "$CTX_PORT" "context")
 QA_PORT=$(allocate_port "$QA_PORT" "ecohub-qa")
+HYPEREXECUTE_PORT=$(allocate_port "$HYPEREXECUTE_PORT" "hyperexecute-qa")
 
 CTX_SSE="http://${HOST}:${CTX_PORT}/sse"
 QA_SSE="http://${HOST}:${QA_PORT}/sse"
+HYPEREXECUTE_SSE="http://${HOST}:${HYPEREXECUTE_PORT}/sse"
 
 PIDS=()
 LABELS=()
@@ -171,9 +175,11 @@ echo "[MCP] Workspace: $ROOT"
 echo "[MCP] Allow-Origin: $ALLOW_ORIGIN"
 echo "CTX_SSE=${CTX_SSE}"
 echo "QA_SSE=${QA_SSE}"
+echo "HYPEREXECUTE_SSE=${HYPEREXECUTE_SSE}"
 
 start_proxy "context" "$CTX_PORT" env DOTENV_CONFIG_QUIET=true MCP_STDIO=1 node "$ROOT/tools/mcp-context-server/dist/server.js"
 start_proxy "ecohub-qa" "$QA_PORT" env DOTENV_CONFIG_QUIET=true MCP_STDIO=1 node "$ROOT/tools/ecohub-qa/dist/index.js"
+start_proxy "hyperexecute-qa" "$HYPEREXECUTE_PORT" env DOTENV_CONFIG_QUIET=true MCP_STDIO=1 node "$ROOT/tools/hyperexecute-qa/dist/index.js"
 
 check_startup
 

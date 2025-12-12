@@ -74,7 +74,15 @@
     "roles": {
       "admin": "Admin",
       "user": "User",
-      "moderator": "Moderator"
+      "moderator": "Moderator",
+      "Individ": "Individual",
+      "Organizata": "Organization",
+      "Kompani": "Company",
+      "OJQ": "NGO",
+      "Ndërmarrje Sociale": "Social Enterprise",
+      "ORG_ADMIN_AUTO": "Organization Admin (Auto)",
+      "Admin": "Admin",
+      "User": "User"
     },
     "status": {
       "approved": "Approved",

@@ -2,7 +2,7 @@
 
 import { asc, desc, eq, ilike, inArray, or } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
-import { ecoCategories, ecoListings } from "@/db/schema"
+import { ecoCategories, ecoListings, users } from "@/db/schema"
 import { isMarketplaceV2WritesEnabled } from "@/lib/env"
 import type { AdminListingUpdateInput } from "@/validation/admin"
 export type { AdminListingUpdateInput } from "@/validation/admin"
@@ -242,5 +242,26 @@ export async function updateListingRecord(listingId: string, data: AdminListingU
   } catch (error) {
     console.error("[services/admin/listings] Failed to update listing:", error)
     return { error: toError(error) }
+  }
+}
+
+export async function getListingForNotification(listingId: string) {
+  try {
+    const result = await db
+      .get()
+      .select({
+        title: ecoListings.title,
+        userId: ecoListings.created_by_user_id,
+        userEmail: users.email,
+        userName: users.full_name,
+      })
+      .from(ecoListings)
+      .leftJoin(users, eq(ecoListings.created_by_user_id, users.id))
+      .where(eq(ecoListings.id, listingId))
+      .limit(1)
+
+    return { data: result[0] || null, error: null }
+  } catch (error) {
+    return { data: null, error: toError(error) }
   }
 }

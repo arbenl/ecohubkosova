@@ -5,15 +5,10 @@ import { Button } from "@/components/ui/button"
 import {
   Users,
   Building,
-  BookOpen,
   ShoppingCart,
-  TrendingUp,
   Shield,
-  FileText,
   UserCheck,
   ArrowUpRight,
-  RefreshCw,
-  Activity,
   CheckIcon,
 } from "lucide-react"
 import { revalidatePath } from "next/cache"
@@ -31,11 +26,6 @@ import {
   approveListingRecord,
   rejectListingRecord,
 } from "@/services/admin/listings"
-import {
-  fetchPendingArticles,
-  approveArticleRecord,
-  rejectArticleRecord,
-} from "@/services/admin/articles"
 
 async function approveListingAction(formData: FormData) {
   "use server"
@@ -69,38 +59,6 @@ async function rejectListingAction(formData: FormData) {
   revalidatePath("/admin/listings")
 }
 
-async function approveArticleAction(formData: FormData) {
-  "use server"
-
-  const articleId = formData.get("id")
-  if (typeof articleId !== "string" || !articleId) return
-
-  const { error } = await approveArticleRecord(articleId)
-  if (error) {
-    console.error("[admin] Failed to approve article", error)
-    return
-  }
-
-  revalidatePath("/admin")
-  revalidatePath("/admin/articles")
-}
-
-async function rejectArticleAction(formData: FormData) {
-  "use server"
-
-  const articleId = formData.get("id")
-  if (typeof articleId !== "string" || !articleId) return
-
-  const { error } = await rejectArticleRecord(articleId)
-  if (error) {
-    console.error("[admin] Failed to reject article", error)
-    return
-  }
-
-  revalidatePath("/admin")
-  revalidatePath("/admin/articles")
-}
-
 export default async function AdminDashboardPage({
   params,
 }: {
@@ -125,7 +83,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
     users: 0,
     organizations: 0,
     pendingOrganizations: 0,
-    articles: 0,
+    articles: 0, // Keeping these to satisfy type interface if shared, but setting to 0
     pendingArticles: 0,
     listings: 0,
     pendingListings: 0,
@@ -140,7 +98,6 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
 
   const pendingOrgsResult = await fetchPendingOrganizations(5)
   const pendingListings = await fetchPendingAdminListings(5)
-  const pendingArticles = await fetchPendingArticles(5)
 
   return (
     <div className="space-y-8">
@@ -149,7 +106,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900 mb-6">
           {t("stats.title")}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 p-5 md:p-6">
               <div>
@@ -221,42 +178,6 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 p-5 md:p-6">
               <div>
                 <CardTitle className="text-lg font-semibold text-gray-900 group-hover:text-emerald-900 transition-colors">
-                  {t("stats.articles")}
-                </CardTitle>
-                <CardDescription className="text-sm text-gray-600">
-                  {t("stats.articlesDescription")}
-                </CardDescription>
-              </div>
-              <div className="p-2 rounded-full bg-emerald-50 group-hover:bg-emerald-100 transition-colors">
-                <BookOpen className="h-5 w-5 text-emerald-600" />
-              </div>
-            </CardHeader>
-            <CardContent className="p-5 md:p-6 pt-0">
-              <div className="text-3xl font-bold text-gray-900 mb-2 group-hover:text-emerald-900 transition-colors">
-                {stats.articles.toLocaleString()}
-              </div>
-              <div className="flex items-center justify-between">
-                <Link
-                  href="admin/articles"
-                  className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 focus:text-emerald-700 focus:outline-none group-hover:underline font-medium"
-                  aria-label={t("stats.articlesAriaLabel")}
-                >
-                  {t("stats.viewDetails")}
-                  <ArrowUpRight className="h-3 w-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Link>
-                {stats.pendingArticles > 0 && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                    {stats.pendingArticles} {t("stats.pending")}
-                  </span>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 p-5 md:p-6">
-              <div>
-                <CardTitle className="text-lg font-semibold text-gray-900 group-hover:text-emerald-900 transition-colors">
                   {t("stats.listings")}
                 </CardTitle>
                 <CardDescription className="text-sm text-gray-600">
@@ -296,7 +217,7 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900 mb-6">
           {t("quickActions.title")}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
             <Link
               href="/admin/users"
@@ -339,26 +260,6 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
 
           <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
             <Link
-              href="/admin/articles"
-              className="block p-6 focus:outline-none h-full"
-              aria-label={t("quickActions.articlesAriaLabel")}
-            >
-              <div className="flex flex-col items-center text-center h-full">
-                <div className="p-3 rounded-full bg-emerald-50 group-hover:bg-emerald-100 transition-colors mb-4">
-                  <BookOpen className="h-8 w-8 text-emerald-600 group-hover:scale-110 transition-transform" />
-                </div>
-                <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-emerald-900 transition-colors">
-                  {t("quickActions.articles")}
-                </h3>
-                <p className="text-sm text-gray-500 leading-relaxed">
-                  {t("quickActions.articlesDescription")}
-                </p>
-              </div>
-            </Link>
-          </Card>
-
-          <Card className="rounded-2xl border border-emerald-100 bg-white shadow-sm hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 group cursor-pointer">
-            <Link
               href="admin/organization-members"
               className="block p-6 focus:outline-none h-full"
               aria-label={t("quickActions.membersAriaLabel")}
@@ -385,7 +286,8 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
             >
               <div className="flex flex-col items-center text-center h-full">
                 <div className="p-3 rounded-full bg-emerald-50 group-hover:bg-emerald-100 transition-colors mb-4">
-                  <FileText className="h-8 w-8 text-emerald-600 group-hover:scale-110 transition-transform" />
+                  {/* Replaced FileText with Shield or similar if FileText was only for Articles/Audits - actually Audits is FileText usually */}
+                  <Shield className="h-8 w-8 text-emerald-600 group-hover:scale-110 transition-transform" />
                 </div>
                 <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-emerald-900 transition-colors">
                   {t("quickActions.audits")}
@@ -406,12 +308,6 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
             count: stats.pendingOrganizations,
             href: "/admin/organizations",
             icon: <UserCheck className="h-5 w-5 text-emerald-600" />,
-          },
-          {
-            title: t("stats.articlesPending"),
-            count: stats.pendingArticles,
-            href: "/admin/articles",
-            icon: <FileText className="h-5 w-5 text-emerald-600" />,
           },
           {
             title: t("stats.listingsPending"),
@@ -482,23 +378,6 @@ async function AdminDashboardContent({ locale, t }: { locale: string; t: any }) 
         reviewLabel={t("pendingSection.review")}
         onApprove={approveListingAction}
         onReject={rejectListingAction}
-      />
-
-      <PendingList
-        title={t("pendingSection.articlesTitle")}
-        emptyLabel={t("pendingSection.emptyArticles")}
-        href="/admin/articles"
-        approveLabel={t("pendingSection.approve")}
-        rejectLabel={t("pendingSection.reject")}
-        rows={(pendingArticles.data ?? []).map((article) => ({
-          id: article.id,
-          title: article.title,
-          meta: article.original_language ?? undefined,
-          createdAt: article.created_at,
-        }))}
-        reviewLabel={t("pendingSection.review")}
-        onApprove={approveArticleAction}
-        onReject={rejectArticleAction}
       />
 
       <AdminQuickActions locale={locale} />

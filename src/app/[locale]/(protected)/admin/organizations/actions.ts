@@ -6,10 +6,12 @@ import {
   deleteOrganizationRecord,
   fetchAdminOrganizations,
   updateOrganizationRecord,
+  approveOrganizationRecord,
   type AdminOrganization,
   type AdminOrganizationUpdateInput,
 } from "@/services/admin/organizations"
 import { adminOrganizationUpdateSchema } from "@/validation/admin"
+import { createAuditLog } from "@/services/audit"
 
 type OrganizationUpdateData = AdminOrganizationUpdateInput
 
@@ -32,13 +34,14 @@ export async function getOrganizations(): Promise<GetOrganizationsResult> {
     console.error("Server Action Error (getOrganizations):", error)
     return {
       data: null,
-      error: error instanceof Error ? error.message : "Gabim i panjohur gjatë marrjes së organizatave.",
+      error:
+        error instanceof Error ? error.message : "Gabim i panjohur gjatë marrjes së organizatave.",
     }
   }
 }
 
-export async function deleteOrganization(organizationId: string) {
-  await requireAdminRole()
+export async function deleteOrganization(organizationId: string, orgName?: string) {
+  const admin = await requireAdminRole()
 
   try {
     const { error } = await deleteOrganizationRecord(organizationId)
@@ -47,6 +50,16 @@ export async function deleteOrganization(organizationId: string) {
       console.error("Error deleting organization:", error)
       return { error: error.message ?? "Gabim gjatë fshirjes së organizatës." }
     }
+
+    // Log audit
+    await createAuditLog({
+      actorId: admin.id,
+      actorEmail: admin.email,
+      action: "ORGANIZATION_DELETED",
+      entityType: "organization",
+      entityId: organizationId,
+      entityName: orgName,
+    })
 
     revalidatePath("/admin/organizations")
     return { success: true }
@@ -57,7 +70,7 @@ export async function deleteOrganization(organizationId: string) {
 }
 
 export async function updateOrganization(organizationId: string, formData: OrganizationUpdateData) {
-  await requireAdminRole()
+  const admin = await requireAdminRole()
 
   const parsed = adminOrganizationUpdateSchema.safeParse(formData)
   if (!parsed.success) {
@@ -79,5 +92,31 @@ export async function updateOrganization(organizationId: string, formData: Organ
   } catch (error: any) {
     console.error("Server Action Error (updateOrganization):", error)
     return { error: error.message || "Gabim i panjohur gjatë përditësimit të organizatës." }
+  }
+}
+
+export async function approveOrganization(organizationId: string, orgName?: string) {
+  const admin = await requireAdminRole()
+
+  try {
+    const { error } = await approveOrganizationRecord(organizationId)
+    if (error) {
+      return { error: error.message }
+    }
+
+    // Log audit
+    await createAuditLog({
+      actorId: admin.id,
+      actorEmail: admin.email,
+      action: "ORGANIZATION_APPROVED",
+      entityType: "organization",
+      entityId: organizationId,
+      entityName: orgName,
+    })
+
+    revalidatePath("/admin/organizations")
+    return { success: true }
+  } catch (err: any) {
+    return { error: err.message }
   }
 }

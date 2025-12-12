@@ -5,10 +5,7 @@
       "label": "eco:mcp-proxies",
       "type": "shell",
       "command": "bash",
-      "args": [
-        "-lc",
-        "./scripts/start-mcp-http.sh"
-      ],
+      "args": ["-lc", "MCP_HYPEREXECUTE_PORT=7341 ./scripts/start-mcp-http.sh"],
       "options": { "cwd": "${workspaceFolder}" },
       "isBackground": true,
       "problemMatcher": [],
@@ -21,7 +18,7 @@
       "command": "bash",
       "args": [
         "-lc",
-        "MCP_HTTP=1 MCP_HOST=127.0.0.1 MCP_CONTEXT_PORT=7337 MCP_QA_PORT=7338 ./scripts/check-mcp-health.sh"
+        "MCP_HTTP=1 MCP_HOST=127.0.0.1 MCP_CONTEXT_PORT=7337 MCP_QA_PORT=7338 MCP_HYPEREXECUTE_PORT=7341 ./scripts/check-mcp-health.sh"
       ],
       "options": { "cwd": "${workspaceFolder}" },
       "problemMatcher": [],

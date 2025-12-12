@@ -4,6 +4,7 @@
 | ---------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | mcp-context-server           | Repo structure + search                       | project_map, code_search, read_files                                                              | `node tools/mcp-context-server/dist/server.js`              |
 | ecohub-qa                    | Build/Lint/TS health                          | build_health                                                                                      | `node tools/ecohub-qa/dist/index.js`                        |
+| hyperexecute-qa              | Cloud test orchestration (HyperExecute)       | run_test_suite, get_test_report, cache_results                                                    | `node tools/hyperexecute-qa/dist/index.js`                  |
 | context7                     | Semantic code/doc context                     | resolve-library-id, get-library-docs                                                              | `npx context7-mcp`                                          |
 | playwright                   | Browser/E2E automation (accessibility-driven) | browser_navigate, browser_click, browser_fill_form, browser_pdf_save, browser_verify_text_visible | `npx mcp-server-playwright`                                 |
 | markitdown                   | Doc → Markdown converter (Python)             | convert_to_markdown                                                                               | `markitdown-mcp --http --port 3001` (pipx install required) |
@@ -16,7 +17,7 @@
 ### Logical tool mapping (current)
 
 - DB tools (`mcp-db-schema`, `mcp-db-inspect`) → context7 (until a dedicated DB MCP exists)
-- Tests (`mcp-test-runner`) → ecohub-qa
+- Tests (`mcp-test-runner`) → ecohub-qa (local) / hyperexecute-qa (cloud)
 - Docs/knowledge (`mcp-docs-knowledge`) → context7 (+ markitdown for doc conversion)
 - UX/assets (`mcp-ux-assets`) → context7
 

@@ -10,6 +10,7 @@ export interface ListingListOptions {
   pageSize?: number
   condition?: string
   location?: string
+  tag?: string
   sort?: "newest" | "oldest"
   locale?: string
 }

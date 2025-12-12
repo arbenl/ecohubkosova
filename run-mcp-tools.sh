@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")" && pwd)
 MCP_CONTEXT="$ROOT/tools/mcp-context-server/dist/server.js"
 ECOHUB_QA="$ROOT/tools/ecohub-qa/dist/index.js"
+HYPEREXECUTE_QA="$ROOT/tools/hyperexecute-qa/dist/index.js"
 CONTEXT7_BIN="$ROOT/node_modules/.bin/context7-mcp"
 PLAYWRIGHT_BIN="$ROOT/node_modules/.bin/mcp-server-playwright"
 BRAVE_BIN="$ROOT/node_modules/.bin/brave-search-mcp-server"
@@ -47,6 +48,12 @@ if [[ -f "$ECOHUB_QA" ]]; then
   start_server "ecohub-qa" node "$ECOHUB_QA"
 else
   echo "[MCP] ecohub-qa binary missing at $ECOHUB_QA"
+fi
+
+if [[ -f "$HYPEREXECUTE_QA" ]]; then
+  start_server "hyperexecute-qa" node "$HYPEREXECUTE_QA"
+else
+  echo "[MCP] hyperexecute-qa binary missing at $HYPEREXECUTE_QA"
 fi
 
 if [[ -x "$CONTEXT7_BIN" ]]; then
