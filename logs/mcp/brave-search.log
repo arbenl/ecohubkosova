@@ -1,0 +1,3 @@
+[MCP] Starting brave-search -> /Users/arbenlila/development/ecohubkosova/node_modules/.bin/brave-search-mcp-server --transport stdio
+Error: --brave-api-key is required. You can get one at https://brave.com/search/api/.
+Invalid configuration

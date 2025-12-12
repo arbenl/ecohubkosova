@@ -1,7 +1,13 @@
+/**
+ * EcoHub Kosova – My Workspace Layout
+ * MIT License – feel free to reuse in other projects.
+ * Copyright (c) 2025 Kosovo Advocacy and Development Center (KADC)
+ */
+
 import type { ReactNode } from "react"
 import { setRequestLocale, getTranslations } from "next-intl/server"
-import { LayoutDashboard, Bookmark, User, Building2, ShoppingBag } from "lucide-react"
-import { DashboardNav } from "./dashboard-nav"
+import { LayoutDashboard, Bookmark, User, Building2, ShoppingBag, Settings } from "lucide-react"
+import { AppShell } from "@/components/layout/app-shell"
 
 type Props = {
   children: ReactNode
@@ -39,6 +45,12 @@ export default async function MyLayout({ children, params }: Props) {
       icon: <User className="h-4 w-4" />,
     },
     {
+      label: t("nav.account"),
+      description: t("nav.accountDesc"),
+      href: "/my/account",
+      icon: <Settings className="h-4 w-4" />,
+    },
+    {
       label: t("nav.organization"),
       description: t("nav.organizationDesc"),
       href: "/my/organization",
@@ -47,16 +59,13 @@ export default async function MyLayout({ children, params }: Props) {
   ]
 
   return (
-    <div className="container mx-auto px-4 lg:px-8 py-8 space-y-6">
-      <div className="grid gap-6 lg:grid-cols-[260px,1fr]">
-        <DashboardNav
-          items={navItems}
-          ctaLabel={t("nav.addListing")}
-          heading={t("nav.workspace")}
-          eyebrow={t("title")}
-        />
-        <div className="min-w-0 space-y-6">{children}</div>
-      </div>
-    </div>
+    <AppShell
+      navItems={navItems}
+      ctaLabel={t("nav.addListing")}
+      heading={t("nav.workspace")}
+      eyebrow={t("title")}
+    >
+      {children}
+    </AppShell>
   )
 }

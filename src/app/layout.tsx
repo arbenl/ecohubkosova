@@ -1,6 +1,8 @@
 import type React from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 import ErrorBoundary from "@/components/error-boundary" // Import the ErrorBoundary component
+import { SkipToContent } from "@/components/accessibility/skip-to-content"
+import { OrganizationJsonLd, WebsiteJsonLd } from "@/components/seo/json-ld"
 import "./globals.css"
 import "../lib/unhandled-rejection-logger"
 import type { Metadata } from "next"
@@ -33,14 +35,30 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="sq" suppressHydrationWarning>
+      <head>
+        {/* PWA meta tags */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0fbf8c" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="EcoHub Kosova" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+
+        {/* Global structured data for search engines */}
+        <OrganizationJsonLd />
+        <WebsiteJsonLd />
+      </head>
       <body className={inter.className}>
+        <SkipToContent />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
-          <ErrorBoundary>{children}</ErrorBoundary>
+          <ErrorBoundary>
+            <main id="main-content">{children}</main>
+          </ErrorBoundary>
         </ThemeProvider>
       </body>
     </html>

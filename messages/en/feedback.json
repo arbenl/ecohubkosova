@@ -1,0 +1,17 @@
+{
+  "openButton": "Feedback",
+  "title": "How are we doing?",
+  "thankYouTitle": "Thank You!",
+  "close": "Close",
+  "ratingQuestion": "How likely are you to recommend EcoHub Kosova to a friend?",
+  "starLabel": "{count} stars",
+  "notLikely": "Not likely",
+  "veryLikely": "Very likely",
+  "changeRating": "Change",
+  "commentLabel": "Additional comments",
+  "commentPlaceholder": "What could we improve? (optional)",
+  "skipComment": "Skip",
+  "send": "Send",
+  "sending": "Sending...",
+  "thankYouMessage": "Your feedback helps us improve!"
+}

@@ -6,6 +6,7 @@ MCP_CONTEXT="$ROOT/tools/mcp-context-server/dist/server.js"
 ECOHUB_QA="$ROOT/tools/ecohub-qa/dist/index.js"
 CONTEXT7_BIN="$ROOT/node_modules/.bin/context7-mcp"
 PLAYWRIGHT_BIN="$ROOT/node_modules/.bin/mcp-server-playwright"
+BRAVE_BIN="$ROOT/node_modules/.bin/brave-search-mcp-server"
 MARKITDOWN_BIN="$(command -v markitdown-mcp || true)"
 LOG_DIR="$ROOT/logs/mcp"
 
@@ -58,6 +59,12 @@ if [[ -x "$PLAYWRIGHT_BIN" ]]; then
   start_server "playwright" "$PLAYWRIGHT_BIN"
 else
   note_todo "playwright" "install @playwright/mcp (pnpm add -D @playwright/mcp)"
+fi
+
+if [[ -x "$BRAVE_BIN" ]]; then
+  start_server "brave-search" "$BRAVE_BIN" --transport stdio
+else
+  note_todo "brave-search" "install @brave/brave-search-mcp-server (pnpm add -D @brave/brave-search-mcp-server)"
 fi
 
 if [[ -n "$MARKITDOWN_BIN" ]]; then

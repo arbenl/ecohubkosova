@@ -83,7 +83,8 @@ export function createSignOutHandler({
 
       // Step 6: Force navigation with window.location.replace for immediate effect
       // This is more reliable than href as it prevents back button issues
-      window.location.replace(`/login`)
+      const localeAwareLogin = locale ? `/${locale}/login` : `/login`
+      window.location.replace(localeAwareLogin)
     } catch (error) {
       logAuthAction("signOut", "Unexpected error during sign-out", {
         error: error instanceof Error ? error.message : String(error),
@@ -91,7 +92,8 @@ export function createSignOutHandler({
       signOutInFlightRef.current = false
       setSignOutPending(false)
       // Force navigation even on error
-      window.location.replace(`/login`)
+      const localeAwareLogin = locale ? `/${locale}/login` : `/login`
+      window.location.replace(localeAwareLogin)
     }
   }
 }

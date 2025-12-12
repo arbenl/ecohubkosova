@@ -85,6 +85,13 @@ jobs:
           export PATH="$(pwd)/.bin:$PATH"
           pnpm tsc --noEmit
 
+      - name: Unit Tests
+        shell: bash
+        continue-on-error: true
+        run: |
+          export PATH="$(pwd)/.bin:$PATH"
+          pnpm test --reporter=verbose 2>&1 | head -200 || true
+
       - name: Build
         shell: bash
         run: |

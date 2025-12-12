@@ -13,11 +13,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import type { AdminUser } from "@/services/admin/users"
 
 interface UserTableProps {
-  users: AdminUser[]
-  onEdit: (user: AdminUser) => void
-  onDelete: (userId: string) => void
+  users?: AdminUser[]
+  onEdit?: (user: AdminUser) => void
+  onDelete?: (userId: string) => void
   isLoading?: boolean
-  t: any
+  t?: (key: string) => string
 }
 
 function getRoleBadgeVariant(role: string) {
@@ -44,7 +44,13 @@ function getInitials(name: string) {
     .slice(0, 2)
 }
 
-export function UserTable({ users, onEdit, onDelete, isLoading, t }: UserTableProps) {
+export function UserTable({
+  users = [],
+  onEdit = () => undefined,
+  onDelete = () => undefined,
+  isLoading,
+  t = (key: string) => key,
+}: UserTableProps) {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden">
       <div className="overflow-x-auto">

@@ -1,0 +1,17 @@
+{
+  "openButton": "Feedback",
+  "title": "Si po shkojmë?",
+  "thankYouTitle": "Faleminderit!",
+  "close": "Mbyll",
+  "ratingQuestion": "Sa gjasa ka që t'ia rekomandoni EcoHub Kosova një miku?",
+  "starLabel": "{count} yje",
+  "notLikely": "Jo gjasa",
+  "veryLikely": "Shumë gjasa",
+  "changeRating": "Ndrysho",
+  "commentLabel": "Komente shtesë",
+  "commentPlaceholder": "Çfarë mund të përmirësojmë? (opsionale)",
+  "skipComment": "Kalo",
+  "send": "Dërgo",
+  "sending": "Duke dërguar...",
+  "thankYouMessage": "Feedback-u juaj na ndihmon të përmirësohemi!"
+}

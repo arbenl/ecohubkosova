@@ -63,3 +63,27 @@ export const registrationSchema = baseRegistrationSchema.superRefine((data, ctx)
 
 export type RegistrationInput = z.infer<typeof registrationSchema>
 export type LoginInput = z.infer<typeof loginSchema>
+
+export const passwordChangeSchema = z
+  .object({
+    currentPassword: z
+      .string({ required_error: "Fjalëkalimi aktual është i detyrueshëm." })
+      .min(6, "Fjalëkalimi aktual është i pavlefshëm."),
+    newPassword: z
+      .string({ required_error: "Fjalëkalimi i ri është i detyrueshëm." })
+      .min(8, "Fjalëkalimi i ri duhet të ketë të paktën 8 karaktere."),
+    confirmNewPassword: z
+      .string({ required_error: "Konfirmoni fjalëkalimin e ri." })
+      .min(8, "Fjalëkalimi i ri duhet të ketë të paktën 8 karaktere."),
+  })
+  .superRefine((data, ctx) => {
+    if (data.newPassword !== data.confirmNewPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["confirmNewPassword"],
+        message: "Fjalëkalimet nuk përputhen.",
+      })
+    }
+  })
+
+export type PasswordChangeInput = z.infer<typeof passwordChangeSchema>
