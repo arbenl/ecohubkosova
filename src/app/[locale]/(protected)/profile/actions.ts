@@ -161,7 +161,7 @@ export async function changePassword(formData: PasswordChangeInput) {
   })
 
   if (reauth.error) {
-    return { error: t("passwordInvalid") }
+    return { error: t("pwdInvalid") }
   }
 
   const { error: updateError } = await supabase.auth.updateUser({
@@ -182,5 +182,5 @@ export async function changePassword(formData: PasswordChangeInput) {
   // Invalidate all sessions and force re-login with the new password
   await supabase.auth.signOut({ scope: "global" })
 
-  return { success: t("passwordChanged") }
+  return { success: t("pwdChanged") }
 }

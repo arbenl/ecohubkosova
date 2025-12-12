@@ -46,7 +46,7 @@ export function PasswordChangeForm() {
         return
       }
 
-      setSuccess(result?.success ?? t("passwordChangedLogin"))
+      setSuccess(result?.success ?? t("pwdChangedLogin"))
       setForm(initialState)
 
       // Send user back to login to re-authenticate with the new password
@@ -72,7 +72,7 @@ export function PasswordChangeForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2 sm:col-span-2">
-          <Label htmlFor="currentPassword">{t("currentPassword")}</Label>
+          <Label htmlFor="currentPassword">{t("currPwd")}</Label>
           <Input
             id="currentPassword"
             name="currentPassword"
@@ -86,7 +86,7 @@ export function PasswordChangeForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="newPassword">{t("newPassword")}</Label>
+          <Label htmlFor="newPassword">{t("newPwd")}</Label>
           <Input
             id="newPassword"
             name="newPassword"
@@ -100,7 +100,7 @@ export function PasswordChangeForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmNewPassword">{t("confirmNewPassword")}</Label>
+          <Label htmlFor="confirmNewPassword">{t("confirmNewPwd")}</Label>
           <Input
             id="confirmNewPassword"
             name="confirmNewPassword"
@@ -114,11 +114,11 @@ export function PasswordChangeForm() {
         </div>
       </div>
 
-      <p className="text-sm text-gray-500">{t("passwordChangeHint")}</p>
+      <p className="text-sm text-gray-500">{t("pwdChangeHint")}</p>
 
       <div className="flex gap-3">
         <Button type="submit" disabled={pending} className="rounded-full">
-          {pending ? t("saving") : t("passwordSubmit")}
+          {pending ? t("saving") : t("pwdSubmit")}
         </Button>
         <Button
           type="button"
