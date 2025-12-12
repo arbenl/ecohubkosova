@@ -60,7 +60,7 @@ The app will be available at [http://localhost:3000](http://localhost:3000).
 
 ## Project Structure
 
-```
+```bash
 ecohubkosova/
 ├── src/
 │   ├── app/                    # Next.js App Router pages
@@ -154,7 +154,7 @@ export default function Button(props: any) {
 
 ### Branch Naming
 
-```
+```text
 feature/short-description
 fix/issue-description
 chore/task-description
@@ -165,7 +165,7 @@ docs/documentation-update
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
-```
+```text
 feat: add password reset functionality
 fix: resolve login redirect issue
 chore: update dependencies

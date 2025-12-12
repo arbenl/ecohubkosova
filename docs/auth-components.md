@@ -106,7 +106,7 @@ A complete account settings page with:
 - Password change
 - Language preference toggle
 
-### Files
+### Account Files
 
 | File                        | Purpose                                 |
 | --------------------------- | --------------------------------------- |
@@ -144,14 +144,14 @@ type ChangePasswordResult = {
 
 Allows users to request a password reset email.
 
-### Files
+### Forgot Password Files
 
 | File         | Purpose                                |
 | ------------ | -------------------------------------- |
 | `page.tsx`   | Client component with email input form |
 | `actions.ts` | Server action to send reset email      |
 
-### Flow
+### Forgot Password Flow Steps
 
 1. User enters email address
 2. Server calls `supabase.auth.resetPasswordForEmail()`
@@ -175,14 +175,14 @@ return { success: true }
 
 Allows users to set a new password after clicking the email link.
 
-### Files
+### Reset Password Files
 
 | File         | Purpose                                 |
 | ------------ | --------------------------------------- |
 | `page.tsx`   | Client component with new password form |
 | `actions.ts` | Server action to update password        |
 
-### Flow
+### Reset Password Flow Steps
 
 1. User clicks link in email → redirected to `/auth/callback`
 2. Callback verifies token and establishes session
@@ -213,9 +213,9 @@ Handles Supabase email confirmation and recovery links.
 - `recovery` - Password reset links
 - `magiclink` - Magic link authentication (if enabled)
 
-### Flow
+### Callback Flow
 
-```
+```text
 Email Link → /auth/callback?token_hash=xxx&type=recovery
                     ↓
           Verify OTP with Supabase
@@ -405,4 +405,4 @@ const navItems = [
 
 ---
 
-_Last updated: December 2024_
+Last updated: December 2024

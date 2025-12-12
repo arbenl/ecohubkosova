@@ -17,7 +17,7 @@ A complete implementation plan to take the application from **7.0 → 10.0**.
 
 Create `public/robots.txt`:
 
-```
+```text
 User-agent: *
 Allow: /
 
