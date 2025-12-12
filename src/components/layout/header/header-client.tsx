@@ -248,6 +248,16 @@ export default function HeaderClient({
                         {t("myListings")}
                       </Link>
                     </Button>
+                    {userRole === "Admin" && (
+                      <Button
+                        className="w-full h-8 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium text-sm interactive-press"
+                        asChild
+                      >
+                        <Link href="/admin" onClick={() => setIsMenuOpen(false)}>
+                          {t("administration")}
+                        </Link>
+                      </Button>
+                    )}
                     <Button
                       className="w-full h-8 eco-gradient text-white rounded-lg font-medium text-sm interactive-press"
                       asChild
