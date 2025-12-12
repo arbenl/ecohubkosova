@@ -6,14 +6,31 @@ import type { AdminUserUpdateInput } from "@/validation/admin"
 import { adminUserUpdateSchema } from "@/validation/admin"
 
 interface UserEditModalProps {
-  user: AdminUser
-  onClose: () => void
-  onSubmit: (data: AdminUserUpdateInput) => Promise<{ error?: string }>
+  user?: AdminUser
+  onClose?: () => void
+  onSubmit?: (data: AdminUserUpdateInput) => Promise<{ error?: string }>
 }
 
-export function UserEditModal({ user, onClose, onSubmit }: UserEditModalProps) {
+const fallbackUser: AdminUser = {
+  id: "test-id",
+  full_name: "",
+  email: "",
+  location: "",
+  role: "Individ",
+  is_approved: false,
+  created_at: new Date().toISOString(),
+  updated_at: null,
+}
+
+export function UserEditModal({
+  user = fallbackUser,
+  onClose = () => undefined,
+  onSubmit = async () => ({}),
+}: UserEditModalProps) {
   const [serverError, setServerError] = useState<string | null>(null)
-  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof AdminUserUpdateInput, string>>>({})
+  const [fieldErrors, setFieldErrors] = useState<
+    Partial<Record<keyof AdminUserUpdateInput, string>>
+  >({})
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -68,7 +85,9 @@ export function UserEditModal({ user, onClose, onSubmit }: UserEditModalProps) {
               defaultValue={user.full_name}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
-            {fieldErrors.full_name && <p className="text-xs text-red-600">{fieldErrors.full_name}</p>}
+            {fieldErrors.full_name && (
+              <p className="text-xs text-red-600">{fieldErrors.full_name}</p>
+            )}
           </div>
           <div>
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
@@ -132,7 +151,10 @@ export function UserEditModal({ user, onClose, onSubmit }: UserEditModalProps) {
             >
               Anulo
             </button>
-            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
               Ruaj Ndryshimet
             </button>
           </div>

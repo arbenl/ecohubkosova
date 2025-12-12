@@ -4,7 +4,34 @@ const trimmedString = (min: number, max: number) => z.string().trim().min(min).m
 
 const booleanField = z.boolean()
 
-const optionalUrl = z.string().trim().url("Formati i fotos duhet të jetë URL e vlefshme.").max(500).nullable()
+const optionalUrl = z
+  .preprocess(
+    (val) =>
+      val === undefined || val === null || (typeof val === "string" && val.trim() === "")
+        ? null
+        : val,
+    z.string().trim().url("Formati i fotos duhet të jetë URL e vlefshme.").max(500).nullable()
+  )
+  .optional()
+
+const optionalLanguage = z
+  .preprocess(
+    (val) =>
+      val === undefined || val === null || (typeof val === "string" && val.trim() === "")
+        ? null
+        : val,
+    trimmedString(2, 10).nullable()
+  )
+  .optional()
+
+const contentField = z
+  .preprocess((val) => {
+    if (val === undefined) return undefined
+    if (val === null) return null
+    if (typeof val === "string" && val.trim() === "") return null
+    return val
+  }, trimmedString(20, 10000).nullable())
+  .optional()
 
 const roleOptions = ["Individ", "OJQ", "Ndërmarrje Sociale", "Kompani", "Admin"] as const
 
@@ -60,26 +87,17 @@ export const adminListingUpdateSchema = z.object({
 
 export type AdminListingUpdateInput = z.infer<typeof adminListingUpdateSchema>
 
-const tagsSchema = z
-  .array(trimmedString(1, 30))
-  .max(15, "Maksimumi 15 tags.")
-  .nullable()
+const tagsSchema = z.array(trimmedString(1, 30)).max(15, "Maksimumi 15 tags.").nullable().optional()
 
 export const adminArticleBaseSchema = z.object({
   title: trimmedString(5, 180),
-  content: trimmedString(20, 10000).nullable(),
+  content: contentField,
   external_url: optionalUrl,
-  original_language: trimmedString(2, 10).nullable(),
+  original_language: optionalLanguage,
   category: trimmedString(2, 120),
   is_published: booleanField,
   tags: tagsSchema,
   featured_image: optionalUrl,
-}).refine((data) => {
-  // Either content OR external_url must be provided
-  return (data.content && data.content.length > 0) || (data.external_url && data.external_url.length > 0)
-}, {
-  message: "Duhet të jepet ose përmbajtja lokale ose URL-ja e jashtme.",
-  path: ["content"], // This will show the error on the content field
 })
 
 export const adminArticleCreateSchema = adminArticleBaseSchema

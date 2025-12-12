@@ -1,15 +1,10 @@
-import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react"
-import { describe, expect, it, vi } from "vitest"
-import { function } from "loading"
+import { render } from "@testing-library/react"
+import { describe, expect, it } from "vitest"
+import Loading from "./loading"
 
-describe("function component", () => {
-  it("renders without crashing", () => {
-    expect(() => render(<function />)).not.toThrow()
-  })
-
-  it("renders with basic structure", () => {
-    render(<function />)
-    expect(document.body).toBeInTheDocument()
+describe("admin users loading", () => {
+  it("renders nothing (skeleton handled elsewhere)", () => {
+    const { container } = render(<Loading />)
+    expect(container).toBeEmptyDOMElement()
   })
 })

@@ -1,32 +1,55 @@
-import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react"
-import { describe, expect, it, vi } from "vitest"
-import { function } from "contact-listing-button"
+import { render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import { describe, expect, it, vi, beforeEach } from "vitest"
+import ContactListingButton from "./contact-listing-button"
 
-// Mock Next.js
-vi.mock("next/navigation", () => ({
+const pushMock = vi.fn()
+
+vi.mock("@/i18n/routing", () => ({
   useRouter: () => ({
-    push: vi.fn(),
-    replace: vi.fn(),
-    back: vi.fn()
+    push: pushMock,
   }),
-  usePathname: () => "/",
-  useSearchParams: () => new URLSearchParams()
 }))
 
-// Mock external dependencies
+vi.mock("next-intl", () => ({
+  useLocale: () => "sq",
+}))
 
-describe("function component", () => {
-  it("renders without crashing", () => {
-    expect(() => render(
-      <function />
-    )).not.toThrow()
+const baseListing = {
+  id: "listing-1",
+  title: "Test Listing",
+  users: {
+    full_name: "Owner Name",
+    email: "owner@test.com",
+  },
+  organizations: {
+    name: "Test Org",
+    contact_email: "org@test.com",
+  },
+}
+
+describe("ContactListingButton", () => {
+  beforeEach(() => {
+    pushMock.mockClear()
   })
 
-  it("renders with basic structure", () => {
-    const { container } = render(
-      <function />
-    )
-    expect(container).toBeInTheDocument()
+  it("redirects unauthenticated users to login", async () => {
+    const user = userEvent.setup()
+    render(<ContactListingButton listing={baseListing} user={null} />)
+
+    await user.click(screen.getByRole("button", { name: /Kontakto/i }))
+    expect(pushMock).toHaveBeenCalled()
+    expect(pushMock.mock.calls[0][0]).toContain("/login")
+  })
+
+  it("shows contact modal for authenticated users", async () => {
+    const user = userEvent.setup()
+    render(<ContactListingButton listing={baseListing} user={{ id: "123" } as any} />)
+
+    await user.click(screen.getByRole("button", { name: /Kontakto/i }))
+
+    expect(screen.getByText(/Informacione Kontakti/)).toBeInTheDocument()
+    expect(screen.getByText(baseListing.organizations.name)).toBeInTheDocument()
+    expect(screen.getByText(baseListing.organizations.contact_email)).toBeInTheDocument()
   })
 })

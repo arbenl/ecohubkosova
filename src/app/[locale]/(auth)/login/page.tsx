@@ -87,6 +87,7 @@ export default function KycuPage() {
   const supabase = useSupabase()
   const searchParams = useSearchParams()
   const message = searchParams.get("message")
+  const nextParam = searchParams.get("next")
   const [error, setError] = useState<string>("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const redirectInProgressRef = useRef(false)
@@ -138,7 +139,15 @@ export default function KycuPage() {
           /* ignore */
         }
 
-        router.push("/my")
+        const isSafeNext = nextParam && nextParam.startsWith("/")
+        const nextPath = isSafeNext ? nextParam : "/my"
+
+        // Use locale-aware navigation; if nextPath already contains locale, push as-is
+        if (isSafeNext && nextPath.startsWith(`/${locale}/`)) {
+          router.push(nextPath)
+        } else {
+          router.push({ pathname: nextPath }, { locale })
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : t("loginError"))
@@ -199,6 +208,14 @@ export default function KycuPage() {
               disabled={isSubmitting}
               data-testid="login-password-input"
             />
+            <div className="flex justify-end mt-1">
+              <Link
+                href="/forgot-password"
+                className="text-xs text-gray-500 hover:text-[#00C896] transition-colors"
+              >
+                {t("forgotPassword.link")}
+              </Link>
+            </div>
           </div>
 
           <SubmitButton isSubmitting={isSubmitting} />

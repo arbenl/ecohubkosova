@@ -1,12 +1,13 @@
 // Login server action for handling user authentication
 "use server"
 
-import { cookies } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { loginSchema } from "@/validation/auth"
 import { incrementSessionVersion } from "@/services/session"
 import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_OPTIONS } from "@/lib/auth/session-version"
 import { logAuthAction } from "@/lib/auth/logging"
+import { checkRateLimit, getClientIp, RATE_LIMITS, resetRateLimit } from "@/lib/rate-limit"
 
 type SessionTokens = {
   access_token: string
@@ -29,11 +30,27 @@ export type SignInWithGoogleResponse =
   | { redirectUrl: string; error?: undefined }
   | { error: string; redirectUrl?: undefined }
 
-export async function signIn(prevState: any, formData: FormData): Promise<SignInResponse> {
+export async function signIn(prevState: unknown, formData: FormData): Promise<SignInResponse> {
+  // Rate limiting
+  const headersList = await headers()
+  const ip = getClientIp(headersList)
+  const { success: withinLimit, remaining } = checkRateLimit(
+    `login:${ip}`,
+    RATE_LIMITS.LOGIN.limit,
+    RATE_LIMITS.LOGIN.windowMs
+  )
+
+  if (!withinLimit) {
+    logAuthAction("signIn", "Rate limited", { ip })
+    return {
+      error: "Shumë përpjekje për hyrje. Ju lutemi prisni një minutë para se të provoni përsëri.",
+    }
+  }
+
   const email = String(formData.get("email") ?? "")
   const password = String(formData.get("password") ?? "")
 
-  logAuthAction("signIn", "Login attempt", { email })
+  logAuthAction("signIn", "Login attempt", { email, remaining })
 
   const supabase = await createServerSupabaseClient()
 

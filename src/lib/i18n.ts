@@ -42,6 +42,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     myProfile,
     faq,
     adminProfile,
+    feedback,
   ] = await Promise.all([
     import(`../../messages/${validLocale}/navigation.json`),
     import(`../../messages/${validLocale}/cta.json`),
@@ -75,6 +76,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     import(`../../messages/${validLocale}/my-profile.json`),
     import(`../../messages/${validLocale}/faq.json`),
     import(`../../messages/${validLocale}/admin-profile.json`),
+    import(`../../messages/${validLocale}/feedback.json`),
   ])
 
   return {
@@ -112,6 +114,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       "my-profile": myProfile.default,
       faq: faq.default,
       "admin-profile": adminProfile.default,
+      feedback: feedback.default,
     },
   }
 })

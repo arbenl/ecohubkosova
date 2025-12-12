@@ -1,15 +1,10 @@
-import { describe, expect, it, vi } from "vitest"
-import { actions } from "actions"
+import { describe, expect, it } from "vitest"
+import { deleteUser, getUsers, updateUser } from "./actions"
 
-// Mock Next.js
-
-describe("actions service", () => {
-  it("should be defined", () => {
-    expect(actions).toBeDefined()
-  })
-
-  // Add specific service tests based on functionality
-  it("should export expected functions", () => {
-    expect(typeof actions).toBe('function')
+describe("admin/users actions", () => {
+  it("exposes user admin server actions", () => {
+    expect(getUsers).toBeDefined()
+    expect(deleteUser).toBeDefined()
+    expect(updateUser).toBeDefined()
   })
 })

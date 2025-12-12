@@ -115,6 +115,14 @@ export function MyListingsTable({
     return statusFiltered.filter((listing) => listing.title.toLowerCase().includes(normalizedQuery))
   }, [activeTab, listings, query])
 
+  const dateFormatter = useMemo(() => {
+    try {
+      return new Intl.DateTimeFormat(locale || undefined)
+    } catch {
+      return new Intl.DateTimeFormat()
+    }
+  }, [locale])
+
   const sorted = useMemo(
     () =>
       [...filtered].sort((a, b) => {
@@ -230,7 +238,7 @@ export function MyListingsTable({
                   <TableCell>{statusBadge(listing.status)}</TableCell>
                   <TableCell>{visibilityBadge(listing.visibility)}</TableCell>
                   <TableCell className="text-sm text-gray-600">
-                    {new Date(listing.updated_at || listing.created_at).toLocaleDateString(locale)}
+                    {dateFormatter.format(new Date(listing.updated_at || listing.created_at))}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>

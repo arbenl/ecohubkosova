@@ -15,6 +15,18 @@
       "args": ["context7-mcp"],
       "cwd": "/Users/arbenlila/development/ecohubkosova"
     },
+    "brave-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@brave/brave-search-mcp-server",
+        "--transport",
+        "stdio",
+        "--brave-api-key",
+        "${BRAVE_API_KEY}"
+      ],
+      "cwd": "/Users/arbenlila/development/ecohubkosova"
+    },
     "playwright": {
       "command": "npx",
       "args": ["mcp-server-playwright"],

@@ -4,48 +4,83 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 160 100% 39%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 160 100% 31%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 98%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 160 100% 45%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 160 100% 39%;
-    --radius: 0.5rem;
+    /* Palette: Emerald/Teal + Charcoal + Warm Gray */
+    --primary: 160 90% 38%;
+    --primary-foreground: 0 0% 100%;
+    --primary-soft: 160 65% 92%;
+    --secondary: 174 60% 36%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 160 70% 42%;
+    --accent-foreground: 0 0% 100%;
+    --foreground: 210 15% 14%;
+    --muted-900: 210 15% 14%;
+    --muted-700: 210 10% 28%;
+    --muted-500: 210 8% 44%;
+    --muted-300: 210 10% 70%;
+    --muted-200: 210 20% 82%;
+    --muted-100: 210 30% 94%;
+    --background: 40 33% 98%;
+    --surface: 0 0% 100%;
+    --surface-strong: 210 25% 96%;
+    --card: var(--surface);
+    --card-foreground: var(--foreground);
+    --popover: var(--surface);
+    --popover-foreground: var(--foreground);
+    --border: 210 20% 88%;
+    --border-strong: 210 20% 75%;
+    --input: var(--border);
+    --ring: var(--primary);
+    --destructive: 0 72% 52%;
+    --destructive-foreground: 0 0% 100%;
+    --radius: 0.75rem;
+
+    /* Typography scale */
+    --font-display: "Space Grotesk", "Inter", system-ui, -apple-system, sans-serif;
+    --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+    --fs-12: 0.75rem;
+    --fs-14: 0.875rem;
+    --fs-16: 1rem;
+    --fs-18: 1.125rem;
+    --fs-20: 1.25rem;
+    --fs-24: 1.5rem;
+    --fs-32: 2rem;
+    --fs-40: 2.5rem;
+    --fs-56: 3.5rem;
+    --lh-tight: 1.1;
+    --lh-snug: 1.25;
+    --lh-base: 1.5;
+    --lh-loose: 1.7;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 160 100% 39%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 160 100% 45%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 160 100% 39%;
+    --background: 210 20% 8%;
+    --foreground: 0 0% 100%;
+    --card: 210 15% 12%;
+    --card-foreground: 0 0% 100%;
+    --popover: 210 15% 12%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 160 80% 42%;
+    --primary-foreground: 0 0% 100%;
+    --primary-soft: 160 40% 20%;
+    --secondary: 174 45% 38%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 160 70% 42%;
+    --accent-foreground: 0 0% 100%;
+    --muted-900: 210 12% 10%;
+    --muted-700: 210 10% 26%;
+    --muted-500: 210 12% 44%;
+    --muted-300: 210 15% 62%;
+    --muted-200: 210 15% 72%;
+    --muted-100: 210 20% 82%;
+    --background-strong: 210 15% 6%;
+    --surface: 210 15% 12%;
+    --surface-strong: 210 18% 18%;
+    --border: 210 12% 24%;
+    --border-strong: 210 15% 36%;
+    --input: var(--border);
+    --ring: var(--primary);
+    --destructive: 0 70% 46%;
+    --destructive-foreground: 0 0% 100%;
   }
 }
 
@@ -54,22 +89,72 @@
     @apply border-border;
   }
   body {
-    @apply bg-gray-50 text-foreground;
+    @apply bg-[hsl(var(--background))] text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: var(--font-sans);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: var(--lh-tight);
+    letter-spacing: -0.01em;
+  }
+  h1 {
+    font-size: var(--fs-56);
+  }
+  h2 {
+    font-size: var(--fs-40);
+  }
+  h3 {
+    font-size: var(--fs-32);
+  }
+  h4 {
+    font-size: var(--fs-24);
+  }
+  p,
+  span,
+  li,
+  input,
+  button {
+    line-height: var(--lh-base);
+    font-size: var(--fs-16);
+  }
+
+  /* Accessibility: Focus visible styles for keyboard navigation */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-emerald-500;
+  }
+
+  /* Remove default focus for mouse users */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Ensure focus is visible on interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    @apply ring-2 ring-emerald-500 ring-offset-2;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-lg;
+    @apply bg-[hsl(var(--surface))] backdrop-blur-sm border border-[hsl(var(--border))] shadow-lg;
   }
 
   .eco-gradient {
-    background: linear-gradient(135deg, #00c896 0%, #00a07e 100%);
+    background: linear-gradient(135deg, #0fbf8c 0%, #089e7a 100%);
   }
 
   .eco-gradient-light {
-    background: linear-gradient(135deg, rgba(0, 200, 150, 0.1) 0%, rgba(0, 160, 126, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(15, 191, 140, 0.12) 0%, rgba(8, 158, 122, 0.12) 100%);
   }
 
   .animate-fade-in {

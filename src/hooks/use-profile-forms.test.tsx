@@ -1,12 +1,14 @@
-import { renderHook, act } from "@testing-library/react"
+import { renderHook } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import { useUserProfileForm, useOrganizationProfileForm } from "./use-profile-forms"
 
-// Mock external dependencies
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string) => key,
+}))
 
 describe("useUserProfileForm hook", () => {
   it("returns expected values", () => {
-    const mockSubmit = vi.fn()
+    const mockSubmit = vi.fn().mockResolvedValue({})
 
     const { result } = renderHook(() =>
       useUserProfileForm({
@@ -16,25 +18,31 @@ describe("useUserProfileForm hook", () => {
       })
     )
 
-    // Add specific assertions based on hook analysis
-    expect(result.current).toBeDefined()
+    expect(result.current.formData.full_name).toBe("John Doe")
+    expect(result.current.formData.location).toBe("Prishtina")
   })
 })
 
 describe("useOrganizationProfileForm hook", () => {
   it("returns expected values", () => {
-    const mockSubmit = vi.fn()
+    const mockSubmit = vi.fn().mockResolvedValue({})
 
     const { result } = renderHook(() =>
       useOrganizationProfileForm({
-        initialName: "Test Organization",
-        initialDescription: "Test description",
-        initialLocation: "Prishtina",
+        organizationId: "org-1",
+        initialData: {
+          name: "Test Organization",
+          description: "Test description that is long enough",
+          primary_interest: "Recycling",
+          contact_person: "Alice",
+          contact_email: "a@test.com",
+          location: "Prishtina",
+        },
         submit: mockSubmit,
       })
     )
 
-    // Add specific assertions based on hook analysis
-    expect(result.current).toBeDefined()
+    expect(result.current.formData.name).toBe("Test Organization")
+    expect(result.current.formData.contact_person).toBe("Alice")
   })
 })

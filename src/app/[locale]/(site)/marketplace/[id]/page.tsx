@@ -12,6 +12,7 @@ import type { Listing } from "@/types"
 import { getLocale, getTranslations } from "next-intl/server"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { OwnerListingActions } from "./owner-listing-actions"
+import { ListingJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld"
 
 export default async function ListingDetailPage({
   params,
@@ -97,6 +98,26 @@ export default async function ListingDetailPage({
   const locationLabel = listing.location || listing.city || ""
   return (
     <div className="flex min-h-screen flex-col">
+      {/* Structured data for search engines */}
+      <ListingJsonLd
+        id={listing.id}
+        title={listing.title}
+        description={listing.description || ""}
+        price={listing.price ?? undefined}
+        currency={listing.currency || "EUR"}
+        category={listing.category || undefined}
+        condition={listing.listing_type === "shes" ? "used" : "new"}
+        sellerName={listing.organization_name || undefined}
+        location={locationLabel || undefined}
+        datePosted={listing.created_at}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "EcoHub Kosova", url: "/" },
+          { name: "Marketplace", url: `/${locale}/marketplace` },
+          { name: listing.title, url: `/${locale}/marketplace/${listing.id}` },
+        ]}
+      />
       <>
         <main className="flex-1 py-12">
           <div className="container px-4 md:px-6 max-w-4xl">

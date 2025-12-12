@@ -48,10 +48,8 @@ describe("MarketplaceClientPage filter → request wiring", () => {
     // Wait for initial load
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
 
-    const trigger = screen.getByText("category")
-    await user.click(trigger)
-    const option = await screen.findByText("categoryList.recyclable_materials")
-    await user.click(option)
+    const trigger = screen.getByTestId("category-trigger")
+    await user.selectOptions(trigger, "recycled-metals")
 
     await waitFor(() =>
       expect(fetchMock).toHaveBeenCalledWith(

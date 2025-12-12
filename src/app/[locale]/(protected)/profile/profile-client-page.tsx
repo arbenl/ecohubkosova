@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UserProfileForm } from "./components/user-profile-form"
 import { OrganizationProfileForm } from "./components/org-profile-form"
 import { ProfileSectionCard } from "./components/profile-section-card"
+import { PasswordChangeForm } from "./components/password-change-form"
 
 interface UserProfile {
   id: string
@@ -71,10 +72,7 @@ export default function ProfileClientPage({ userProfile, organization }: Profile
       label: t("tabs.organization"),
       show: true,
       content: (
-        <ProfileSectionCard
-          title={t("orgProfile")}
-          description={t("manageOrgDescription")}
-        >
+        <ProfileSectionCard title={t("orgProfile")} description={t("manageOrgDescription")}>
           {organization ? (
             <OrganizationProfileForm
               organizationId={organization.id}
@@ -98,8 +96,11 @@ export default function ProfileClientPage({ userProfile, organization }: Profile
       label: t("changePassword"),
       show: true,
       content: (
-        <ProfileSectionCard title={t("changePassword")} description={t("changePasswordDescription")}>
-          <p>{t("changePasswordPlaceholder")}</p>
+        <ProfileSectionCard
+          title={t("changePassword")}
+          description={t("changePasswordDescription")}
+        >
+          <PasswordChangeForm />
         </ProfileSectionCard>
       ),
     },

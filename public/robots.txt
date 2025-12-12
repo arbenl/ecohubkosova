@@ -1,0 +1,19 @@
+# EcoHub Kosova - Robots.txt
+# https://www.robotstxt.org/
+
+User-agent: *
+Allow: /
+
+# Disallow protected and admin areas
+Disallow: /*/admin/*
+Disallow: /*/my/*
+Disallow: /api/*
+Disallow: /auth/*
+
+# Disallow dev/test pages
+Disallow: /*/sentry-example-page
+Disallow: /*/dev/*
+Disallow: /sentry-test
+
+# Sitemap
+Sitemap: https://ecohubkosova.com/sitemap.xml
