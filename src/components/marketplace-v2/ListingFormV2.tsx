@@ -1,6 +1,6 @@
 "use client"
 
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { FormField } from "@/components/profile/form-field"
@@ -54,6 +54,7 @@ const ECO_LABELS = ["recycled", "upcycled", "local", "repairable"]
 
 export function ListingFormV2({ initialData, submit, categories, mode }: ListingFormV2Props) {
   const t = useTranslations("marketplace-v2")
+  const locale = useLocale()
   const { formData, fieldErrors, saving, error, success, handleChange, handleSubmit } =
     useListingForm({
       initialData,
@@ -68,7 +69,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
       <form
         onSubmit={async (e) => {
           e.preventDefault()
-          
+
           // Upload selected files if any
           if (media.state.selectedFiles.length > 0) {
             // Use title + timestamp as listing identifier for storage
@@ -103,22 +104,18 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
             name="title"
             value={formData.title}
             onChange={handleChange}
-            placeholder="Give your listing a clear title"
+            placeholder={t("form.placeholders.title")}
             maxLength={100}
           />
         </FormField>
 
         {/* Description */}
-        <FormField
-          label={t("form.description")}
-          name="description"
-          error={fieldErrors.description}
-        >
+        <FormField label={t("form.description")} name="description" error={fieldErrors.description}>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
-            placeholder="Describe your listing in detail..."
+            placeholder={t("form.placeholders.description")}
             rows={5}
             maxLength={2000}
             className="w-full px-3 py-2 border rounded-md"
@@ -133,21 +130,17 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-md"
           >
-            <option value="">Select a category...</option>
+            <option value="">{t("form.placeholders.category")}</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
-                {cat.name_en}
+                {locale === "sq" ? cat.name_sq : cat.name_en}
               </option>
             ))}
           </select>
         </FormField>
 
         {/* Flow Type */}
-        <FormField
-          label={t("form.flowType")}
-          name="flow_type"
-          error={fieldErrors.flow_type}
-        >
+        <FormField label={t("form.flowType")} name="flow_type" error={fieldErrors.flow_type}>
           <select
             name="flow_type"
             value={formData.flow_type}
@@ -204,7 +197,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
               type="number"
               value={formData.quantity || ""}
               onChange={handleChange}
-              placeholder="0.00"
+              placeholder={t("form.placeholders.price")}
               step="0.01"
             />
           </FormField>
@@ -213,7 +206,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
               name="unit"
               value={formData.unit || ""}
               onChange={handleChange}
-              placeholder="kg, tons, units..."
+              placeholder={t("form.placeholders.quantity")}
               maxLength={20}
             />
           </FormField>
@@ -227,7 +220,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
               type="number"
               value={formData.price || ""}
               onChange={handleChange}
-              placeholder="0.00"
+              placeholder={t("form.placeholders.price")}
               step="0.01"
             />
           </FormField>
@@ -254,7 +247,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
             value={formData.currency}
             onChange={handleChange}
             maxLength={3}
-            placeholder="EUR"
+            placeholder={t("form.placeholders.currency")}
           />
         </FormField>
 
@@ -267,7 +260,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
               name="country"
               value={formData.country}
               onChange={handleChange}
-              placeholder="XK"
+              placeholder={t("form.placeholders.country")}
               maxLength={2}
             />
           </FormField>
@@ -278,7 +271,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
                 name="city"
                 value={formData.city || ""}
                 onChange={handleChange}
-                placeholder="City"
+                placeholder={t("form.placeholders.city")}
                 maxLength={100}
               />
             </FormField>
@@ -287,7 +280,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
                 name="region"
                 value={formData.region || ""}
                 onChange={handleChange}
-                placeholder="Region"
+                placeholder={t("form.placeholders.region")}
                 maxLength={100}
               />
             </FormField>
@@ -298,7 +291,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
               name="location_details"
               value={formData.location_details || ""}
               onChange={handleChange}
-              placeholder="Street address, building details, etc..."
+              placeholder={t("form.placeholders.locationDetails")}
               rows={3}
               maxLength={500}
               className="w-full px-3 py-2 border rounded-md"
@@ -341,7 +334,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
                 type="number"
                 value={formData.eco_score || ""}
                 onChange={handleChange}
-                placeholder="0-100"
+                placeholder={t("form.placeholders.ecoScore")}
                 min="0"
                 max="100"
                 className="flex-1"
@@ -366,7 +359,7 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
                 target: { ...e.target, name: "tags", value: tags.join(", ") },
               } as any)
             }}
-            placeholder="Tag1, Tag2, Tag3... (comma separated)"
+            placeholder={t("form.placeholders.tags")}
           />
         </FormField>
 

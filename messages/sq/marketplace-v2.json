@@ -141,7 +141,21 @@
     "addListing": "Shto Ofertë",
     "editListing": "Redakto Ofertën",
     "cancel": "Anulo",
-    "save": "Ruaj Ndryshimet"
+    "save": "Ruaj Ndryshimet",
+    "placeholders": {
+      "title": "Jepini ofertës suaj një titull të qartë",
+      "description": "Përshkruani ofertën tuaj në detaje...",
+      "category": "Zgjidhni një kategori...",
+      "quantity": "kg, ton, njësi...",
+      "city": "Qyteti",
+      "region": "Rajoni",
+      "locationDetails": "Adresa e rrugës, detajet e ndërtesës, etj...",
+      "tags": "Etiketa1, Etiketa2, Etiketa3... (të ndara me presje)",
+      "currency": "EUR",
+      "country": "XK",
+      "ecoScore": "0-100",
+      "price": "0.00"
+    }
   },
   "media": {
     "uploadLabel": "Ngarko Fotografi",

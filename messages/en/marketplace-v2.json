@@ -141,7 +141,21 @@
     "addListing": "Create Listing",
     "editListing": "Edit Listing",
     "cancel": "Cancel",
-    "save": "Save Changes"
+    "save": "Save Changes",
+    "placeholders": {
+      "title": "Give your listing a clear title",
+      "description": "Describe your listing in detail...",
+      "category": "Select a category...",
+      "quantity": "kg, tons, units...",
+      "city": "City",
+      "region": "Region",
+      "locationDetails": "Street address, building details, etc...",
+      "tags": "Tag1, Tag2, Tag3... (comma separated)",
+      "currency": "EUR",
+      "country": "XK",
+      "ecoScore": "0-100",
+      "price": "0.00"
+    }
   },
   "media": {
     "uploadLabel": "Upload Photos",
