@@ -143,7 +143,7 @@ export default function KycuPage() {
         const nextPath = isSafeNext ? nextParam : "/my"
 
         // Use locale-aware navigation; if nextPath already contains locale, push as-is
-        if (isSafeNext && nextPath.startsWith(`/${locale}/`)) {
+        if (isSafeNext && nextPath.startsWith("/" + locale + "/")) {
           router.push(nextPath)
         } else {
           router.push({ pathname: nextPath }, { locale })

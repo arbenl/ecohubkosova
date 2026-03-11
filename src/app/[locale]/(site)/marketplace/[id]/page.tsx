@@ -114,8 +114,8 @@ export default async function ListingDetailPage({
       <BreadcrumbJsonLd
         items={[
           { name: "EcoHub Kosova", url: "/" },
-          { name: "Marketplace", url: `/${locale}/marketplace` },
-          { name: listing.title, url: `/${locale}/marketplace/${listing.id}` },
+          { name: "Marketplace", url: "/" + locale + `/marketplace` },
+          { name: listing.title, url: "/" + locale + `/marketplace/${listing.id}` },
         ]}
       />
       <>
