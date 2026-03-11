@@ -41,7 +41,7 @@ export async function createListingAction(formData: ListingFormInput, locale: st
 
   const parsed = listingFormSchema.safeParse(formData)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? t("createError") }
+    return { error: parsed.error.issues[0]?.message ?? t("createError") }
   }
 
   const payload = parsed.data
@@ -165,7 +165,7 @@ export async function updateListingAction(
 
   const parsed = listingFormSchema.safeParse(formData)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? t("updateError") }
+    return { error: parsed.error.issues[0]?.message ?? t("updateError") }
   }
 
   const payload = parsed.data

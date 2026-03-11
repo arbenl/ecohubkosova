@@ -41,7 +41,7 @@ export async function requestPasswordReset(formData: FormData): Promise<ForgotPa
   // Validate input
   const parsed = forgotPasswordSchema.safeParse({ email })
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? "Email i pavlefshëm" }
+    return { error: parsed.error.issues[0]?.message ?? "Email i pavlefshëm" }
   }
 
   const supabase = await createServerSupabaseClient()

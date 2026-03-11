@@ -31,7 +31,7 @@ export async function resetPassword(formData: FormData): Promise<ResetPasswordRe
   // Validate input
   const parsed = resetPasswordSchema.safeParse({ password, confirmPassword })
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? "Të dhëna të pavlefshme" }
+    return { error: parsed.error.issues[0]?.message ?? "Të dhëna të pavlefshme" }
   }
 
   const supabase = await createServerSupabaseClient()

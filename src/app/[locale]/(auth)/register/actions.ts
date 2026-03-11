@@ -31,7 +31,7 @@ export async function registerUser(formData: RegistrationFormData) {
     const parsed = registrationSchema.safeParse(formData)
     if (!parsed.success) {
       return {
-        error: parsed.error.errors[0]?.message || "Të dhënat e regjistrimit nuk janë të vlefshme.",
+        error: parsed.error.issues[0]?.message || "Të dhënat e regjistrimit nuk janë të vlefshme.",
       }
     }
     const payload = parsed.data

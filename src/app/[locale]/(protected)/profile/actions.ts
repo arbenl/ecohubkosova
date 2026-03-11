@@ -53,7 +53,7 @@ export async function updateUserProfile(formData: UserProfileUpdateInput) {
 
   const parsed = userProfileUpdateSchema.safeParse(formData)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? t("updateError") }
+    return { error: parsed.error.issues[0]?.message ?? t("updateError") }
   }
 
   const payload = parsed.data
@@ -97,7 +97,7 @@ export async function updateOrganizationProfile(
 
   const parsed = organizationProfileUpdateSchema.safeParse(formData)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? t("updateError") }
+    return { error: parsed.error.issues[0]?.message ?? t("updateError") }
   }
 
   const payload = parsed.data
@@ -149,7 +149,7 @@ export async function changePassword(formData: PasswordChangeInput) {
 
   const parsed = passwordChangeSchema.safeParse(formData)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? t("updateError") }
+    return { error: parsed.error.issues[0]?.message ?? t("updateError") }
   }
 
   const { currentPassword, newPassword } = parsed.data

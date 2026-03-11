@@ -26,10 +26,10 @@ export async function validateAuthCredentials(email: string, password: string, s
   if (!parsed.success) {
     logAuthAction("auth", "Validation failed", {
       email,
-      errors: parsed.error.errors.map((e: any) => e.message),
+      errors: parsed.error.issues.map((e: any) => e.message),
     })
     return {
-      error: parsed.error.errors[0]?.message ?? "Të dhëna të pavlefshme.",
+      error: parsed.error.issues[0]?.message ?? "Të dhëna të pavlefshme.",
     }
   }
 

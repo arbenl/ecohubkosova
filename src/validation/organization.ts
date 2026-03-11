@@ -7,9 +7,7 @@ export const organizationOnboardingSchema = z.object({
   contact_person: z.string().min(2, "Emri i personit kontakti është i detyrueshëm").max(200),
   contact_email: z.string().email("Email-i kontakti duhet të jetë i vlefshëm"),
   location: z.string().min(2, "Vendndodhja është e detyrueshme").max(100),
-  type: z.enum(["OJQ", "Ndërmarrje Sociale", "Kompani"], {
-    errorMap: () => ({ message: "Lloji i organizatës është i detyrueshëm" }),
-  }),
+  type: z.enum(["OJQ", "Ndërmarrje Sociale", "Kompani"]),
 })
 
 export type OrganizationOnboardingInput = z.infer<typeof organizationOnboardingSchema>
