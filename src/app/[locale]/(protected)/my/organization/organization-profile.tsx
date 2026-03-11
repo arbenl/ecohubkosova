@@ -3,9 +3,19 @@
 import { useState } from "react"
 import { Link } from "@/i18n/routing"
 import { useTranslations } from "next-intl"
-import { Building2, Mail, MapPin, Edit2, ExternalLink, Eye, Archive } from "lucide-react"
+import {
+  Building2,
+  Mail,
+  MapPin,
+  Edit2,
+  ExternalLink,
+  Eye,
+  Archive,
+  AlertTriangle,
+} from "lucide-react"
 import type { UserOrganization } from "@/services/organization-onboarding"
 import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
   Table,
   TableBody,
@@ -54,6 +64,19 @@ export default function OrganizationProfile({
 
   return (
     <div className="space-y-8">
+      {/* Pending Approval Warning */}
+      {!organization.is_approved && (
+        <Alert variant="destructive" className="bg-amber-50 text-amber-900 border-amber-200">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
+          <AlertTitle className="text-amber-900 font-semibold">
+            {t("workspace.profile.pendingApprovalTitle")}
+          </AlertTitle>
+          <AlertDescription className="text-amber-800">
+            {t("workspace.profile.pendingApprovalMessage")}
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Profile Summary Card */}
       <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
         <div className="flex items-start justify-between">

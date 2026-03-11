@@ -3,12 +3,13 @@
 import { and, count, eq } from "drizzle-orm"
 import { db } from "@/lib/drizzle"
 import { ecoListings, ecoListingInteractions } from "@/db/schema/marketplace-v2"
-import { organizationMembers } from "@/db/schema"
+import { organizationMembers, organizations as organizationsTable } from "@/db/schema"
 import { getServerUser } from "@/lib/supabase/server"
 
 export interface UserStats {
   savedListings: number
   organizations: number
+  pendingOrganizations: number
   myListings: number
 }
 
@@ -25,7 +26,7 @@ export async function getUserStats(): Promise<GetUserStatsResult> {
 
   try {
     const database = db.get()
-    const [savedListings, organizations, myListings] = await Promise.all([
+    const [savedListings, organizations, pendingOrganizations, myListings] = await Promise.all([
       database
         .select({ value: count() })
         .from(ecoListingInteractions)
@@ -38,7 +39,23 @@ export async function getUserStats(): Promise<GetUserStatsResult> {
       database
         .select({ value: count() })
         .from(organizationMembers)
-        .where(eq(organizationMembers.user_id, user.id)),
+        .innerJoin(
+          organizationsTable,
+          eq(organizationMembers.organization_id, organizationsTable.id)
+        )
+        .where(
+          and(eq(organizationMembers.user_id, user.id), eq(organizationsTable.is_approved, true))
+        ),
+      database
+        .select({ value: count() })
+        .from(organizationMembers)
+        .innerJoin(
+          organizationsTable,
+          eq(organizationMembers.organization_id, organizationsTable.id)
+        )
+        .where(
+          and(eq(organizationMembers.user_id, user.id), eq(organizationsTable.is_approved, false))
+        ),
       database
         .select({ value: count() })
         .from(ecoListings)
@@ -48,6 +65,7 @@ export async function getUserStats(): Promise<GetUserStatsResult> {
     const stats: UserStats = {
       savedListings: savedListings[0]?.value ?? 0,
       organizations: organizations[0]?.value ?? 0,
+      pendingOrganizations: pendingOrganizations[0]?.value ?? 0,
       myListings: myListings[0]?.value ?? 0,
     }
 

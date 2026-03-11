@@ -93,13 +93,19 @@ export default function MyOrganizationClient({
         title={org.name}
         subtitle=""
         actions={
-          <Link
-            href="/marketplace/add"
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
-          >
-            <Plus className="h-5 w-5" />
-            {t("workspace.actions.createListing")}
-          </Link>
+          org.is_approved ? (
+            <Link
+              href="/marketplace/add"
+              className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
+            >
+              <Plus className="h-5 w-5" />
+              {t("workspace.actions.createListing")}
+            </Link>
+          ) : (
+            <span className="inline-flex items-center gap-2 rounded-lg bg-amber-100 px-4 py-2 text-amber-700 text-sm font-medium cursor-not-allowed">
+              {locale === "sq" ? "Në pritje të aprovimit" : "Pending Approval"}
+            </span>
+          )
         }
       >
         {/* Tabs */}
@@ -168,13 +174,19 @@ export default function MyOrganizationClient({
       title={t("onboarding.subtitle")}
       subtitle=""
       actions={
-        <Link
-          href="/marketplace/add"
-          className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
-        >
-          <Plus className="h-5 w-5" />
-          {t("workspace.actions.createListing")}
-        </Link>
+        activeOrg?.is_approved ? (
+          <Link
+            href="/marketplace/add"
+            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
+          >
+            <Plus className="h-5 w-5" />
+            {t("workspace.actions.createListing")}
+          </Link>
+        ) : (
+          <span className="inline-flex items-center gap-2 rounded-lg bg-amber-100 px-4 py-2 text-amber-700 text-sm font-medium cursor-not-allowed">
+            {locale === "sq" ? "Në pritje të aprovimit" : "Pending Approval"}
+          </span>
+        )
       }
     >
       {/* Organization Switcher */}
