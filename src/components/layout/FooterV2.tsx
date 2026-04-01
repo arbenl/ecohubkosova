@@ -32,33 +32,29 @@ export async function FooterV2({ locale }: FooterV2Props = {}) {
   ]
 
   return (
-    <footer className="mt-16 border-t bg-slate-50">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-[2fr_3fr]">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-xl font-bold text-white shadow-lg">
-                E
-              </div>
-              <div className="space-y-1">
-                <p className="text-lg font-semibold text-slate-900">EcoHub Kosova</p>
-                <p className="text-xs uppercase tracking-wide text-emerald-700">
-                  Circular marketplace
-                </p>
+    <footer className="footer-v2">
+      <div className="footer-v2-main">
+        <div className="footer-v2-grid">
+          <div className="footer-v2-brand-block">
+            <div className="footer-v2-brand-row">
+              <div className="footer-v2-brand-mark">E</div>
+              <div className="footer-v2-brand-copy">
+                <p className="footer-v2-brand-title">EcoHub Kosova</p>
+                <p className="footer-v2-brand-kicker">Circular marketplace</p>
               </div>
             </div>
-            <p className="max-w-2xl text-sm leading-relaxed text-slate-700">{t("tagline")}</p>
+            <p className="footer-v2-tagline">{t("tagline")}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-slate-900">{t("columnAboutTitle")}</h3>
-              <ul className="space-y-2 text-sm text-slate-700">
+          <div className="footer-v2-links-grid">
+            <div className="footer-v2-column">
+              <h3 className="footer-v2-column-title">{t("columnAboutTitle")}</h3>
+              <ul className="footer-v2-list">
                 {aboutLinks.map((link) => (
                   <li key={link.key}>
                     <Link
                       href={link.href.startsWith("/") ? link.href : `/${link.href}`}
-                      className="transition hover:text-emerald-700"
+                      className="footer-v2-link"
                     >
                       {t(link.key)}
                     </Link>
@@ -67,14 +63,14 @@ export async function FooterV2({ locale }: FooterV2Props = {}) {
               </ul>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-slate-900">{t("columnExploreTitle")}</h3>
-              <ul className="space-y-2 text-sm text-slate-700">
+            <div className="footer-v2-column">
+              <h3 className="footer-v2-column-title">{t("columnExploreTitle")}</h3>
+              <ul className="footer-v2-list">
                 {exploreLinks.map((link) => (
                   <li key={link.key}>
                     <Link
                       href={link.href.startsWith("/") ? link.href : `/${link.href}`}
-                      className="transition hover:text-emerald-700"
+                      className="footer-v2-link"
                     >
                       {t(link.key)}
                     </Link>
@@ -83,14 +79,14 @@ export async function FooterV2({ locale }: FooterV2Props = {}) {
               </ul>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-slate-900">{t("columnHelpTitle")}</h3>
-              <ul className="space-y-2 text-sm text-slate-700">
+            <div className="footer-v2-column">
+              <h3 className="footer-v2-column-title">{t("columnHelpTitle")}</h3>
+              <ul className="footer-v2-list">
                 {helpLinks.map((link) => (
                   <li key={link.key}>
                     <Link
                       href={link.href.startsWith("/") ? link.href : `/${link.href}`}
-                      className="transition hover:text-emerald-700"
+                      className="footer-v2-link"
                     >
                       {t(link.key)}
                     </Link>
@@ -102,20 +98,18 @@ export async function FooterV2({ locale }: FooterV2Props = {}) {
         </div>
       </div>
 
-      <div className="border-t bg-slate-100">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-4 text-xs text-slate-600 sm:flex-row sm:px-6 lg:px-8">
+      <div className="footer-v2-legal">
+        <div className="footer-v2-legal-inner">
           <span>{t("legalCopyright", { year })}</span>
-          <div className="flex items-center gap-3 text-slate-500">
-            <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-              {t("columnSocialTitle")}
-            </span>
+          <div className="footer-v2-socials">
+            <span className="footer-v2-social-label">{t("columnSocialTitle")}</span>
             {socials.map((social) => {
               const Icon = social.icon
               return (
                 <Link
                   key={social.key}
                   href="#"
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-500 shadow-sm transition hover:text-emerald-700 hover:shadow-md"
+                  className="footer-v2-social-link"
                   aria-label={t(social.key)}
                   // TODO: replace # with real social URLs
                 >

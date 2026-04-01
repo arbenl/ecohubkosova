@@ -24,13 +24,7 @@ export function PageLayout({ children, className = "", locale }: PageLayoutProps
         <FloatingLeaves />
 
         {/* Subtle dot pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.015]"
-          style={{
-            backgroundImage: `radial-gradient(circle, #10b981 1px, transparent 1px)`,
-            backgroundSize: "24px 24px",
-          }}
-        />
+        <div className="eco-dot-pattern-overlay absolute inset-0 opacity-[0.015]" />
       </div>
 
       <Header />

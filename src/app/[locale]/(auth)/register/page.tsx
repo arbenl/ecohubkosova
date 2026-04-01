@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useRef, useState } from "react"
 import { Link } from "@/i18n/routing"
 import { useRouter } from "@/i18n/routing"
 import { useLocale, useTranslations } from "next-intl"
@@ -47,6 +47,7 @@ export default function RegjistrohuPage() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const locale = useLocale() as Locale
+  const nextStepLockRef = useRef(false)
 
   const [formData, setFormData] = useState<FormData>({
     full_name: "",
@@ -64,6 +65,10 @@ export default function RegjistrohuPage() {
     newsletter: false,
   })
 
+  const updateFormData = (updates: Partial<FormData>) => {
+    setFormData((current) => ({ ...current, ...updates }))
+  }
+
   /**
    * Handles changes for input and textarea elements.
    * Updates the formData state based on input name and value/checked status.
@@ -73,10 +78,9 @@ export default function RegjistrohuPage() {
     const { name, value, type } = e.target
     // For checkboxes, use the 'checked' property, otherwise use 'value'
     const checked = (e.target as HTMLInputElement).checked
-    setFormData({
-      ...formData,
+    updateFormData({
       [name]: type === "checkbox" ? checked : value,
-    })
+    } as Partial<FormData>)
   }
 
   /**
@@ -85,7 +89,7 @@ export default function RegjistrohuPage() {
    * @param {UserRole} value - The selected role value.
    */
   const handleRoleChange = (value: UserRole) => {
-    setFormData({ ...formData, role: value })
+    updateFormData({ role: value })
   }
 
   /**
@@ -93,6 +97,12 @@ export default function RegjistrohuPage() {
    * Performs validation based on the current step.
    */
   const handleNextStep = () => {
+    if (nextStepLockRef.current) {
+      return
+    }
+
+    nextStepLockRef.current = true
+
     if (step === 1) {
       // Step 1 validation: Basic user information
       if (
@@ -103,14 +113,17 @@ export default function RegjistrohuPage() {
         !formData.location
       ) {
         setError(t("errors.fillAll"))
+        nextStepLockRef.current = false
         return
       }
       if (formData.password !== formData.confirmPassword) {
         setError(t("errors.passwordMismatch"))
+        nextStepLockRef.current = false
         return
       }
       if (formData.password.length < 6) {
         setError(t("errors.passwordLength"))
+        nextStepLockRef.current = false
         return
       }
     }
@@ -125,19 +138,24 @@ export default function RegjistrohuPage() {
         !formData.contact_email
       ) {
         setError(t("errors.fillOrg"))
+        nextStepLockRef.current = false
         return
       }
     }
 
     setError(null) // Clear any previous errors
-    setStep(step + 1) // Move to the next step
+    setStep((currentStep) => {
+      nextStepLockRef.current = false
+      return currentStep === step ? currentStep + 1 : currentStep
+    })
   }
 
   /**
    * Handles going back to the previous step in the multi-step registration form.
    */
   const handlePrevStep = () => {
-    setStep(step - 1)
+    nextStepLockRef.current = false
+    setStep((currentStep) => currentStep - 1)
     setError(null) // Clear errors when going back
   }
 
@@ -182,22 +200,22 @@ export default function RegjistrohuPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00C896]/5 to-[#00A07E]/5 py-12">
-      <div className="container px-4 md:px-6 max-w-lg">
-        <Card className="glass-card rounded-2xl">
-          <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-3xl font-bold text-gray-900">{t("joinUs")}</CardTitle>
-            <CardDescription className="text-gray-600">
+    <div className="register-shell">
+      <div className="register-container">
+        <Card className="register-card">
+          <CardHeader className="register-card-header">
+            <CardTitle className="register-title">{t("joinUs")}</CardTitle>
+            <CardDescription className="register-description">
               {t("step", { step: step.toString(), total: "3" })} -{" "}
               {step === 1 ? t("basicInfo") : step === 2 ? t("orgDetails") : t("termsAndConfirm")}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="register-form">
               {step === 1 && (
                 <>
-                  <div className="space-y-2">
-                    <Label htmlFor="full_name" className="text-gray-700 font-medium">
+                  <div className="register-field">
+                    <Label htmlFor="full_name" className="register-label">
                       {t("fullName")}
                     </Label>
                     <Input
@@ -205,12 +223,12 @@ export default function RegjistrohuPage() {
                       name="full_name"
                       value={formData.full_name}
                       onChange={handleChange}
-                      className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                      className="register-input"
                       required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="text-gray-700 font-medium">
+                  <div className="register-field">
+                    <Label htmlFor="email" className="register-label">
                       {t("email")}
                     </Label>
                     <Input
@@ -220,12 +238,12 @@ export default function RegjistrohuPage() {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder={t("placeholders.email")}
-                      className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                      className="register-input"
                       required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password" className="text-gray-700 font-medium">
+                  <div className="register-field">
+                    <Label htmlFor="password" className="register-label">
                       {t("password")}
                     </Label>
                     <Input
@@ -234,12 +252,12 @@ export default function RegjistrohuPage() {
                       type="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                      className="register-input"
                       required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="text-gray-700 font-medium">
+                  <div className="register-field">
+                    <Label htmlFor="confirmPassword" className="register-label">
                       {t("confirmPassword")}
                     </Label>
                     <Input
@@ -248,12 +266,12 @@ export default function RegjistrohuPage() {
                       type="password"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                      className="register-input"
                       required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="location" className="text-gray-700 font-medium">
+                  <div className="register-field">
+                    <Label htmlFor="location" className="register-label">
                       {t("location")}
                     </Label>
                     <Input
@@ -262,45 +280,47 @@ export default function RegjistrohuPage() {
                       value={formData.location}
                       onChange={handleChange}
                       placeholder={t("placeholders.location")}
-                      className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                      className="register-input"
                       required
                     />
                   </div>
-                  <div className="space-y-3">
-                    <Label className="text-gray-700 font-medium">{t("role")}</Label>
+                  <div className="register-role-section">
+                    <Label className="register-label">{t("role")}</Label>
                     <RadioGroup
                       value={formData.role}
                       onValueChange={(value) => handleRoleChange(value as UserRole)}
-                      className="space-y-3"
+                      className="register-role-list"
                     >
-                      <div className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
+                      <div className="register-role-option">
                         <RadioGroupItem value="Individ" id="individ" />
-                        <Label htmlFor="individ" className="flex-1 cursor-pointer">
-                          <div className="font-medium">{t("roles.individual")}</div>
-                          <div className="text-sm text-gray-500">{t("roles.individualDesc")}</div>
+                        <Label htmlFor="individ" className="register-role-label">
+                          <div className="register-role-name">{t("roles.individual")}</div>
+                          <div className="register-role-description">
+                            {t("roles.individualDesc")}
+                          </div>
                         </Label>
                       </div>
-                      <div className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
+                      <div className="register-role-option">
                         <RadioGroupItem value="OJQ" id="ojq" />
-                        <Label htmlFor="ojq" className="flex-1 cursor-pointer">
-                          <div className="font-medium">{t("roles.ngo")}</div>
-                          <div className="text-sm text-gray-500">{t("roles.ngoDesc")}</div>
+                        <Label htmlFor="ojq" className="register-role-label">
+                          <div className="register-role-name">{t("roles.ngo")}</div>
+                          <div className="register-role-description">{t("roles.ngoDesc")}</div>
                         </Label>
                       </div>
-                      <div className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
+                      <div className="register-role-option">
                         <RadioGroupItem value="Ndërmarrje Sociale" id="ndermarrje" />
-                        <Label htmlFor="ndermarrje" className="flex-1 cursor-pointer">
-                          <div className="font-medium">{t("roles.socialEnterprise")}</div>
-                          <div className="text-sm text-gray-500">
+                        <Label htmlFor="ndermarrje" className="register-role-label">
+                          <div className="register-role-name">{t("roles.socialEnterprise")}</div>
+                          <div className="register-role-description">
                             {t("roles.socialEnterpriseDesc")}
                           </div>
                         </Label>
                       </div>
-                      <div className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
+                      <div className="register-role-option">
                         <RadioGroupItem value="Kompani" id="kompani" />
-                        <Label htmlFor="kompani" className="flex-1 cursor-pointer">
-                          <div className="font-medium">{t("roles.company")}</div>
-                          <div className="text-sm text-gray-500">{t("roles.companyDesc")}</div>
+                        <Label htmlFor="kompani" className="register-role-label">
+                          <div className="register-role-name">{t("roles.company")}</div>
+                          <div className="register-role-description">{t("roles.companyDesc")}</div>
                         </Label>
                       </div>
                     </RadioGroup>
@@ -312,8 +332,8 @@ export default function RegjistrohuPage() {
                 <>
                   {formData.role !== "Individ" ? (
                     <>
-                      <div className="space-y-2">
-                        <Label htmlFor="organization_name" className="text-gray-700 font-medium">
+                      <div className="register-field">
+                        <Label htmlFor="organization_name" className="register-label">
                           {t("orgName")}
                         </Label>
                         <Input
@@ -322,15 +342,12 @@ export default function RegjistrohuPage() {
                           value={formData.organization_name}
                           onChange={handleChange}
                           placeholder={t("placeholders.orgName")}
-                          className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                          className="register-input"
                           required
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label
-                          htmlFor="organization_description"
-                          className="text-gray-700 font-medium"
-                        >
+                      <div className="register-field">
+                        <Label htmlFor="organization_description" className="register-label">
                           {t("orgDesc")}
                         </Label>
                         <Textarea
@@ -339,13 +356,13 @@ export default function RegjistrohuPage() {
                           value={formData.organization_description}
                           onChange={handleChange}
                           placeholder={t("placeholders.orgDesc")}
-                          className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                          className="register-input register-textarea"
                           rows={3}
                           required
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="primary_interest" className="text-gray-700 font-medium">
+                      <div className="register-field">
+                        <Label htmlFor="primary_interest" className="register-label">
                           {t("primaryInterest")}
                         </Label>
                         <Input
@@ -354,12 +371,12 @@ export default function RegjistrohuPage() {
                           value={formData.primary_interest}
                           onChange={handleChange}
                           placeholder={t("placeholders.primaryInterest")}
-                          className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                          className="register-input"
                           required
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="contact_person" className="text-gray-700 font-medium">
+                      <div className="register-field">
+                        <Label htmlFor="contact_person" className="register-label">
                           {t("contactPerson")}
                         </Label>
                         <Input
@@ -368,13 +385,13 @@ export default function RegjistrohuPage() {
                           value={formData.contact_person}
                           onChange={handleChange}
                           placeholder={t("placeholders.contactPersonName")}
-                          className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                          className="register-input"
                           required
                         />
                       </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="contact_email" className="text-gray-700 font-medium">
+                      <div className="register-field">
+                        <Label htmlFor="contact_email" className="register-label">
                           {t("contactEmail")}
                         </Label>
                         <Input
@@ -384,16 +401,16 @@ export default function RegjistrohuPage() {
                           value={formData.contact_email}
                           onChange={handleChange}
                           placeholder={t("placeholders.contactPersonEmail")}
-                          className="rounded-xl border-gray-200 focus:border-[#00C896] focus:ring-[#00C896]"
+                          className="register-input"
                           required
                         />
                       </div>
                     </>
                   ) : (
-                    <div className="text-center py-12">
-                      <div className="w-16 h-16 mx-auto mb-4 rounded-full eco-gradient flex items-center justify-center">
+                    <div className="register-individual-step">
+                      <div className="register-individual-icon">
                         <svg
-                          className="w-8 h-8 text-white"
+                          className="register-individual-icon-svg"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -406,10 +423,8 @@ export default function RegjistrohuPage() {
                           />
                         </svg>
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        {t("readyForNext")}
-                      </h3>
-                      <p className="text-gray-500">{t("noExtraInfo")}</p>
+                      <h3 className="register-individual-title">{t("readyForNext")}</h3>
+                      <p className="register-individual-description">{t("noExtraInfo")}</p>
                     </div>
                   )}
                 </>
@@ -418,57 +433,43 @@ export default function RegjistrohuPage() {
               {step === 3 && (
                 <>
                   <div className="space-y-6">
-                    <div className="flex items-start space-x-3 p-4 rounded-xl border border-gray-200">
+                    <div className="register-checkbox-row">
                       <Checkbox
                         id="terms"
                         name="terms"
                         checked={formData.terms}
-                        onCheckedChange={(checked) =>
-                          setFormData({ ...formData, terms: checked as boolean })
-                        }
+                        onCheckedChange={(checked) => updateFormData({ terms: checked as boolean })}
                         required
-                        className="mt-1"
+                        className="register-checkbox"
                       />
                       <div className="flex-1">
-                        <Label
-                          htmlFor="terms"
-                          className="text-sm font-medium leading-relaxed cursor-pointer"
-                        >
+                        <Label htmlFor="terms" className="register-checkbox-label">
                           {t("agreeTo")}{" "}
-                          <Link
-                            href="/legal/terms"
-                            className="text-[#00C896] hover:text-[#00A07E] underline"
-                          >
+                          <Link href="/legal/terms" className="register-inline-link">
                             {t("termsOfUse")}
                           </Link>{" "}
                           {t("and")}{" "}
-                          <Link
-                            href="/privatesia"
-                            className="text-[#00C896] hover:text-[#00A07E] underline"
-                          >
+                          <Link href="/privatesia" className="register-inline-link">
                             {t("privacyPolicy")}
                           </Link>
                         </Label>
                       </div>
                     </div>
-                    <div className="flex items-start space-x-3 p-4 rounded-xl border border-gray-200">
+                    <div className="register-checkbox-row">
                       <Checkbox
                         id="newsletter"
                         name="newsletter"
                         checked={formData.newsletter}
                         onCheckedChange={(checked) =>
-                          setFormData({ ...formData, newsletter: checked as boolean })
+                          updateFormData({ newsletter: checked as boolean })
                         }
-                        className="mt-1"
+                        className="register-checkbox"
                       />
                       <div className="flex-1">
-                        <Label
-                          htmlFor="newsletter"
-                          className="text-sm font-medium leading-relaxed cursor-pointer"
-                        >
+                        <Label htmlFor="newsletter" className="register-checkbox-label">
                           {t("newsletter")}
                         </Label>
-                        <p className="text-xs text-gray-500 mt-1">{t("newsletterNote")}</p>
+                        <p className="register-checkbox-note">{t("newsletterNote")}</p>
                       </div>
                     </div>
                   </div>
@@ -476,19 +477,19 @@ export default function RegjistrohuPage() {
               )}
 
               {error && (
-                <div className="p-4 rounded-xl bg-red-50 border border-red-200">
-                  <div className="text-sm text-red-800">{error}</div>
+                <div className="register-error">
+                  <div className="register-error-text">{error}</div>
                 </div>
               )}
 
-              <div className="flex justify-between pt-4">
+              <div className="register-actions">
                 {step > 1 && (
                   <Button
                     type="button"
                     variant="outline"
                     onClick={handlePrevStep}
                     disabled={loading}
-                    className="rounded-xl border-gray-200"
+                    className="register-secondary-button"
                   >
                     {t("back")}
                   </Button>
@@ -496,17 +497,13 @@ export default function RegjistrohuPage() {
                 {step < 3 ? (
                   <Button
                     type="button"
-                    className="ml-auto eco-gradient hover:shadow-lg hover:shadow-[#00C896]/25 text-white rounded-xl px-8 py-2 font-semibold transition-all duration-300 hover:scale-[1.02]"
+                    className="register-primary-button"
                     onClick={handleNextStep}
                   >
                     {t("continue")}
                   </Button>
                 ) : (
-                  <Button
-                    type="submit"
-                    className="ml-auto eco-gradient hover:shadow-lg hover:shadow-[#00C896]/25 text-white rounded-xl px-8 py-2 font-semibold transition-all duration-300 hover:scale-[1.02]"
-                    disabled={loading}
-                  >
+                  <Button type="submit" className="register-primary-button" disabled={loading}>
                     {loading ? (
                       <div className="flex items-center">
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
@@ -520,13 +517,10 @@ export default function RegjistrohuPage() {
               </div>
             </form>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-sm text-center text-gray-600">
+          <CardFooter className="register-footer">
+            <div className="register-footer-text">
               {t("alreadyHaveAccount")}{" "}
-              <Link
-                href="/login"
-                className="text-[#00C896] hover:text-[#00A07E] font-medium transition-colors"
-              >
+              <Link href="/login" className="register-inline-link register-footer-link">
                 {t("loginHere")}
               </Link>
             </div>

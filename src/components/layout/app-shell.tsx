@@ -64,13 +64,7 @@ export function AppShell({ children, navItems, ctaLabel, heading, eyebrow }: App
         <div className="absolute bottom-0 -left-20 w-80 h-80 rounded-full bg-teal-100/20 blur-3xl" />
 
         {/* Dot pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.012]"
-          style={{
-            backgroundImage: `radial-gradient(circle, #10b981 1px, transparent 1px)`,
-            backgroundSize: "20px 20px",
-          }}
-        />
+        <div className="eco-dot-pattern-overlay eco-dot-pattern-overlay--compact absolute inset-0 opacity-[0.012]" />
       </div>
 
       <div className="container mx-auto px-4 lg:px-8 py-6 lg:py-8 relative z-10">
