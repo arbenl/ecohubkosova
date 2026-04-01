@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useRef, useState } from "react"
 import { Link } from "@/i18n/routing"
 import { useRouter } from "@/i18n/routing"
 import { useLocale, useTranslations } from "next-intl"
@@ -47,6 +47,7 @@ export default function RegjistrohuPage() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const locale = useLocale() as Locale
+  const nextStepLockRef = useRef(false)
 
   const [formData, setFormData] = useState<FormData>({
     full_name: "",
@@ -96,6 +97,12 @@ export default function RegjistrohuPage() {
    * Performs validation based on the current step.
    */
   const handleNextStep = () => {
+    if (nextStepLockRef.current) {
+      return
+    }
+
+    nextStepLockRef.current = true
+
     if (step === 1) {
       // Step 1 validation: Basic user information
       if (
@@ -106,14 +113,17 @@ export default function RegjistrohuPage() {
         !formData.location
       ) {
         setError(t("errors.fillAll"))
+        nextStepLockRef.current = false
         return
       }
       if (formData.password !== formData.confirmPassword) {
         setError(t("errors.passwordMismatch"))
+        nextStepLockRef.current = false
         return
       }
       if (formData.password.length < 6) {
         setError(t("errors.passwordLength"))
+        nextStepLockRef.current = false
         return
       }
     }
@@ -128,18 +138,23 @@ export default function RegjistrohuPage() {
         !formData.contact_email
       ) {
         setError(t("errors.fillOrg"))
+        nextStepLockRef.current = false
         return
       }
     }
 
     setError(null) // Clear any previous errors
-    setStep((currentStep) => currentStep + 1) // Move to the next step
+    setStep((currentStep) => {
+      nextStepLockRef.current = false
+      return currentStep === step ? currentStep + 1 : currentStep
+    })
   }
 
   /**
    * Handles going back to the previous step in the multi-step registration form.
    */
   const handlePrevStep = () => {
+    nextStepLockRef.current = false
     setStep((currentStep) => currentStep - 1)
     setError(null) // Clear errors when going back
   }
@@ -273,7 +288,6 @@ export default function RegjistrohuPage() {
                     <Label className="register-label">{t("role")}</Label>
                     <RadioGroup
                       value={formData.role}
-                      defaultValue="Individ"
                       onValueChange={(value) => handleRoleChange(value as UserRole)}
                       className="register-role-list"
                     >

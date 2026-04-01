@@ -72,22 +72,22 @@ describe("RegjistrohuPage", () => {
   })
 
   it("advances to the next step when required fields are filled without re-selecting the default role", () => {
-    const { container } = render(<RegjistrohuPage />)
+    render(<RegjistrohuPage />)
 
     act(() => {
-      fireEvent.change(container.querySelector("#full_name")!, {
+      fireEvent.change(screen.getByLabelText("fullName"), {
         target: { name: "full_name", value: "Test User" },
       })
-      fireEvent.change(container.querySelector("#email")!, {
+      fireEvent.change(screen.getByLabelText("email"), {
         target: { name: "email", value: "test@example.com" },
       })
-      fireEvent.change(container.querySelector("#password")!, {
+      fireEvent.change(screen.getByLabelText("password"), {
         target: { name: "password", value: "TestPass123!" },
       })
-      fireEvent.change(container.querySelector("#confirmPassword")!, {
+      fireEvent.change(screen.getByLabelText("confirmPassword"), {
         target: { name: "confirmPassword", value: "TestPass123!" },
       })
-      fireEvent.change(container.querySelector("#location")!, {
+      fireEvent.change(screen.getByLabelText("location"), {
         target: { name: "location", value: "Prishtine" },
       })
     })
