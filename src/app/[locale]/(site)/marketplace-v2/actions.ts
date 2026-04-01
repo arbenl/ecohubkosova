@@ -4,6 +4,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { redirect } from "@/i18n/routing"
 import { getTranslations } from "next-intl/server"
+import { isRedirectError } from "next/dist/client/components/redirect-error"
 import { listingFormSchema, type ListingFormInput } from "@/validation/listings"
 import { db } from "@/lib/drizzle"
 import { ecoListings, ecoListingMedia, ecoOrganizations } from "@/db/schema/marketplace-v2"
@@ -134,6 +135,9 @@ export async function createListingAction(formData: ListingFormInput, locale: st
     }
     redirect({ href: `/marketplace?message=${encodeURIComponent(t("createSuccess"))}`, locale })
   } catch (error: any) {
+    if (isRedirectError(error)) {
+      throw error
+    }
     console.error("Server Action Error (createListingAction):", error)
     return { error: error.message || t("createError") }
   }
@@ -252,6 +256,9 @@ export async function updateListingAction(
       locale,
     })
   } catch (error: any) {
+    if (isRedirectError(error)) {
+      throw error
+    }
     console.error("Server Action Error (updateListingAction):", error)
     return { error: error.message || t("updateError") }
   }

@@ -70,9 +70,8 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
         onSubmit={async (e) => {
           e.preventDefault()
 
-          // Upload selected files if any
+          // Upload selected files first so the validated payload includes final media metadata.
           if (media.state.selectedFiles.length > 0) {
-            // Use title + timestamp as listing identifier for storage
             const listingKey = `temp-${Date.now()}`
             const uploadResult = await media.handleUploadSelected(listingKey)
             if (!uploadResult.success) {
@@ -80,21 +79,18 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
             }
           }
 
-          // Build media data with primary and sort_order
           const mediaData = media.state.uploadedFiles.map((file, index) => ({
             ...file,
             is_primary: index === media.state.primaryIndex,
             sort_order: index,
           }))
 
-          // Create new form data with media
           const submissionData: ListingFormInput = {
             ...formData,
             media: mediaData,
-          } as ListingFormInput
+          }
 
-          // Call original submit
-          await submit(submissionData)
+          await handleSubmit(e, submissionData)
         }}
         className="space-y-6"
       >

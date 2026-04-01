@@ -38,9 +38,9 @@ export function useListingForm({
     media: initialData?.media ?? [],
   })
 
-  const [fieldErrors, setFieldErrors] = useState<
-    Partial<Record<keyof ListingFormInput, string>>
-  >({})
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof ListingFormInput, string>>>(
+    {}
+  )
 
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -49,13 +49,13 @@ export function useListingForm({
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       const { name, value, type } = event.target
-      
+
       // Handle checkbox arrays (eco_labels, tags)
       if (type === "checkbox" && (name === "eco_labels" || name === "tags")) {
         const currentArray = Array.isArray(formData[name as keyof ListingFormInput])
           ? (formData[name as keyof ListingFormInput] as string[])
           : []
-        
+
         if ((event.target as HTMLInputElement).checked) {
           setFormData((prev) => ({
             ...prev,
@@ -70,20 +70,21 @@ export function useListingForm({
       } else {
         setFormData((prev) => ({ ...prev, [name]: value || undefined }))
       }
-      
+
       setFieldErrors((prev) => ({ ...prev, [name]: undefined }))
     },
     [formData]
   )
 
   const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
+    async (event: React.FormEvent<HTMLFormElement>, overrideData?: ListingFormInput) => {
       event.preventDefault()
       setSaving(true)
       setError(null)
       setSuccess(null)
 
-      const parsed = listingFormSchema.safeParse(formData)
+      const payload = overrideData ?? formData
+      const parsed = listingFormSchema.safeParse(payload)
       if (!parsed.success) {
         const { fieldErrors } = parsed.error.flatten()
         setFieldErrors(fieldErrors as Partial<Record<keyof ListingFormInput, string>>)
