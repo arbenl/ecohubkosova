@@ -127,7 +127,7 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/swagger-ui-express": "^4.1.8",
-    "@upstash/context7-mcp": "^1.0.29",
+    "@upstash/context7-mcp": "^2.1.6",
     "@vitest/coverage-v8": "^4.0.18",
     "baseline-browser-mapping": "^2.10.0",
     "drizzle-kit": "0.31.9",
