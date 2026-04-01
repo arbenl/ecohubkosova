@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { act, fireEvent, render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import RegjistrohuPage from "./page"
 
@@ -69,5 +69,31 @@ describe("RegjistrohuPage", () => {
     expect(screen.getByText("confirmPassword")).toBeInTheDocument()
     // Button
     expect(screen.getByText("continue")).toBeInTheDocument()
+  })
+
+  it("advances to the next step when required fields are filled without re-selecting the default role", () => {
+    const { container } = render(<RegjistrohuPage />)
+
+    act(() => {
+      fireEvent.change(container.querySelector("#full_name")!, {
+        target: { name: "full_name", value: "Test User" },
+      })
+      fireEvent.change(container.querySelector("#email")!, {
+        target: { name: "email", value: "test@example.com" },
+      })
+      fireEvent.change(container.querySelector("#password")!, {
+        target: { name: "password", value: "TestPass123!" },
+      })
+      fireEvent.change(container.querySelector("#confirmPassword")!, {
+        target: { name: "confirmPassword", value: "TestPass123!" },
+      })
+      fireEvent.change(container.querySelector("#location")!, {
+        target: { name: "location", value: "Prishtine" },
+      })
+    })
+
+    fireEvent.click(screen.getByText("continue"))
+
+    expect(screen.getByText("readyForNext")).toBeInTheDocument()
   })
 })

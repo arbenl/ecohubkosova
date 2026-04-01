@@ -9,6 +9,7 @@ import {
   Leaf,
   Users,
   LogIn,
+  ArrowRight,
 } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 
@@ -21,92 +22,191 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     <>
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-24 md:py-32 relative overflow-hidden">
-          <div className="absolute inset-0 eco-gradient-light"></div>
-          <div className="container px-4 md:px-6 relative">
-            <div className="flex flex-col items-center text-center space-y-10 animate-fade-in">
-              <div className="inline-flex items-center rounded-full glass-card px-4 py-2 text-sm font-semibold transition-all duration-300 hover:scale-105">
-                <Sparkles className="w-4 h-4 mr-2 text-[#00C896]" />
-                {t("hero.supportedBy")}
-              </div>
+        <section className="home-hero-section">
+          <div className="home-hero-backdrop" />
+          <div className="container home-hero-container">
+            <div className="home-hero-shell">
+              <div className="home-hero-grid">
+                <div className="home-hero-copy animate-slide-in-left">
+                  <div className="home-hero-eyebrow">
+                    <Sparkles className="home-hero-eyebrow-icon" />
+                    {t("hero.supportedBy")}
+                  </div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-                {t("hero.titleStart")}{" "}
-                <span className="bg-gradient-to-r from-[#00C896] to-[#00A07E] bg-clip-text text-transparent font-extrabold">
-                  {t("hero.titleEnd")}
-                </span>
-              </h1>
+                  <h1 className="home-hero-title">
+                    {t("hero.titleStart")}{" "}
+                    <span className="home-hero-title-accent">{t("hero.titleEnd")}</span>
+                  </h1>
 
-              <p className="max-w-4xl text-xl md:text-2xl text-gray-600 leading-relaxed">
-                {t("hero.subtitle")}
-              </p>
+                  <p className="home-hero-subtitle">{t("hero.subtitle")}</p>
 
-              <div className="flex flex-col sm:flex-row gap-6 pt-4">
-                <Button
-                  size="lg"
-                  className="eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
-                  asChild
-                >
-                  <Link href="/register">
-                    <UserPlus className="mr-2 h-5 w-5" />
-                    {t("hero.ctaRegister")}
-                  </Link>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105 border-2 border-[#00C896] text-[#00C896] hover:bg-[#00C896] hover:text-white"
-                  asChild
-                >
-                  <Link href="/marketplace">
-                    <Search className="mr-2 h-5 w-5" />
-                    {t("hero.ctaMarketplace")}
-                  </Link>
-                </Button>
-              </div>
+                  <div className="home-hero-actions">
+                    <Button size="lg" className="home-hero-primary-cta" asChild>
+                      <Link href="/register">
+                        <UserPlus className="mr-2 h-5 w-5" />
+                        {t("hero.ctaRegister")}
+                      </Link>
+                    </Button>
+                    <Button size="lg" variant="outline" className="home-hero-secondary-cta" asChild>
+                      <Link href="/marketplace">
+                        <Search className="mr-2 h-5 w-5" />
+                        {t("hero.ctaMarketplace")}
+                      </Link>
+                    </Button>
+                  </div>
 
-              {/* Auth Links - Always visible, no auth state checking */}
-              <div className="flex items-center gap-4 pt-6">
-                <span className="text-gray-500 text-sm">{t("hero.haveAccount")}</span>
-                <Button
-                  variant="link"
-                  className="text-[#00C896] hover:text-[#00A07E] p-0 h-auto font-semibold"
-                  asChild
-                >
-                  <Link href="/login">
-                    <LogIn className="mr-1 h-4 w-4" />
-                    {t("hero.signIn")}
-                  </Link>
-                </Button>
+                  <div className="home-hero-signin-row">
+                    <span>{t("hero.haveAccount")}</span>
+                    <Button variant="link" className="home-hero-signin-link" asChild>
+                      <Link href="/login">
+                        <LogIn className="mr-1 h-4 w-4" />
+                        {t("hero.signIn")}
+                      </Link>
+                    </Button>
+                  </div>
+
+                  <div className="home-hero-feature-grid">
+                    <div className="home-hero-feature-card">
+                      <p className="home-hero-feature-title">{t("howItWorks.step1Title")}</p>
+                      <p className="home-hero-feature-body">{t("howItWorks.step1Body")}</p>
+                    </div>
+                    <div className="home-hero-feature-card">
+                      <p className="home-hero-feature-title">{t("howItWorks.step2Title")}</p>
+                      <p className="home-hero-feature-body">{t("howItWorks.step2Body")}</p>
+                    </div>
+                    <div className="home-hero-feature-card">
+                      <p className="home-hero-feature-title">{t("howItWorks.step3Title")}</p>
+                      <p className="home-hero-feature-body">{t("howItWorks.step3Body")}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="home-hero-visual animate-slide-in-right">
+                  <div className="home-hero-main-panel">
+                    <div className="home-hero-panel-header">
+                      <div className="home-hero-panel-pill">{t("marketplace.title")}</div>
+                      <Leaf className="home-hero-panel-icon" />
+                    </div>
+
+                    <div className="home-hero-panel-grid">
+                      <div className="home-hero-highlight-card">
+                        <div className="home-hero-highlight-visual">
+                          <div className="home-hero-highlight-badge">
+                            <ShoppingCart className="h-4 w-4" />
+                            {t("marketplace.forSaleTitle")}
+                          </div>
+                        </div>
+                        <h3 className="home-hero-highlight-title">{t("marketplace.title")}</h3>
+                        <p className="home-hero-highlight-body">{t("marketplace.subtitle")}</p>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          className="home-hero-highlight-cta"
+                          asChild
+                        >
+                          <Link href="/marketplace">
+                            {t("hero.ctaMarketplace")}
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </div>
+
+                      <div className="home-hero-mini-grid">
+                        <div className="home-hero-mini-card">
+                          <div className="home-hero-mini-header">
+                            <div className="home-hero-mini-icon">
+                              <ShoppingCart className="h-5 w-5" />
+                            </div>
+                            <div>
+                              <p className="home-hero-mini-title">
+                                {t("marketplace.forSaleTitle")}
+                              </p>
+                              <p className="home-hero-mini-caption">
+                                {t("marketplace.forSaleCta")}
+                              </p>
+                            </div>
+                          </div>
+                          <p className="home-hero-mini-body">{t("marketplace.forSaleBody")}</p>
+                        </div>
+
+                        <div className="home-hero-mini-card">
+                          <div className="home-hero-mini-header">
+                            <div className="home-hero-mini-icon">
+                              <Users className="h-5 w-5" />
+                            </div>
+                            <div>
+                              <p className="home-hero-mini-title">{t("marketplace.wantedTitle")}</p>
+                              <p className="home-hero-mini-caption">{t("marketplace.wantedCta")}</p>
+                            </div>
+                          </div>
+                          <p className="home-hero-mini-body">{t("marketplace.wantedBody")}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="home-hero-floating-panel">
+                    <p className="home-hero-floating-eyebrow">{t("howItWorks.title")}</p>
+                    <p className="home-hero-floating-title">{t("howItWorks.subtitle")}</p>
+                    <div className="home-hero-floating-list">
+                      <div className="home-hero-floating-item">
+                        <div className="home-hero-floating-icon">
+                          <UserPlus className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="home-hero-floating-item-title">
+                            {t("howItWorks.step1Title")}
+                          </p>
+                          <p className="home-hero-floating-item-body">{t("howItWorks.step1Cta")}</p>
+                        </div>
+                      </div>
+                      <div className="home-hero-floating-item">
+                        <div className="home-hero-floating-icon">
+                          <Search className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="home-hero-floating-item-title">
+                            {t("howItWorks.step2Title")}
+                          </p>
+                          <p className="home-hero-floating-item-body">{t("howItWorks.step2Cta")}</p>
+                        </div>
+                      </div>
+                      <div className="home-hero-floating-item">
+                        <div className="home-hero-floating-icon">
+                          <MessageCircle className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="home-hero-floating-item-title">
+                            {t("howItWorks.step3Title")}
+                          </p>
+                          <p className="home-hero-floating-item-body">{t("howItWorks.step3Cta")}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* How It Works Section */}
-        <section className="py-24 relative">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center text-center space-y-6 mb-16 animate-slide-up">
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
-                {t("howItWorks.title")}
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl leading-relaxed">
-                {t("howItWorks.subtitle")}
-              </p>
+        <section className="home-section">
+          <div className="container home-section-container">
+            <div className="home-section-heading animate-slide-up">
+              <h2 className="home-section-title">{t("howItWorks.title")}</h2>
+              <p className="home-section-subtitle">{t("howItWorks.subtitle")}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="group animate-slide-in-left">
-                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100">
-                  <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <div className="home-steps-grid">
+              <div className="animate-slide-in-left">
+                <div className="home-step-card home-step-card--blue">
+                  <div className="home-step-icon home-step-icon--blue">
                     <UserPlus className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">{t("howItWorks.step1Title")}</h3>
-                  <p className="text-gray-600 leading-relaxed">{t("howItWorks.step1Body")}</p>
-                  <Button
-                    className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 hover:shadow-xl hover:shadow-blue-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
-                    asChild
-                  >
+                  <h3 className="home-step-title">{t("howItWorks.step1Title")}</h3>
+                  <p className="home-step-body">{t("howItWorks.step1Body")}</p>
+                  <Button className="home-step-cta home-step-cta--blue" asChild>
                     <Link href="/marketplace">
                       <UserPlus className="mr-2 h-4 w-4" />
                       {t("howItWorks.step1Cta")}
@@ -115,17 +215,14 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 </div>
               </div>
 
-              <div className="group animate-slide-up">
-                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100">
-                  <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+              <div className="animate-slide-up">
+                <div className="home-step-card home-step-card--purple">
+                  <div className="home-step-icon home-step-icon--purple">
                     <Search className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">{t("howItWorks.step2Title")}</h3>
-                  <p className="text-gray-600 leading-relaxed">{t("howItWorks.step2Body")}</p>
-                  <Button
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 hover:shadow-xl hover:shadow-purple-500/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
-                    asChild
-                  >
+                  <h3 className="home-step-title">{t("howItWorks.step2Title")}</h3>
+                  <p className="home-step-body">{t("howItWorks.step2Body")}</p>
+                  <Button className="home-step-cta home-step-cta--purple" asChild>
                     <Link href="/partners">
                       <Search className="mr-2 h-4 w-4" />
                       {t("howItWorks.step2Cta")}
@@ -134,17 +231,14 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 </div>
               </div>
 
-              <div className="group animate-slide-in-right">
-                <div className="glass-card p-8 rounded-2xl hover-lift text-center space-y-6 h-full bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100">
-                  <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+              <div className="animate-slide-in-right">
+                <div className="home-step-card home-step-card--emerald">
+                  <div className="home-step-icon home-step-icon--emerald">
                     <MessageCircle className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">{t("howItWorks.step3Title")}</h3>
-                  <p className="text-gray-600 leading-relaxed">{t("howItWorks.step3Body")}</p>
-                  <Button
-                    className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
-                    asChild
-                  >
+                  <h3 className="home-step-title">{t("howItWorks.step3Title")}</h3>
+                  <p className="home-step-body">{t("howItWorks.step3Body")}</p>
+                  <Button className="home-step-cta home-step-cta--emerald" asChild>
                     <Link href="/marketplace">
                       <MessageCircle className="mr-2 h-4 w-4" />
                       {t("howItWorks.step3Cta")}
@@ -157,33 +251,24 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         </section>
 
         {/* Marketplace Overview */}
-        <section className="py-24 bg-gradient-to-br from-white to-gray-50">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center text-center space-y-6 mb-16 animate-fade-in">
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
-                {t("marketplace.title")}
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl leading-relaxed">
-                {t("marketplace.subtitle")}
-              </p>
+        <section className="home-marketplace-section">
+          <div className="container home-section-container">
+            <div className="home-section-heading animate-fade-in">
+              <h2 className="home-section-title">{t("marketplace.title")}</h2>
+              <p className="home-section-subtitle">{t("marketplace.subtitle")}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="group animate-slide-in-left">
-                <div className="glass-card p-8 rounded-2xl hover-lift space-y-6 h-full bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <div className="home-marketplace-grid">
+              <div className="animate-slide-in-left">
+                <div className="home-marketplace-card">
+                  <div className="home-marketplace-header">
+                    <div className="home-marketplace-icon">
                       <ShoppingCart className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900">
-                      {t("marketplace.forSaleTitle")}
-                    </h3>
+                    <h3 className="home-marketplace-card-title">{t("marketplace.forSaleTitle")}</h3>
                   </div>
-                  <p className="text-gray-600 leading-relaxed">{t("marketplace.forSaleBody")}</p>
-                  <Button
-                    className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
-                    asChild
-                  >
+                  <p className="home-marketplace-card-body">{t("marketplace.forSaleBody")}</p>
+                  <Button className="home-marketplace-cta" asChild>
                     <Link href="/marketplace?lloji=shes">
                       <Leaf className="mr-2 h-4 w-4" />
                       {t("marketplace.forSaleCta")}
@@ -192,21 +277,16 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 </div>
               </div>
 
-              <div className="group animate-slide-in-right">
-                <div className="glass-card p-8 rounded-2xl hover-lift space-y-6 h-full bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+              <div className="animate-slide-in-right">
+                <div className="home-marketplace-card">
+                  <div className="home-marketplace-header">
+                    <div className="home-marketplace-icon">
                       <Users className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900">
-                      {t("marketplace.wantedTitle")}
-                    </h3>
+                    <h3 className="home-marketplace-card-title">{t("marketplace.wantedTitle")}</h3>
                   </div>
-                  <p className="text-gray-600 leading-relaxed">{t("marketplace.wantedBody")}</p>
-                  <Button
-                    className="w-full eco-gradient hover:shadow-xl hover:shadow-[#00C896]/25 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 hover:scale-105"
-                    asChild
-                  >
+                  <p className="home-marketplace-card-body">{t("marketplace.wantedBody")}</p>
+                  <Button className="home-marketplace-cta" asChild>
                     <Link href="/marketplace?lloji=blej">
                       <Search className="mr-2 h-4 w-4" />
                       {t("marketplace.wantedCta")}
