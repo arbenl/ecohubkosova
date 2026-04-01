@@ -75,7 +75,7 @@ export async function createOrganizationAction(
   // Validate input
   const parsed = organizationOnboardingSchema.safeParse(formData)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? t("form.createError") }
+    return { error: parsed.error.issues[0]?.message ?? t("form.createError") }
   }
 
   const result = await createOrganizationForUser(user.id, parsed.data)

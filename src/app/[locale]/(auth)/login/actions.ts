@@ -62,9 +62,9 @@ export async function signIn(prevState: unknown, formData: FormData): Promise<Si
   if (!parsed.success) {
     logAuthAction("signIn", "Validation failed", {
       email,
-      errors: parsed.error.errors.map((e) => e.message),
+      errors: parsed.error.issues.map((e) => e.message),
     })
-    return { message: parsed.error.errors[0]?.message ?? "Të dhëna të pavlefshme." }
+    return { message: parsed.error.issues[0]?.message ?? "Të dhëna të pavlefshme." }
   }
 
   const { data, error } = await supabase.auth.signInWithPassword({

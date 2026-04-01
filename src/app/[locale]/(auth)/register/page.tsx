@@ -175,7 +175,8 @@ export default function RegjistrohuPage() {
     if (result.error) {
       setError(result.error)
     } else {
-      router.push(`/success`) // Redirect to success page upon successful registration
+      const typeParam = formData.role === "Individ" ? "user" : "org"
+      router.push(`/success?type=${typeParam}`) // Redirect to success page upon successful registration
     }
     setLoading(false) // Reset loading state
   }

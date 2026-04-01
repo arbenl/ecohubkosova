@@ -31,7 +31,7 @@ export async function createListing(formData: FormPayload) {
   try {
     const parsed = listingCreateSchema.safeParse(formData)
     if (!parsed.success) {
-      return { error: parsed.error.errors[0]?.message || "Formulari ka të dhëna të pavlefshme." }
+      return { error: parsed.error.issues[0]?.message || "Formulari ka të dhëna të pavlefshme." }
     }
 
     const result = await createUserListing(user.id, parsed.data)

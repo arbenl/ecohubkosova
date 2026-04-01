@@ -24,10 +24,10 @@ export const ai = genkit({
 export const simpleGeminiFlow = ai.defineFlow(
   {
     name: "simpleGeminiFlow",
-    inputSchema: z.string().describe("The prompt for the model"),
-    outputSchema: z.string().describe("The model's response"),
+    inputSchema: z.string().describe("The prompt for the model") as any,
+    outputSchema: z.string().describe("The model's response") as any,
   },
-  async (prompt) => {
+  async (prompt: string) => {
     const response = await ai.generate({
       model: "gemini-2.5-pro", // Using the model specified by the user
       prompt: prompt,

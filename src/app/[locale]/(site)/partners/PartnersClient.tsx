@@ -96,10 +96,9 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
     setSelectedCity(city)
   }
 
-  const CTA_TARGET_FALLBACK = "/dashboard"
-  const ctaHref = user?.id
-    ? CTA_TARGET_FALLBACK
-    : `/login?next=${encodeURIComponent(CTA_TARGET_FALLBACK)}`
+  const CTA_TARGET_LOGGED_IN = "/my/organization"
+  const CTA_TARGET_FALLBACK = "/my/organization"
+  const ctaHref = user?.id ? CTA_TARGET_LOGGED_IN : `/register`
 
   const stats = useMemo(() => {
     const totalOrgs = partners.length
@@ -328,7 +327,7 @@ export function PartnersClient({ locale, partners, roleLabels, initialCity }: Pa
           <p className="text-sm text-emerald-800">{t("cta.body")}</p>
         </div>
         <Link
-          href="/dashboard"
+          href="/my/organization"
           className="rounded-full bg-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 transition"
         >
           {t("cta.button")}

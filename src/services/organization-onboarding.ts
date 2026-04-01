@@ -101,6 +101,32 @@ export async function createOrganizationForUser(
       return { error: "Nuk u arrit të krijohet organizata." }
     }
 
+    // Send admin notification asynchronously
+    try {
+      const { resend, isResendConfigured } = await import("@/lib/resend")
+      if (isResendConfigured && resend) {
+        await resend.emails.send({
+          from: "EcoHub Kosova <noreply@ecohub.app>",
+          to: process.env.ADMIN_EMAIL || "info@ecohub-kosova.com",
+          subject: `New pending organization: ${input.name}`,
+          html: `
+            <h2>New Organization Created via Dashboard</h2>
+            <p>A new organization has been created and is currently pending approval.</p>
+            <ul>
+              <li><strong>Name:</strong> ${input.name}</li>
+              <li><strong>Type:</strong> ${input.type}</li>
+              <li><strong>Email:</strong> ${input.contact_email}</li>
+              <li><strong>Person:</strong> ${input.contact_person}</li>
+              <li><strong>Location:</strong> ${input.location}</li>
+            </ul>
+            <a href="https://ecohub-kosova.com/admin">Requires Admin Approval</a>
+          `,
+        })
+      }
+    } catch (emailError) {
+      console.error("Failed to send admin notification email:", emailError)
+    }
+
     return { data: { organizationId: createdOrgId } }
   } catch (error) {
     console.error("[organization-onboarding] createOrganizationForUser failed:", error)

@@ -6,7 +6,8 @@ import { redirect } from "@/i18n/routing"
 import { getTranslations } from "next-intl/server"
 import { listingFormSchema, type ListingFormInput } from "@/validation/listings"
 import { db } from "@/lib/drizzle"
-import { ecoListings, ecoListingMedia } from "@/db/schema/marketplace-v2"
+import { ecoListings, ecoListingMedia, ecoOrganizations } from "@/db/schema/marketplace-v2"
+import { organizationMembers } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { isMarketplaceV2WritesEnabled } from "@/lib/env"
 
@@ -40,10 +41,33 @@ export async function createListingAction(formData: ListingFormInput, locale: st
 
   const parsed = listingFormSchema.safeParse(formData)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? t("createError") }
+    return { error: parsed.error.issues[0]?.message ?? t("createError") }
   }
 
   const payload = parsed.data
+
+  // Resolve the user's eco organization to link the listing
+  let resolvedEcoOrgId: string | null = null
+  try {
+    const memberRows = await db
+      .get()
+      .select({ organization_id: organizationMembers.organization_id })
+      .from(organizationMembers)
+      .where(eq(organizationMembers.user_id, user.id))
+      .limit(1)
+
+    if (memberRows[0]?.organization_id) {
+      const ecoOrgRows = await db
+        .get()
+        .select({ id: ecoOrganizations.id })
+        .from(ecoOrganizations)
+        .where(eq(ecoOrganizations.organization_id, memberRows[0].organization_id))
+        .limit(1)
+      resolvedEcoOrgId = ecoOrgRows[0]?.id ?? null
+    }
+  } catch (err) {
+    console.warn("[createListingAction] Could not resolve eco org id:", err)
+  }
 
   try {
     warnIfV2FlagDisabled()
@@ -70,6 +94,7 @@ export async function createListingAction(formData: ListingFormInput, locale: st
         eco_score: payload.eco_score ? parseInt(payload.eco_score.toString()) : null,
         tags: payload.tags.length > 0 ? payload.tags : [],
         category_id: payload.category_id,
+        organization_id: resolvedEcoOrgId,
         created_by_user_id: user.id,
         status: "DRAFT" as any,
         visibility: "PRIVATE",
@@ -140,7 +165,7 @@ export async function updateListingAction(
 
   const parsed = listingFormSchema.safeParse(formData)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0]?.message ?? t("updateError") }
+    return { error: parsed.error.issues[0]?.message ?? t("updateError") }
   }
 
   const payload = parsed.data

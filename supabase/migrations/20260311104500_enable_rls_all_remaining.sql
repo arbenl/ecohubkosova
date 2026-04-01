@@ -1,0 +1,53 @@
+-- Enable RLS on all remaining public tables to satisfy Supabase Security Advisor
+-- Since these tables are not used via the Data API, we do not need to add policies.
+-- Deny-by-default (no policies) will secure them from unauthorized access.
+
+ALTER TABLE public."verification" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."account" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."session" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."tenant_settings" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."membership_plans" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."membership_family_members" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."user_notification_preferences" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."claim_documents" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."claim_messages" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."claim_stage_history" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."crm_leads" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."crm_activities" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."crm_deals" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."leads" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."agent_clients" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."agent_commissions" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."agent_settings" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."referrals" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."service_usage" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."service_requests" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."partner_discount_usage" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."lead_downloads" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."notifications" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."email_campaign_logs" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."member_notes" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."audit_log" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."automation_logs" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."engagement_email_sends" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."nps_survey_tokens" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."nps_survey_responses" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."policies" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."webhook_events" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."user_roles" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."subscriptions" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."branches" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."member_leads" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."membership_cards" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."claim_tracking_tokens" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."claim" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."tenants" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."claim_counters" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."member_counters" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."claim_threads" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."document_access_log" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."documents" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."share_packs" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."seed_meta" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."lead_payment_attempts" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public."user" ENABLE ROW LEVEL SECURITY;

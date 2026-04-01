@@ -4,7 +4,15 @@ import { NextRequest, NextResponse } from "next/server"
 import createIntlMiddleware from "next-intl/middleware"
 import { defaultLocale, deriveLocaleFromPath, locales } from "./src/lib/locale"
 
-const PROTECTED_ROUTES = ["/dashboard", "/profile", "/admin", "/settings", "/listings", "/my"]
+const PROTECTED_ROUTES = [
+  "/dashboard",
+  "/profile",
+  "/admin",
+  "/settings",
+  "/listings",
+  "/my",
+  "/marketplace/add",
+]
 const AUTH_ROUTES = ["/login", "/register"]
 
 // Create the next-intl middleware

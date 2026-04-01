@@ -1,10 +1,20 @@
 import { Suspense } from "react"
 import { getTranslations, getLocale, setRequestLocale } from "next-intl/server"
-import { Heart, Briefcase, User, LayoutGrid, Bell, ArrowUpRight, ShoppingCart } from "lucide-react"
+import {
+  Heart,
+  Briefcase,
+  User,
+  LayoutGrid,
+  Bell,
+  ArrowUpRight,
+  ShoppingCart,
+  AlertTriangle,
+} from "lucide-react"
 import { Link } from "@/i18n/routing"
 import { getUserStats } from "./actions"
 import type { UserStats } from "./actions"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { getServerUser } from "@/lib/supabase/server"
 
@@ -39,6 +49,7 @@ async function DashboardContent({ locale, t }: { locale: string; t: any }) {
   const defaultStats: UserStats = {
     savedListings: 0,
     organizations: 0,
+    pendingOrganizations: 0,
     myListings: 0,
   }
 
@@ -114,15 +125,31 @@ async function DashboardContent({ locale, t }: { locale: string; t: any }) {
         <h2 className="text-2xl font-bold tracking-tight text-gray-900 mb-6">
           {t("alerts.title")}
         </h2>
-        <Card className="rounded-2xl border border-gray-100 bg-white shadow-sm">
-          <CardContent className="p-6 flex items-center justify-center text-center">
-            <div className="space-y-2">
-              <Bell className="h-8 w-8 text-gray-400 mx-auto" />
-              <p className="text-sm font-medium text-gray-700">{t("alerts.noNewAlerts")}</p>
-              <p className="text-xs text-gray-500">{t("alerts.description")}</p>
-            </div>
-          </CardContent>
-        </Card>
+        {stats.pendingOrganizations > 0 ? (
+          <Alert variant="destructive" className="bg-amber-50 text-amber-900 border-amber-200">
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
+            <AlertTitle className="text-amber-900 font-semibold">
+              {locale === "sq"
+                ? "Organizatë në pritje të aprovimit"
+                : "Organization Pending Approval"}
+            </AlertTitle>
+            <AlertDescription className="text-amber-800">
+              {locale === "sq"
+                ? `Keni ${stats.pendingOrganizations} organizatë(a) që janë në pritje të aprovimit nga administratori.`
+                : `You have ${stats.pendingOrganizations} organization(s) pending admin approval.`}
+            </AlertDescription>
+          </Alert>
+        ) : (
+          <Card className="rounded-2xl border border-gray-100 bg-white shadow-sm">
+            <CardContent className="p-6 flex items-center justify-center text-center">
+              <div className="space-y-2">
+                <Bell className="h-8 w-8 text-gray-400 mx-auto" />
+                <p className="text-sm font-medium text-gray-700">{t("alerts.noNewAlerts")}</p>
+                <p className="text-xs text-gray-500">{t("alerts.description")}</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </section>
     </div>
   )

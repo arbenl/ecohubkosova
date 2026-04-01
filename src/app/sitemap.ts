@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Generate URLs for all static pages in both locales
   const staticUrls: MetadataRoute.Sitemap = staticPages.flatMap((page) =>
     locales.map((locale) => ({
-      url: `${baseUrl}/${locale}${page.path}`,
+      url: `${baseUrl}/` + locale + `${page.path}`,
       lastModified: new Date(),
       changeFrequency: page.changeFrequency,
       priority: page.priority,
@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (listings) {
       listingUrls = listings.flatMap((listing) =>
         locales.map((locale) => ({
-          url: `${baseUrl}/${locale}/marketplace/${listing.id}`,
+          url: `${baseUrl}/` + locale + `/marketplace/${listing.id}`,
           lastModified: listing.created_at ? new Date(listing.created_at) : new Date(),
           changeFrequency: "weekly" as const,
           priority: 0.6,
@@ -78,7 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (articles) {
       articleUrls = articles.flatMap((article) =>
         locales.map((locale) => ({
-          url: `${baseUrl}/${locale}/knowledge/${article.id}`,
+          url: `${baseUrl}/` + locale + `/knowledge/${article.id}`,
           lastModified: article.created_at ? new Date(article.created_at) : new Date(),
           changeFrequency: "monthly" as const,
           priority: 0.5,
@@ -102,7 +102,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (organizations) {
       organizationUrls = organizations.flatMap((org) =>
         locales.map((locale) => ({
-          url: `${baseUrl}/${locale}/eco-organizations/${org.id}`,
+          url: `${baseUrl}/` + locale + `/eco-organizations/${org.id}`,
           lastModified: org.created_at ? new Date(org.created_at) : new Date(),
           changeFrequency: "monthly" as const,
           priority: 0.5,

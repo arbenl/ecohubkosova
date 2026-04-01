@@ -23,7 +23,9 @@
         "verified": "E verifikuar",
         "pending": "Në pritje të verifikimit",
         "unverified": "E paverifikuar"
-      }
+      },
+      "pendingApprovalTitle": "Në pritje të aprovimit",
+      "pendingApprovalMessage": "Organizata juaj është aktualisht në pritje të aprovimit nga administratori. Nuk do të jetë e dukshme publikisht derisa të aprovohet."
     },
     "actions": {
       "viewPublicProfile": "Shiko profilin publik",

@@ -23,7 +23,9 @@
         "verified": "Verified",
         "pending": "Pending Verification",
         "unverified": "Unverified"
-      }
+      },
+      "pendingApprovalTitle": "Pending Approval",
+      "pendingApprovalMessage": "Your organization is currently pending admin approval. It will not be publicly visible and you may be restricted from certain actions until it is approved."
     },
     "actions": {
       "viewPublicProfile": "View public profile",

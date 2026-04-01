@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Audit logs are viewable by admins only" ON audit_logs;

@@ -52,7 +52,7 @@ export function generatePageMetadata({
   noIndex = false,
 }: PageMetadataParams): Metadata {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ecohubkosova.com"
-  const url = `${baseUrl}/${locale}${path}`
+  const url = `${baseUrl}/` + locale + `${path}`
   const imageUrl = image.startsWith("http") ? image : `${baseUrl}${image}`
   const fullTitle = title === SITE_NAME ? title : `${title} | ${SITE_NAME}`
 

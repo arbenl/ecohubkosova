@@ -30,7 +30,9 @@ export async function registerUser(formData: RegistrationFormData) {
   try {
     const parsed = registrationSchema.safeParse(formData)
     if (!parsed.success) {
-      return { error: parsed.error.errors[0]?.message || "Të dhënat e regjistrimit nuk janë të vlefshme." }
+      return {
+        error: parsed.error.issues[0]?.message || "Të dhënat e regjistrimit nuk janë të vlefshme.",
+      }
     }
     const payload = parsed.data
 
@@ -108,6 +110,34 @@ export async function registerUser(formData: RegistrationFormData) {
     } catch (cookieError) {
       // Session versioning is optional, don't fail registration if it fails
       console.warn("Failed to set session version cookie:", cookieError)
+    }
+
+    // Send admin notification asynchronously
+    if (payload.role !== "Individ") {
+      try {
+        const { resend, isResendConfigured } = await import("@/lib/resend")
+        if (isResendConfigured && resend) {
+          await resend.emails.send({
+            from: "EcoHub Kosova <noreply@ecohub.app>",
+            to: process.env.ADMIN_EMAIL || "info@ecohub-kosova.com",
+            subject: `New pending organization: ${payload.organization_name}`,
+            html: `
+              <h2>New Organization Registered</h2>
+              <p>A new organization has registered and is currently pending approval.</p>
+              <ul>
+                <li><strong>Name:</strong> ${payload.organization_name}</li>
+                <li><strong>Type:</strong> ${payload.role}</li>
+                <li><strong>Email:</strong> ${payload.contact_email}</li>
+                <li><strong>Person:</strong> ${payload.contact_person}</li>
+                <li><strong>Location:</strong> ${payload.location}</li>
+              </ul>
+              <a href="https://ecohub-kosova.com/admin">Requires Admin Approval</a>
+            `,
+          })
+        }
+      } catch (emailError) {
+        console.error("Failed to send admin notification email:", emailError)
+      }
     }
 
     // Revalidate paths that might display user/organization data
