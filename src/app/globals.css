@@ -86,10 +86,13 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
   body {
-    @apply bg-[hsl(var(--background))] text-foreground antialiased;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: var(--font-sans);
   }
@@ -125,7 +128,8 @@
 
   /* Accessibility: Focus visible styles for keyboard navigation */
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-emerald-500;
+    outline: 2px solid rgb(16 185 129);
+    outline-offset: 2px;
   }
 
   /* Remove default focus for mouse users */
@@ -140,13 +144,18 @@
   select:focus-visible,
   textarea:focus-visible,
   [tabindex]:focus-visible {
-    @apply ring-2 ring-emerald-500 ring-offset-2;
+    box-shadow: 0 0 0 2px rgb(16 185 129);
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-[hsl(var(--surface))] backdrop-blur-sm border border-[hsl(var(--border))] shadow-lg;
+    background-color: hsl(var(--surface));
+    backdrop-filter: blur(4px);
+    border: 1px solid hsl(var(--border));
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
 
   .eco-gradient {
