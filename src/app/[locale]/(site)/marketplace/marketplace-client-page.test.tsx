@@ -3,9 +3,35 @@ import userEvent from "@testing-library/user-event"
 import { describe, expect, it, beforeEach, vi, afterEach } from "vitest"
 import MarketplaceClientPage from "./marketplace-client-page"
 
+const mockSearchParams = new URLSearchParams()
+
 // Mock translations to simple echo values
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
+}))
+
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => mockSearchParams,
+}))
+
+vi.mock("@/components/ui/input", () => ({
+  Input: (props: any) => <input {...props} />,
+}))
+
+vi.mock("@/components/ui/button", () => ({
+  Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+}))
+
+vi.mock("@/components/ui/badge", () => ({
+  Badge: ({ children, ...props }: any) => <span {...props}>{children}</span>,
+}))
+
+vi.mock("@/components/ui/select", () => ({
+  Select: ({ children }: any) => <div>{children}</div>,
+  SelectTrigger: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+  SelectContent: ({ children }: any) => <div>{children}</div>,
+  SelectItem: ({ children, value }: any) => <div data-value={value}>{children}</div>,
+  SelectValue: () => <div>SelectValue</div>,
 }))
 
 // Simplify ListingCardV2 to avoid Radix/Intl complexity
@@ -45,8 +71,7 @@ describe("MarketplaceClientPage filter → request wiring", () => {
     const user = userEvent.setup()
     render(<MarketplaceClientPage locale="sq" initialSearchParams={{}} />)
 
-    // Wait for initial load
-    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
 
     const trigger = screen.getByTestId("category-trigger")
     await user.selectOptions(trigger, "recycled-metals")

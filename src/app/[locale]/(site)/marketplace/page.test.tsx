@@ -3,9 +3,15 @@ import { render, screen, waitFor } from "@testing-library/react"
 import { describe, expect, it, vi, beforeEach } from "vitest"
 import MarketplaceClientPage from "./marketplace-client-page"
 
+const mockSearchParams = new URLSearchParams()
+
 // Mock translations
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
+}))
+
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => mockSearchParams,
 }))
 
 // Mock UI components
