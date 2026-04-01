@@ -1,6 +1,6 @@
 import { Link } from "@/i18n/routing"
 import { getLocale, getTranslations } from "next-intl/server"
-import { Facebook, Instagram, Linkedin } from "lucide-react"
+import { Briefcase, Camera, Globe } from "lucide-react"
 
 type FooterV2Props = {
   locale?: string
@@ -26,9 +26,9 @@ export async function FooterV2({ locale }: FooterV2Props = {}) {
   ]
 
   const socials = [
-    { key: "socialFacebook", icon: Facebook },
-    { key: "socialInstagram", icon: Instagram },
-    { key: "socialLinkedIn", icon: Linkedin },
+    { key: "socialFacebook", icon: Globe },
+    { key: "socialInstagram", icon: Camera },
+    { key: "socialLinkedIn", icon: Briefcase },
   ]
 
   return (
