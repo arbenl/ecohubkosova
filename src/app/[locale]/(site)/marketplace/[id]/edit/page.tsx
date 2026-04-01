@@ -2,7 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { redirect, Link } from "@/i18n/routing"
 import { getServerUser } from "@/lib/supabase/server"
-import { fetchListingById } from "@/services/listings"
+import { fetchListingByIdForOwner } from "@/services/listings"
 import { ListingFormV2 } from "@/components/marketplace-v2/ListingFormV2"
 import { updateListingAction } from "@/app/[locale]/(site)/marketplace-v2/actions"
 import { getCategories } from "@/db/categories"
@@ -28,17 +28,10 @@ export default async function EditListingPage({ params }: EditListingPageProps) 
   }
 
   // Fetch listing
-  const { data: listing, error } = await fetchListingById(id)
+  const { data: listing, error } = await fetchListingByIdForOwner(id, user.id)
 
   if (error || !listing) {
     notFound()
-  }
-
-  // Check ownership
-  if (listing.user_id !== user.id) {
-    // If not owner, redirect to details page instead of showing 404
-    redirect({ href: `/marketplace/${id}`, locale })
-    return null
   }
 
   // Fetch categories for the form
