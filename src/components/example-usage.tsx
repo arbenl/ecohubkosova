@@ -16,7 +16,10 @@ export function ExampleComponent() {
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
-        const { data } = await supabase.from("tregu_listime").select("*").eq("user_id", user.id)
+        const { data } = await supabase
+          .from("tregu_listime")
+          .select("*")
+          .eq("created_by_user_id", user.id)
 
         setData(data || [])
       }

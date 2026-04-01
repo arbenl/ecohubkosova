@@ -45,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { data: listings } = await supabase
       .from("tregu_listime")
       .select("id, created_at")
-      .eq("status", "active")
+      .eq("is_approved", true)
       .order("created_at", { ascending: false })
       .limit(500)
 
