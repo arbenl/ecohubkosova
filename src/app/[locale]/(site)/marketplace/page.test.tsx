@@ -3,7 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react"
 import { describe, expect, it, vi, beforeEach } from "vitest"
 import MarketplaceClientPage from "./marketplace-client-page"
 
-const mockSearchParams = new URLSearchParams()
+let mockSearchParams = new URLSearchParams()
 
 // Mock translations
 vi.mock("next-intl", () => ({
@@ -44,6 +44,7 @@ global.fetch = mockFetch
 
 describe("MarketplaceClientPage", () => {
   beforeEach(() => {
+    mockSearchParams = new URLSearchParams()
     vi.clearAllMocks()
   })
 

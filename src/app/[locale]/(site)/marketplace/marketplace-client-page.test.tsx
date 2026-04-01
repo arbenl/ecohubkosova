@@ -1,9 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { describe, expect, it, beforeEach, vi, afterEach } from "vitest"
 import MarketplaceClientPage from "./marketplace-client-page"
 
-const mockSearchParams = new URLSearchParams()
+let mockSearchParams = new URLSearchParams()
 
 // Mock translations to simple echo values
 vi.mock("next-intl", () => ({
@@ -45,6 +44,7 @@ describe("MarketplaceClientPage filter → request wiring", () => {
   const fetchMock = vi.fn()
 
   beforeEach(() => {
+    mockSearchParams = new URLSearchParams()
     fetchMock.mockResolvedValue({
       ok: true,
       json: async () => ({ listings: [], hasMore: false }),
@@ -68,13 +68,12 @@ describe("MarketplaceClientPage filter → request wiring", () => {
   })
 
   it("sends category slug when a specific category is selected", async () => {
-    const user = userEvent.setup()
     render(<MarketplaceClientPage locale="sq" initialSearchParams={{}} />)
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
 
     const trigger = screen.getByTestId("category-trigger")
-    await user.selectOptions(trigger, "recycled-metals")
+    fireEvent.change(trigger, { target: { value: "recycled-metals" } })
 
     await waitFor(() =>
       expect(fetchMock).toHaveBeenCalledWith(
