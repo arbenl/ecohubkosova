@@ -4,7 +4,6 @@ import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { redirect } from "@/i18n/routing"
 import { getTranslations } from "next-intl/server"
-import { isRedirectError } from "next/dist/client/components/redirect-error"
 import { listingFormSchema, type ListingFormInput } from "@/validation/listings"
 import { db } from "@/lib/drizzle"
 import { ecoListings, ecoListingMedia, ecoOrganizations } from "@/db/schema/marketplace-v2"
@@ -70,6 +69,7 @@ export async function createListingAction(formData: ListingFormInput, locale: st
     console.warn("[createListingAction] Could not resolve eco org id:", err)
   }
 
+  let redirectHref: string
   try {
     warnIfV2FlagDisabled()
 
@@ -127,20 +127,15 @@ export async function createListingAction(formData: ListingFormInput, locale: st
 
     revalidatePath("/marketplace")
     revalidatePath("/my/listings")
-    if (listingId) {
-      redirect({
-        href: `/marketplace/${listingId}/edit?created=1&message=${encodeURIComponent(t("createSuccess"))}`,
-        locale,
-      })
-    }
-    redirect({ href: `/marketplace?message=${encodeURIComponent(t("createSuccess"))}`, locale })
+    redirectHref = listingId
+      ? `/marketplace/${listingId}/edit?created=1&message=${encodeURIComponent(t("createSuccess"))}`
+      : `/marketplace?message=${encodeURIComponent(t("createSuccess"))}`
   } catch (error: any) {
-    if (isRedirectError(error)) {
-      throw error
-    }
     console.error("Server Action Error (createListingAction):", error)
     return { error: error.message || t("createError") }
   }
+
+  redirect({ href: redirectHref, locale })
 }
 
 /**
@@ -174,6 +169,7 @@ export async function updateListingAction(
 
   const payload = parsed.data
 
+  let redirectHref: string
   try {
     warnIfV2FlagDisabled()
 
@@ -251,15 +247,11 @@ export async function updateListingAction(
     revalidatePath(`/marketplace/${listingId}`)
     revalidatePath("/marketplace")
     revalidatePath("/my/listings")
-    redirect({
-      href: `/marketplace/${listingId}?message=${encodeURIComponent(t("updateSuccess"))}`,
-      locale,
-    })
+    redirectHref = `/marketplace/${listingId}?message=${encodeURIComponent(t("updateSuccess"))}`
   } catch (error: any) {
-    if (isRedirectError(error)) {
-      throw error
-    }
     console.error("Server Action Error (updateListingAction):", error)
     return { error: error.message || t("updateError") }
   }
+
+  redirect({ href: redirectHref, locale })
 }

@@ -68,8 +68,6 @@ export function ListingFormV2({ initialData, submit, categories, mode }: Listing
       <FormStatus error={error} success={success} />
       <form
         onSubmit={async (e) => {
-          e.preventDefault()
-
           // Upload selected files first so the validated payload includes final media metadata.
           if (media.state.selectedFiles.length > 0) {
             const listingKey = `temp-${Date.now()}`
