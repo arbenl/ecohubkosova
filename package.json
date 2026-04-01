@@ -119,7 +119,7 @@
     "@rushstack/eslint-patch": "^1.16.1",
     "@solana/wallet-standard-features": "1.3.0",
     "@storybook/nextjs": "^10.2.13",
-    "@storybook/react": "^8.6.14",
+    "@storybook/react": "^10.3.3",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
