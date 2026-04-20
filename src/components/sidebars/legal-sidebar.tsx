@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 const legalLinks = [
   { href: "/legal", label: "Ligjore" },
   { href: "/legal/terms", label: "Termat e Shërbimit" },
+  { href: "/legal/privacy", label: "Politika e Privatësisë" },
 ]
 
 export function LegalSidebar() {
