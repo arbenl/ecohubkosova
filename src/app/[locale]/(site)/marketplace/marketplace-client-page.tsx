@@ -226,7 +226,7 @@ export default function MarketplaceClientPage({
         <div className="text-center mb-8">
           {/* Emerald section accent */}
           <div className="mx-auto w-20 h-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 mb-6" />
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{heroTitle}</h2>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{heroTitle}</h1>
         </div>
       )}
 

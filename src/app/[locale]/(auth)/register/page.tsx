@@ -439,7 +439,7 @@ export default function RegjistrohuPage() {
                         name="terms"
                         checked={formData.terms}
                         onCheckedChange={(checked) => updateFormData({ terms: checked as boolean })}
-                        required
+                        aria-invalid={Boolean(error && !formData.terms)}
                         className="register-checkbox"
                       />
                       <div className="flex-1">
@@ -449,7 +449,7 @@ export default function RegjistrohuPage() {
                             {t("termsOfUse")}
                           </Link>{" "}
                           {t("and")}{" "}
-                          <Link href="/privatesia" className="register-inline-link">
+                          <Link href="/legal/privacy" className="register-inline-link">
                             {t("privacyPolicy")}
                           </Link>
                         </Label>
@@ -477,7 +477,7 @@ export default function RegjistrohuPage() {
               )}
 
               {error && (
-                <div className="register-error">
+                <div className="register-error" role="alert" aria-live="polite">
                   <div className="register-error-text">{error}</div>
                 </div>
               )}

@@ -52,7 +52,7 @@ const prodCsp = [
   "default-src 'self';",
   // Using self + unsafe-inline to avoid per-request nonces while allowing Next.js inline bootstrap
   "script-src 'self' 'unsafe-inline';",
-  "style-src 'self';",
+  "style-src 'self' 'unsafe-inline';",
   `img-src ${imageSrc.join(" ")};`,
   "font-src 'self' data:;",
   `connect-src ${connectSrc.join(" ")};`,
