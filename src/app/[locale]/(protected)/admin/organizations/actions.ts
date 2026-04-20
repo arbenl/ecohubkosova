@@ -21,6 +21,8 @@ type GetOrganizationsResult = {
 }
 
 export async function getOrganizations(): Promise<GetOrganizationsResult> {
+  await requireAdminRole()
+
   try {
     const { data, error } = await fetchAdminOrganizations()
 
