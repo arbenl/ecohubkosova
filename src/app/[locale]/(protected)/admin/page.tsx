@@ -14,6 +14,7 @@ import {
 import { revalidatePath } from "next/cache"
 import { Link } from "@/i18n/routing"
 import { getAdminStats } from "./actions"
+import { requireAdminRole } from "@/lib/auth/roles"
 import type { AdminStats } from "@/services/admin/stats"
 import { AdminDashboardSkeleton } from "./components/AdminDashboardSkeleton"
 import { AdminDashboardHeader } from "./components/AdminDashboardHeader"
@@ -30,6 +31,8 @@ import {
 async function approveListingAction(formData: FormData) {
   "use server"
 
+  await requireAdminRole()
+
   const listingId = formData.get("id")
   if (typeof listingId !== "string" || !listingId) return
 
@@ -45,6 +48,8 @@ async function approveListingAction(formData: FormData) {
 
 async function rejectListingAction(formData: FormData) {
   "use server"
+
+  await requireAdminRole()
 
   const listingId = formData.get("id")
   if (typeof listingId !== "string" || !listingId) return

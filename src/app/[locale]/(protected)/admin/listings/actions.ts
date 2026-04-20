@@ -24,6 +24,8 @@ type GetListingsResult = {
 }
 
 export async function getListings(): Promise<GetListingsResult> {
+  await requireAdminRole()
+
   try {
     const { data, error } = await fetchAdminListings()
 

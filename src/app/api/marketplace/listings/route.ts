@@ -2,8 +2,23 @@
 
 import { NextResponse } from "next/server"
 import { fetchListings } from "@/services/listings"
+import { checkRateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit"
 
 export async function GET(request: Request) {
+  const ip = getClientIp(request.headers)
+  const { success: withinLimit, resetIn } = checkRateLimit(
+    `marketplace-listings:${ip}`,
+    RATE_LIMITS.API_SEARCH.limit,
+    RATE_LIMITS.API_SEARCH.windowMs
+  )
+
+  if (!withinLimit) {
+    return NextResponse.json(
+      { error: "Too many requests", listings: [], hasMore: false },
+      { status: 429, headers: { "Retry-After": Math.ceil(resetIn / 1000).toString() } }
+    )
+  }
+
   const url = new URL(request.url)
   const searchParams = url.searchParams
 
@@ -25,7 +40,7 @@ export async function GET(request: Request) {
     search,
     category,
     page: Number.isFinite(page) && page > 0 ? page : 1,
-    pageSize: Number.isFinite(pageSize) && pageSize > 0 ? pageSize : 12,
+    pageSize: Number.isFinite(pageSize) && pageSize > 0 ? Math.min(pageSize, 100) : 12,
     condition,
     location,
     tag,

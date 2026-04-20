@@ -3,10 +3,12 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
+import { headers } from "next/headers"
 import { registrationSchema } from "@/validation/auth"
 import { db } from "@/lib/drizzle"
 import { organizationMembers, organizations, users } from "@/db/schema"
 import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_OPTIONS } from "@/lib/auth/session-version"
+import { checkRateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit"
 
 type UserRole = "Individ" | "OJQ" | "Ndërmarrje Sociale" | "Kompani"
 
@@ -28,6 +30,21 @@ export async function registerUser(formData: RegistrationFormData) {
   const supabase = await createServerSupabaseClient()
 
   try {
+    const headersList = await headers()
+    const ip = getClientIp(headersList)
+    const { success: withinLimit } = checkRateLimit(
+      `register:${ip}`,
+      RATE_LIMITS.REGISTER.limit,
+      RATE_LIMITS.REGISTER.windowMs
+    )
+
+    if (!withinLimit) {
+      return {
+        error:
+          "Shumë përpjekje regjistrimi. Ju lutemi prisni një minutë para se të provoni përsëri.",
+      }
+    }
+
     const parsed = registrationSchema.safeParse(formData)
     if (!parsed.success) {
       return {
