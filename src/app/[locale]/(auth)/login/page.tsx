@@ -112,8 +112,9 @@ export default function KycuPage() {
       const result: SignInResponse = await signIn(null, formData)
 
       // Handle errors
-      if (result.message) {
-        setError(result.message)
+      const actionError = result.message || result.error
+      if (actionError) {
+        setError(actionError)
         setIsSubmitting(false)
         return
       }

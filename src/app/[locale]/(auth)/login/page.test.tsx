@@ -64,4 +64,26 @@ describe("KycuPage", () => {
       expect(mockSignIn).toHaveBeenCalled()
     })
   })
+
+  it("shows server action errors and re-enables submit", async () => {
+    const mockSignIn = vi.mocked(signIn)
+    mockSignIn.mockResolvedValue({ error: "Too many login attempts" })
+
+    render(<KycuPage />)
+
+    fireEvent.change(screen.getByTestId("login-email-input"), {
+      target: { value: "test@example.com" },
+    })
+    fireEvent.change(screen.getByTestId("login-password-input"), {
+      target: { value: "password" },
+    })
+
+    const submitBtn = screen.getByTestId("login-submit-button")
+    fireEvent.click(submitBtn)
+
+    expect(await screen.findByText("Too many login attempts")).toBeInTheDocument()
+    await waitFor(() => {
+      expect(submitBtn).not.toBeDisabled()
+    })
+  })
 })
