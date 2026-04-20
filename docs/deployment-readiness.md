@@ -15,6 +15,12 @@
 - `SENTRY_ORG` - Sentry organization slug
 - `SENTRY_PROJECT` - Sentry project slug
 
+### Security Hardening
+
+- `DIAGNOSTICS_API_KEY` - Required in production to access `/api/health/db`, `/api/docs`, and `/openapi.json`
+- `UPSTASH_REDIS_REST_URL` - Optional Upstash Redis REST URL for distributed rate limiting
+- `UPSTASH_REDIS_REST_TOKEN` - Optional Upstash Redis REST token for distributed rate limiting
+
 ### Next.js (Auto-configured)
 
 - `NODE_ENV` - Environment (production/development/test)

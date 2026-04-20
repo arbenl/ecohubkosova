@@ -5,7 +5,7 @@ import { checkRateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit"
 export async function GET(request: Request) {
   try {
     const ip = getClientIp(request.headers)
-    const { success: withinLimit, resetIn } = checkRateLimit(
+    const { success: withinLimit, resetIn } = await checkRateLimit(
       `public-organizations:${ip}`,
       RATE_LIMITS.API_SEARCH.limit,
       RATE_LIMITS.API_SEARCH.windowMs

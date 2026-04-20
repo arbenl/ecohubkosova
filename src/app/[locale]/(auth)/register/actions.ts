@@ -32,7 +32,7 @@ export async function registerUser(formData: RegistrationFormData) {
   try {
     const headersList = await headers()
     const ip = getClientIp(headersList)
-    const { success: withinLimit } = checkRateLimit(
+    const { success: withinLimit } = await checkRateLimit(
       `register:${ip}`,
       RATE_LIMITS.REGISTER.limit,
       RATE_LIMITS.REGISTER.windowMs

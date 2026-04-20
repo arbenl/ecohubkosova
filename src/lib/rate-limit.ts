@@ -3,8 +3,8 @@
  * MIT License – feel free to reuse in other projects.
  * Copyright (c) 2025 Kosovo Advocacy and Development Center (KADC)
  *
- * Simple in-memory rate limiter for protecting auth endpoints.
- * For production with multiple instances, consider Redis-based solutions.
+ * Rate limiter for protecting auth and write-adjacent endpoints.
+ * Uses Upstash Redis REST when configured and falls back to in-memory storage.
  */
 
 interface RateLimitRecord {
@@ -34,6 +34,7 @@ export interface RateLimitResult {
   success: boolean
   remaining: number
   resetIn: number // milliseconds until reset
+  backend: "memory" | "redis"
 }
 
 /**
@@ -45,16 +46,23 @@ export interface RateLimitResult {
  * @returns Object with success status, remaining attempts, and reset time
  *
  * @example
- * const { success, remaining } = checkRateLimit(`login:${ip}`, 5, 60000)
+ * const { success, remaining } = await checkRateLimit(`login:${ip}`, 5, 60000)
  * if (!success) {
  *   return { error: "Too many attempts. Please try again later." }
  * }
  */
-export function checkRateLimit(
+export async function checkRateLimit(
   key: string,
   limit: number = 5,
   windowMs: number = 60000
-): RateLimitResult {
+): Promise<RateLimitResult> {
+  const redisResult = await checkRedisRateLimit(key, limit, windowMs)
+  if (redisResult) return redisResult
+
+  return checkMemoryRateLimit(key, limit, windowMs)
+}
+
+function checkMemoryRateLimit(key: string, limit: number, windowMs: number): RateLimitResult {
   const now = Date.now()
   const record = rateLimitStore.get(key)
 
@@ -65,6 +73,7 @@ export function checkRateLimit(
       success: true,
       remaining: limit - 1,
       resetIn: windowMs,
+      backend: "memory",
     }
   }
 
@@ -74,6 +83,7 @@ export function checkRateLimit(
       success: false,
       remaining: 0,
       resetIn: record.resetTime - now,
+      backend: "memory",
     }
   }
 
@@ -83,7 +93,111 @@ export function checkRateLimit(
     success: true,
     remaining: limit - record.count,
     resetIn: record.resetTime - now,
+    backend: "memory",
   }
+}
+
+type UpstashResponse = {
+  result?: unknown
+  error?: string
+}
+
+async function checkRedisRateLimit(
+  key: string,
+  limit: number,
+  windowMs: number
+): Promise<RateLimitResult | null> {
+  const redisUrl = process.env.UPSTASH_REDIS_REST_URL
+  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN
+
+  if (!redisUrl || !redisToken) {
+    return null
+  }
+
+  const redisKey = `ecohub:rate:${key}`
+
+  try {
+    const [countResponse, ttlResponse] = await runUpstashPipeline(redisUrl, redisToken, [
+      ["INCR", redisKey],
+      ["PTTL", redisKey],
+    ])
+
+    const count = Number(countResponse?.result)
+    let ttl = Number(ttlResponse?.result)
+
+    if (!Number.isFinite(count)) {
+      return null
+    }
+
+    if (!Number.isFinite(ttl) || ttl < 0) {
+      const expireResponse = await runUpstashCommand(redisUrl, redisToken, [
+        "PEXPIRE",
+        redisKey,
+        windowMs,
+      ])
+      if (expireResponse?.error) {
+        return null
+      }
+      ttl = windowMs
+    }
+
+    return {
+      success: count <= limit,
+      remaining: Math.max(limit - count, 0),
+      resetIn: Math.max(ttl, 0),
+      backend: "redis",
+    }
+  } catch (error) {
+    console.error("[rate-limit] Redis rate limit failed, falling back to memory:", error)
+    return null
+  }
+}
+
+async function runUpstashPipeline(
+  redisUrl: string,
+  redisToken: string,
+  commands: Array<Array<string | number>>
+): Promise<UpstashResponse[]> {
+  const response = await fetch(`${redisUrl.replace(/\/$/, "")}/pipeline`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${redisToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(commands),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Upstash pipeline failed with status ${response.status}`)
+  }
+
+  const payload = (await response.json()) as UpstashResponse[]
+  if (!Array.isArray(payload) || payload.some((item) => item?.error)) {
+    throw new Error("Upstash pipeline returned an error")
+  }
+
+  return payload
+}
+
+async function runUpstashCommand(
+  redisUrl: string,
+  redisToken: string,
+  command: Array<string | number>
+): Promise<UpstashResponse> {
+  const response = await fetch(redisUrl.replace(/\/$/, ""), {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${redisToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(command),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Upstash command failed with status ${response.status}`)
+  }
+
+  return (await response.json()) as UpstashResponse
 }
 
 /**

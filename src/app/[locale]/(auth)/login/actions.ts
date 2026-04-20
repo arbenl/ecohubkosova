@@ -7,7 +7,7 @@ import { loginSchema } from "@/validation/auth"
 import { incrementSessionVersion } from "@/services/session"
 import { SESSION_VERSION_COOKIE, SESSION_VERSION_COOKIE_OPTIONS } from "@/lib/auth/session-version"
 import { logAuthAction } from "@/lib/auth/logging"
-import { checkRateLimit, getClientIp, RATE_LIMITS, resetRateLimit } from "@/lib/rate-limit"
+import { checkRateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit"
 
 type SessionTokens = {
   access_token: string
@@ -34,7 +34,7 @@ export async function signIn(prevState: unknown, formData: FormData): Promise<Si
   // Rate limiting
   const headersList = await headers()
   const ip = getClientIp(headersList)
-  const { success: withinLimit, remaining } = checkRateLimit(
+  const { success: withinLimit, remaining } = await checkRateLimit(
     `login:${ip}`,
     RATE_LIMITS.LOGIN.limit,
     RATE_LIMITS.LOGIN.windowMs
