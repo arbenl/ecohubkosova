@@ -4,6 +4,10 @@ import { describe, expect, it, vi } from "vitest"
 import KycuPage from "./page"
 import { signIn } from "./actions"
 
+const { mockSearchParams } = vi.hoisted(() => ({
+  mockSearchParams: { get: vi.fn(() => null) },
+}))
+
 // Mock translations and hooks
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
@@ -16,7 +20,7 @@ vi.mock("@/i18n/routing", () => ({
 }))
 
 vi.mock("next/navigation", () => ({
-  useSearchParams: () => ({ get: () => null }),
+  useSearchParams: () => mockSearchParams,
 }))
 
 // Mock Supabase hook
@@ -67,7 +71,12 @@ describe("KycuPage", () => {
 
   it("shows server action errors and re-enables submit", async () => {
     const mockSignIn = vi.mocked(signIn)
-    mockSignIn.mockResolvedValue({ error: "Too many login attempts" })
+    let resolveSignIn: (value: Awaited<ReturnType<typeof signIn>>) => void = () => {}
+    mockSignIn.mockReturnValue(
+      new Promise((resolve) => {
+        resolveSignIn = resolve
+      })
+    )
 
     render(<KycuPage />)
 
@@ -79,11 +88,19 @@ describe("KycuPage", () => {
     })
 
     const submitBtn = screen.getByTestId("login-submit-button")
-    fireEvent.click(submitBtn)
+    const form = submitBtn.closest("form")
+    expect(form).not.toBeNull()
+    fireEvent.submit(form!)
+
+    await waitFor(() => {
+      expect(screen.getByTestId("login-submit-button")).toBeDisabled()
+    })
+
+    resolveSignIn({ error: "Too many login attempts" })
 
     expect(await screen.findByText("Too many login attempts")).toBeInTheDocument()
     await waitFor(() => {
-      expect(submitBtn).not.toBeDisabled()
+      expect(screen.getByTestId("login-submit-button")).not.toBeDisabled()
     })
   })
 })
