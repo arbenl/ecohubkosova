@@ -1,6 +1,20 @@
 import { NextResponse } from "next/server"
+import fs from "fs"
+import path from "path"
+import {
+  diagnosticsNoStoreHeaders,
+  diagnosticsNotFoundResponse,
+  hasDiagnosticsAccess,
+} from "@/lib/diagnostics-access"
 
-export async function GET() {
+export async function GET(request: Request) {
+  if (!hasDiagnosticsAccess(request)) {
+    return diagnosticsNotFoundResponse()
+  }
+
+  const specPath = path.join(process.cwd(), "docs", "openapi.json")
+  const spec = JSON.parse(fs.readFileSync(specPath, "utf-8"))
+  const serializedSpec = JSON.stringify(spec).replace(/</g, "\\u003c")
   const swaggerHtml = `
     <!DOCTYPE html>
     <html>
@@ -35,7 +49,7 @@ export async function GET() {
         <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3/swagger-ui-standalone-preset.js"></script>
         <script>
           const ui = SwaggerUIBundle({
-            url: '/openapi.json',
+            spec: ${serializedSpec},
             dom_id: '#swagger-ui',
             deepLinking: true,
             presets: [
@@ -57,7 +71,7 @@ export async function GET() {
   return new NextResponse(swaggerHtml, {
     headers: {
       "Content-Type": "text/html",
-      "Cache-Control": "public, max-age=3600, s-maxage=3600",
+      ...diagnosticsNoStoreHeaders,
     },
   })
 }

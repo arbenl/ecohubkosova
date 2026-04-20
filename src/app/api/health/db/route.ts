@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/drizzle"
 import { users } from "@/db/schema"
+import {
+  diagnosticsNoStoreHeaders,
+  diagnosticsNotFoundResponse,
+  hasDiagnosticsAccess,
+} from "@/lib/diagnostics-access"
 
 export const dynamic = "force-dynamic"
 
@@ -14,7 +19,11 @@ export interface HealthCheckResponse {
   }
 }
 
-export async function GET(): Promise<NextResponse<HealthCheckResponse>> {
+export async function GET(request: Request): Promise<NextResponse> {
+  if (!hasDiagnosticsAccess(request)) {
+    return diagnosticsNotFoundResponse()
+  }
+
   const startTime = Date.now()
 
   try {
@@ -23,14 +32,17 @@ export async function GET(): Promise<NextResponse<HealthCheckResponse>> {
 
     const responseTime = Date.now() - startTime
 
-    return NextResponse.json({
-      status: "healthy",
-      timestamp: new Date().toISOString(),
-      database: {
-        connected: true,
-        responseTime,
+    return NextResponse.json(
+      {
+        status: "healthy",
+        timestamp: new Date().toISOString(),
+        database: {
+          connected: true,
+          responseTime,
+        },
       },
-    })
+      { headers: diagnosticsNoStoreHeaders }
+    )
   } catch (error) {
     const responseTime = Date.now() - startTime
     const errorMsg = error instanceof Error ? error.message : String(error)
@@ -50,7 +62,7 @@ export async function GET(): Promise<NextResponse<HealthCheckResponse>> {
           responseTime,
         },
       },
-      { status: 503 } // Service Unavailable
+      { status: 503, headers: diagnosticsNoStoreHeaders } // Service Unavailable
     )
   }
 }

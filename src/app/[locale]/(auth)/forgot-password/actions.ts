@@ -24,7 +24,7 @@ export async function requestPasswordReset(formData: FormData): Promise<ForgotPa
   // Rate limiting - stricter for password reset
   const headersList = await headers()
   const ip = getClientIp(headersList)
-  const { success: withinLimit } = checkRateLimit(
+  const { success: withinLimit } = await checkRateLimit(
     `password-reset:${ip}`,
     RATE_LIMITS.PASSWORD_RESET.limit,
     RATE_LIMITS.PASSWORD_RESET.windowMs
